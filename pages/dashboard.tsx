@@ -9,6 +9,8 @@ import TaskCard from '../src/components/ui/TaskCard';
 import CreateTaskModal, { NewTaskData } from '../src/components/ui/CreateTaskModal';
 import EnergyInsights from '../src/components/ui/EnergyInsights';
 import UserStats from '../src/components/ui/UserStats';
+import ProjectCard from '../src/components/ui/ProjectCard';
+import CreateProjectModal from '../src/components/ui/CreateProjectModal';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 
 interface Task {
@@ -39,12 +41,15 @@ export default function Dashboard() {
   
   const [currentEnergy, setCurrentEnergy] = React.useState(3);
   const [tasks, setTasks] = React.useState<Task[]>([]);
-  const [, setProjects] = React.useState<Project[]>([]);
+  const [projects, setProjects] = React.useState<Project[]>([]);
   const [energyLogs, setEnergyLogs] = React.useState<Array<{ level: number; timestamp: string }>>([]);
   const [userPoints, setUserPoints] = React.useState(0);
   const [userLevel, setUserLevel] = React.useState(1);
   const [loading, setLoading] = React.useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
+  const [isCreateProjectModalOpen, setIsCreateProjectModalOpen] = React.useState(false);
+  const [editingProject, setEditingProject] = React.useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = React.useState<Project | null>(null);
 
   // Load user data on mount
   const loadUserData = React.useCallback(async () => {
@@ -214,6 +219,58 @@ export default function Dashboard() {
     }
   };
 
+  const handleCreateProject = () => {
+    setIsCreateProjectModalOpen(true);
+    setEditingProject(null);
+  };
+
+  const handleEditProject = (project: Project) => {
+    setEditingProject(project);
+    setIsCreateProjectModalOpen(true);
+  };
+
+  const handleDeleteProject = async (projectId: string) => {
+    if (!confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const response = await authenticatedFetch(`/api/projects/${projectId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        toast.success('Project deleted successfully! 🗑️', {
+          duration: 3000,
+          icon: '📁',
+        });
+        
+        // Reload projects
+        loadUserData();
+        
+        // Clear selection if this project was selected
+        if (selectedProject?.id === projectId) {
+          setSelectedProject(null);
+        }
+      } else {
+        throw new Error('Failed to delete project');
+      }
+    } catch (error) {
+      console.error('Error deleting project:', error);
+      toast.error('Failed to delete project. Please try again.', {
+        duration: 4000,
+      });
+    }
+  };
+
+  const handleProjectSuccess = () => {
+    loadUserData();
+  };
+
+  const handleProjectSelect = (project: Project) => {
+    setSelectedProject(project);
+  };
+
   // Calculate stats from tasks
   const activeTasks = tasks.filter(task => !task.completed);
   const completedTasks = tasks.filter(task => task.completed);
@@ -315,6 +372,69 @@ export default function Dashboard() {
                 currentEnergy={currentEnergy}
               />
             </motion.div>
+          )}
+        </motion.section>
+
+        {/* Projects Section */}
+        <motion.section 
+          className="dashboard-section"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+        >
+          <div className="section-header">
+            <div>
+              <h2 className="section-title">Projects</h2>
+              <p className="section-description">
+                Organize your tasks into projects for better focus
+              </p>
+            </div>
+            <button
+              className="btn btn-primary"
+              onClick={handleCreateProject}
+            >
+              <svg className="neural-icon" viewBox="0 0 24 24">
+                <path d="M12 5v14m-7-7h14" stroke="currentColor" strokeWidth="2" fill="none" />
+              </svg>
+              New Project
+            </button>
+          </div>
+
+          {projects.length > 0 ? (
+            <div className="projects-grid">
+              {projects.map((project) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  onEdit={handleEditProject}
+                  onDelete={handleDeleteProject}
+                  onSelect={handleProjectSelect}
+                  isSelected={selectedProject?.id === project.id}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="empty-state">
+              <div className="empty-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2-2z"/>
+                  <path d="M8 5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2H8V5z"/>
+                </svg>
+              </div>
+              <h3 className="empty-title">No projects yet</h3>
+              <p className="empty-description">
+                Create your first project to organize your tasks
+              </p>
+              <button
+                className="btn btn-primary"
+                onClick={handleCreateProject}
+              >
+                <svg className="neural-icon" viewBox="0 0 24 24">
+                  <path d="M12 5v14m-7-7h14" stroke="currentColor" strokeWidth="2" fill="none" />
+                </svg>
+                Create Project
+              </button>
+            </div>
           )}
         </motion.section>
 
@@ -458,6 +578,17 @@ export default function Dashboard() {
         onClose={() => setIsCreateModalOpen(false)}
         onCreateTask={handleCreateTask}
         currentEnergy={currentEnergy}
+      />
+
+      {/* Create/Edit Project Modal */}
+      <CreateProjectModal
+        isOpen={isCreateProjectModalOpen}
+        onClose={() => {
+          setIsCreateProjectModalOpen(false);
+          setEditingProject(null);
+        }}
+        onSuccess={handleProjectSuccess}
+        editProject={editingProject}
       />
     </div>
   );
