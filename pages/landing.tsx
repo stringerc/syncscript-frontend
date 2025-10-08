@@ -67,9 +67,6 @@ export default function LandingPage() {
         {/* Ribbon Animation */}
         <div className="ribbon-animation">
           <div className="ribbon-flow"></div>
-          <div className="ribbon-flow"></div>
-          <div className="ribbon-flow"></div>
-          <div className="ribbon-flow"></div>
         </div>
       </motion.section>
 
