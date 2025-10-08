@@ -5,9 +5,10 @@ interface Project {
   id: string;
   name: string;
   description?: string;
-  color?: string;
+  color: string;
   created_at: string;
   updated_at: string;
+  archived: boolean;
 }
 
 interface ProjectCardProps {
