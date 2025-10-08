@@ -114,13 +114,20 @@ export default function Dashboard() {
       });
 
       if (response.ok) {
+        const data = await response.json();
+        
         toast.success(`Energy updated to ${energyLabels[energy]}! 🎯`, {
           duration: 3000,
           icon: '⚡',
         });
         
-        // Don't reload - just update the current energy state
-        // Tasks will re-render with new energy matching automatically
+        // Add the new energy log to state
+        if (data.energy_log) {
+          setEnergyLogs(prev => [...prev, {
+            level: data.energy_log.energy_level,
+            timestamp: data.energy_log.logged_at
+          }]);
+        }
       }
     } catch (error) {
       console.error('Error logging energy:', error);
