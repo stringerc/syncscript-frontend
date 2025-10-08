@@ -105,8 +105,8 @@ export default function Dashboard() {
           icon: '⚡',
         });
         
-        // Reload tasks to get energy-matched ones
-        loadUserData();
+        // Don't reload - just update the current energy state
+        // Tasks will re-render with new energy matching automatically
       }
     } catch (error) {
       console.error('Error logging energy:', error);
