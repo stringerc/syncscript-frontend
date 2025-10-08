@@ -95,8 +95,7 @@ export default function Dashboard() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          level: energy,
-          timestamp: new Date().toISOString(),
+          energy_level: energy,
         }),
       });
 

@@ -324,3 +324,28 @@
 .energy-option:focus-visible .neural-indicator {
   opacity: 1;
 }
+
+/* Active Option - Show Checkmark */
+.energy-option.active .neural-indicator {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.energy-option.active .neural-indicator .neural-icon {
+  stroke: white;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Hide indicator on non-active options */
+.energy-option:not(.active) .neural-indicator {
+  opacity: 0.4;
+}
+
+.energy-option:not(.active):hover .neural-indicator {
+  opacity: 0.7;
+}
