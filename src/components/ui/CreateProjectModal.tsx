@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
+import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
     color: editProject?.color || 'blue'
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const authenticatedFetch = useAuthenticatedFetch();
 
   const colorOptions = [
     { value: 'blue', label: 'Blue', class: 'from-blue-500 to-blue-600' },
@@ -50,13 +52,10 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
     setIsSubmitting(true);
 
     try {
-      const authenticatedFetch = (await import('../../hooks/useAuthenticatedFetch')).useAuthenticatedFetch();
-      const fetch = authenticatedFetch();
-
       const url = editProject ? `/api/projects/${editProject.id}` : '/api/projects';
       const method = editProject ? 'PUT' : 'POST';
 
-      const response = await fetch(url, {
+      const response = await authenticatedFetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
