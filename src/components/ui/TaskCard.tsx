@@ -1,0 +1,246 @@
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+interface Task {
+  id: string;
+  title: string;
+  description?: string;
+  priority: 1 | 2 | 3 | 4 | 5;
+  energyRequirement: 1 | 2 | 3 | 4 | 5;
+  completed: boolean;
+  points: number;
+  createdAt: string;
+  dueDate?: string;
+}
+
+interface TaskCardProps {
+  task: Task;
+  currentEnergy: number;
+  onComplete: (taskId: string) => void;
+  onDelete: (taskId: string) => void;
+  onEdit: (taskId: string) => void;
+  className?: string;
+}
+
+const PRIORITY_LABELS = {
+  1: 'Low',
+  2: 'Medium-Low', 
+  3: 'Medium',
+  4: 'High',
+  5: 'Critical'
+};
+
+const ENERGY_LABELS = {
+  1: 'Low',
+  2: 'Medium-Low',
+  3: 'Medium', 
+  4: 'High',
+  5: 'Peak'
+};
+
+const PRIORITY_COLORS = {
+  1: 'var(--syncscript-blue-500)',
+  2: 'var(--syncscript-blue-400)',
+  3: 'var(--syncscript-green-500)',
+  4: 'var(--syncscript-orange-500)',
+  5: 'var(--gradient-ribbon)'
+};
+
+export const TaskCard: React.FC<TaskCardProps> = ({
+  task,
+  currentEnergy,
+  onComplete,
+  onDelete,
+  onEdit,
+  className = ''
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const energyMatch = Math.abs(task.energyRequirement - currentEnergy);
+  const isPerfectMatch = energyMatch === 0;
+  const isGoodMatch = energyMatch <= 1;
+  const matchScore = isPerfectMatch ? 100 : isGoodMatch ? 50 : 0;
+
+  const getMatchColor = () => {
+    if (isPerfectMatch) return 'var(--syncscript-green-500)';
+    if (isGoodMatch) return 'var(--syncscript-orange-500)';
+    return 'var(--syncscript-charcoal-400)';
+  };
+
+  const getMatchIcon = () => {
+    if (isPerfectMatch) return '⚡';
+    if (isGoodMatch) return '🔋';
+    return '🔌';
+  };
+
+  const handleComplete = () => {
+    onComplete(task.id);
+  };
+
+  const handleDelete = () => {
+    onDelete(task.id);
+  };
+
+  const handleEdit = () => {
+    onEdit(task.id);
+  };
+
+  return (
+    <motion.div
+      className={`task-card ${className} task-priority-${task.priority} ${task.completed ? 'completed' : ''}`}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      whileHover={{ y: -2 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+    >
+      {/* Task Header */}
+      <div className="task-header">
+        <div className="task-title-section">
+          <h3 className="task-title">{task.title}</h3>
+          {task.description && (
+            <p className="task-description">{task.description}</p>
+          )}
+        </div>
+        
+        {/* Energy Match Indicator */}
+        <div 
+          className="energy-match-indicator"
+          style={{ color: getMatchColor() }}
+        >
+          <span className="match-icon">{getMatchIcon()}</span>
+          <span className="match-score">{matchScore}%</span>
+        </div>
+      </div>
+
+      {/* Task Details */}
+      <div className="task-details">
+        <div className="task-meta">
+          <div className="priority-badge">
+            <span className="priority-label">Priority {task.priority}</span>
+            <span className="priority-text">{PRIORITY_LABELS[task.priority]}</span>
+          </div>
+          
+          <div className="energy-requirement">
+            <span className="energy-label">Energy Level</span>
+            <span className="energy-value">{ENERGY_LABELS[task.energyRequirement]}</span>
+          </div>
+          
+          <div className="points-indicator">
+            <span className="points-label">Points</span>
+            <span className="points-value">{task.points}</span>
+          </div>
+        </div>
+
+        {/* Neural Circuit Pattern */}
+        <div className="neural-pattern">
+          <svg className="neural-circuit" viewBox="0 0 100 20">
+            <defs>
+              <linearGradient id={`gradient-${task.id}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor={PRIORITY_COLORS[task.priority]} />
+                <stop offset="100%" stopColor={getMatchColor()} />
+              </linearGradient>
+            </defs>
+            <circle cx="10" cy="10" r="2" fill="currentColor" />
+            <path d="M10 10 L30 10" stroke="url(#gradient-${task.id})" strokeWidth="1" />
+            <circle cx="30" cy="10" r="2" fill="currentColor" />
+            <path d="M30 10 L50 10" stroke="url(#gradient-${task.id})" strokeWidth="1" />
+            <circle cx="50" cy="10" r="2" fill="currentColor" />
+            <path d="M50 10 L70 10" stroke="url(#gradient-${task.id})" strokeWidth="1" />
+            <circle cx="70" cy="10" r="2" fill="currentColor" />
+            <path d="M70 10 L90 10" stroke="url(#gradient-${task.id})" strokeWidth="1" />
+            <circle cx="90" cy="10" r="2" fill="currentColor" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <AnimatePresence>
+        {isHovered && !task.completed && (
+          <motion.div
+            className="task-actions"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <motion.button
+              className="btn btn-sm btn-primary"
+              onClick={handleComplete}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <svg className="neural-icon" viewBox="0 0 24 24">
+                <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" fill="none" />
+              </svg>
+              Complete
+            </motion.button>
+            
+            <motion.button
+              className="btn btn-sm btn-secondary"
+              onClick={handleEdit}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <svg className="neural-icon" viewBox="0 0 24 24">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" strokeWidth="2" fill="none" />
+                <path d="m18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2" fill="none" />
+              </svg>
+              Edit
+            </motion.button>
+            
+            <motion.button
+              className="btn btn-sm btn-ghost"
+              onClick={handleDelete}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <svg className="neural-icon" viewBox="0 0 24 24">
+                <path d="M3 6h18" stroke="currentColor" strokeWidth="2" fill="none" />
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" stroke="currentColor" strokeWidth="2" fill="none" />
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" stroke="currentColor" strokeWidth="2" fill="none" />
+              </svg>
+              Delete
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Completion Animation */}
+      <AnimatePresence>
+        {task.completed && (
+          <motion.div
+            className="completion-overlay"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            <div className="completion-check">
+              <svg viewBox="0 0 24 24" className="check-icon">
+                <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="3" fill="none" />
+              </svg>
+            </div>
+            <div className="completion-text">
+              <span className="completion-label">Completed!</span>
+              <span className="completion-points">+{task.points} points</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Ribbon Effect */}
+      <div className="ribbon-effect">
+        <div 
+          className="ribbon-line"
+          style={{ 
+            background: `linear-gradient(90deg, ${PRIORITY_COLORS[task.priority]} 0%, ${getMatchColor()} 100%)`
+          }}
+        />
+      </div>
+    </motion.div>
+  );
+};
+
+export default TaskCard;

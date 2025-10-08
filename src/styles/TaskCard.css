@@ -1,0 +1,418 @@
+/* 🎨 TASK CARD COMPONENT STYLES - RIBBON INSPIRED */
+
+.task-card {
+  position: relative;
+  background: var(--syncscript-cream-50);
+  border: 1px solid var(--syncscript-charcoal-100);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-flow);
+  overflow: hidden;
+  min-height: var(--task-card-min-height);
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--syncscript-blue-200);
+}
+
+.task-card.completed {
+  opacity: 0.7;
+  background: var(--syncscript-cream-100);
+  border-color: var(--syncscript-green-200);
+}
+
+/* Task Header */
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-3);
+  gap: var(--space-3);
+}
+
+.task-title-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--syncscript-charcoal-800);
+  margin: 0 0 var(--space-1) 0;
+  line-height: var(--line-height-tight);
+}
+
+.task-description {
+  font-size: var(--text-sm);
+  color: var(--syncscript-charcoal-600);
+  margin: 0;
+  line-height: var(--line-height-normal);
+}
+
+/* Energy Match Indicator */
+.energy-match-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(10px);
+  min-width: 3rem;
+}
+
+.match-icon {
+  font-size: var(--text-lg);
+  line-height: 1;
+}
+
+.match-score {
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+}
+
+/* Task Details */
+.task-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.task-meta {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.priority-badge,
+.energy-requirement,
+.points-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  background: var(--syncscript-cream-100);
+  border-radius: var(--radius-md);
+  min-width: 4rem;
+}
+
+.priority-label,
+.energy-label,
+.points-label {
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--syncscript-charcoal-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.priority-text,
+.energy-value,
+.points-value {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--syncscript-charcoal-800);
+}
+
+/* Priority-specific styling */
+.task-priority-1 .priority-badge {
+  background: var(--syncscript-blue-50);
+  border: 1px solid var(--syncscript-blue-200);
+}
+
+.task-priority-1 .priority-text {
+  color: var(--syncscript-blue-700);
+}
+
+.task-priority-2 .priority-badge {
+  background: var(--syncscript-blue-50);
+  border: 1px solid var(--syncscript-blue-200);
+}
+
+.task-priority-2 .priority-text {
+  color: var(--syncscript-blue-600);
+}
+
+.task-priority-3 .priority-badge {
+  background: var(--syncscript-green-50);
+  border: 1px solid var(--syncscript-green-200);
+}
+
+.task-priority-3 .priority-text {
+  color: var(--syncscript-green-700);
+}
+
+.task-priority-4 .priority-badge {
+  background: var(--syncscript-orange-50);
+  border: 1px solid var(--syncscript-orange-200);
+}
+
+.task-priority-4 .priority-text {
+  color: var(--syncscript-orange-700);
+}
+
+.task-priority-5 .priority-badge {
+  background: linear-gradient(135deg, var(--syncscript-blue-50) 0%, var(--syncscript-orange-50) 100%);
+  border: 1px solid var(--syncscript-orange-300);
+}
+
+.task-priority-5 .priority-text {
+  background: var(--gradient-ribbon);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: var(--font-weight-bold);
+}
+
+/* Neural Circuit Pattern */
+.neural-pattern {
+  opacity: 0.6;
+  transition: opacity var(--duration-normal) var(--ease-flow);
+}
+
+.task-card:hover .neural-pattern {
+  opacity: 1;
+}
+
+.neural-circuit {
+  width: 100px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 1;
+  fill: none;
+}
+
+/* Action Buttons */
+.task-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--syncscript-charcoal-100);
+}
+
+.task-actions .btn {
+  flex: 1;
+  justify-content: center;
+}
+
+/* Completion Overlay */
+.completion-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(126, 211, 33, 0.1);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  backdrop-filter: blur(5px);
+}
+
+.completion-check {
+  width: 3rem;
+  height: 3rem;
+  background: var(--syncscript-green-500);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.check-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke: white;
+  stroke-width: 3;
+}
+
+.completion-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.completion-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--syncscript-green-700);
+}
+
+.completion-points {
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--syncscript-green-600);
+}
+
+/* Ribbon Effect */
+.ribbon-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  overflow: hidden;
+}
+
+.ribbon-line {
+  width: 100%;
+  height: 3px;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  transition: all var(--duration-normal) var(--ease-flow);
+}
+
+.task-card:hover .ribbon-line {
+  height: 4px;
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+}
+
+/* Priority-specific ribbon colors */
+.task-priority-1 .ribbon-line {
+  background: var(--syncscript-blue-500);
+}
+
+.task-priority-2 .ribbon-line {
+  background: var(--syncscript-blue-400);
+}
+
+.task-priority-3 .ribbon-line {
+  background: var(--syncscript-green-500);
+}
+
+.task-priority-4 .ribbon-line {
+  background: var(--syncscript-orange-500);
+}
+
+.task-priority-5 .ribbon-line {
+  background: var(--gradient-ribbon);
+  box-shadow: var(--shadow-blue);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .task-card {
+    padding: var(--space-3);
+  }
+  
+  .task-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+  
+  .energy-match-indicator {
+    align-self: flex-end;
+    min-width: 2.5rem;
+  }
+  
+  .task-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  
+  .task-meta {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .priority-badge,
+  .energy-requirement,
+  .points-indicator {
+    flex: 1;
+    min-width: auto;
+  }
+  
+  .neural-pattern {
+    align-self: center;
+  }
+  
+  .task-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .task-title {
+    font-size: var(--text-base);
+  }
+  
+  .task-description {
+    font-size: var(--text-xs);
+  }
+  
+  .task-meta {
+    gap: var(--space-2);
+  }
+  
+  .priority-badge,
+  .energy-requirement,
+  .points-indicator {
+    padding: var(--space-1);
+  }
+  
+  .priority-label,
+  .energy-label,
+  .points-label {
+    font-size: 0.625rem;
+  }
+  
+  .priority-text,
+  .energy-value,
+  .points-value {
+    font-size: var(--text-xs);
+  }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+  .task-card,
+  .task-actions .btn,
+  .ribbon-line {
+    transition: none;
+  }
+  
+  .completion-overlay {
+    animation: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .task-card {
+    border-width: 2px;
+  }
+  
+  .task-card:hover {
+    border-width: 3px;
+  }
+  
+  .priority-badge,
+  .energy-requirement,
+  .points-indicator {
+    border: 1px solid var(--syncscript-charcoal-300);
+  }
+}
+
+/* Focus States */
+.task-card:focus-visible {
+  outline: 3px solid var(--syncscript-blue-500);
+  outline-offset: 2px;
+}
+
+.task-actions .btn:focus-visible {
+  outline: 2px solid var(--syncscript-blue-500);
+  outline-offset: 1px;
+}

@@ -1,0 +1,326 @@
+/* 🎨 ENERGY SELECTOR COMPONENT STYLES - RIBBON INSPIRED */
+
+.energy-selector {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--space-6);
+  background: var(--syncscript-cream-50);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.energy-selector::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-ribbon);
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+}
+
+/* Header Section */
+.energy-header {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.energy-title {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--syncscript-charcoal-800);
+  margin: 0 0 var(--space-4) 0;
+}
+
+.energy-selection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--syncscript-cream-100);
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--syncscript-blue-100);
+}
+
+.energy-selection .energy-indicator {
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-bold);
+  box-shadow: var(--shadow-md);
+}
+
+.energy-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+
+.energy-label {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--syncscript-charcoal-800);
+}
+
+.energy-description {
+  font-size: var(--text-sm);
+  color: var(--syncscript-charcoal-600);
+}
+
+/* Energy Options Grid */
+.energy-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.energy-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--syncscript-cream-50);
+  border: 2px solid var(--syncscript-charcoal-100);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-flow);
+  position: relative;
+  overflow: hidden;
+}
+
+.energy-option::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  opacity: 0.1;
+  transition: opacity var(--duration-normal) var(--ease-flow);
+}
+
+.energy-option:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--syncscript-blue-200);
+}
+
+.energy-option:hover::before {
+  opacity: 0.2;
+}
+
+.energy-option.active {
+  border-color: var(--syncscript-blue-500);
+  box-shadow: var(--shadow-blue);
+  transform: translateY(-1px);
+}
+
+.energy-option.active::before {
+  opacity: 0.3;
+}
+
+.energy-number {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+.energy-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.energy-details .energy-label {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.energy-details .energy-desc {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.neural-indicator {
+  width: 1.5rem;
+  height: 1.5rem;
+  opacity: 0.7;
+  transition: opacity var(--duration-normal) var(--ease-flow);
+}
+
+.energy-option:hover .neural-indicator {
+  opacity: 1;
+}
+
+.neural-indicator .neural-icon {
+  width: 100%;
+  height: 100%;
+  stroke: rgba(255, 255, 255, 0.8);
+  stroke-width: 1.5;
+}
+
+/* Ribbon Connection Lines */
+.ribbon-connections {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ribbon-line {
+  position: absolute;
+  top: 0;
+  height: 2px;
+  border-radius: var(--radius-full);
+  transform-origin: left center;
+  transition: all var(--duration-slow) var(--ease-ribbon);
+}
+
+.ribbon-line:nth-child(1) { left: 0%; width: 20%; }
+.ribbon-line:nth-child(2) { left: 20%; width: 20%; }
+.ribbon-line:nth-child(3) { left: 40%; width: 20%; }
+.ribbon-line:nth-child(4) { left: 60%; width: 20%; }
+.ribbon-line:nth-child(5) { left: 80%; width: 20%; }
+
+.ribbon-line.active {
+  height: 4px;
+  box-shadow: 0 0 8px rgba(74, 144, 226, 0.3);
+}
+
+/* Completion Animation */
+.energy-completion {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.completion-ring {
+  width: 4rem;
+  height: 4rem;
+  background: var(--gradient-ribbon);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-2xl);
+}
+
+.completion-icon {
+  width: 2rem;
+  height: 2rem;
+  stroke: white;
+  stroke-width: 2;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .energy-selector {
+    padding: var(--space-4);
+    margin: var(--space-4);
+  }
+  
+  .energy-options {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  
+  .energy-option {
+    padding: var(--space-3);
+    gap: var(--space-3);
+  }
+  
+  .energy-selection {
+    flex-direction: column;
+    gap: var(--space-3);
+    text-align: center;
+  }
+  
+  .energy-info {
+    align-items: center;
+  }
+  
+  .ribbon-connections {
+    display: none; /* Hide on mobile for cleaner look */
+  }
+}
+
+@media (max-width: 480px) {
+  .energy-title {
+    font-size: var(--text-xl);
+  }
+  
+  .energy-selection .energy-indicator {
+    width: 3rem;
+    height: 3rem;
+    font-size: var(--text-lg);
+  }
+  
+  .energy-number {
+    width: 2rem;
+    height: 2rem;
+    font-size: var(--text-base);
+  }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+  .energy-option,
+  .energy-selection,
+  .ribbon-line {
+    transition: none;
+  }
+  
+  .energy-completion {
+    animation: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .energy-option {
+    border-width: 3px;
+  }
+  
+  .energy-option.active {
+    border-width: 4px;
+  }
+  
+  .energy-selection {
+    border-width: 3px;
+  }
+}
+
+/* Focus States */
+.energy-option:focus-visible {
+  outline: 3px solid var(--syncscript-blue-500);
+  outline-offset: 2px;
+}
+
+.energy-option:focus-visible .neural-indicator {
+  opacity: 1;
+}

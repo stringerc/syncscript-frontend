@@ -1,42 +1,47 @@
-'use client';
-
-import { useAuth0 } from '@auth0/auth0-react';
 import { useCallback } from 'react';
 
-export function useAuthenticatedFetch() {
-  const { getAccessTokenSilently } = useAuth0();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.syncscript.app';
-
-  const authenticatedFetch = useCallback(
-    async (endpoint: string, options: RequestInit = {}) => {
-      try {
-        const token = await getAccessTokenSilently({
-          authorizationParams: {
-            audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
-          },
-        });
-
-        const response = await fetch(`${apiUrl}${endpoint}`, {
-          ...options,
-          headers: {
-            ...options.headers,
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        return await response.json();
-      } catch (error) {
-        console.error('API call failed:', error);
-        throw error;
+export const useAuthenticatedFetch = () => {
+  const authenticatedFetch = useCallback(async (
+    url: string, 
+    options: RequestInit = {}
+  ) => {
+    try {
+      // Get the access token from Auth0 using the token endpoint
+      const tokenResponse = await fetch('/api/auth/token');
+      
+      if (!tokenResponse.ok) {
+        throw new Error('Failed to get access token');
       }
-    },
-    [getAccessTokenSilently, apiUrl]
-  );
 
-  return { authenticatedFetch };
-}
+      const { accessToken } = await tokenResponse.json();
+
+      // Make authenticated request
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+        ...options.headers,
+      };
+
+      console.log(`Making authenticated request to: ${process.env.NEXT_PUBLIC_API_URL}${url}`);
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
+        ...options,
+        headers,
+      });
+
+      console.log('Response status:', response.status);
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Request failed' }));
+        throw new Error(errorData.message || `HTTP ${response.status}`);
+      }
+
+      return response;
+    } catch (error) {
+      console.error('Authenticated fetch error:', error);
+      throw error;
+    }
+  }, []);
+
+  return authenticatedFetch;
+};

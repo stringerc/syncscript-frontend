@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 🎨 SYNCSCRIPT THEME IMPORTS */
+@import './tokens.css';
+@import './components.css';
+@import './EnergySelector.css';
+@import './TaskCard.css';
+@import './ThemeDemo.css';
+@import './Dashboard.css';
+@import './LandingPage.css';
