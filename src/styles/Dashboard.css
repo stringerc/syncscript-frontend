@@ -350,3 +350,32 @@
     width: 100%;
   }
 }
+
+/* Header Right - Stats and Logout */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1024px) {
+  .header-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-right {
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-right {
+    width: 100%;
+  }
+
+  .user-stats {
+    flex: 1;
+  }
+}

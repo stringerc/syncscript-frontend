@@ -8,6 +8,7 @@ import EnergySelector from '../src/components/ui/EnergySelector';
 import TaskCard from '../src/components/ui/TaskCard';
 import CreateTaskModal, { NewTaskData } from '../src/components/ui/CreateTaskModal';
 import EnergyInsights from '../src/components/ui/EnergyInsights';
+import UserStats from '../src/components/ui/UserStats';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 
 interface Task {
@@ -40,6 +41,8 @@ export default function Dashboard() {
   const [tasks, setTasks] = React.useState<Task[]>([]);
   const [, setProjects] = React.useState<Project[]>([]);
   const [energyLogs, setEnergyLogs] = React.useState<Array<{ level: number; timestamp: string }>>([]);
+  const [userPoints, setUserPoints] = React.useState(0);
+  const [userLevel, setUserLevel] = React.useState(1);
   const [loading, setLoading] = React.useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
 
@@ -211,6 +214,18 @@ export default function Dashboard() {
     }
   };
 
+  // Calculate stats from tasks
+  const activeTasks = tasks.filter(task => !task.completed);
+  const completedTasks = tasks.filter(task => task.completed);
+  const totalPoints = completedTasks.reduce((sum, task) => sum + (task.points || 0), 0);
+  const calculatedLevel = Math.floor(totalPoints / 1000) + 1;
+
+  // Update points and level when tasks change
+  React.useEffect(() => {
+    setUserPoints(totalPoints);
+    setUserLevel(calculatedLevel);
+  }, [totalPoints, calculatedLevel]);
+
   if (isLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -226,9 +241,6 @@ export default function Dashboard() {
     router.push('/');
     return null;
   }
-
-  const activeTasks = tasks.filter(task => !task.completed);
-  const completedTasks = tasks.filter(task => task.completed);
 
   return (
     <div className="dashboard">
@@ -250,6 +262,12 @@ export default function Dashboard() {
           </div>
           
           <div className="header-right">
+            <UserStats
+              points={userPoints}
+              level={userLevel}
+              tasksCompleted={completedTasks.length}
+              streak={0}
+            />
             <Link href="/api/auth/logout" className="btn btn-ghost">
               <svg className="neural-icon" viewBox="0 0 24 24">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" strokeWidth="2" fill="none" />
