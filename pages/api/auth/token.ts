@@ -6,9 +6,15 @@ export default withApiAuthRequired(async function token(
   res: NextApiResponse
 ) {
   try {
-    const { accessToken } = await getAccessToken(req, res, {
-      scopes: ['openid', 'profile', 'email']
-    });
+    // Request access token with API audience
+    const { accessToken } = await getAccessToken(req, res);
+
+    if (!accessToken) {
+      return res.status(401).json({ 
+        error: 'No access token available',
+        message: 'Failed to retrieve access token from Auth0'
+      });
+    }
 
     res.status(200).json({ accessToken });
   } catch (error) {
