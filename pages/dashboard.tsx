@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import EnergySelector from '../src/components/ui/EnergySelector';
 import TaskCard from '../src/components/ui/TaskCard';
 import CreateTaskModal, { NewTaskData } from '../src/components/ui/CreateTaskModal';
+import EnergyInsights from '../src/components/ui/EnergyInsights';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 
 interface Task {
@@ -38,6 +39,7 @@ export default function Dashboard() {
   const [currentEnergy, setCurrentEnergy] = React.useState(3);
   const [tasks, setTasks] = React.useState<Task[]>([]);
   const [, setProjects] = React.useState<Project[]>([]);
+  const [energyLogs, setEnergyLogs] = React.useState<Array<{ level: number; timestamp: string }>>([]);
   const [loading, setLoading] = React.useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
 
@@ -66,6 +68,18 @@ export default function Dashboard() {
         const energyData = await energyResponse.json();
         if (energyData.energy) {
           setCurrentEnergy(energyData.energy.level);
+        }
+      }
+
+      // Load all energy logs for insights
+      const energyLogsResponse = await authenticatedFetch('/api/energy?limit=100');
+      if (energyLogsResponse.ok) {
+        const logsData = await energyLogsResponse.json();
+        if (logsData.logs) {
+          setEnergyLogs(logsData.logs.map((log: { energy_level: number; logged_at: string }) => ({
+            level: log.energy_level,
+            timestamp: log.logged_at
+          })));
         }
       }
     } catch (error) {
@@ -262,6 +276,21 @@ export default function Dashboard() {
             onEnergyChange={handleEnergyChange}
             className="dashboard-energy-selector"
           />
+
+          {/* Energy Insights */}
+          {energyLogs.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.3 }}
+              style={{ marginTop: 'var(--space-6)' }}
+            >
+              <EnergyInsights
+                energyLogs={energyLogs}
+                currentEnergy={currentEnergy}
+              />
+            </motion.div>
+          )}
         </motion.section>
 
         {/* Active Tasks Section */}
