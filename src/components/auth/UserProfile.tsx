@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth0 } from '@auth0/auth0-react';
+import Image from 'next/image';
 
 export function UserProfile() {
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -16,10 +17,12 @@ export function UserProfile() {
   return (
     <div className="flex items-center gap-3">
       {user.picture && (
-        <img
+        <Image
           src={user.picture}
           alt={user.name || 'User'}
-          className="w-10 h-10 rounded-full"
+          width={40}
+          height={40}
+          className="rounded-full"
         />
       )}
       <div>

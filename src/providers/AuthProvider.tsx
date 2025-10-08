@@ -10,7 +10,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const clientId = process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID || '';
   const audience = process.env.NEXT_PUBLIC_AUTH0_AUDIENCE || '';
 
-  const onRedirectCallback = (appState: any) => {
+  const onRedirectCallback = (appState?: { returnTo?: string }) => {
     router.push(appState?.returnTo || '/dashboard/home');
   };
 
