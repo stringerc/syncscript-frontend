@@ -27,6 +27,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   isSelected = false
 }) => {
   const getProjectColor = (color?: string) => {
+    // If color is a hex value, create a gradient from it
+    if (color && color.startsWith('#')) {
+      return `from-[${color}] to-[${color}]`;
+    }
+    
+    // Fallback to named colors
     const colors = {
       blue: 'from-blue-500 to-blue-600',
       green: 'from-green-500 to-green-600',

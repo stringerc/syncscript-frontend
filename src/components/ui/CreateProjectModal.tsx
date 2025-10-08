@@ -27,18 +27,18 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   const [formData, setFormData] = useState({
     name: editProject?.name || '',
     description: editProject?.description || '',
-    color: editProject?.color || 'blue'
+    color: editProject?.color || '#3B82F6'
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const authenticatedFetch = useAuthenticatedFetch();
 
   const colorOptions = [
-    { value: 'blue', label: 'Blue', class: 'from-blue-500 to-blue-600' },
-    { value: 'green', label: 'Green', class: 'from-green-500 to-green-600' },
-    { value: 'orange', label: 'Orange', class: 'from-orange-500 to-orange-600' },
-    { value: 'purple', label: 'Purple', class: 'from-purple-500 to-purple-600' },
-    { value: 'pink', label: 'Pink', class: 'from-pink-500 to-pink-600' },
-    { value: 'teal', label: 'Teal', class: 'from-teal-500 to-teal-600' }
+    { value: '#3B82F6', label: 'Blue', class: 'from-blue-500 to-blue-600' },
+    { value: '#10B981', label: 'Green', class: 'from-green-500 to-green-600' },
+    { value: '#F59E0B', label: 'Orange', class: 'from-orange-500 to-orange-600' },
+    { value: '#8B5CF6', label: 'Purple', class: 'from-purple-500 to-purple-600' },
+    { value: '#EC4899', label: 'Pink', class: 'from-pink-500 to-pink-600' },
+    { value: '#14B8A6', label: 'Teal', class: 'from-teal-500 to-teal-600' }
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -94,7 +94,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 
   const handleClose = () => {
     if (!isSubmitting) {
-      setFormData({ name: '', description: '', color: 'blue' });
+      setFormData({ name: '', description: '', color: '#3B82F6' });
       onClose();
     }
   };
@@ -179,7 +179,10 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                         className="color-input"
                         disabled={isSubmitting}
                       />
-                      <div className={`color-preview bg-gradient-to-r ${color.class}`}>
+                      <div 
+                        className="color-preview"
+                        style={{ background: color.value }}
+                      >
                         {formData.color === color.value && (
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <polyline points="20,6 9,17 4,12"/>
