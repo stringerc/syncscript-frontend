@@ -31,6 +31,7 @@ interface Project {
   description?: string;
   color: string;
   created_at: string;
+  updated_at: string;
   archived: boolean;
 }
 
