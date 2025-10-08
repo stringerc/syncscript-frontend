@@ -3,8 +3,10 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import EnergySelector from '../src/components/ui/EnergySelector';
 import TaskCard from '../src/components/ui/TaskCard';
+import CreateTaskModal, { NewTaskData } from '../src/components/ui/CreateTaskModal';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 
 interface Task {
@@ -37,6 +39,7 @@ export default function Dashboard() {
   const [tasks, setTasks] = React.useState<Task[]>([]);
   const [, setProjects] = React.useState<Project[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
 
   // Load user data on mount
   const loadUserData = React.useCallback(async () => {
@@ -79,11 +82,14 @@ export default function Dashboard() {
   }, [user, isLoading, loadUserData]);
 
   const handleEnergyChange = async (energy: number) => {
+    const previousEnergy = currentEnergy;
     setCurrentEnergy(energy);
+    
+    const energyLabels = ['', 'Low', 'Medium-Low', 'Medium', 'High', 'Peak'];
     
     try {
       // Log energy to backend
-      await authenticatedFetch('/api/energy', {
+      const response = await authenticatedFetch('/api/energy', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,8 +99,22 @@ export default function Dashboard() {
           timestamp: new Date().toISOString(),
         }),
       });
+
+      if (response.ok) {
+        toast.success(`Energy updated to ${energyLabels[energy]}! 🎯`, {
+          duration: 3000,
+          icon: '⚡',
+        });
+        
+        // Reload tasks to get energy-matched ones
+        loadUserData();
+      }
     } catch (error) {
       console.error('Error logging energy:', error);
+      setCurrentEnergy(previousEnergy); // Revert on error
+      toast.error('Failed to update energy level. Please try again.', {
+        duration: 4000,
+      });
     }
   };
 
@@ -105,13 +125,21 @@ export default function Dashboard() {
       });
       
       if (response.ok) {
+        const data = await response.json();
+        
         // Update local state
         setTasks(prev => prev.map(task => 
           task.id === taskId ? { ...task, completed: true } : task
         ));
+        
+        toast.success(`Task completed! +${data.points_earned} points earned! 🎉`, {
+          duration: 4000,
+          icon: '✅',
+        });
       }
     } catch (error) {
       console.error('Error completing task:', error);
+      toast.error('Failed to complete task. Please try again.');
     }
   };
 
@@ -123,15 +151,44 @@ export default function Dashboard() {
       
       if (response.ok) {
         setTasks(prev => prev.filter(task => task.id !== taskId));
+        toast.success('Task deleted successfully', {
+          icon: '🗑️',
+        });
       }
     } catch (error) {
       console.error('Error deleting task:', error);
+      toast.error('Failed to delete task. Please try again.');
     }
   };
 
   const handleTaskEdit = (taskId: string) => {
     // TODO: Implement task editing modal
     console.log('Edit task:', taskId);
+  };
+
+  const handleCreateTask = async (taskData: NewTaskData) => {
+    try {
+      const response = await authenticatedFetch('/api/tasks', {
+        method: 'POST',
+        body: JSON.stringify(taskData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Add new task to the list
+        setTasks(prev => [data.task, ...prev]);
+        
+        toast.success('Task created successfully! 🎉', {
+          duration: 3000,
+          icon: '✨',
+        });
+      }
+    } catch (error) {
+      console.error('Error creating task:', error);
+      toast.error('Failed to create task. Please try again.');
+      throw error; // Re-throw to keep modal open on error
+    }
   };
 
   if (isLoading || loading) {
@@ -216,10 +273,21 @@ export default function Dashboard() {
           transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
         >
           <div className="section-header">
-            <h2 className="section-title">Active Tasks</h2>
-            <p className="section-description">
-              Tasks matched to your current energy level ({currentEnergy}/5)
-            </p>
+            <div>
+              <h2 className="section-title">Active Tasks</h2>
+              <p className="section-description">
+                Tasks matched to your current energy level ({currentEnergy}/5)
+              </p>
+            </div>
+            <button
+              className="btn btn-primary"
+              onClick={() => setIsCreateModalOpen(true)}
+            >
+              <svg className="neural-icon" viewBox="0 0 24 24">
+                <path d="M12 5v14m-7-7h14" stroke="currentColor" strokeWidth="2" fill="none" />
+              </svg>
+              New Task
+            </button>
           </div>
           
           {activeTasks.length === 0 ? (
@@ -234,7 +302,10 @@ export default function Dashboard() {
               <p className="empty-description">
                 Create your first task to get started with energy-matched productivity
               </p>
-              <button className="btn btn-primary">
+              <button 
+                className="btn btn-primary"
+                onClick={() => setIsCreateModalOpen(true)}
+              >
                 <svg className="neural-icon" viewBox="0 0 24 24">
                   <path d="M12 5v14m-7-7h14" stroke="currentColor" strokeWidth="2" fill="none" />
                 </svg>
@@ -327,6 +398,14 @@ export default function Dashboard() {
           </motion.section>
         )}
       </main>
+
+      {/* Create Task Modal */}
+      <CreateTaskModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onCreateTask={handleCreateTask}
+        currentEnergy={currentEnergy}
+      />
     </div>
   );
 }
