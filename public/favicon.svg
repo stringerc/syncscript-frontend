@@ -1,11 +1,46 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="6" fill="url(#gradient)"/>
-  <path d="M16 8L20 16L16 24L12 16L16 8Z" stroke="white" stroke-width="2" fill="none"/>
-  <circle cx="16" cy="16" r="2" fill="white"/>
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#1a1a1a"/>
+  
+  <!-- Ribbon 'S' shape with gradient -->
+  <path d="M8 6C8 6 10 4 16 4C22 4 24 6 24 8C24 10 22 12 20 12C18 12 16 10 14 10C12 10 10 12 10 14C10 16 12 18 14 18C16 18 18 20 20 20C22 20 24 18 24 16C24 14 22 12 20 12" 
+        stroke="url(#ribbonGradient)" 
+        stroke-width="2.5" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  
+  <!-- Brain outline -->
+  <path d="M16 8C14 8 12 10 12 12C12 13 13 14 14 14C15 14 16 13 16 12C16 11 17 10 18 10C19 10 20 11 20 12C20 14 18 16 16 16C14 16 12 18 12 20C12 22 14 24 16 24C18 24 20 22 20 20C20 19 19 18 18 18C17 18 16 19 16 20C16 21 15 22 14 22C13 22 12 21 12 20" 
+        stroke="#888888" 
+        stroke-width="1.5" 
+        fill="none"/>
+  
+  <!-- Circuit nodes -->
+  <circle cx="14" cy="11" r="1" fill="#888888"/>
+  <circle cx="18" cy="13" r="1" fill="#888888"/>
+  <circle cx="14" cy="17" r="1" fill="#888888"/>
+  <circle cx="18" cy="19" r="1" fill="#888888"/>
+  <circle cx="16" cy="14" r="1" fill="#888888"/>
+  
+  <!-- Circuit connections -->
+  <line x1="14" y1="11" x2="16" y2="14" stroke="#888888" stroke-width="0.8"/>
+  <line x1="16" y1="14" x2="18" y2="13" stroke="#888888" stroke-width="0.8"/>
+  <line x1="16" y1="14" x2="16" y2="17" stroke="#888888" stroke-width="0.8"/>
+  <line x1="14" y1="17" x2="16" y2="17" stroke="#888888" stroke-width="0.8"/>
+  <line x1="16" y1="17" x2="18" y2="19" stroke="#888888" stroke-width="0.8"/>
+  
+  <!-- Play button triangles -->
+  <path d="M24 24L26 26L24 28Z" fill="url(#playGradient)" opacity="0.8"/>
+  
   <defs>
-    <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
+    <linearGradient id="ribbonGradient" x1="8" y1="4" x2="24" y2="20">
       <stop offset="0%" stop-color="#4A90E2"/>
       <stop offset="50%" stop-color="#7ED321"/>
+      <stop offset="100%" stop-color="#F5A623"/>
+    </linearGradient>
+    <linearGradient id="playGradient" x1="24" y1="24" x2="26" y2="28">
+      <stop offset="0%" stop-color="#4A90E2"/>
       <stop offset="100%" stop-color="#F5A623"/>
     </linearGradient>
   </defs>
