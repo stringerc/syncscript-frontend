@@ -25,6 +25,7 @@ import { useKeyboardShortcuts } from '../src/hooks/useKeyboardShortcuts';
 import { updateLoginStreak, updateCompletionStreak, getStreakData, checkNewMilestone } from '../src/utils/streakUtils';
 import { Tag } from '../src/utils/tagUtils';
 import { Subtask } from '../src/utils/subtaskUtils';
+import { TaskNote } from '../src/utils/noteUtils';
 
 interface Task {
   id: string;
@@ -45,6 +46,7 @@ interface Task {
   };
   tags?: Tag[];
   subtasks?: Subtask[];
+  notes?: TaskNote[];
 }
 
 interface Project {
@@ -926,7 +928,8 @@ export default function Dashboard() {
                       project_id: task.project_id,
                       project: task.project,
                       tags: task.tags,
-                      subtasks: task.subtasks
+                      subtasks: task.subtasks,
+                      notes: task.notes
                     }}
                     currentEnergy={currentEnergy}
                     onComplete={handleTaskComplete}
@@ -989,7 +992,8 @@ export default function Dashboard() {
                       project_id: task.project_id,
                       project: task.project,
                       tags: task.tags,
-                      subtasks: task.subtasks
+                      subtasks: task.subtasks,
+                      notes: task.notes
                     }}
                     currentEnergy={currentEnergy}
                     onComplete={handleTaskComplete}

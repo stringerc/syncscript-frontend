@@ -4,6 +4,7 @@ import ConfettiExplosion from 'react-confetti-explosion';
 import { getTaskUrgency, getUrgencyColor, getUrgencyIcon } from '../../utils/dateUtils';
 import { Tag } from '../../utils/tagUtils';
 import { Subtask, getSubtaskProgress } from '../../utils/subtaskUtils';
+import { TaskNote } from '../../utils/noteUtils';
 
 interface Task {
   id: string;
@@ -27,6 +28,7 @@ interface Task {
   };
   tags?: Tag[];
   subtasks?: Subtask[];
+  notes?: TaskNote[];
 }
 
 interface TaskCardProps {
@@ -204,6 +206,20 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                   }}
                 ></div>
               </div>
+            </div>
+          )}
+          
+          {/* Notes Count */}
+          {task.notes && task.notes.length > 0 && (
+            <div className="notes-count">
+              <svg className="notes-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+              <span className="notes-text">{task.notes.length} note{task.notes.length !== 1 ? 's' : ''}</span>
             </div>
           )}
         </div>

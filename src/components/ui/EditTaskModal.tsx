@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { Tag, parseTags, tagsToString } from '../../utils/tagUtils';
 import { Subtask, createSubtask, toggleSubtask, deleteSubtask } from '../../utils/subtaskUtils';
+import { TaskNote, createNote, deleteNote, formatNoteTime } from '../../utils/noteUtils';
 
 interface Task {
   id: string;
@@ -18,6 +19,7 @@ interface Task {
   project_id?: string;
   tags?: Tag[];
   subtasks?: Subtask[];
+  notes?: TaskNote[];
 }
 
 interface Project {
@@ -52,6 +54,8 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
   });
   const [subtasks, setSubtasks] = useState<Subtask[]>([]);
   const [newSubtaskText, setNewSubtaskText] = useState('');
+  const [notes, setNotes] = useState<TaskNote[]>([]);
+  const [newNoteText, setNewNoteText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const authenticatedFetch = useAuthenticatedFetch();
 
@@ -68,6 +72,7 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
         tagInput: task.tags ? tagsToString(task.tags) : ''
       });
       setSubtasks(task.subtasks || []);
+      setNotes(task.notes || []);
     }
   }, [task]);
 
@@ -98,6 +103,7 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
         project_id?: string;
         tags?: Tag[];
         subtasks?: Subtask[];
+        notes?: TaskNote[];
       } = {
         title: formData.title.trim(),
         priority: formData.priority,
@@ -123,6 +129,10 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
 
       if (subtasks.length > 0) {
         requestData.subtasks = subtasks;
+      }
+
+      if (notes.length > 0) {
+        requestData.notes = notes;
       }
 
       const response = await authenticatedFetch(`/api/tasks/${task.id}`, {
@@ -409,6 +419,78 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
                 </div>
                 <p className="form-hint">
                   Break down your task into smaller steps
+                </p>
+              </div>
+
+              {/* Notes / Comments */}
+              <div className="form-group">
+                <label className="form-label">
+                  Notes / Comments (Optional)
+                </label>
+                
+                {/* Notes List */}
+                {notes.length > 0 && (
+                  <div className="notes-list">
+                    {notes.map((note) => (
+                      <div key={note.id} className="note-item">
+                        <div className="note-header">
+                          <span className="note-timestamp">{formatNoteTime(note.created_at)}</span>
+                          <button
+                            type="button"
+                            onClick={() => setNotes(deleteNote(notes, note.id))}
+                            className="note-delete"
+                            title="Delete note"
+                          >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <line x1="18" y1="6" x2="6" y2="18"/>
+                              <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                          </button>
+                        </div>
+                        <p className="note-text">{note.text}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {/* Add Note */}
+                <div className="note-add">
+                  <textarea
+                    value={newNoteText}
+                    onChange={(e) => setNewNoteText(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        if (newNoteText.trim()) {
+                          setNotes([...notes, createNote(newNoteText)]);
+                          setNewNoteText('');
+                        }
+                      }
+                    }}
+                    placeholder="Add a note... (Enter to save, Shift+Enter for new line)"
+                    className="form-textarea"
+                    rows={2}
+                    disabled={isSubmitting}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (newNoteText.trim()) {
+                        setNotes([...notes, createNote(newNoteText)]);
+                        setNewNoteText('');
+                      }
+                    }}
+                    className="btn btn-sm btn-secondary"
+                    disabled={!newNoteText.trim() || isSubmitting}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 5v14m-7-7h14"/>
+                    </svg>
+                    Add Note
+                  </button>
+                </div>
+                <p className="form-hint">
+                  Track progress, thoughts, and important details
                 </p>
               </div>
 
