@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ConfettiExplosion from 'react-confetti-explosion';
 import { getTaskUrgency, getUrgencyColor, getUrgencyIcon } from '../../utils/dateUtils';
 
 interface Task {
@@ -61,6 +62,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   className = ''
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
   const urgency = getTaskUrgency(task.dueDate);
 
   const energyMatch = Math.abs(task.energyRequirement - currentEnergy);
@@ -81,7 +83,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   };
 
   const handleComplete = () => {
-    onComplete(task.id);
+    setShowConfetti(true);
+    setTimeout(() => {
+      onComplete(task.id);
+    }, 500);
   };
 
   const handleDelete = () => {
@@ -103,6 +108,19 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
+      {/* Confetti Celebration */}
+      {showConfetti && (
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1000 }}>
+          <ConfettiExplosion
+            force={0.6}
+            duration={2500}
+            particleCount={task.points > 100 ? 100 : 50}
+            width={1200}
+            colors={['#4A90E2', '#7ED321', '#F5A623', '#EC4899', '#8B5CF6']}
+          />
+        </div>
+      )}
+      
       {/* Task Header */}
       <div className="task-header">
         <div className="task-title-section">
