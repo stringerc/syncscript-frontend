@@ -1,0 +1,287 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
+import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
+
+interface Task {
+  id: string;
+  title: string;
+  description?: string;
+  priority: 1 | 2 | 3 | 4 | 5;
+  energy_requirement: 1 | 2 | 3 | 4 | 5;
+  completed: boolean;
+  points: number;
+  created_at: string;
+  due_date?: string;
+}
+
+interface EditTaskModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSuccess: () => void;
+  task: Task | null;
+}
+
+const EditTaskModal: React.FC<EditTaskModalProps> = ({
+  isOpen,
+  onClose,
+  onSuccess,
+  task
+}) => {
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    priority: 3 as 1 | 2 | 3 | 4 | 5,
+    energy_requirement: 3 as 1 | 2 | 3 | 4 | 5,
+    due_date: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const authenticatedFetch = useAuthenticatedFetch();
+
+  // Update form data when task changes
+  useEffect(() => {
+    if (task) {
+      setFormData({
+        title: task.title,
+        description: task.description || '',
+        priority: task.priority,
+        energy_requirement: task.energy_requirement,
+        due_date: task.due_date ? task.due_date.split('T')[0] : ''
+      });
+    }
+  }, [task]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.title.trim()) {
+      toast.error('Task title is required');
+      return;
+    }
+
+    if (!task) {
+      toast.error('No task selected');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const requestData = {
+        title: formData.title.trim(),
+        description: formData.description.trim() || null,
+        priority: formData.priority,
+        energy_requirement: formData.energy_requirement,
+        due_date: formData.due_date || null
+      };
+
+      console.log('Updating task data:', requestData);
+
+      const response = await authenticatedFetch(`/api/tasks/${task.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (response.ok) {
+        toast.success('Task updated successfully! 🎯', {
+          duration: 3000,
+          icon: '✅',
+        });
+        
+        onSuccess();
+        onClose();
+      } else {
+        const errorData = await response.json().catch(() => ({ message: 'Failed to update task' }));
+        console.error('Task update error:', errorData);
+        throw new Error(errorData.message || `HTTP ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Error updating task:', error);
+      toast.error('Failed to update task. Please try again.', {
+        duration: 4000,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleClose = () => {
+    if (!isSubmitting) {
+      onClose();
+    }
+  };
+
+  const getPriorityLabel = (priority: number) => {
+    const labels = ['', 'Very Low', 'Low', 'Medium', 'High', 'Critical'];
+    return labels[priority];
+  };
+
+  const getEnergyLabel = (energy: number) => {
+    const labels = ['', 'Low', 'Medium-Low', 'Medium', 'High', 'Peak'];
+    return labels[energy];
+  };
+
+  if (!task) return null;
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="modal-overlay"
+          onClick={handleClose}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="modal-content task-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-header">
+              <h2 className="modal-title">
+                Edit Task
+              </h2>
+              <button
+                className="modal-close-btn"
+                onClick={handleClose}
+                disabled={isSubmitting}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="task-form">
+              <div className="form-group">
+                <label htmlFor="task-title" className="form-label">
+                  Task Title *
+                </label>
+                <input
+                  id="task-title"
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="Enter task title..."
+                  className="form-input"
+                  disabled={isSubmitting}
+                  maxLength={200}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="task-description" className="form-label">
+                  Description
+                </label>
+                <textarea
+                  id="task-description"
+                  value={formData.description}
+                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="Describe your task..."
+                  className="form-textarea"
+                  disabled={isSubmitting}
+                  rows={3}
+                  maxLength={1000}
+                />
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="task-priority" className="form-label">
+                    Priority
+                  </label>
+                  <select
+                    id="task-priority"
+                    value={formData.priority}
+                    onChange={(e) => setFormData(prev => ({ ...prev, priority: parseInt(e.target.value) as 1 | 2 | 3 | 4 | 5 }))}
+                    className="form-select"
+                    disabled={isSubmitting}
+                  >
+                    <option value={1}>1 - Very Low</option>
+                    <option value={2}>2 - Low</option>
+                    <option value={3}>3 - Medium</option>
+                    <option value={4}>4 - High</option>
+                    <option value={5}>5 - Critical</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="task-energy" className="form-label">
+                    Energy Required
+                  </label>
+                  <select
+                    id="task-energy"
+                    value={formData.energy_requirement}
+                    onChange={(e) => setFormData(prev => ({ ...prev, energy_requirement: parseInt(e.target.value) as 1 | 2 | 3 | 4 | 5 }))}
+                    className="form-select"
+                    disabled={isSubmitting}
+                  >
+                    <option value={1}>1 - Low</option>
+                    <option value={2}>2 - Medium-Low</option>
+                    <option value={3}>3 - Medium</option>
+                    <option value={4}>4 - High</option>
+                    <option value={5}>5 - Peak</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="task-due-date" className="form-label">
+                  Due Date
+                </label>
+                <input
+                  id="task-due-date"
+                  type="date"
+                  value={formData.due_date}
+                  onChange={(e) => setFormData(prev => ({ ...prev, due_date: e.target.value }))}
+                  className="form-input"
+                  disabled={isSubmitting}
+                  min={new Date().toISOString().split('T')[0]}
+                />
+              </div>
+
+              <div className="form-actions">
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  className="btn btn-ghost"
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={isSubmitting || !formData.title.trim()}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="spinner-small"></div>
+                      Updating...
+                    </>
+                  ) : (
+                    <>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M20 6L9 17l-5-5"/>
+                      </svg>
+                      Update Task
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+export default EditTaskModal;

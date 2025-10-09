@@ -11,6 +11,7 @@ import EnergyInsights from '../src/components/ui/EnergyInsights';
 import UserStats from '../src/components/ui/UserStats';
 import ProjectCard from '../src/components/ui/ProjectCard';
 import CreateProjectModal from '../src/components/ui/CreateProjectModal';
+import EditTaskModal from '../src/components/ui/EditTaskModal';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 
 interface Task {
@@ -51,6 +52,8 @@ export default function Dashboard() {
   const [isCreateProjectModalOpen, setIsCreateProjectModalOpen] = React.useState(false);
   const [editingProject, setEditingProject] = React.useState<Project | null>(null);
   const [selectedProject, setSelectedProject] = React.useState<Project | null>(null);
+  const [isEditTaskModalOpen, setIsEditTaskModalOpen] = React.useState(false);
+  const [editingTask, setEditingTask] = React.useState<Task | null>(null);
 
   // Load user data on mount
   const loadUserData = React.useCallback(async () => {
@@ -191,8 +194,15 @@ export default function Dashboard() {
   };
 
   const handleTaskEdit = (taskId: string) => {
-    // TODO: Implement task editing modal
-    console.log('Edit task:', taskId);
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+      setEditingTask(task);
+      setIsEditTaskModalOpen(true);
+    }
+  };
+
+  const handleTaskEditSuccess = () => {
+    loadUserData();
   };
 
   const handleCreateTask = async (taskData: NewTaskData) => {
@@ -590,6 +600,17 @@ export default function Dashboard() {
         }}
         onSuccess={handleProjectSuccess}
         editProject={editingProject}
+      />
+
+      {/* Edit Task Modal */}
+      <EditTaskModal
+        isOpen={isEditTaskModalOpen}
+        onClose={() => {
+          setIsEditTaskModalOpen(false);
+          setEditingTask(null);
+        }}
+        onSuccess={handleTaskEditSuccess}
+        task={editingTask}
       />
     </div>
   );
