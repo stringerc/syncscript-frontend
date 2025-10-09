@@ -69,6 +69,7 @@ export default function Dashboard() {
   const [isEditTaskModalOpen, setIsEditTaskModalOpen] = React.useState(false);
   const [editingTask, setEditingTask] = React.useState<Task | null>(null);
   const [filterProjectId, setFilterProjectId] = React.useState<string | null>(null);
+  const [filterTag, setFilterTag] = React.useState<string | null>(null);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [sortBy, setSortBy] = React.useState<SortOption>('energy_match');
   const [streakData, setStreakData] = React.useState(getStreakData());
@@ -370,20 +371,32 @@ export default function Dashboard() {
   const allActiveTasks = tasks.filter(task => !task.completed);
   const completedTasks = tasks.filter(task => task.completed);
 
-  // Apply filter first (for proper counts)
-  const filteredByProject = React.useMemo(() => {
-    if (!filterProjectId) {
-      return allActiveTasks;
+  // Apply filters first (for proper counts)
+  const filteredTasks = React.useMemo(() => {
+    let filtered = allActiveTasks;
+    
+    // Apply project filter
+    if (filterProjectId) {
+      if (filterProjectId === 'none') {
+        filtered = filtered.filter(task => !task.project_id);
+      } else {
+        filtered = filtered.filter(task => task.project_id === filterProjectId);
+      }
     }
-    if (filterProjectId === 'none') {
-      return allActiveTasks.filter(task => !task.project_id);
+    
+    // Apply tag filter
+    if (filterTag) {
+      filtered = filtered.filter(task => 
+        task.tags?.some(tag => tag.label === filterTag)
+      );
     }
-    return allActiveTasks.filter(task => task.project_id === filterProjectId);
-  }, [allActiveTasks, filterProjectId]);
+    
+    return filtered;
+  }, [allActiveTasks, filterProjectId, filterTag]);
 
   // Apply search and sort to filtered tasks
   const activeTasks = React.useMemo(() => {
-    let filtered = filteredByProject;
+    let filtered = filteredTasks;
 
     // Apply search
     if (searchQuery.trim()) {
@@ -419,7 +432,7 @@ export default function Dashboard() {
     });
 
     return sorted;
-  }, [filteredByProject, searchQuery, sortBy, currentEnergy]);
+  }, [filteredTasks, searchQuery, sortBy, currentEnergy]);
 
   // Calculate task counts for filter (only active tasks, no search applied)
   const taskCounts = React.useMemo(() => {
@@ -639,6 +652,9 @@ export default function Dashboard() {
                   selectedProjectId={filterProjectId}
                   onFilterChange={handleFilterChange}
                   taskCounts={taskCounts}
+                  tasks={allActiveTasks}
+                  selectedTag={filterTag}
+                  onTagFilterChange={setFilterTag}
                 />
               </div>
             )}

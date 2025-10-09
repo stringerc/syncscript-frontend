@@ -1,10 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Tag, getAllTags } from '../../utils/tagUtils';
 
 interface Project {
   id: string;
   name: string;
   color: string;
+}
+
+interface Task {
+  tags?: Tag[];
+  project_id?: string;
 }
 
 interface TaskFilterProps {
@@ -16,14 +22,33 @@ interface TaskFilterProps {
     noProject: number;
     byProject: { [key: string]: number };
   };
+  tasks: Task[];
+  selectedTag: string | null;
+  onTagFilterChange: (tagLabel: string | null) => void;
 }
 
 const TaskFilter: React.FC<TaskFilterProps> = ({
   projects,
   selectedProjectId,
   onFilterChange,
-  taskCounts
+  taskCounts,
+  tasks,
+  selectedTag,
+  onTagFilterChange
 }) => {
+  // Get all unique tags from tasks
+  const allTags = React.useMemo(() => getAllTags(tasks), [tasks]);
+  
+  // Calculate tag counts
+  const tagCounts = React.useMemo(() => {
+    const counts: { [key: string]: number } = {};
+    tasks.forEach(task => {
+      task.tags?.forEach(tag => {
+        counts[tag.label] = (counts[tag.label] || 0) + 1;
+      });
+    });
+    return counts;
+  }, [tasks]);
   return (
     <div className="task-filter">
       <div className="filter-label">
@@ -90,13 +115,48 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
             <span className="option-count">{taskCounts.byProject[project.id] || 0}</span>
           </motion.button>
         ))}
+        
+        {/* Tags Section */}
+        {allTags.length > 0 && (
+          <>
+            <div className="filter-divider"></div>
+            <div className="filter-section-label">
+              <svg className="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                <line x1="7" y1="7" x2="7.01" y2="7"/>
+              </svg>
+              <span>Filter by Tag</span>
+            </div>
+            {allTags.map((tag) => (
+              <motion.button
+                key={tag.id}
+                className={`filter-option tag-filter ${selectedTag === tag.label ? 'active' : ''}`}
+                onClick={() => onTagFilterChange(selectedTag === tag.label ? null : tag.label)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <div className="filter-option-content">
+                  <div 
+                    className="tag-color-dot"
+                    style={{ background: tag.color }}
+                  ></div>
+                  <span className="option-label">#{tag.label}</span>
+                </div>
+                <span className="option-count">{tagCounts[tag.label] || 0}</span>
+              </motion.button>
+            ))}
+          </>
+        )}
       </div>
 
       {/* Clear Filter */}
-      {selectedProjectId && (
+      {(selectedProjectId || selectedTag) && (
         <motion.button
           className="clear-filter-btn"
-          onClick={() => onFilterChange(null)}
+          onClick={() => {
+            onFilterChange(null);
+            onTagFilterChange(null);
+          }}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
@@ -105,7 +165,7 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
             <line x1="18" y1="6" x2="6" y2="18"/>
             <line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
-          Clear Filter
+          Clear Filters
         </motion.button>
       )}
     </div>
