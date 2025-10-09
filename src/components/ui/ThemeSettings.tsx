@@ -60,63 +60,16 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ isOpen, onClose }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            style={{
-              position: 'relative',
-              background: '#FFFDF7',
-              borderRadius: '16px',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-              maxWidth: '600px',
-              width: '100%',
-              maxHeight: '85vh',
-              display: 'flex',
-              flexDirection: 'column',
-              zIndex: 2,
-              border: '1px solid #E5E7EB'
-            }}
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div 
-              className="modal-header"
-              style={{
-                flexShrink: 0,
-                padding: '24px 24px 16px',
-                marginTop: '6px',
-                borderBottom: '1px solid #E5E7EB',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
-              <h2 
-                className="modal-title"
-                style={{
-                  fontSize: '24px',
-                  fontWeight: '700',
-                  background: 'linear-gradient(135deg, #4A90E2 0%, #7ED321 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  margin: 0
-                }}
-              >
+            <div className="modal-header">
+              <h2 className="modal-title">
                 🎨 Theme Settings
               </h2>
               <button 
                 className="modal-close-btn" 
                 onClick={onClose}
-                style={{
-                  background: 'rgba(255, 255, 255, 0.8)',
-                  border: '1px solid #E5E7EB',
-                  borderRadius: '50%',
-                  width: '32px',
-                  height: '32px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  padding: 0
-                }}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <line x1="18" y1="6" x2="6" y2="18"/>
@@ -126,16 +79,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ isOpen, onClose }) => {
             </div>
 
             {/* Content */}
-            <div 
-              className="modal-content"
-              style={{
-                flex: 1,
-                overflowY: 'auto',
-                padding: '24px',
-                scrollbarWidth: 'thin',
-                scrollbarColor: '#D1D5DB transparent'
-              }}
-            >
+            <div className="modal-content">
               {/* Theme Mode */}
               <div className="theme-section">
                 <h3 className="theme-section-title">Mode</h3>
@@ -252,23 +196,8 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ isOpen, onClose }) => {
             </div>
 
             {/* Footer */}
-            <div 
-              className="modal-footer"
-              style={{
-                flexShrink: 0,
-                padding: '16px 24px',
-                borderTop: '1px solid #E5E7EB',
-                background: '#FFFDF7'
-              }}
-            >
-              <div 
-                className="theme-actions"
-                style={{
-                  display: 'flex',
-                  gap: '12px',
-                  justifyContent: 'flex-end'
-                }}
-              >
+            <div className="modal-footer">
+              <div className="theme-actions">
                 <button className="btn btn-ghost" onClick={resetTheme}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <polyline points="1,4 1,10 7,10"/>
