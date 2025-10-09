@@ -20,11 +20,15 @@ import {
 
 interface Task {
   id: string;
+  title: string;
+  description?: string;
   completed: boolean;
   completed_at?: string;
-  priority: string;
-  energy_level: number;
+  priority: 1 | 2 | 3 | 4 | 5;
+  energy_level?: number;
   project_id?: string;
+  due_date?: string;
+  created_at?: string;
 }
 
 interface EnergyLog {
@@ -142,11 +146,11 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({
       }))
       .sort((a, b) => a.hourNum - b.hourNum);
 
-    // 3. PRIORITY BREAKDOWN
+    // 3. PRIORITY BREAKDOWN (priority: 1-5, where 5=highest)
     const priorityCounts = {
-      high: recentTasks.filter(t => t.priority === 'high').length,
-      medium: recentTasks.filter(t => t.priority === 'medium').length,
-      low: recentTasks.filter(t => t.priority === 'low').length
+      high: recentTasks.filter(t => t.priority >= 4).length,
+      medium: recentTasks.filter(t => t.priority === 3).length,
+      low: recentTasks.filter(t => t.priority <= 2).length
     };
 
     const priorityBreakdown = [
@@ -459,7 +463,7 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) => `${name}: ${((percent as number) * 100).toFixed(0)}%`}
                   outerRadius={70}
                   fill="#8884d8"
                   dataKey="value"
