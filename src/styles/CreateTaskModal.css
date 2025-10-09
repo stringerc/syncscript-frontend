@@ -94,6 +94,14 @@
   gap: var(--space-4);
 }
 
+/* Form Hint */
+.form-hint {
+  font-size: var(--text-xs);
+  color: var(--syncscript-charcoal-500);
+  margin: var(--space-1) 0 0 0;
+  font-style: italic;
+}
+
 .modal-actions {
   display: flex;
   gap: var(--space-3);

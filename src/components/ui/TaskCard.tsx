@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ConfettiExplosion from 'react-confetti-explosion';
 import { getTaskUrgency, getUrgencyColor, getUrgencyIcon } from '../../utils/dateUtils';
+import { Tag } from '../../utils/tagUtils';
 
 interface Task {
   id: string;
@@ -18,6 +19,7 @@ interface Task {
     name: string;
     color: string;
   };
+  tags?: Tag[];
 }
 
 interface TaskCardProps {
@@ -127,6 +129,20 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           <h3 className="task-title">{task.title}</h3>
           {task.description && (
             <p className="task-description">{task.description}</p>
+          )}
+          {/* Tags */}
+          {task.tags && task.tags.length > 0 && (
+            <div className="task-tags">
+              {task.tags.map((tag) => (
+                <span
+                  key={tag.id}
+                  className="task-tag"
+                  style={{ background: tag.color }}
+                >
+                  #{tag.label}
+                </span>
+              ))}
+            </div>
           )}
         </div>
         

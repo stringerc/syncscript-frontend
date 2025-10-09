@@ -19,6 +19,7 @@ import StreakCounter from '../src/components/ui/StreakCounter';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { useKeyboardShortcuts } from '../src/hooks/useKeyboardShortcuts';
 import { updateLoginStreak, updateCompletionStreak, getStreakData, checkNewMilestone } from '../src/utils/streakUtils';
+import { Tag, parseTags } from '../src/utils/tagUtils';
 
 interface Task {
   id: string;
@@ -36,6 +37,7 @@ interface Task {
     name: string;
     color: string;
   };
+  tags?: Tag[];
 }
 
 interface Project {
@@ -699,7 +701,8 @@ export default function Dashboard() {
                       points: task.points,
                       createdAt: task.created_at,
                       dueDate: task.due_date,
-                      project: task.project
+                      project: task.project,
+                      tags: task.tags
                     }}
                     currentEnergy={currentEnergy}
                     onComplete={handleTaskComplete}
@@ -752,7 +755,8 @@ export default function Dashboard() {
                       points: task.points,
                       createdAt: task.created_at,
                       dueDate: task.due_date,
-                      project: task.project
+                      project: task.project,
+                      tags: task.tags
                     }}
                     currentEnergy={currentEnergy}
                     onComplete={handleTaskComplete}

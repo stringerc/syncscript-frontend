@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Tag, parseTags, tagsToString } from '../../utils/tagUtils';
 
 interface Project {
   id: string;
@@ -23,6 +24,7 @@ export interface NewTaskData {
   due_date?: string;
   estimated_duration?: number;
   project_id?: string;
+  tags?: Tag[];
 }
 
 export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
@@ -39,6 +41,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   const [dueDate, setDueDate] = useState('');
   const [estimatedDuration, setEstimatedDuration] = useState('');
   const [projectId, setProjectId] = useState<string>('');
+  const [tagInput, setTagInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -51,6 +54,8 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
     setIsSubmitting(true);
 
     try {
+      const tags = parseTags(tagInput);
+      
       const taskData: NewTaskData = {
         title: title.trim(),
         description: description.trim() || undefined,
@@ -59,6 +64,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         due_date: dueDate ? new Date(dueDate).toISOString() : undefined,
         estimated_duration: estimatedDuration ? parseInt(estimatedDuration) : undefined,
         project_id: projectId || undefined,
+        tags: tags.length > 0 ? tags : undefined,
       };
 
       await onCreateTask(taskData);
@@ -71,6 +77,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
       setDueDate('');
       setEstimatedDuration('');
       setProjectId('');
+      setTagInput('');
       
       onClose();
     } catch (error) {
@@ -242,6 +249,24 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                   className="form-input"
                 />
               </div>
+            </div>
+
+            {/* Tags */}
+            <div className="form-group">
+              <label htmlFor="task-tags" className="form-label">
+                Tags (Optional)
+              </label>
+              <input
+                id="task-tags"
+                type="text"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                placeholder="work, urgent, quick (comma-separated)"
+                className="form-input"
+              />
+              <p className="form-hint">
+                Add tags like: work, personal, urgent, quick
+              </p>
             </div>
 
             {/* Actions */}
