@@ -180,7 +180,6 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ isOpen, onClose }) => {
                 </button>
               </div>
             </div>
-            </div>
           </motion.div>
         </>
       )}
