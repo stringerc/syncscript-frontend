@@ -15,8 +15,10 @@ import EditTaskModal from '../src/components/ui/EditTaskModal';
 import TaskFilter from '../src/components/ui/TaskFilter';
 import TaskSearch, { SortOption } from '../src/components/ui/TaskSearch';
 import KeyboardHint from '../src/components/ui/KeyboardHint';
+import StreakCounter from '../src/components/ui/StreakCounter';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { useKeyboardShortcuts } from '../src/hooks/useKeyboardShortcuts';
+import { updateLoginStreak, updateCompletionStreak, getStreakData, checkNewMilestone } from '../src/utils/streakUtils';
 
 interface Task {
   id: string;
@@ -67,6 +69,8 @@ export default function Dashboard() {
   const [filterProjectId, setFilterProjectId] = React.useState<string | null>(null);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [sortBy, setSortBy] = React.useState<SortOption>('energy_match');
+  const [streakData, setStreakData] = React.useState(getStreakData());
+  const [showMilestoneConfetti, setShowMilestoneConfetti] = React.useState(false);
 
   // Keyboard shortcuts for power users
   useKeyboardShortcuts({
@@ -139,6 +143,22 @@ export default function Dashboard() {
   React.useEffect(() => {
     if (user && !isLoading) {
       loadUserData();
+      
+      // Update login streak
+      const oldStreak = streakData.loginStreak;
+      const newStreakData = updateLoginStreak();
+      setStreakData(newStreakData);
+      
+      // Check for milestone achievement
+      const milestone = checkNewMilestone(oldStreak, newStreakData.loginStreak);
+      if (milestone) {
+        setShowMilestoneConfetti(true);
+        toast.success(`${milestone.emoji} ${milestone.label} Login Streak! ${newStreakData.loginStreak} days!`, {
+          duration: 5000,
+          icon: milestone.emoji
+        });
+        setTimeout(() => setShowMilestoneConfetti(false), 3000);
+      }
     }
   }, [user, isLoading, loadUserData]);
 
@@ -203,6 +223,22 @@ export default function Dashboard() {
           duration: 4000,
           icon: '✅',
         });
+
+        // Update completion streak
+        const oldCompletionStreak = streakData.completionStreak;
+        const newStreakData = updateCompletionStreak();
+        setStreakData(newStreakData);
+        
+        // Check for completion streak milestone
+        const milestone = checkNewMilestone(oldCompletionStreak, newStreakData.completionStreak);
+        if (milestone) {
+          setTimeout(() => {
+            toast.success(`${milestone.emoji} ${milestone.label} Completion Streak! ${newStreakData.completionStreak} days!`, {
+              duration: 5000,
+              icon: milestone.emoji
+            });
+          }, 1000);
+        }
       }
     } catch (error) {
       console.error('Error completing task:', error);
@@ -446,7 +482,13 @@ export default function Dashboard() {
               points={userPoints}
               level={userLevel}
               tasksCompleted={completedTasks.length}
-              streak={0}
+              streak={streakData.loginStreak}
+            />
+            <StreakCounter
+              loginStreak={streakData.loginStreak}
+              completionStreak={streakData.completionStreak}
+              longestLoginStreak={streakData.longestLoginStreak}
+              longestCompletionStreak={streakData.longestCompletionStreak}
             />
             <Link href="/api/auth/logout" className="btn btn-ghost">
               <svg className="neural-icon" viewBox="0 0 24 24">
