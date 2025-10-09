@@ -32,6 +32,7 @@ interface Task {
   points: number;
   created_at: string;
   due_date?: string;
+  estimated_duration?: number;
   project_id?: string;
   project?: {
     id: string;
