@@ -55,16 +55,20 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
       const url = editProject ? `/api/projects/${editProject.id}` : '/api/projects';
       const method = editProject ? 'PUT' : 'POST';
 
+      const requestData = {
+        name: formData.name.trim(),
+        description: formData.description.trim() || null,
+        color: formData.color
+      };
+
+      console.log('Sending project data:', requestData);
+
       const response = await authenticatedFetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          name: formData.name.trim(),
-          description: formData.description.trim() || null,
-          color: formData.color
-        }),
+        body: JSON.stringify(requestData),
       });
 
       if (response.ok) {
@@ -74,11 +78,12 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
           icon: '📁',
         });
         
-        setFormData({ name: '', description: '', color: 'blue' });
+        setFormData({ name: '', description: '', color: '#3B82F6' });
         onSuccess();
         onClose();
       } else {
         const errorData = await response.json().catch(() => ({ message: 'Failed to save project' }));
+        console.error('Project creation error:', errorData);
         throw new Error(errorData.message || `HTTP ${response.status}`);
       }
     } catch (error) {
