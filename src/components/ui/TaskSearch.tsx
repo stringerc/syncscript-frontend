@@ -30,11 +30,14 @@ const TaskSearch: React.FC<TaskSearchProps> = ({
             <path d="m21 21-4.35-4.35"/>
           </svg>
           <input
+            id="task-search-input"
+            name="task-search"
             type="text"
             placeholder="Search tasks..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             className="search-input"
+            autoComplete="off"
           />
           <AnimatePresence>
             {searchQuery && (
@@ -62,6 +65,8 @@ const TaskSearch: React.FC<TaskSearchProps> = ({
             <path d="M3 6h18M7 12h10m-7 6h4"/>
           </svg>
           <select
+            id="task-sort-select"
+            name="task-sort"
             value={sortBy}
             onChange={(e) => onSortChange(e.target.value as SortOption)}
             className="sort-dropdown"
