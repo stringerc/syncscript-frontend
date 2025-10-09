@@ -55,11 +55,15 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
       const url = editProject ? `/api/projects/${editProject.id}` : '/api/projects';
       const method = editProject ? 'PUT' : 'POST';
 
-      const requestData = {
+      const requestData: { name: string; description?: string; color: string } = {
         name: formData.name.trim(),
-        description: formData.description.trim() || null,
         color: formData.color
       };
+
+      // Only include description if it's not empty
+      if (formData.description.trim()) {
+        requestData.description = formData.description.trim();
+      }
 
       console.log('Sending project data:', requestData);
 
@@ -83,8 +87,9 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
         onClose();
       } else {
         const errorData = await response.json().catch(() => ({ message: 'Failed to save project' }));
-        console.error('Project creation error:', errorData);
-        throw new Error(errorData.message || `HTTP ${response.status}`);
+        console.error('Project creation error response:', errorData);
+        console.error('Full error details:', JSON.stringify(errorData, null, 2));
+        throw new Error(errorData.message || errorData.error || `HTTP ${response.status}`);
       }
     } catch (error) {
       console.error('Error saving project:', error);
