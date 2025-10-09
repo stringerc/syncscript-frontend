@@ -41,32 +41,60 @@ const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
       
       setIsConnected(true);
       
-      // Mock calendar events
+      // Generate upcoming US holidays and placeholder events
+      const today = new Date();
       const mockEvents: CalendarEvent[] = [
+        // Upcoming US Holidays
         {
-          id: '1',
-          summary: 'Team Meeting',
-          description: 'Weekly sync with the team',
-          start: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
-          end: new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString(),
+          id: 'holiday-1',
+          summary: '🎃 Halloween',
+          description: 'US Holiday',
+          start: new Date(2025, 9, 31, 0, 0).toISOString(), // Oct 31, 2025
+          end: new Date(2025, 9, 31, 23, 59).toISOString(),
           selected: false
         },
         {
-          id: '2',
-          summary: 'Client Presentation',
-          description: 'Q4 results presentation',
-          start: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-          end: new Date(Date.now() + 25 * 60 * 60 * 1000).toISOString(),
+          id: 'holiday-2',
+          summary: '🦃 Thanksgiving',
+          description: 'US Holiday',
+          start: new Date(2025, 10, 27, 0, 0).toISOString(), // Nov 27, 2025
+          end: new Date(2025, 10, 27, 23, 59).toISOString(),
           selected: false
         },
         {
-          id: '3',
-          summary: 'Dentist Appointment',
-          start: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
-          end: new Date(Date.now() + 49 * 60 * 60 * 1000).toISOString(),
+          id: 'holiday-3',
+          summary: '🎄 Christmas',
+          description: 'US Holiday',
+          start: new Date(2025, 11, 25, 0, 0).toISOString(), // Dec 25, 2025
+          end: new Date(2025, 11, 25, 23, 59).toISOString(),
+          selected: false
+        },
+        {
+          id: 'holiday-4',
+          summary: '🎆 New Year\'s Day',
+          description: 'US Holiday',
+          start: new Date(2026, 0, 1, 0, 0).toISOString(), // Jan 1, 2026
+          end: new Date(2026, 0, 1, 23, 59).toISOString(),
+          selected: false
+        },
+        {
+          id: 'holiday-5',
+          summary: '❤️ Valentine\'s Day',
+          description: 'US Holiday',
+          start: new Date(2026, 1, 14, 0, 0).toISOString(), // Feb 14, 2026
+          end: new Date(2026, 1, 14, 23, 59).toISOString(),
+          selected: false
+        },
+        // Sample placeholder events (will be replaced with real Google Calendar)
+        {
+          id: 'sample-1',
+          summary: '📅 Connect Google Calendar to see your events',
+          description: 'Click "Connect Google Calendar" above to sync your real events and holidays',
+          start: new Date(today.getTime() + 24 * 60 * 60 * 1000).toISOString(),
+          end: new Date(today.getTime() + 25 * 60 * 60 * 1000).toISOString(),
           selected: false
         }
-      ];
+      ].filter(event => new Date(event.start) >= today); // Only show future events
       
       setEvents(mockEvents);
       
