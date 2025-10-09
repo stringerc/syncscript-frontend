@@ -192,7 +192,10 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
                         {!notif.read && (
                           <button
                             className="notif-action-btn"
-                            onClick={() => onMarkAsRead(notif.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onMarkAsRead(notif.id);
+                            }}
                             title="Mark as read"
                           >
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -202,7 +205,10 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
                         )}
                         <button
                           className="notif-action-btn"
-                          onClick={() => onDelete(notif.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete(notif.id);
+                          }}
                           title="Delete"
                         >
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
