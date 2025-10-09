@@ -125,19 +125,22 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       {onToggleSelect && !task.completed && (
         <div className="task-checkbox">
           <input
+            id={`task-select-${task.id}`}
+            name={`task-select-${task.id}`}
             type="checkbox"
             checked={isSelected}
             onChange={() => onToggleSelect(task.id)}
             onClick={(e) => e.stopPropagation()}
             className="checkbox-input"
+            aria-label={`Select task: ${task.title}`}
           />
-          <div className="checkbox-custom">
+          <label htmlFor={`task-select-${task.id}`} className="checkbox-custom">
             {isSelected && (
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                 <polyline points="20,6 9,17 4,12"/>
               </svg>
             )}
-          </div>
+          </label>
         </div>
       )}
 
