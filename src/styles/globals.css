@@ -52,11 +52,25 @@
 }
 
 [data-theme="dark"] p,
-[data-theme="dark"] span:not(.gradient-text):not([class*="badge"]),
+[data-theme="dark"] span:not(.gradient-text):not([class*="badge"]):not([class*="icon"]),
 [data-theme="dark"] .task-title,
 [data-theme="dark"] .project-name,
-[data-theme="dark"] .task-description {
+[data-theme="dark"] .task-description,
+[data-theme="dark"] label,
+[data-theme="dark"] .text-sm,
+[data-theme="dark"] .text-base,
+[data-theme="dark"] .text-xs,
+[data-theme="dark"] div:not([class*="gradient"]) {
   color: #cccccc !important;
+}
+
+/* Force light text on dark backgrounds */
+[data-theme="dark"] * {
+  color: inherit;
+}
+
+[data-theme="dark"] *:not(.gradient-text):not([class*="badge"]):not(button):not(a):not([class*="icon"]) {
+  color: #cccccc;
 }
 
 [data-theme="dark"] input,

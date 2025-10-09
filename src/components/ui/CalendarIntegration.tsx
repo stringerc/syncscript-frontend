@@ -238,6 +238,9 @@ const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
                   <p className="privacy-note">
                     🔒 We only access your calendar data. Your information is secure and private.
                   </p>
+                  <p className="privacy-note" style={{ marginTop: '8px', fontSize: '14px', color: '#F59E0B', fontWeight: '600' }}>
+                    ⚠️ Demo Mode: Shows sample events + US holidays. Full Google Calendar sync requires OAuth configuration.
+                  </p>
                 </div>
               ) : (
                 <div className="calendar-events-section">
