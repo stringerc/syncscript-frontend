@@ -38,6 +38,7 @@ import { Tag } from '../src/utils/tagUtils';
 import { Subtask } from '../src/utils/subtaskUtils';
 import { TaskNote } from '../src/utils/noteUtils';
 import { RecurrenceConfig, calculateNextDueDate, shouldEndRecurrence } from '../src/utils/recurrenceUtils';
+import { checkQuickWins, saveQuickWinPoints } from '../src/utils/quickWinBadges';
 
 interface Task {
   id: string;
@@ -310,6 +311,38 @@ export default function Dashboard() {
           task.id === taskId ? { ...task, completed: true } : task
         ));
         
+        // Check for quick wins!
+        const quickWins = checkQuickWins(
+          {
+            completed_at: new Date().toISOString(),
+            created_at: completedTask?.created_at,
+            project_id: completedTask?.project_id
+          },
+          tasks,
+          energyLogs
+        );
+
+        // Show quick win badges
+        if (quickWins.length > 0) {
+          const totalQuickWinPoints = quickWins.reduce((sum, win) => sum + win.points, 0);
+          saveQuickWinPoints(totalQuickWinPoints);
+          setUserPoints(prev => prev + totalQuickWinPoints);
+
+          // Show each quick win
+          quickWins.forEach((win, index) => {
+            setTimeout(() => {
+              toast.success(`${win.emoji} ${win.title}! ${win.message} +${win.points}pts`, {
+                duration: 3000,
+                style: {
+                  background: 'linear-gradient(135deg, #4A90E2 0%, #7ED321 100%)',
+                  color: 'white',
+                  fontWeight: 'bold'
+                }
+              });
+            }, index * 800); // Stagger the notifications
+          });
+        }
+
         toast.success(`Task completed! +${data.points_earned} points earned! 🎉`, {
           duration: 4000,
           icon: '✅',
