@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ConfettiExplosion from 'react-confetti-explosion';
 import { getTaskUrgency, getUrgencyColor, getUrgencyIcon } from '../../utils/dateUtils';
 import { Tag } from '../../utils/tagUtils';
+import { Subtask, getSubtaskProgress } from '../../utils/subtaskUtils';
 
 interface Task {
   id: string;
@@ -25,6 +26,7 @@ interface Task {
     color: string;
   };
   tags?: Tag[];
+  subtasks?: Subtask[];
 }
 
 interface TaskCardProps {
@@ -77,6 +79,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const urgency = getTaskUrgency(task.dueDate);
+  const subtaskProgress = task.subtasks ? getSubtaskProgress(task.subtasks) : null;
 
   const energyMatch = Math.abs(task.energyRequirement - currentEnergy);
   const isPerfectMatch = energyMatch === 0;
@@ -176,6 +179,31 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                   #{tag.label}
                 </span>
               ))}
+            </div>
+          )}
+          
+          {/* Subtask Progress */}
+          {subtaskProgress && subtaskProgress.total > 0 && (
+            <div className="subtask-progress">
+              <div className="progress-info">
+                <svg className="progress-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 11l3 3L22 4"/>
+                </svg>
+                <span className="progress-text">
+                  {subtaskProgress.completed}/{subtaskProgress.total} subtasks
+                </span>
+              </div>
+              <div className="progress-bar-container">
+                <div 
+                  className="progress-bar-fill"
+                  style={{ 
+                    width: `${subtaskProgress.percentage}%`,
+                    background: subtaskProgress.percentage === 100 
+                      ? 'var(--syncscript-green-500)' 
+                      : 'var(--gradient-ribbon)'
+                  }}
+                ></div>
+              </div>
             </div>
           )}
         </div>

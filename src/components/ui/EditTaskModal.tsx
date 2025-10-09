@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { Tag, parseTags, tagsToString } from '../../utils/tagUtils';
+import { Subtask, createSubtask, toggleSubtask, deleteSubtask } from '../../utils/subtaskUtils';
 
 interface Task {
   id: string;
@@ -16,6 +17,7 @@ interface Task {
   due_date?: string;
   project_id?: string;
   tags?: Tag[];
+  subtasks?: Subtask[];
 }
 
 interface Project {
@@ -48,6 +50,8 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
     project_id: '',
     tagInput: ''
   });
+  const [subtasks, setSubtasks] = useState<Subtask[]>([]);
+  const [newSubtaskText, setNewSubtaskText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const authenticatedFetch = useAuthenticatedFetch();
 
@@ -63,6 +67,7 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
         project_id: task.project_id || '',
         tagInput: task.tags ? tagsToString(task.tags) : ''
       });
+      setSubtasks(task.subtasks || []);
     }
   }, [task]);
 
@@ -92,6 +97,7 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
         due_date?: string;
         project_id?: string;
         tags?: Tag[];
+        subtasks?: Subtask[];
       } = {
         title: formData.title.trim(),
         priority: formData.priority,
@@ -113,6 +119,10 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
 
       if (tags.length > 0) {
         requestData.tags = tags;
+      }
+
+      if (subtasks.length > 0) {
+        requestData.subtasks = subtasks;
       }
 
       const response = await authenticatedFetch(`/api/tasks/${task.id}`, {
@@ -320,6 +330,85 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
                 />
                 <p className="form-hint">
                   Add tags like: work, personal, urgent, quick
+                </p>
+              </div>
+
+              {/* Subtasks / Checklist */}
+              <div className="form-group">
+                <label className="form-label">
+                  Subtasks / Checklist (Optional)
+                </label>
+                
+                {/* Subtask List */}
+                {subtasks.length > 0 && (
+                  <div className="subtask-list">
+                    {subtasks.map((subtask) => (
+                      <div key={subtask.id} className="subtask-item">
+                        <input
+                          id={`subtask-${subtask.id}`}
+                          type="checkbox"
+                          checked={subtask.completed}
+                          onChange={() => setSubtasks(toggleSubtask(subtasks, subtask.id))}
+                          className="subtask-checkbox"
+                        />
+                        <label htmlFor={`subtask-${subtask.id}`} className="subtask-text">
+                          {subtask.text}
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setSubtasks(deleteSubtask(subtasks, subtask.id))}
+                          className="subtask-delete"
+                          title="Delete subtask"
+                        >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {/* Add Subtask */}
+                <div className="subtask-add">
+                  <input
+                    type="text"
+                    value={newSubtaskText}
+                    onChange={(e) => setNewSubtaskText(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (newSubtaskText.trim()) {
+                          setSubtasks([...subtasks, createSubtask(newSubtaskText)]);
+                          setNewSubtaskText('');
+                        }
+                      }
+                    }}
+                    placeholder="Add a subtask... (press Enter)"
+                    className="form-input"
+                    disabled={isSubmitting}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (newSubtaskText.trim()) {
+                        setSubtasks([...subtasks, createSubtask(newSubtaskText)]);
+                        setNewSubtaskText('');
+                      }
+                    }}
+                    className="btn btn-sm btn-secondary"
+                    disabled={!newSubtaskText.trim() || isSubmitting}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <line x1="12" y1="5" x2="12" y2="19"/>
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Add
+                  </button>
+                </div>
+                <p className="form-hint">
+                  Break down your task into smaller steps
                 </p>
               </div>
 
