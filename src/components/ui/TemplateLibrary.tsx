@@ -5,15 +5,16 @@ import toast from 'react-hot-toast';
 
 interface TemplateLibraryProps {
   onUseTemplate: (template: TaskTemplate) => void;
+  refreshTrigger?: number;
 }
 
-const TemplateLibrary: React.FC<TemplateLibraryProps> = ({ onUseTemplate }) => {
+const TemplateLibrary: React.FC<TemplateLibraryProps> = ({ onUseTemplate, refreshTrigger }) => {
   const [templates, setTemplates] = React.useState<TaskTemplate[]>([]);
   const [isExpanded, setIsExpanded] = React.useState(false);
 
   React.useEffect(() => {
     loadTemplates();
-  }, []);
+  }, [refreshTrigger]);
 
   const loadTemplates = () => {
     const savedTemplates = getTemplates();
@@ -37,10 +38,6 @@ const TemplateLibrary: React.FC<TemplateLibraryProps> = ({ onUseTemplate }) => {
     });
   };
 
-  if (templates.length === 0) {
-    return null;
-  }
-
   return (
     <motion.div 
       className="template-library"
@@ -51,6 +48,7 @@ const TemplateLibrary: React.FC<TemplateLibraryProps> = ({ onUseTemplate }) => {
       <button
         className="template-library-toggle"
         onClick={() => setIsExpanded(!isExpanded)}
+        disabled={templates.length === 0}
       >
         <svg className="template-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
@@ -58,16 +56,22 @@ const TemplateLibrary: React.FC<TemplateLibraryProps> = ({ onUseTemplate }) => {
           <polyline points="7 3 7 8 15 8"/>
         </svg>
         <span className="template-count">{templates.length}</span>
-        <span className="template-label">Template{templates.length !== 1 ? 's' : ''}</span>
-        <svg 
-          className={`expand-icon ${isExpanded ? 'expanded' : ''}`}
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="2"
-        >
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
+        <span className="template-label">
+          {templates.length === 0 
+            ? 'No templates yet - save a task as template!' 
+            : `Template${templates.length !== 1 ? 's' : ''}`}
+        </span>
+        {templates.length > 0 && (
+          <svg 
+            className={`expand-icon ${isExpanded ? 'expanded' : ''}`}
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2"
+          >
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        )}
       </button>
 
       <AnimatePresence>

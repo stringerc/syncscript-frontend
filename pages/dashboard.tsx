@@ -88,6 +88,7 @@ export default function Dashboard() {
     project_id?: string;
     tags?: Tag[];
   } | null>(null);
+  const [templateRefresh, setTemplateRefresh] = React.useState(0);
 
   // Keyboard shortcuts for power users
   useKeyboardShortcuts({
@@ -690,7 +691,10 @@ export default function Dashboard() {
           </div>
 
           {/* Template Library */}
-          <TemplateLibrary onUseTemplate={handleUseTemplate} />
+          <TemplateLibrary 
+            onUseTemplate={handleUseTemplate}
+            refreshTrigger={templateRefresh}
+          />
 
           {/* Task Filter and Tasks Grid Layout */}
           <div className="tasks-section-layout">
@@ -886,6 +890,7 @@ export default function Dashboard() {
         onClose={() => {
           setIsSaveTemplateModalOpen(false);
           setTemplateTaskData(null);
+          setTemplateRefresh(prev => prev + 1); // Trigger template library refresh
         }}
         taskData={templateTaskData}
       />
