@@ -6,10 +6,10 @@ export default withApiAuthRequired(async function token(
   res: NextApiResponse
 ) {
   try {
-    // Request access token with API audience
-    const { accessToken } = await getAccessToken(req, res, {
-      scopes: ['read:users', 'write:users', 'read:tasks', 'write:tasks', 'read:energy', 'write:energy', 'read:projects', 'write:projects']
-    });
+    // Request access token with API audience - try without scopes first
+    const tokenResponse = await getAccessToken(req, res);
+    
+    const accessToken = tokenResponse?.accessToken;
 
     if (!accessToken) {
       return res.status(401).json({ 
