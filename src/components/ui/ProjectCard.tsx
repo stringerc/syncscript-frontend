@@ -26,13 +26,46 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   onSelect,
   isSelected = false
 }) => {
-  const getProjectColor = (color?: string) => {
-    // If color is a hex value, create a gradient from it
+  const getProjectColorStyle = (color?: string) => {
+    // If color is a hex value, create an inline gradient style
     if (color && color.startsWith('#')) {
-      return `from-[${color}] to-[${color}]`;
+      // Create a slightly darker shade for the gradient
+      const lighten = (hex: string, percent: number) => {
+        const num = parseInt(hex.replace('#', ''), 16);
+        const amt = Math.round(2.55 * percent);
+        const R = (num >> 16) + amt;
+        const G = (num >> 8 & 0x00FF) + amt;
+        const B = (num & 0x0000FF) + amt;
+        return '#' + (
+          0x1000000 +
+          (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
+          (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
+          (B < 255 ? (B < 1 ? 0 : B) : 255)
+        ).toString(16).slice(1);
+      };
+      
+      const darken = (hex: string, percent: number) => {
+        const num = parseInt(hex.replace('#', ''), 16);
+        const amt = Math.round(2.55 * percent);
+        const R = (num >> 16) - amt;
+        const G = (num >> 8 & 0x00FF) - amt;
+        const B = (num & 0x0000FF) - amt;
+        return '#' + (
+          0x1000000 +
+          (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
+          (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
+          (B < 255 ? (B < 1 ? 0 : B) : 255)
+        ).toString(16).slice(1);
+      };
+      
+      const color2 = darken(color, 10);
+      return {
+        background: `linear-gradient(135deg, ${color} 0%, ${color2} 100%)`,
+        className: ''
+      };
     }
     
-    // Fallback to named colors
+    // Fallback to Tailwind classes for named colors
     const colors = {
       blue: 'from-blue-500 to-blue-600',
       green: 'from-green-500 to-green-600',
@@ -43,7 +76,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     };
     
     if (color && colors[color as keyof typeof colors]) {
-      return colors[color as keyof typeof colors];
+      return {
+        background: '',
+        className: `bg-gradient-to-r ${colors[color as keyof typeof colors]}`
+      };
     }
     
     // Default gradient based on project name hash
@@ -53,7 +89,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     }, 0);
     const colorKeys = Object.keys(colors);
     const defaultColor = colorKeys[Math.abs(hash) % colorKeys.length];
-    return colors[defaultColor as keyof typeof colors];
+    return {
+      background: '',
+      className: `bg-gradient-to-r ${colors[defaultColor as keyof typeof colors]}`
+    };
   };
 
   const formatDate = (dateString: string) => {
@@ -64,6 +103,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     });
   };
 
+  const colorStyle = getProjectColorStyle(project.color);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -72,7 +113,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       className={`project-card ${isSelected ? 'selected' : ''}`}
       onClick={() => onSelect?.(project)}
     >
-      <div className={`project-header bg-gradient-to-r ${getProjectColor(project.color)}`}>
+      <div 
+        className={`project-header ${colorStyle.className}`}
+        style={colorStyle.background ? { background: colorStyle.background } : {}}
+      >
         <div className="project-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2-2z"/>
