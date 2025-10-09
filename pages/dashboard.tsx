@@ -294,8 +294,18 @@ export default function Dashboard() {
     }
   };
 
-  const handleTaskEditSuccess = () => {
-    loadUserData();
+  const handleTaskEditSuccess = async () => {
+    try {
+      // Only reload tasks, not everything
+      const response = await authenticatedFetch('/api/tasks');
+      
+      if (response.ok) {
+        const data = await response.json();
+        setTasks(data.tasks || []);
+      }
+    } catch (error) {
+      console.error('Error reloading tasks:', error);
+    }
   };
 
   const handleCreateTask = async (taskData: NewTaskData) => {
