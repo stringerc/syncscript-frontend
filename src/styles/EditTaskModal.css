@@ -610,4 +610,13 @@
 
 .note-add .btn {
   align-self: flex-end;
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.note-add .btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
 }
