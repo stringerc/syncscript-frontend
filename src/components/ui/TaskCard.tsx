@@ -262,16 +262,17 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         {isHovered && !task.completed && (
           <motion.div
             className="task-actions"
-            initial={{ opacity: 0, y: 10, height: 0 }}
-            animate={{ opacity: 1, y: 0, height: 'auto' }}
-            exit={{ opacity: 0, y: 10, height: 0 }}
+            initial={{ opacity: 0, y: 8, scaleY: 0.8 }}
+            animate={{ opacity: 1, y: 0, scaleY: 1 }}
+            exit={{ opacity: 0, y: 8, scaleY: 0.8 }}
             transition={{ 
-              duration: 0.4, 
-              ease: [0.4, 0, 0.2, 1],
-              opacity: { duration: 0.3 },
-              y: { duration: 0.4 },
-              height: { duration: 0.4 }
+              duration: 0.35,
+              ease: [0.25, 0.1, 0.25, 1],
+              opacity: { duration: 0.25, ease: "easeInOut" },
+              y: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] },
+              scaleY: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }
             }}
+            style={{ originY: 0 }}
           >
             <motion.button
               className="btn btn-sm btn-primary"
