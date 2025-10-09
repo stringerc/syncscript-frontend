@@ -313,18 +313,20 @@ export default function Dashboard() {
   const allActiveTasks = tasks.filter(task => !task.completed);
   const completedTasks = tasks.filter(task => task.completed);
 
-  // Apply filter, search, and sort
-  const activeTasks = React.useMemo(() => {
-    let filtered = allActiveTasks;
-
-    // Apply project filter
-    if (filterProjectId) {
-      if (filterProjectId === 'none') {
-        filtered = filtered.filter(task => !task.project_id);
-      } else {
-        filtered = filtered.filter(task => task.project_id === filterProjectId);
-      }
+  // Apply filter first (for proper counts)
+  const filteredByProject = React.useMemo(() => {
+    if (!filterProjectId) {
+      return allActiveTasks;
     }
+    if (filterProjectId === 'none') {
+      return allActiveTasks.filter(task => !task.project_id);
+    }
+    return allActiveTasks.filter(task => task.project_id === filterProjectId);
+  }, [allActiveTasks, filterProjectId]);
+
+  // Apply search and sort to filtered tasks
+  const activeTasks = React.useMemo(() => {
+    let filtered = filteredByProject;
 
     // Apply search
     if (searchQuery.trim()) {
@@ -359,10 +361,13 @@ export default function Dashboard() {
       }
     });
 
+    console.log('Filtered tasks after all operations:', sorted.length);
+    console.log('Filter:', filterProjectId, 'Search:', searchQuery, 'Sort:', sortBy);
+    
     return sorted;
-  }, [allActiveTasks, filterProjectId, searchQuery, sortBy, currentEnergy]);
+  }, [filteredByProject, searchQuery, sortBy, currentEnergy]);
 
-  // Calculate task counts for filter
+  // Calculate task counts for filter (only active tasks, no search applied)
   const taskCounts = React.useMemo(() => {
     const counts = {
       all: allActiveTasks.length,
@@ -373,6 +378,8 @@ export default function Dashboard() {
     projects.forEach(project => {
       counts.byProject[project.id] = allActiveTasks.filter(t => t.project_id === project.id).length;
     });
+    
+    console.log('Task counts by project:', counts);
     
     return counts;
   }, [allActiveTasks, projects]);
@@ -588,7 +595,7 @@ export default function Dashboard() {
                 sortBy={sortBy}
                 onSortChange={setSortBy}
                 resultsCount={activeTasks.length}
-                totalCount={allActiveTasks.length}
+                totalCount={filteredByProject.length}
               />
 
               {activeTasks.length === 0 ? (
