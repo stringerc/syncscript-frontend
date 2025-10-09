@@ -7,6 +7,8 @@ import Head from 'next/head';
 import '../src/styles/globals.css';
 import '../src/styles/SmartSuggestions.css';
 import '../src/styles/AdvancedAnalytics.css';
+import '../src/styles/AchievementGallery.css';
+import '../src/styles/AchievementUnlock.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {

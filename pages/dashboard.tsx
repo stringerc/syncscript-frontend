@@ -25,8 +25,11 @@ import ThemeSettings from '../src/components/ui/ThemeSettings';
 import NotificationCenter from '../src/components/ui/NotificationCenter';
 import InstallPWA from '../src/components/ui/InstallPWA';
 import SmartSuggestions from '../src/components/ui/SmartSuggestions';
+import AchievementGallery from '../src/components/ui/AchievementGallery';
+import AchievementUnlockNotification from '../src/components/ui/AchievementUnlockNotification';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { useNotifications } from '../src/hooks/useNotifications';
+import { useAchievements } from '../src/hooks/useAchievements';
 import { TaskTemplate, createTaskFromTemplate } from '../src/utils/templateUtils';
 import { useKeyboardShortcuts } from '../src/hooks/useKeyboardShortcuts';
 import { updateLoginStreak, updateCompletionStreak, getStreakData, checkNewMilestone } from '../src/utils/streakUtils';
@@ -110,6 +113,9 @@ export default function Dashboard() {
   const [showSuggestions, setShowSuggestions] = React.useState(false);
   const [showThemeSettings, setShowThemeSettings] = React.useState(false);
   const [showNotifications, setShowNotifications] = React.useState(false);
+  const [showAchievements, setShowAchievements] = React.useState(false);
+  const [focusSessionsCount, setFocusSessionsCount] = React.useState(0);
+  const [totalFocusMinutes, setTotalFocusMinutes] = React.useState(0);
 
   // Notifications
   const {
@@ -121,6 +127,25 @@ export default function Dashboard() {
     deleteNotification: deleteNotif,
     clearAll: clearAllNotifications
   } = useNotifications(tasks, currentEnergy, streakData);
+
+  // Achievements
+  const {
+    unlockedAchievements,
+    newlyUnlocked,
+    achievementProgress,
+    totalPoints: achievementPoints,
+    completionPercentage: achievementCompletion,
+    totalAchievements,
+    unlockedCount,
+    clearNewlyUnlocked
+  } = useAchievements({
+    tasks,
+    energyLogs,
+    projects,
+    currentStreak: streakData.loginStreak,
+    focusSessions: focusSessionsCount,
+    focusMinutes: totalFocusMinutes
+  });
 
   // Keyboard shortcuts for power users
   useKeyboardShortcuts({
@@ -211,6 +236,19 @@ export default function Dashboard() {
       }
     }
   }, [user, isLoading, loadUserData]);
+
+  // Load focus session data from localStorage
+  React.useEffect(() => {
+    const savedSessions = localStorage.getItem('focusSessions');
+    const savedMinutes = localStorage.getItem('focusMinutes');
+    
+    if (savedSessions) {
+      setFocusSessionsCount(parseInt(savedSessions, 10) || 0);
+    }
+    if (savedMinutes) {
+      setTotalFocusMinutes(parseInt(savedMinutes, 10) || 0);
+    }
+  }, []);
 
   const handleEnergyChange = async (energy: number) => {
     const previousEnergy = currentEnergy;
@@ -591,6 +629,14 @@ export default function Dashboard() {
   };
 
   const handleFocusComplete = () => {
+    // Track focus session for achievements
+    setFocusSessionsCount(prev => prev + 1);
+    setTotalFocusMinutes(prev => prev + 25); // Pomodoro is 25 minutes
+    
+    // Save to localStorage for persistence
+    localStorage.setItem('focusSessions', String(focusSessionsCount + 1));
+    localStorage.setItem('focusMinutes', String(totalFocusMinutes + 25));
+    
     toast.success('Focus session saved! Great work! 🎯', {
       duration: 3000,
       icon: '✅',
@@ -853,6 +899,20 @@ export default function Dashboard() {
               </button>
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowAchievements(!showAchievements)}
+                title="View your achievements"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '16px', height: '16px' }}>
+                  <circle cx="12" cy="8" r="7"/>
+                  <polyline points="8.21,13.89 7,23 12,20 17,23 15.79,13.88"/>
+                </svg>
+                Achievements
+                {unlockedCount > 0 && (
+                  <span className="achievement-badge">{unlockedCount}</span>
+                )}
+              </button>
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowAnalytics(!showAnalytics)}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '16px', height: '16px' }}>
@@ -901,6 +961,24 @@ export default function Dashboard() {
               energyLogs={energyLogs}
               projects={projects}
               authenticatedFetch={authenticatedFetch}
+            />
+          </motion.div>
+        )}
+
+        {/* Achievement Gallery */}
+        {showAchievements && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{ marginBottom: 'var(--space-6)' }}
+          >
+            <AchievementGallery
+              achievementProgress={achievementProgress}
+              unlockedCount={unlockedCount}
+              totalPoints={achievementPoints}
+              completionPercentage={achievementCompletion}
             />
           </motion.div>
         )}
@@ -1300,6 +1378,12 @@ export default function Dashboard() {
           }
         }}
         authenticatedFetch={authenticatedFetch}
+      />
+
+      {/* Achievement Unlock Notification */}
+      <AchievementUnlockNotification
+        achievement={newlyUnlocked[0] || null}
+        onClose={clearNewlyUnlocked}
       />
 
       {/* PWA Install Prompt */}
