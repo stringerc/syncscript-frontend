@@ -29,6 +29,8 @@ const DEFAULT_PREFERENCES: NotificationPreferences = {
 };
 
 export const getNotificationPreferences = (): NotificationPreferences => {
+  if (typeof window === 'undefined') return DEFAULT_PREFERENCES;
+  
   const saved = localStorage.getItem('syncscript-notification-prefs');
   if (saved) {
     try {
@@ -45,6 +47,8 @@ export const saveNotificationPreferences = (prefs: NotificationPreferences): voi
 };
 
 export const getStoredNotifications = (): Notification[] => {
+  if (typeof window === 'undefined') return [];
+  
   const saved = localStorage.getItem('syncscript-notifications');
   if (saved) {
     try {
