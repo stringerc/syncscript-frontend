@@ -161,10 +161,17 @@ export default function Dashboard() {
       setIsCreateModalOpen(false);
       setIsCreateProjectModalOpen(false);
       setIsEditTaskModalOpen(false);
+      setShowThemeSettings(false);
+      setShowAchievements(false);
+      setShowSuggestions(false);
     },
     onQuickEnergy: (level) => {
       handleEnergyChange(level);
-    }
+    },
+    onOpenAchievements: () => setShowAchievements(prev => !prev),
+    onOpenSuggestions: () => setShowSuggestions(true),
+    onOpenTheme: () => setShowThemeSettings(true),
+    onOpenAnalytics: () => setShowAnalytics(prev => !prev)
   });
 
   // Load user data on mount - PARALLELIZED for 3x faster loading!

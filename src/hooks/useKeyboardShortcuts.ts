@@ -6,6 +6,10 @@ interface KeyboardShortcutHandlers {
   onFocusSearch?: () => void;
   onEscapePressed?: () => void;
   onQuickEnergy?: (level: 1 | 2 | 3 | 4 | 5) => void;
+  onOpenAchievements?: () => void;
+  onOpenAnalytics?: () => void;
+  onOpenSuggestions?: () => void;
+  onOpenTheme?: () => void;
 }
 
 /**
@@ -31,8 +35,8 @@ export const useKeyboardShortcuts = (handlers: KeyboardShortcutHandlers) => {
       if (isTyping) return;
 
       // Prevent default for our shortcuts
-      const shouldPreventDefault = ['n', 'p', '/', '1', '2', '3', '4', '5'].includes(event.key.toLowerCase());
-      if (shouldPreventDefault) {
+      const shouldPreventDefault = ['n', 'p', '/', '1', '2', '3', '4', '5', 'a', 's', 't'].includes(event.key.toLowerCase());
+      if (shouldPreventDefault && !event.metaKey && !event.ctrlKey) {
         event.preventDefault();
       }
 
@@ -55,6 +59,34 @@ export const useKeyboardShortcuts = (handlers: KeyboardShortcutHandlers) => {
           // / - Focus Search
           if (handlers.onFocusSearch) {
             handlers.onFocusSearch();
+          }
+          break;
+
+        case 'a':
+          // A - Achievements
+          if (handlers.onOpenAchievements) {
+            handlers.onOpenAchievements();
+          }
+          break;
+
+        case 's':
+          // S - Smart Suggestions
+          if (handlers.onOpenSuggestions) {
+            handlers.onOpenSuggestions();
+          }
+          break;
+
+        case 't':
+          // T - Theme Settings
+          if (handlers.onOpenTheme) {
+            handlers.onOpenTheme();
+          }
+          break;
+
+        case 'd':
+          // D - Dashboard Analytics (with Shift)
+          if (event.shiftKey && handlers.onOpenAnalytics) {
+            handlers.onOpenAnalytics();
           }
           break;
 
@@ -88,6 +120,10 @@ export const useKeyboardShortcuts = (handlers: KeyboardShortcutHandlers) => {
 export const getShortcutsList = () => [
   { key: 'N', description: 'Create new task', category: 'Actions' },
   { key: 'P', description: 'Create new project', category: 'Actions' },
+  { key: 'A', description: 'Open achievements', category: 'Navigation' },
+  { key: 'S', description: 'Open smart suggestions', category: 'Navigation' },
+  { key: 'T', description: 'Open theme settings', category: 'Navigation' },
+  { key: 'Shift+D', description: 'Toggle analytics dashboard', category: 'Navigation' },
   { key: '/', description: 'Focus search bar', category: 'Navigation' },
   { key: 'ESC', description: 'Close modals/dialogs', category: 'Navigation' },
   { key: '1-5', description: 'Quick energy level selection', category: 'Energy' },
