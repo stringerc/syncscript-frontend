@@ -28,7 +28,7 @@ export default withApiAuthRequired(async function token(
     }
 
     // Auth0 session should have accessToken in it
-    const accessToken = (session as any).accessToken;
+    const accessToken = (session as { accessToken?: string }).accessToken;
     
     if (accessToken) {
       return res.status(200).json({ accessToken });
