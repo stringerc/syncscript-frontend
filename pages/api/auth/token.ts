@@ -7,7 +7,9 @@ export default withApiAuthRequired(async function token(
 ) {
   try {
     // Request access token with API audience
-    const { accessToken } = await getAccessToken(req, res);
+    const { accessToken } = await getAccessToken(req, res, {
+      scopes: ['read:users', 'write:users', 'read:tasks', 'write:tasks', 'read:energy', 'write:energy', 'read:projects', 'write:projects']
+    });
 
     if (!accessToken) {
       return res.status(401).json({ 
