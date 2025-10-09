@@ -253,31 +253,44 @@ export default function Dashboard() {
         });
 
         // Handle recurring task - create next instance
-        if (completedTask?.recurrence && completedTask.recurrence.frequency !== 'none') {
-          const nextDueDate = completedTask.due_date 
-            ? calculateNextDueDate(completedTask.due_date, completedTask.recurrence)
-            : new Date();
-          
-          // Check if recurrence should continue
-          if (!shouldEndRecurrence(completedTask.recurrence, nextDueDate)) {
-            // Create next instance
-            await handleCreateTask({
-              title: completedTask.title,
-              description: completedTask.description,
-              priority: completedTask.priority,
-              energy_requirement: completedTask.energy_requirement,
-              due_date: nextDueDate.toISOString(),
-              estimated_duration: completedTask.estimated_duration,
-              project_id: completedTask.project_id,
-              tags: completedTask.tags,
-              recurrence: completedTask.recurrence
-            });
-            
-            toast.success(`🔄 Next "${completedTask.title}" task created!`, {
-              duration: 3000,
-              icon: '🔄',
-            });
-          }
+        if (completedTask?.recurrence && completedTask.recurrence.frequency !== 'none' && completedTask.recurrence.is_active) {
+          setTimeout(async () => {
+            try {
+              const nextDueDate = completedTask.due_date 
+                ? calculateNextDueDate(completedTask.due_date, completedTask.recurrence!)
+                : new Date();
+              
+              // Check if recurrence should continue
+              if (!shouldEndRecurrence(completedTask.recurrence!, nextDueDate)) {
+                // Create next instance - build clean object
+                const nextTaskData: NewTaskData = {
+                  title: completedTask.title,
+                  priority: completedTask.priority,
+                  energy_requirement: completedTask.energy_requirement,
+                  recurrence: completedTask.recurrence
+                };
+                
+                // Only add optional fields if they exist
+                if (completedTask.description) nextTaskData.description = completedTask.description;
+                if (completedTask.estimated_duration) nextTaskData.estimated_duration = completedTask.estimated_duration;
+                if (completedTask.project_id) nextTaskData.project_id = completedTask.project_id;
+                if (completedTask.tags && completedTask.tags.length > 0) nextTaskData.tags = completedTask.tags;
+                
+                // Set next due date
+                nextTaskData.due_date = nextDueDate.toISOString();
+                
+                await handleCreateTask(nextTaskData);
+                
+                toast.success(`🔄 Next "${completedTask.title}" task created!`, {
+                  duration: 3000,
+                  icon: '🔄',
+                });
+              }
+            } catch (error) {
+              console.error('Error creating recurring task:', error);
+              toast.error('Failed to create next recurring task');
+            }
+          }, 500); // Small delay to avoid race conditions
         }
 
         // Update completion streak
