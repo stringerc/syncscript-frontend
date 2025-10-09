@@ -10,10 +10,15 @@ interface Task {
   description?: string;
   priority: 1 | 2 | 3 | 4 | 5;
   energyRequirement: 1 | 2 | 3 | 4 | 5;
+  energy_requirement: 1 | 2 | 3 | 4 | 5;
   completed: boolean;
   points: number;
   createdAt: string;
+  created_at: string;
   dueDate?: string;
+  estimatedDuration?: number;
+  estimated_duration?: number;
+  project_id?: string;
   project?: {
     id: string;
     name: string;
