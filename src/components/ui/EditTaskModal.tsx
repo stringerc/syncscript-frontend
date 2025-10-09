@@ -80,20 +80,26 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
     try {
       const requestData: {
         title: string;
-        description: string | null;
+        description?: string;
         priority: number;
         energy_requirement: number;
-        due_date: string | null;
+        due_date?: string;
         project_id?: string;
       } = {
         title: formData.title.trim(),
-        description: formData.description.trim() || null,
         priority: formData.priority,
-        energy_requirement: formData.energy_requirement,
-        due_date: formData.due_date || null
+        energy_requirement: formData.energy_requirement
       };
 
-      // Only include project_id if it's not empty
+      // Only include optional fields if they have values
+      if (formData.description.trim()) {
+        requestData.description = formData.description.trim();
+      }
+
+      if (formData.due_date) {
+        requestData.due_date = new Date(formData.due_date).toISOString();
+      }
+
       if (formData.project_id) {
         requestData.project_id = formData.project_id;
       }
@@ -118,8 +124,9 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
         onClose();
       } else {
         const errorData = await response.json().catch(() => ({ message: 'Failed to update task' }));
-        console.error('Task update error:', errorData);
-        throw new Error(errorData.message || `HTTP ${response.status}`);
+        console.error('Task update error response:', errorData);
+        console.error('Full error details:', JSON.stringify(errorData, null, 2));
+        throw new Error(errorData.message || errorData.error || `HTTP ${response.status}`);
       }
     } catch (error) {
       console.error('Error updating task:', error);
