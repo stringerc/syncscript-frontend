@@ -22,7 +22,9 @@ import BulkActionToolbar from '../src/components/ui/BulkActionToolbar';
 import FocusTimer from '../src/components/ui/FocusTimer';
 import AnalyticsDashboard from '../src/components/ui/AnalyticsDashboard';
 import ThemeSettings from '../src/components/ui/ThemeSettings';
+import NotificationCenter from '../src/components/ui/NotificationCenter';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
+import { useNotifications } from '../src/hooks/useNotifications';
 import { TaskTemplate, createTaskFromTemplate } from '../src/utils/templateUtils';
 import { useKeyboardShortcuts } from '../src/hooks/useKeyboardShortcuts';
 import { updateLoginStreak, updateCompletionStreak, getStreakData, checkNewMilestone } from '../src/utils/streakUtils';
@@ -104,6 +106,18 @@ export default function Dashboard() {
   const [focusTaskTitle, setFocusTaskTitle] = React.useState<string>('');
   const [showAnalytics, setShowAnalytics] = React.useState(false);
   const [showThemeSettings, setShowThemeSettings] = React.useState(false);
+  const [showNotifications, setShowNotifications] = React.useState(false);
+
+  // Notifications
+  const {
+    notifications,
+    unreadCount,
+    preferences: notificationPreferences,
+    updatePreferences: updateNotificationPreferences,
+    markAsRead,
+    deleteNotification: deleteNotif,
+    clearAll: clearAllNotifications
+  } = useNotifications(tasks, currentEnergy, streakData);
 
   // Keyboard shortcuts for power users
   useKeyboardShortcuts({
@@ -768,6 +782,16 @@ export default function Dashboard() {
             {/* Actions Row */}
             <div className="header-actions">
               <button
+                className="btn btn-secondary notif-btn"
+                onClick={() => setShowNotifications(true)}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '16px', height: '16px' }}>
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+                {unreadCount > 0 && <span className="notif-count">{unreadCount}</span>}
+              </button>
+              <button
                 className="btn btn-secondary"
                 onClick={() => setShowAnalytics(!showAnalytics)}
               >
@@ -1182,6 +1206,19 @@ export default function Dashboard() {
       <ThemeSettings
         isOpen={showThemeSettings}
         onClose={() => setShowThemeSettings(false)}
+      />
+
+      {/* Notification Center */}
+      <NotificationCenter
+        isOpen={showNotifications}
+        onClose={() => setShowNotifications(false)}
+        notifications={notifications}
+        unreadCount={unreadCount}
+        preferences={notificationPreferences}
+        onMarkAsRead={markAsRead}
+        onDelete={deleteNotif}
+        onClearAll={clearAllNotifications}
+        onUpdatePreferences={updateNotificationPreferences}
       />
 
       {/* Keyboard Shortcuts Hint */}
