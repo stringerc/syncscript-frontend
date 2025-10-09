@@ -81,6 +81,7 @@
 
 .notif-btn {
   position: relative;
+  overflow: visible !important;
 }
 
 .notif-count {
