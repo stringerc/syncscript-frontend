@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
@@ -31,6 +31,23 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const authenticatedFetch = useAuthenticatedFetch();
+
+  // Update form data when editProject changes
+  useEffect(() => {
+    if (editProject) {
+      setFormData({
+        name: editProject.name,
+        description: editProject.description || '',
+        color: editProject.color
+      });
+    } else {
+      setFormData({
+        name: '',
+        description: '',
+        color: '#3B82F6'
+      });
+    }
+  }, [editProject]);
 
   const colorOptions = [
     { value: '#3B82F6', label: 'Blue', class: 'from-blue-500 to-blue-600' },
