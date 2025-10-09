@@ -19,6 +19,7 @@ import StreakCounter from '../src/components/ui/StreakCounter';
 import SaveTemplateModal from '../src/components/ui/SaveTemplateModal';
 import TemplateLibrary from '../src/components/ui/TemplateLibrary';
 import BulkActionToolbar from '../src/components/ui/BulkActionToolbar';
+import FocusTimer from '../src/components/ui/FocusTimer';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { TaskTemplate, createTaskFromTemplate } from '../src/utils/templateUtils';
 import { useKeyboardShortcuts } from '../src/hooks/useKeyboardShortcuts';
@@ -97,6 +98,8 @@ export default function Dashboard() {
   } | null>(null);
   const [templateRefresh, setTemplateRefresh] = React.useState(0);
   const [selectedTaskIds, setSelectedTaskIds] = React.useState<Set<string>>(new Set());
+  const [focusTaskId, setFocusTaskId] = React.useState<string | null>(null);
+  const [focusTaskTitle, setFocusTaskTitle] = React.useState<string>('');
 
   // Keyboard shortcuts for power users
   useKeyboardShortcuts({
@@ -561,6 +564,25 @@ export default function Dashboard() {
     }
   };
 
+  const handleStartFocus = (taskId: string, taskTitle: string) => {
+    setFocusTaskId(taskId);
+    setFocusTaskTitle(taskTitle);
+  };
+
+  const handleFocusComplete = () => {
+    toast.success('Focus session saved! Great work! 🎯', {
+      duration: 3000,
+      icon: '✅',
+    });
+    setFocusTaskId(null);
+    setFocusTaskTitle('');
+  };
+
+  const handleFocusCancel = () => {
+    setFocusTaskId(null);
+    setFocusTaskTitle('');
+  };
+
   const handleBulkMove = async (projectId: string | null) => {
     const count = selectedTaskIds.size;
     if (count === 0) return;
@@ -982,6 +1004,7 @@ export default function Dashboard() {
                     onDelete={handleTaskDelete}
                     onEdit={handleTaskEdit}
                     onSaveAsTemplate={handleSaveAsTemplate}
+                    onStartFocus={handleStartFocus}
                     isSelected={selectedTaskIds.has(task.id)}
                     onToggleSelect={handleToggleSelect}
                   />
@@ -1047,6 +1070,7 @@ export default function Dashboard() {
                     onDelete={handleTaskDelete}
                     onEdit={handleTaskEdit}
                     onSaveAsTemplate={handleSaveAsTemplate}
+                    onStartFocus={handleStartFocus}
                     isSelected={selectedTaskIds.has(task.id)}
                     onToggleSelect={handleToggleSelect}
                   />
@@ -1099,6 +1123,15 @@ export default function Dashboard() {
         }}
         taskData={templateTaskData}
       />
+
+      {/* Focus Timer */}
+      {focusTaskId && (
+        <FocusTimer
+          taskTitle={focusTaskTitle}
+          onComplete={handleFocusComplete}
+          onCancel={handleFocusCancel}
+        />
+      )}
 
       {/* Keyboard Shortcuts Hint */}
       <KeyboardHint />

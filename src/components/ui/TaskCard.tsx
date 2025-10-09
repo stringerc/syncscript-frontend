@@ -40,6 +40,7 @@ interface TaskCardProps {
   onDelete: (taskId: string) => void;
   onEdit: (taskId: string) => void;
   onSaveAsTemplate?: (task: Task) => void;
+  onStartFocus?: (taskId: string, taskTitle: string) => void;
   isSelected?: boolean;
   onToggleSelect?: (taskId: string) => void;
   className?: string;
@@ -76,6 +77,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   onDelete, 
   onEdit,
   onSaveAsTemplate,
+  onStartFocus,
   isSelected = false,
   onToggleSelect,
   className = ''
@@ -330,8 +332,24 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             }}
             style={{ originY: 0 }}
           >
+            {onStartFocus && (
+              <motion.button
+                className="btn btn-sm btn-primary"
+                onClick={() => onStartFocus(task.id, task.title)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                title="Start focus session"
+              >
+                <svg className="neural-icon" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+                  <polyline points="12 6 12 12 16 14" stroke="currentColor" strokeWidth="2" fill="none" />
+                </svg>
+                Focus
+              </motion.button>
+            )}
+            
             <motion.button
-              className="btn btn-sm btn-primary"
+              className="btn btn-sm btn-success"
               onClick={handleComplete}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
