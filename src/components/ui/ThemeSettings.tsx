@@ -163,7 +163,10 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
-              {/* Actions */}
+            </div>
+
+            {/* Footer */}
+            <div className="modal-footer">
               <div className="theme-actions">
                 <button className="btn btn-ghost" onClick={resetTheme}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -176,6 +179,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ isOpen, onClose }) => {
                   Done
                 </button>
               </div>
+            </div>
             </div>
           </motion.div>
         </>

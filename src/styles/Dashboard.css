@@ -64,6 +64,7 @@
   flex-direction: column;
   gap: var(--space-3);
   align-items: flex-end;
+  overflow: visible;
 }
 
 .header-stats {
@@ -77,6 +78,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  overflow: visible;
 }
 
 .notif-btn {

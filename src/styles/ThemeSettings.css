@@ -9,7 +9,7 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   max-width: 600px;
   width: 90vw;
-  max-height: 85vh;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   z-index: 10000;
@@ -96,6 +96,19 @@
 
 .modal-content::-webkit-scrollbar-thumb:hover {
   background: var(--syncscript-charcoal-400);
+}
+
+.modal-footer {
+  flex-shrink: 0;
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--syncscript-charcoal-200);
+  background: var(--syncscript-cream-50);
+}
+
+.theme-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
 }
 
 /* Theme Section */
