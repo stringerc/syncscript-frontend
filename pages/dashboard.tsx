@@ -26,6 +26,7 @@ import { updateLoginStreak, updateCompletionStreak, getStreakData, checkNewMiles
 import { Tag } from '../src/utils/tagUtils';
 import { Subtask } from '../src/utils/subtaskUtils';
 import { TaskNote } from '../src/utils/noteUtils';
+import { RecurrenceConfig, calculateNextDueDate, shouldEndRecurrence } from '../src/utils/recurrenceUtils';
 
 interface Task {
   id: string;
@@ -47,6 +48,7 @@ interface Task {
   tags?: Tag[];
   subtasks?: Subtask[];
   notes?: TaskNote[];
+  recurrence?: RecurrenceConfig;
 }
 
 interface Project {
@@ -231,6 +233,8 @@ export default function Dashboard() {
 
   const handleTaskComplete = async (taskId: string) => {
     try {
+      const completedTask = tasks.find(t => t.id === taskId);
+      
       const response = await authenticatedFetch(`/api/tasks/${taskId}/complete`, {
         method: 'POST',
       });
@@ -247,6 +251,34 @@ export default function Dashboard() {
           duration: 4000,
           icon: '✅',
         });
+
+        // Handle recurring task - create next instance
+        if (completedTask?.recurrence && completedTask.recurrence.frequency !== 'none') {
+          const nextDueDate = completedTask.due_date 
+            ? calculateNextDueDate(completedTask.due_date, completedTask.recurrence)
+            : new Date();
+          
+          // Check if recurrence should continue
+          if (!shouldEndRecurrence(completedTask.recurrence, nextDueDate)) {
+            // Create next instance
+            await handleCreateTask({
+              title: completedTask.title,
+              description: completedTask.description,
+              priority: completedTask.priority,
+              energy_requirement: completedTask.energy_requirement,
+              due_date: nextDueDate.toISOString(),
+              estimated_duration: completedTask.estimated_duration,
+              project_id: completedTask.project_id,
+              tags: completedTask.tags,
+              recurrence: completedTask.recurrence
+            });
+            
+            toast.success(`🔄 Next "${completedTask.title}" task created!`, {
+              duration: 3000,
+              icon: '🔄',
+            });
+          }
+        }
 
         // Update completion streak
         const oldCompletionStreak = streakData.completionStreak;
@@ -929,7 +961,8 @@ export default function Dashboard() {
                       project: task.project,
                       tags: task.tags,
                       subtasks: task.subtasks,
-                      notes: task.notes
+                      notes: task.notes,
+                      recurrence: task.recurrence
                     }}
                     currentEnergy={currentEnergy}
                     onComplete={handleTaskComplete}
@@ -993,7 +1026,8 @@ export default function Dashboard() {
                       project: task.project,
                       tags: task.tags,
                       subtasks: task.subtasks,
-                      notes: task.notes
+                      notes: task.notes,
+                      recurrence: task.recurrence
                     }}
                     currentEnergy={currentEnergy}
                     onComplete={handleTaskComplete}

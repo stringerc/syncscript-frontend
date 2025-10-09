@@ -5,6 +5,7 @@ import { getTaskUrgency, getUrgencyColor, getUrgencyIcon } from '../../utils/dat
 import { Tag } from '../../utils/tagUtils';
 import { Subtask, getSubtaskProgress } from '../../utils/subtaskUtils';
 import { TaskNote } from '../../utils/noteUtils';
+import { RecurrenceConfig, getRecurrenceLabel } from '../../utils/recurrenceUtils';
 
 interface Task {
   id: string;
@@ -29,6 +30,7 @@ interface Task {
   tags?: Tag[];
   subtasks?: Subtask[];
   notes?: TaskNote[];
+  recurrence?: RecurrenceConfig;
 }
 
 interface TaskCardProps {
@@ -220,6 +222,16 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                 <polyline points="10 9 9 9 8 9"/>
               </svg>
               <span className="notes-text">{task.notes.length} note{task.notes.length !== 1 ? 's' : ''}</span>
+            </div>
+          )}
+          
+          {/* Recurrence Badge */}
+          {task.recurrence && task.recurrence.frequency !== 'none' && (
+            <div className="recurrence-badge">
+              <svg className="recurrence-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+              </svg>
+              <span className="recurrence-text">{getRecurrenceLabel(task.recurrence)}</span>
             </div>
           )}
         </div>

@@ -102,6 +102,41 @@
   font-style: italic;
 }
 
+/* Recurrence Controls */
+.recurrence-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.interval-control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: rgba(74, 144, 226, 0.05);
+  border: 1px solid rgba(74, 144, 226, 0.2);
+  border-radius: var(--radius-md);
+}
+
+.interval-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--syncscript-charcoal-700);
+}
+
+.interval-input {
+  width: 80px;
+  text-align: center;
+  margin: 0;
+}
+
+.interval-unit {
+  font-size: var(--text-sm);
+  color: var(--syncscript-charcoal-600);
+  font-weight: var(--font-medium);
+}
+
 .modal-actions {
   display: flex;
   gap: var(--space-3);

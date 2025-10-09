@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tag, parseTags } from '../../utils/tagUtils';
+import { RecurrenceConfig, RecurrenceFrequency, createDefaultRecurrence } from '../../utils/recurrenceUtils';
 
 interface Project {
   id: string;
@@ -25,6 +26,7 @@ export interface NewTaskData {
   estimated_duration?: number;
   project_id?: string;
   tags?: Tag[];
+  recurrence?: RecurrenceConfig;
 }
 
 export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
@@ -42,6 +44,8 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   const [estimatedDuration, setEstimatedDuration] = useState('');
   const [projectId, setProjectId] = useState<string>('');
   const [tagInput, setTagInput] = useState('');
+  const [recurrenceFreq, setRecurrenceFreq] = useState<RecurrenceFrequency>('none');
+  const [recurrenceInterval, setRecurrenceInterval] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -56,6 +60,13 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
     try {
       const tags = parseTags(tagInput);
       
+      // Build recurrence config if set
+      const recurrence: RecurrenceConfig | undefined = recurrenceFreq !== 'none' ? {
+        frequency: recurrenceFreq,
+        interval: recurrenceInterval,
+        is_active: true
+      } : undefined;
+      
       const taskData: NewTaskData = {
         title: title.trim(),
         description: description.trim() || undefined,
@@ -65,6 +76,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         estimated_duration: estimatedDuration ? parseInt(estimatedDuration) : undefined,
         project_id: projectId || undefined,
         tags: tags.length > 0 ? tags : undefined,
+        recurrence,
       };
 
       await onCreateTask(taskData);
@@ -78,6 +90,8 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
       setEstimatedDuration('');
       setProjectId('');
       setTagInput('');
+      setRecurrenceFreq('none');
+      setRecurrenceInterval(1);
       
       onClose();
     } catch (error) {
@@ -266,6 +280,50 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               />
               <p className="form-hint">
                 Add tags like: work, personal, urgent, quick
+              </p>
+            </div>
+
+            {/* Recurrence */}
+            <div className="form-group">
+              <label htmlFor="task-recurrence" className="form-label">
+                Repeat Task (Optional)
+              </label>
+              <div className="recurrence-controls">
+                <select
+                  id="task-recurrence"
+                  value={recurrenceFreq}
+                  onChange={(e) => setRecurrenceFreq(e.target.value as RecurrenceFrequency)}
+                  className="form-select"
+                >
+                  <option value="none">Does not repeat</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                </select>
+                
+                {recurrenceFreq !== 'none' && (
+                  <div className="interval-control">
+                    <label htmlFor="recurrence-interval" className="interval-label">
+                      Every
+                    </label>
+                    <input
+                      id="recurrence-interval"
+                      type="number"
+                      value={recurrenceInterval}
+                      onChange={(e) => setRecurrenceInterval(Math.max(1, parseInt(e.target.value) || 1))}
+                      min="1"
+                      max="30"
+                      className="form-input interval-input"
+                    />
+                    <span className="interval-unit">
+                      {recurrenceFreq === 'daily' ? 'day(s)' : 
+                       recurrenceFreq === 'weekly' ? 'week(s)' : 'month(s)'}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <p className="form-hint">
+                Task will auto-create when completed {recurrenceFreq !== 'none' && '🔄'}
               </p>
             </div>
 
