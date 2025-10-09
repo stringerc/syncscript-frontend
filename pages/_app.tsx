@@ -6,6 +6,7 @@ import { ThemeProvider } from '../src/contexts/ThemeContext';
 import Head from 'next/head';
 import '../src/styles/globals.css';
 import '../src/styles/SmartSuggestions.css';
+import '../src/styles/AdvancedAnalytics.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {

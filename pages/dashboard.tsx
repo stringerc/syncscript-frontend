@@ -20,7 +20,7 @@ import SaveTemplateModal from '../src/components/ui/SaveTemplateModal';
 import TemplateLibrary from '../src/components/ui/TemplateLibrary';
 import BulkActionToolbar from '../src/components/ui/BulkActionToolbar';
 import FocusTimer from '../src/components/ui/FocusTimer';
-import AnalyticsDashboard from '../src/components/ui/AnalyticsDashboard';
+import AdvancedAnalytics from '../src/components/ui/AdvancedAnalytics';
 import ThemeSettings from '../src/components/ui/ThemeSettings';
 import NotificationCenter from '../src/components/ui/NotificationCenter';
 import InstallPWA from '../src/components/ui/InstallPWA';
@@ -896,7 +896,12 @@ export default function Dashboard() {
             transition={{ duration: 0.3 }}
             style={{ marginBottom: 'var(--space-6)' }}
           >
-            <AnalyticsDashboard userId={user?.sub || ''} />
+            <AdvancedAnalytics 
+              tasks={tasks}
+              energyLogs={energyLogs}
+              projects={projects}
+              authenticatedFetch={authenticatedFetch}
+            />
           </motion.div>
         )}
 
