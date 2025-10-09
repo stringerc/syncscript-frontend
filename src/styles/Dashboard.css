@@ -143,10 +143,11 @@
 
 .progress-bar {
   width: 100%;
-  height: 6px;
+  height: 8px;
   background: var(--syncscript-charcoal-200);
   border-radius: var(--radius-full);
   overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .progress-fill {
@@ -154,6 +155,7 @@
   background: var(--gradient-ribbon);
   border-radius: var(--radius-full);
   transition: width 0.5s var(--ease-smooth);
+  box-shadow: 0 1px 3px rgba(74, 144, 226, 0.3);
 }
 
 /* Compact Stats */
@@ -230,7 +232,7 @@ button.btn.notif-btn .notif-count {
   font-size: 11px !important;
   font-weight: 700 !important;
   padding: 0 5px !important;
-  z-index: 9999 !important;
+  z-index: 100 !important;
   box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4) !important;
   border: 2px solid white !important;
   pointer-events: none !important;

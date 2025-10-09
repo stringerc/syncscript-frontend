@@ -1294,6 +1294,7 @@ export default function Dashboard() {
             setIsEditTaskModalOpen(true);
           }
         }}
+        authenticatedFetch={authenticatedFetch}
       />
 
       {/* PWA Install Prompt */}

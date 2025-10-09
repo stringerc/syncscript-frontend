@@ -30,9 +30,10 @@ interface SmartSuggestionsProps {
   isOpen: boolean;
   onClose: () => void;
   onAcceptSuggestion: (taskId: string) => void;
+  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>;
 }
 
-const SmartSuggestions: React.FC<SmartSuggestionsProps> = ({ isOpen, onClose, onAcceptSuggestion }) => {
+const SmartSuggestions: React.FC<SmartSuggestionsProps> = ({ isOpen, onClose, onAcceptSuggestion, authenticatedFetch }) => {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [insights, setInsights] = useState<Insights | null>(null);
   const [loading, setLoading] = useState(true);
@@ -49,17 +50,7 @@ const SmartSuggestions: React.FC<SmartSuggestionsProps> = ({ isOpen, onClose, on
     setError(null);
     
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Not authenticated');
-      }
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/suggestions`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await authenticatedFetch('/api/suggestions');
 
       if (!response.ok) {
         throw new Error('Failed to fetch suggestions');

@@ -23,6 +23,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ isOpen, onClose }) => {
     <AnimatePresence>
       {isOpen && (
         <div 
+          className="theme-modal-wrapper"
           style={{
             position: 'fixed',
             top: 0,
@@ -33,7 +34,8 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ isOpen, onClose }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '20px'
+            padding: '20px',
+            pointerEvents: 'auto'
           }}
         >
           <motion.div
