@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
+import { Tag, parseTags, tagsToString } from '../../utils/tagUtils';
 
 interface Task {
   id: string;
@@ -14,6 +15,7 @@ interface Task {
   created_at: string;
   due_date?: string;
   project_id?: string;
+  tags?: Tag[];
 }
 
 interface Project {
@@ -43,7 +45,8 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
     priority: 3 as 1 | 2 | 3 | 4 | 5,
     energy_requirement: 3 as 1 | 2 | 3 | 4 | 5,
     due_date: '',
-    project_id: ''
+    project_id: '',
+    tagInput: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const authenticatedFetch = useAuthenticatedFetch();
@@ -57,7 +60,8 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
         priority: task.priority,
         energy_requirement: task.energy_requirement,
         due_date: task.due_date ? task.due_date.split('T')[0] : '',
-        project_id: task.project_id || ''
+        project_id: task.project_id || '',
+        tagInput: task.tags ? tagsToString(task.tags) : ''
       });
     }
   }, [task]);
@@ -78,6 +82,8 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
     setIsSubmitting(true);
 
     try {
+      const tags = parseTags(formData.tagInput);
+      
       const requestData: {
         title: string;
         description?: string;
@@ -85,6 +91,7 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
         energy_requirement: number;
         due_date?: string;
         project_id?: string;
+        tags?: Tag[];
       } = {
         title: formData.title.trim(),
         priority: formData.priority,
@@ -102,6 +109,10 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
 
       if (formData.project_id) {
         requestData.project_id = formData.project_id;
+      }
+
+      if (tags.length > 0) {
+        requestData.tags = tags;
       }
 
       const response = await authenticatedFetch(`/api/tasks/${task.id}`, {
@@ -291,6 +302,25 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
                   disabled={isSubmitting}
                   min={new Date().toISOString().split('T')[0]}
                 />
+              </div>
+
+              {/* Tags */}
+              <div className="form-group">
+                <label htmlFor="task-tags" className="form-label">
+                  Tags (Optional)
+                </label>
+                <input
+                  id="task-tags"
+                  type="text"
+                  value={formData.tagInput}
+                  onChange={(e) => setFormData(prev => ({ ...prev, tagInput: e.target.value }))}
+                  placeholder="work, urgent, quick (comma-separated)"
+                  className="form-input"
+                  disabled={isSubmitting}
+                />
+                <p className="form-hint">
+                  Add tags like: work, personal, urgent, quick
+                </p>
               </div>
 
               <div className="form-actions">
