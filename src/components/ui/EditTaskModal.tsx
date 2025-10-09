@@ -78,14 +78,18 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
     setIsSubmitting(true);
 
     try {
-      const requestData = {
+      const requestData: any = {
         title: formData.title.trim(),
         description: formData.description.trim() || null,
         priority: formData.priority,
         energy_requirement: formData.energy_requirement,
-        due_date: formData.due_date || null,
-        project_id: formData.project_id || null
+        due_date: formData.due_date || null
       };
+
+      // Only include project_id if it's not empty
+      if (formData.project_id) {
+        requestData.project_id = formData.project_id;
+      }
 
       console.log('Updating task data:', requestData);
 
