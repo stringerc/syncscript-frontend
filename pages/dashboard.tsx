@@ -348,8 +348,18 @@ export default function Dashboard() {
     }
   };
 
-  const handleProjectSuccess = () => {
-    loadUserData();
+  const handleProjectSuccess = async () => {
+    try {
+      // Only reload projects, not everything
+      const response = await authenticatedFetch('/api/projects');
+      
+      if (response.ok) {
+        const data = await response.json();
+        setProjects(data.projects || []);
+      }
+    } catch (error) {
+      console.error('Error reloading projects:', error);
+    }
   };
 
   const handleProjectSelect = (project: Project) => {
