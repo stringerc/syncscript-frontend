@@ -846,15 +846,24 @@ export default function Dashboard() {
   if (isLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-syncscript-cream-50">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p style={{ 
-            fontSize: '18px', 
-            color: 'var(--syncscript-charcoal-600)', 
+        <div style={{ textAlign: 'center', padding: '48px' }}>
+          <div style={{
+            width: '48px',
+            height: '48px',
+            border: '3px solid #e5e7eb',
+            borderTop: '3px solid #4A90E2',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 16px auto'
+          }}></div>
+          <div style={{
+            fontSize: '18px',
+            color: '#4B5563',
             margin: '0',
-            transform: 'none',
-            animation: 'none'
-          }}>Loading your SyncScript dashboard...</p>
+            fontWeight: '500',
+            transform: 'none !important',
+            animation: 'none !important'
+          }}>Loading your SyncScript dashboard...</div>
         </div>
       </div>
     );

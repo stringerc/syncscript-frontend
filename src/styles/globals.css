@@ -29,3 +29,9 @@
 @import './ThemeSettings.css';
 @import './NotificationCenter.css';
 @import './InstallPWA.css';
+
+/* Global Spin Animation for Loading Screens */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
