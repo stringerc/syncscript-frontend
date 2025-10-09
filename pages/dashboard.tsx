@@ -785,12 +785,39 @@ export default function Dashboard() {
               <button
                 className="btn btn-secondary notif-btn"
                 onClick={() => setShowNotifications(true)}
+                style={{ position: 'relative', overflow: 'visible' }}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '16px', height: '16px' }}>
                   <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                   <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
                 </svg>
-                {unreadCount > 0 && <span className="notif-count">{unreadCount}</span>}
+                {unreadCount > 0 && (
+                  <span 
+                    className="notif-count"
+                    style={{
+                      position: 'absolute',
+                      top: '-8px',
+                      right: '-8px',
+                      minWidth: '20px',
+                      height: '20px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: '#ef4444',
+                      color: 'white',
+                      borderRadius: '50%',
+                      fontSize: '11px',
+                      fontWeight: '700',
+                      padding: '0 5px',
+                      zIndex: 9999,
+                      boxShadow: '0 2px 8px rgba(239, 68, 68, 0.4)',
+                      border: '2px solid white',
+                      pointerEvents: 'none'
+                    }}
+                  >
+                    {unreadCount}
+                  </span>
+                )}
               </button>
               <button
                 className="btn btn-secondary"
