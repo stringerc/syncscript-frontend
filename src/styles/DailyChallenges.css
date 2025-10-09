@@ -183,7 +183,7 @@
   font-size: var(--text-sm);
   color: var(--syncscript-charcoal-600);
   line-height: 1.4;
-  margin: 0 0 var(--space-3) 0;
+  margin: 0 0 var(--space-2) 0;
 }
 
 .challenge-progress {
@@ -195,7 +195,8 @@
   font-weight: var(--font-bold);
   color: var(--syncscript-charcoal-700);
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  margin-top: 4px;
 }
 
 .progress-bar-mini {
