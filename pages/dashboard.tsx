@@ -748,10 +748,15 @@ export default function Dashboard() {
                       description: task.description,
                       priority: task.priority,
                       energyRequirement: task.energy_requirement,
+                      energy_requirement: task.energy_requirement,
                       completed: task.completed,
                       points: task.points,
                       createdAt: task.created_at,
+                      created_at: task.created_at,
                       dueDate: task.due_date,
+                      estimatedDuration: task.estimated_duration,
+                      estimated_duration: task.estimated_duration,
+                      project_id: task.project_id,
                       project: task.project,
                       tags: task.tags
                     }}
@@ -803,10 +808,15 @@ export default function Dashboard() {
                       description: task.description,
                       priority: task.priority,
                       energyRequirement: task.energy_requirement,
+                      energy_requirement: task.energy_requirement,
                       completed: task.completed,
                       points: task.points,
                       createdAt: task.created_at,
+                      created_at: task.created_at,
                       dueDate: task.due_date,
+                      estimatedDuration: task.estimated_duration,
+                      estimated_duration: task.estimated_duration,
+                      project_id: task.project_id,
                       project: task.project,
                       tags: task.tags
                     }}
