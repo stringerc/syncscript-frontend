@@ -78,7 +78,14 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
     setIsSubmitting(true);
 
     try {
-      const requestData: any = {
+      const requestData: {
+        title: string;
+        description: string | null;
+        priority: number;
+        energy_requirement: number;
+        due_date: string | null;
+        project_id?: string;
+      } = {
         title: formData.title.trim(),
         description: formData.description.trim() || null,
         priority: formData.priority,
