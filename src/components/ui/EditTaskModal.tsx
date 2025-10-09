@@ -13,6 +13,13 @@ interface Task {
   points: number;
   created_at: string;
   due_date?: string;
+  project_id?: string;
+}
+
+interface Project {
+  id: string;
+  name: string;
+  color: string;
 }
 
 interface EditTaskModalProps {
@@ -20,20 +27,23 @@ interface EditTaskModalProps {
   onClose: () => void;
   onSuccess: () => void;
   task: Task | null;
+  projects?: Project[];
 }
 
 const EditTaskModal: React.FC<EditTaskModalProps> = ({
   isOpen,
   onClose,
   onSuccess,
-  task
+  task,
+  projects = []
 }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     priority: 3 as 1 | 2 | 3 | 4 | 5,
     energy_requirement: 3 as 1 | 2 | 3 | 4 | 5,
-    due_date: ''
+    due_date: '',
+    project_id: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const authenticatedFetch = useAuthenticatedFetch();
@@ -46,7 +56,8 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
         description: task.description || '',
         priority: task.priority,
         energy_requirement: task.energy_requirement,
-        due_date: task.due_date ? task.due_date.split('T')[0] : ''
+        due_date: task.due_date ? task.due_date.split('T')[0] : '',
+        project_id: task.project_id || ''
       });
     }
   }, [task]);
@@ -72,7 +83,8 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
         description: formData.description.trim() || null,
         priority: formData.priority,
         energy_requirement: formData.energy_requirement,
-        due_date: formData.due_date || null
+        due_date: formData.due_date || null,
+        project_id: formData.project_id || null
       };
 
       console.log('Updating task data:', requestData);
@@ -230,6 +242,26 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
                     <option value={5}>5 - Peak</option>
                   </select>
                 </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="task-project" className="form-label">
+                  Project (Optional)
+                </label>
+                <select
+                  id="task-project"
+                  value={formData.project_id}
+                  onChange={(e) => setFormData(prev => ({ ...prev, project_id: e.target.value }))}
+                  className="form-select"
+                  disabled={isSubmitting}
+                >
+                  <option value="">No Project</option>
+                  {projects.map((project) => (
+                    <option key={project.id} value={project.id}>
+                      {project.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="form-group">

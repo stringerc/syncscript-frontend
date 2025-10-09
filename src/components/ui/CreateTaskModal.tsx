@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+interface Project {
+  id: string;
+  name: string;
+  color: string;
+}
+
 interface CreateTaskModalProps {
   isOpen: boolean;
   onClose: () => void;
   onCreateTask: (task: NewTaskData) => Promise<void>;
   currentEnergy?: number;
+  projects?: Project[];
 }
 
 export interface NewTaskData {
@@ -15,13 +22,15 @@ export interface NewTaskData {
   energy_requirement: 1 | 2 | 3 | 4 | 5;
   due_date?: string;
   estimated_duration?: number;
+  project_id?: string;
 }
 
 export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   isOpen,
   onClose,
   onCreateTask,
-  currentEnergy = 3
+  currentEnergy = 3,
+  projects = []
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -29,6 +38,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   const [energyRequirement, setEnergyRequirement] = useState<1 | 2 | 3 | 4 | 5>(currentEnergy as 1 | 2 | 3 | 4 | 5);
   const [dueDate, setDueDate] = useState('');
   const [estimatedDuration, setEstimatedDuration] = useState('');
+  const [projectId, setProjectId] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -48,6 +58,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         energy_requirement: energyRequirement,
         due_date: dueDate ? new Date(dueDate).toISOString() : undefined,
         estimated_duration: estimatedDuration ? parseInt(estimatedDuration) : undefined,
+        project_id: projectId || undefined,
       };
 
       await onCreateTask(taskData);
@@ -59,6 +70,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
       setEnergyRequirement(currentEnergy as 1 | 2 | 3 | 4 | 5);
       setDueDate('');
       setEstimatedDuration('');
+      setProjectId('');
       
       onClose();
     } catch (error) {
@@ -177,6 +189,26 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                   <option value="5">5 - Peak Energy</option>
                 </select>
               </div>
+            </div>
+
+            {/* Project Selection */}
+            <div className="form-group">
+              <label htmlFor="task-project" className="form-label">
+                Project (Optional)
+              </label>
+              <select
+                id="task-project"
+                value={projectId}
+                onChange={(e) => setProjectId(e.target.value)}
+                className="form-select"
+              >
+                <option value="">No Project</option>
+                {projects.map((project) => (
+                  <option key={project.id} value={project.id}>
+                    {project.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Due Date and Duration in a grid */}

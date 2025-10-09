@@ -24,6 +24,12 @@ interface Task {
   points: number;
   created_at: string;
   due_date?: string;
+  project_id?: string;
+  project?: {
+    id: string;
+    name: string;
+    color: string;
+  };
 }
 
 interface Project {
@@ -589,6 +595,7 @@ export default function Dashboard() {
         onClose={() => setIsCreateModalOpen(false)}
         onCreateTask={handleCreateTask}
         currentEnergy={currentEnergy}
+        projects={projects}
       />
 
       {/* Create/Edit Project Modal */}
@@ -611,6 +618,7 @@ export default function Dashboard() {
         }}
         onSuccess={handleTaskEditSuccess}
         task={editingTask}
+        projects={projects}
       />
     </div>
   );
