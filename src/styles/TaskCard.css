@@ -39,8 +39,8 @@
 /* Selection Checkbox */
 .task-checkbox {
   position: absolute;
-  top: var(--space-3);
-  left: var(--space-3);
+  top: var(--space-2);
+  right: var(--space-2);
   z-index: 10;
 }
 
@@ -183,6 +183,7 @@
   border-radius: var(--radius-lg);
   backdrop-filter: blur(10px);
   min-width: 3rem;
+  margin-right: 32px; /* Space for checkbox */
 }
 
 .match-icon {
@@ -387,6 +388,7 @@
   margin-top: var(--space-3);
   padding-top: var(--space-3);
   border-top: 1px solid var(--syncscript-charcoal-100);
+  overflow: hidden;
 }
 
 .task-actions .btn {
