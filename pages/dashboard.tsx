@@ -27,6 +27,7 @@ import InstallPWA from '../src/components/ui/InstallPWA';
 import SmartSuggestions from '../src/components/ui/SmartSuggestions';
 import AchievementGallery from '../src/components/ui/AchievementGallery';
 import AchievementUnlockNotification from '../src/components/ui/AchievementUnlockNotification';
+import DailyChallenges from '../src/components/ui/DailyChallenges';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { useNotifications } from '../src/hooks/useNotifications';
 import { useAchievements } from '../src/hooks/useAchievements';
@@ -637,6 +638,19 @@ export default function Dashboard() {
     localStorage.setItem('focusSessions', String(focusSessionsCount + 1));
     localStorage.setItem('focusMinutes', String(totalFocusMinutes + 25));
     
+    // Track today's focus sessions for daily challenges
+    const today = new Date().toDateString();
+    const todaySessionsStr = localStorage.getItem('todayFocusSessions');
+    const todayDate = localStorage.getItem('focusSessionsDate');
+    
+    if (todayDate === today) {
+      const count = parseInt(todaySessionsStr || '0', 10) + 1;
+      localStorage.setItem('todayFocusSessions', String(count));
+    } else {
+      localStorage.setItem('todayFocusSessions', '1');
+      localStorage.setItem('focusSessionsDate', today);
+    }
+    
     toast.success('Focus session saved! Great work! 🎯', {
       duration: 3000,
       icon: '✅',
@@ -1001,6 +1015,20 @@ export default function Dashboard() {
             currentEnergy={currentEnergy}
             onEnergyChange={handleEnergyChange}
             className="dashboard-energy-selector"
+          />
+
+          {/* Daily Challenges */}
+          <DailyChallenges
+            tasks={tasks}
+            energyLogs={energyLogs}
+            focusSessions={focusSessionsCount}
+            currentStreak={streakData.loginStreak}
+            onChallengeComplete={(challenge, points) => {
+              setUserPoints(prev => prev + points);
+              toast.success(`🎉 Challenge Complete! +${points} bonus points!`, {
+                duration: 4000
+              });
+            }}
           />
 
           {/* Energy Insights */}

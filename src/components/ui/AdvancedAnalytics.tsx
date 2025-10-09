@@ -222,7 +222,7 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({
       insights.push({
         icon: '🔥',
         title: 'Peak Performance Time',
-        description: `You're most productive around ${peakHour.hour} with ${peakHour.completions} completions`,
+        description: `You&apos;re most productive around ${peakHour.hour} with ${peakHour.completions} completions`,
         type: 'success' as const
       });
     }
@@ -270,7 +270,7 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({
       insights.push({
         icon: '✨',
         title: 'Excellent Progress',
-        description: `${Math.round(completionRate)}% completion rate - you're crushing it!`,
+        description: `${Math.round(completionRate)}% completion rate - you&apos;re crushing it!`,
         type: 'success' as const
       });
     }

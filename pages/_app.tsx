@@ -9,6 +9,7 @@ import '../src/styles/SmartSuggestions.css';
 import '../src/styles/AdvancedAnalytics.css';
 import '../src/styles/AchievementGallery.css';
 import '../src/styles/AchievementUnlock.css';
+import '../src/styles/DailyChallenges.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
