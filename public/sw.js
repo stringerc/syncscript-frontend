@@ -80,7 +80,31 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache first strategy for static assets
+  // Network first for HTML/pages to avoid stale chunks
+  const isHTMLRequest = request.headers.get('accept')?.includes('text/html');
+  
+  if (isHTMLRequest) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          // Cache the new HTML
+          if (response.status === 200) {
+            const responseClone = response.clone();
+            caches.open(RUNTIME_CACHE).then((cache) => {
+              cache.put(request, responseClone);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          // Fallback to cache only if network fails
+          return caches.match(request);
+        })
+    );
+    return;
+  }
+
+  // Cache first strategy for static assets only
   event.respondWith(
     caches.match(request)
       .then((cachedResponse) => {
