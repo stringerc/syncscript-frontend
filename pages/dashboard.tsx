@@ -72,6 +72,9 @@ export default function Dashboard() {
         const tasksData = await tasksResponse.json();
         console.log('Tasks data from API:', tasksData.tasks);
         console.log('First task:', tasksData.tasks?.[0]);
+        console.log('First task has project field?', 'project' in (tasksData.tasks?.[0] || {}));
+        console.log('First task project value:', tasksData.tasks?.[0]?.project);
+        console.log('First task project_id value:', tasksData.tasks?.[0]?.project_id);
         setTasks(tasksData.tasks || []);
       }
 
