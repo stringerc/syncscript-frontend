@@ -7,24 +7,16 @@ export const useAuthenticatedFetch = () => {
   ) => {
     try {
       // Get the access token from Auth0 using the token endpoint
-      console.log('Fetching access token from /api/auth/token...');
       const tokenResponse = await fetch('/api/auth/token');
       
-      console.log('Token response status:', tokenResponse.status);
-      
       if (!tokenResponse.ok) {
-        const errorText = await tokenResponse.text();
-        console.error('Token endpoint error:', errorText);
         throw new Error('Failed to get access token');
       }
 
       const tokenData = await tokenResponse.json();
-      console.log('Token data received:', tokenData);
-      
       const { accessToken } = tokenData;
       
       if (!accessToken) {
-        console.error('No access token in response');
         throw new Error('No access token received');
       }
 
@@ -35,14 +27,10 @@ export const useAuthenticatedFetch = () => {
         ...options.headers,
       };
 
-      console.log(`Making authenticated request to: ${process.env.NEXT_PUBLIC_API_URL}${url}`);
-
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
         ...options,
         headers,
       });
-
-      console.log('Response status:', response.status);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: 'Request failed' }));

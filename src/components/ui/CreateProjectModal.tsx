@@ -82,8 +82,6 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
         requestData.description = formData.description.trim();
       }
 
-      console.log('Sending project data:', requestData);
-
       const response = await authenticatedFetch(url, {
         method,
         headers: {
@@ -104,8 +102,6 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
         onClose();
       } else {
         const errorData = await response.json().catch(() => ({ message: 'Failed to save project' }));
-        console.error('Project creation error response:', errorData);
-        console.error('Full error details:', JSON.stringify(errorData, null, 2));
         throw new Error(errorData.message || errorData.error || `HTTP ${response.status}`);
       }
     } catch (error) {

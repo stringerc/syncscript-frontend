@@ -104,8 +104,6 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
         requestData.project_id = formData.project_id;
       }
 
-      console.log('Updating task data:', requestData);
-
       const response = await authenticatedFetch(`/api/tasks/${task.id}`, {
         method: 'PUT',
         headers: {
@@ -124,8 +122,6 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
         onClose();
       } else {
         const errorData = await response.json().catch(() => ({ message: 'Failed to update task' }));
-        console.error('Task update error response:', errorData);
-        console.error('Full error details:', JSON.stringify(errorData, null, 2));
         throw new Error(errorData.message || errorData.error || `HTTP ${response.status}`);
       }
     } catch (error) {
