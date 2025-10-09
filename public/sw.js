@@ -1,6 +1,6 @@
 // Service Worker for SyncScript PWA
-const CACHE_NAME = 'syncscript-v2';
-const RUNTIME_CACHE = 'syncscript-runtime-v2';
+const CACHE_NAME = 'syncscript-v3';
+const RUNTIME_CACHE = 'syncscript-runtime-v3';
 
 // Assets to cache on install
 const PRECACHE_ASSETS = [

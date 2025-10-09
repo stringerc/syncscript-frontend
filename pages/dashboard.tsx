@@ -221,6 +221,14 @@ export default function Dashboard() {
     if (user && !isLoading) {
       loadUserData();
       
+      // Safety timeout - if loading takes more than 10 seconds, force it to stop
+      const loadingTimeout = setTimeout(() => {
+        if (loading) {
+          console.warn('Loading timeout - forcing completion');
+          setLoading(false);
+        }
+      }, 10000);
+      
       // Update login streak
       const oldStreak = streakData.loginStreak;
       const newStreakData = updateLoginStreak();
@@ -236,6 +244,8 @@ export default function Dashboard() {
         });
         setTimeout(() => setShowMilestoneConfetti(false), 3000);
       }
+
+      return () => clearTimeout(loadingTimeout);
     }
   }, [user, isLoading, loadUserData]);
 
