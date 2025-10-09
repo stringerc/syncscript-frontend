@@ -19,10 +19,18 @@ interface Task {
   energy_requirement: number;
 }
 
-export const useNotifications = (tasks: Task[], currentEnergy: number, streakData: any) => {
+interface StreakData {
+  loginStreak: number;
+  completionStreak: number;
+  longestLoginStreak: number;
+  longestCompletionStreak: number;
+  lastLoginDate: string;
+  lastCompletionDate: string;
+}
+
+export const useNotifications = (tasks: Task[], currentEnergy: number, streakData: StreakData) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [preferences, setPreferences] = useState<NotificationPreferences>(getNotificationPreferences());
-  const [lastChecked, setLastChecked] = useState<string | null>(localStorage.getItem('last-notification-check'));
 
   // Load notifications on mount
   useEffect(() => {
