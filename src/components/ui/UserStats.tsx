@@ -5,14 +5,12 @@ interface UserStatsProps {
   points: number;
   level: number;
   tasksCompleted: number;
-  streak: number;
 }
 
 export const UserStats: React.FC<UserStatsProps> = ({
   points,
   level,
-  tasksCompleted,
-  streak
+  tasksCompleted
 }) => {
   // Calculate level progress (assuming 1000 points per level)
   const pointsPerLevel = 1000;
@@ -85,25 +83,6 @@ export const UserStats: React.FC<UserStatsProps> = ({
         </div>
       </motion.div>
 
-      {/* Streak */}
-      {streak > 0 && (
-        <motion.div 
-          className="stat-badge stat-streak"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3, delay: 0.3 }}
-          whileHover={{ scale: 1.05 }}
-        >
-          <svg className="stat-icon" viewBox="0 0 24 24">
-            <path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" 
-                  stroke="currentColor" strokeWidth="1.5" fill="none" />
-          </svg>
-          <div className="stat-content">
-            <span className="stat-value">{streak}</span>
-            <span className="stat-label">Day Streak 🔥</span>
-          </div>
-        </motion.div>
-      )}
     </div>
   );
 };

@@ -482,7 +482,6 @@ export default function Dashboard() {
               points={userPoints}
               level={userLevel}
               tasksCompleted={completedTasks.length}
-              streak={streakData.loginStreak}
             />
             <StreakCounter
               loginStreak={streakData.loginStreak}
