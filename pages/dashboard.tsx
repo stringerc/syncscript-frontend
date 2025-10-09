@@ -23,6 +23,7 @@ import FocusTimer from '../src/components/ui/FocusTimer';
 import AnalyticsDashboard from '../src/components/ui/AnalyticsDashboard';
 import ThemeSettings from '../src/components/ui/ThemeSettings';
 import NotificationCenter from '../src/components/ui/NotificationCenter';
+import InstallPWA from '../src/components/ui/InstallPWA';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { useNotifications } from '../src/hooks/useNotifications';
 import { TaskTemplate, createTaskFromTemplate } from '../src/utils/templateUtils';
@@ -1220,6 +1221,9 @@ export default function Dashboard() {
         onClearAll={clearAllNotifications}
         onUpdatePreferences={updateNotificationPreferences}
       />
+
+      {/* PWA Install Prompt */}
+      <InstallPWA />
 
       {/* Keyboard Shortcuts Hint */}
       <KeyboardHint />
