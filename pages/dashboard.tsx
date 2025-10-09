@@ -70,6 +70,8 @@ export default function Dashboard() {
       const tasksResponse = await authenticatedFetch('/api/tasks');
       if (tasksResponse.ok) {
         const tasksData = await tasksResponse.json();
+        console.log('Tasks data from API:', tasksData.tasks);
+        console.log('First task:', tasksData.tasks?.[0]);
         setTasks(tasksData.tasks || []);
       }
 
@@ -525,7 +527,8 @@ export default function Dashboard() {
                       completed: task.completed,
                       points: task.points,
                       createdAt: task.created_at,
-                      dueDate: task.due_date
+                      dueDate: task.due_date,
+                      project: task.project
                     }}
                     currentEnergy={currentEnergy}
                     onComplete={handleTaskComplete}
@@ -575,7 +578,8 @@ export default function Dashboard() {
                       completed: task.completed,
                       points: task.points,
                       createdAt: task.created_at,
-                      dueDate: task.due_date
+                      dueDate: task.due_date,
+                      project: task.project
                     }}
                     currentEnergy={currentEnergy}
                     onComplete={handleTaskComplete}
