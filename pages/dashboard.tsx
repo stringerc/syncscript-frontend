@@ -29,6 +29,8 @@ import AchievementGallery from '../src/components/ui/AchievementGallery';
 import AchievementUnlockNotification from '../src/components/ui/AchievementUnlockNotification';
 import DailyChallenges from '../src/components/ui/DailyChallenges';
 import CalendarIntegration from '../src/components/ui/CalendarIntegration';
+import TeamDashboard from '../src/components/ui/TeamDashboard';
+import TeamInvitation from '../src/components/ui/TeamInvitation';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { useNotifications } from '../src/hooks/useNotifications';
 import { useAchievements } from '../src/hooks/useAchievements';
@@ -120,6 +122,8 @@ export default function Dashboard() {
   const [showCalendar, setShowCalendar] = React.useState(false);
   const [focusSessionsCount, setFocusSessionsCount] = React.useState(0);
   const [totalFocusMinutes, setTotalFocusMinutes] = React.useState(0);
+  const [showTeamDashboard, setShowTeamDashboard] = React.useState(false);
+  const [showTeamInvitation, setShowTeamInvitation] = React.useState(false);
 
   // Notifications
   const {
@@ -989,6 +993,19 @@ export default function Dashboard() {
                 Calendar
               </button>
               <button
+                className="btn btn-secondary"
+                onClick={() => setShowTeamDashboard(true)}
+                title="Team collaboration"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '16px', height: '16px' }}>
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                Team
+              </button>
+              <button
                 className="btn btn-primary"
                 onClick={() => setShowSuggestions(true)}
                 title="Get AI-powered task suggestions"
@@ -1525,6 +1542,169 @@ export default function Dashboard() {
 
       {/* Keyboard Shortcuts Hint */}
       <KeyboardHint />
+
+      {/* Team Dashboard */}
+      <TeamDashboard
+        isOpen={showTeamDashboard}
+        onClose={() => setShowTeamDashboard(false)}
+        team={{
+          id: 'team-1',
+          name: 'SyncScript Team',
+          description: 'The core development team working on SyncScript',
+          ownerId: user?.sub || '',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          memberCount: 5,
+          settings: {
+            allowMemberInvites: true,
+            defaultMemberRole: 'member',
+            requireApprovalForTasks: false,
+            energyInsightsVisible: true,
+            maxMembers: 50,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+          }
+        }}
+        members={[
+          {
+            id: 'member-1',
+            teamId: 'team-1',
+            userId: user?.sub || '',
+            email: user?.email || '',
+            name: user?.name || 'You',
+            role: 'owner',
+            joinedAt: new Date().toISOString(),
+            status: 'active'
+          },
+          {
+            id: 'member-2',
+            teamId: 'team-1',
+            userId: 'user-2',
+            email: 'sarah@syncscript.com',
+            name: 'Sarah Chen',
+            role: 'admin',
+            joinedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+            status: 'active'
+          },
+          {
+            id: 'member-3',
+            teamId: 'team-1',
+            userId: 'user-3',
+            email: 'mike@syncscript.com',
+            name: 'Mike Rodriguez',
+            role: 'member',
+            joinedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+            status: 'active'
+          }
+        ]}
+        projects={[
+          {
+            id: 'project-1',
+            name: 'Q4 Planning',
+            description: 'Quarterly planning and goal setting',
+            color: '#4A90E2',
+            teamId: 'team-1',
+            createdBy: user?.sub || '',
+            createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+            updatedAt: new Date().toISOString(),
+            memberCount: 3,
+            settings: {
+              allowMemberTaskCreation: true,
+              allowMemberTaskAssignment: true,
+              requireApprovalForTasks: false,
+              showEnergyLevels: true,
+              autoAssignByEnergy: false
+            }
+          }
+        ]}
+        analytics={{
+          teamId: 'team-1',
+          period: 'week',
+          totalTasks: 45,
+          completedTasks: 38,
+          averageEnergy: 72,
+          productivityScore: 85,
+          topPerformers: [
+            {
+              userId: user?.sub || '',
+              name: user?.name || 'You',
+              completedTasks: 15,
+              energyLevel: 78
+            },
+            {
+              userId: 'user-2',
+              name: 'Sarah Chen',
+              completedTasks: 12,
+              energyLevel: 82
+            },
+            {
+              userId: 'user-3',
+              name: 'Mike Rodriguez',
+              completedTasks: 11,
+              energyLevel: 68
+            }
+          ],
+          energyPatterns: [
+            { hour: 9, averageEnergy: 85, taskCount: 8 },
+            { hour: 10, averageEnergy: 88, taskCount: 12 },
+            { hour: 11, averageEnergy: 82, taskCount: 10 },
+            { hour: 14, averageEnergy: 90, taskCount: 15 },
+            { hour: 15, averageEnergy: 86, taskCount: 9 },
+            { hour: 16, averageEnergy: 88, taskCount: 11 }
+          ]
+        }}
+        currentUserRole="owner"
+        onInviteMember={(email, role) => {
+          toast.success(`Invitation sent to ${email} as ${role}`);
+        }}
+        onManageMember={(memberId, action) => {
+          toast.success(`Member ${action} successful`);
+        }}
+        onCreateProject={(project) => {
+          toast.success(`Project "${project.name}" created`);
+        }}
+      />
+
+      {/* Team Invitation */}
+      <TeamInvitation
+        isOpen={showTeamInvitation}
+        onClose={() => setShowTeamInvitation(false)}
+        team={{
+          id: 'team-1',
+          name: 'SyncScript Team',
+          description: 'The core development team working on SyncScript',
+          ownerId: user?.sub || '',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          memberCount: 5,
+          settings: {
+            allowMemberInvites: true,
+            defaultMemberRole: 'member',
+            requireApprovalForTasks: false,
+            energyInsightsVisible: true,
+            maxMembers: 50,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+          }
+        }}
+        inviter={{
+          id: 'member-2',
+          teamId: 'team-1',
+          userId: 'user-2',
+          email: 'sarah@syncscript.com',
+          name: 'Sarah Chen',
+          role: 'admin',
+          joinedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+          status: 'active'
+        }}
+        inviteToken="mock-invite-token-123"
+        onAcceptInvite={(_teamId, _token) => {
+          toast.success('Welcome to the team!');
+          setShowTeamInvitation(false);
+        }}
+        onDeclineInvite={(_teamId, _token) => {
+          toast.success('Invitation declined');
+          setShowTeamInvitation(false);
+        }}
+      />
     </div>
   );
 }

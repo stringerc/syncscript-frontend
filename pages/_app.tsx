@@ -12,6 +12,8 @@ import '../src/styles/AchievementUnlock.css';
 import '../src/styles/DailyChallenges.css';
 import '../src/styles/CalendarIntegration.css';
 import '../src/styles/TaskDependencies.css';
+import '../src/styles/TeamDashboard.css';
+import '../src/styles/TeamInvitation.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
