@@ -28,6 +28,7 @@ import SmartSuggestions from '../src/components/ui/SmartSuggestions';
 import AchievementGallery from '../src/components/ui/AchievementGallery';
 import AchievementUnlockNotification from '../src/components/ui/AchievementUnlockNotification';
 import DailyChallenges from '../src/components/ui/DailyChallenges';
+import CalendarIntegration from '../src/components/ui/CalendarIntegration';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { useNotifications } from '../src/hooks/useNotifications';
 import { useAchievements } from '../src/hooks/useAchievements';
@@ -116,6 +117,7 @@ export default function Dashboard() {
   const [showThemeSettings, setShowThemeSettings] = React.useState(false);
   const [showNotifications, setShowNotifications] = React.useState(false);
   const [showAchievements, setShowAchievements] = React.useState(false);
+  const [showCalendar, setShowCalendar] = React.useState(false);
   const [focusSessionsCount, setFocusSessionsCount] = React.useState(0);
   const [totalFocusMinutes, setTotalFocusMinutes] = React.useState(0);
 
@@ -959,6 +961,19 @@ export default function Dashboard() {
                 )}
               </button>
               <button
+                className="btn btn-secondary"
+                onClick={() => setShowCalendar(true)}
+                title="Connect your calendar"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '16px', height: '16px' }}>
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                Calendar
+              </button>
+              <button
                 className="btn btn-primary"
                 onClick={() => setShowSuggestions(true)}
                 title="Get AI-powered task suggestions"
@@ -1463,6 +1478,25 @@ export default function Dashboard() {
           }
         }}
         authenticatedFetch={authenticatedFetch}
+      />
+
+      {/* Calendar Integration */}
+      <CalendarIntegration
+        isOpen={showCalendar}
+        onClose={() => setShowCalendar(false)}
+        onImportTasks={(events) => {
+          // Convert calendar events to tasks
+          events.forEach(event => {
+            const taskData: NewTaskData = {
+              title: event.summary,
+              description: event.description || `Imported from Google Calendar`,
+              priority: 3,
+              energy_requirement: 3,
+              due_date: event.start
+            };
+            handleCreateTask(taskData);
+          });
+        }}
       />
 
       {/* Achievement Unlock Notification */}
