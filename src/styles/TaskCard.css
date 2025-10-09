@@ -175,6 +175,7 @@
 /* Subtask Progress */
 .subtask-progress {
   margin-top: var(--space-3);
+  margin-right: var(--space-16); /* Space for energy indicator */
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -221,6 +222,7 @@
   align-items: center;
   gap: var(--space-2);
   margin-top: var(--space-2);
+  margin-right: var(--space-16); /* Space for energy indicator */
   padding: var(--space-2) var(--space-3);
   background: rgba(139, 92, 246, 0.1);
   border: 1px solid rgba(139, 92, 246, 0.2);
@@ -252,6 +254,7 @@
   align-items: center;
   gap: var(--space-2);
   margin-top: var(--space-2);
+  margin-right: var(--space-16); /* Space for energy indicator */
   padding: var(--space-2) var(--space-3);
   background: rgba(74, 144, 226, 0.1);
   border: 1px solid rgba(74, 144, 226, 0.2);
