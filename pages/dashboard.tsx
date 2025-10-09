@@ -76,7 +76,15 @@ export default function Dashboard() {
   const [streakData, setStreakData] = React.useState(getStreakData());
   const [showMilestoneConfetti, setShowMilestoneConfetti] = React.useState(false);
   const [isSaveTemplateModalOpen, setIsSaveTemplateModalOpen] = React.useState(false);
-  const [templateTaskData, setTemplateTaskData] = React.useState<any>(null);
+  const [templateTaskData, setTemplateTaskData] = React.useState<{
+    title: string;
+    description?: string;
+    priority: 1 | 2 | 3 | 4 | 5;
+    energy_requirement: 1 | 2 | 3 | 4 | 5;
+    estimated_duration?: number;
+    project_id?: string;
+    tags?: Tag[];
+  } | null>(null);
 
   // Keyboard shortcuts for power users
   useKeyboardShortcuts({

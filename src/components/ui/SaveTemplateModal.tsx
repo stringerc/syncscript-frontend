@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { TaskTemplate, saveTemplate, templateNameExists } from '../../utils/templateUtils';
+import { saveTemplate, templateNameExists } from '../../utils/templateUtils';
 import { Tag } from '../../utils/tagUtils';
 
 interface SaveTemplateModalProps {
