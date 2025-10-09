@@ -1,0 +1,9 @@
+Vercel CLI 48.2.6
+Retrieving project…
+Deploying christopher-stringers-projects/syncscript-frontend
+Uploading [--------------------] (0.0B/56.9KB)
+Uploading [=======-------------] (22.1KB/56.9KB)
+Uploading [=============-------] (38.2KB/56.9KB)
+Uploading [===================-] (54.2KB/56.9KB)
+Uploading [====================] (56.9KB/56.9KB)
+Error: Resource is limited - try again in 2 minutes (more than 100, code: "api-deployments-free-per-day").

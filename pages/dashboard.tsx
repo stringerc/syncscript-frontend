@@ -867,7 +867,14 @@ export default function Dashboard() {
               {/* Level Progress - Prominent */}
               <div className="level-progress-card">
                 <div className="level-info">
-                  <span className="level-badge">Level {userLevel}</span>
+                  <span className="level-badge">
+                    Level {userLevel}
+                    {unlockedCount > 0 && (
+                      <span className="mini-trophy" title={`${unlockedCount} achievements unlocked`}>
+                        🏆
+                      </span>
+                    )}
+                  </span>
                   <span className="points-text">⚡ {userPoints} pts</span>
                 </div>
                 <div className="progress-bar">
