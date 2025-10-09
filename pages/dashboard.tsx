@@ -18,6 +18,7 @@ import KeyboardHint from '../src/components/ui/KeyboardHint';
 import StreakCounter from '../src/components/ui/StreakCounter';
 import SaveTemplateModal from '../src/components/ui/SaveTemplateModal';
 import TemplateLibrary from '../src/components/ui/TemplateLibrary';
+import BulkActionToolbar from '../src/components/ui/BulkActionToolbar';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { TaskTemplate, createTaskFromTemplate } from '../src/utils/templateUtils';
 import { useKeyboardShortcuts } from '../src/hooks/useKeyboardShortcuts';
@@ -89,6 +90,7 @@ export default function Dashboard() {
     tags?: Tag[];
   } | null>(null);
   const [templateRefresh, setTemplateRefresh] = React.useState(0);
+  const [selectedTaskIds, setSelectedTaskIds] = React.useState<Set<string>>(new Set());
 
   // Keyboard shortcuts for power users
   useKeyboardShortcuts({
@@ -415,6 +417,128 @@ export default function Dashboard() {
     }
   };
 
+  // Bulk selection handlers
+  const handleToggleSelect = (taskId: string) => {
+    setSelectedTaskIds(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(taskId)) {
+        newSet.delete(taskId);
+      } else {
+        newSet.add(taskId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleSelectAll = () => {
+    const allTaskIds = activeTasks.map(t => t.id);
+    setSelectedTaskIds(new Set(allTaskIds));
+  };
+
+  const handleClearSelection = () => {
+    setSelectedTaskIds(new Set());
+  };
+
+  const handleBulkComplete = async () => {
+    const count = selectedTaskIds.size;
+    if (count === 0) return;
+
+    try {
+      // Complete all selected tasks in parallel
+      await Promise.all(
+        Array.from(selectedTaskIds).map(taskId =>
+          authenticatedFetch(`/api/tasks/${taskId}/complete`, {
+            method: 'POST',
+          })
+        )
+      );
+
+      // Update local state
+      setTasks(prev => prev.map(task => 
+        selectedTaskIds.has(task.id) ? { ...task, completed: true } : task
+      ));
+
+      toast.success(`${count} task${count > 1 ? 's' : ''} completed! 🎉`, {
+        duration: 3000,
+        icon: '✅',
+      });
+
+      setSelectedTaskIds(new Set());
+    } catch (error) {
+      console.error('Error completing tasks:', error);
+      toast.error('Failed to complete some tasks');
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    const count = selectedTaskIds.size;
+    if (count === 0) return;
+
+    if (!confirm(`Delete ${count} task${count > 1 ? 's' : ''}? This cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      // Delete all selected tasks in parallel
+      await Promise.all(
+        Array.from(selectedTaskIds).map(taskId =>
+          authenticatedFetch(`/api/tasks/${taskId}`, {
+            method: 'DELETE',
+          })
+        )
+      );
+
+      // Update local state
+      setTasks(prev => prev.filter(task => !selectedTaskIds.has(task.id)));
+
+      toast.success(`${count} task${count > 1 ? 's' : ''} deleted`, {
+        icon: '🗑️',
+      });
+
+      setSelectedTaskIds(new Set());
+    } catch (error) {
+      console.error('Error deleting tasks:', error);
+      toast.error('Failed to delete some tasks');
+    }
+  };
+
+  const handleBulkMove = async (projectId: string | null) => {
+    const count = selectedTaskIds.size;
+    if (count === 0) return;
+
+    try {
+      // Move all selected tasks in parallel
+      await Promise.all(
+        Array.from(selectedTaskIds).map(taskId =>
+          authenticatedFetch(`/api/tasks/${taskId}`, {
+            method: 'PUT',
+            body: JSON.stringify({ project_id: projectId }),
+          })
+        )
+      );
+
+      // Reload tasks to get updated project info
+      const response = await authenticatedFetch('/api/tasks');
+      if (response.ok) {
+        const data = await response.json();
+        setTasks(data.tasks || []);
+      }
+
+      const projectName = projectId 
+        ? projects.find(p => p.id === projectId)?.name || 'project'
+        : 'No Project';
+
+      toast.success(`${count} task${count > 1 ? 's' : ''} moved to ${projectName}! 📁`, {
+        duration: 3000,
+      });
+
+      setSelectedTaskIds(new Set());
+    } catch (error) {
+      console.error('Error moving tasks:', error);
+      toast.error('Failed to move some tasks');
+    }
+  };
+
   // Calculate stats from tasks
   const allActiveTasks = tasks.filter(task => !task.completed);
   const completedTasks = tasks.filter(task => task.completed);
@@ -715,6 +839,18 @@ export default function Dashboard() {
 
             {/* Tasks Content */}
             <div className="tasks-content">
+              {/* Bulk Action Toolbar */}
+              <BulkActionToolbar
+                selectedCount={selectedTaskIds.size}
+                onSelectAll={handleSelectAll}
+                onClearSelection={handleClearSelection}
+                onBulkComplete={handleBulkComplete}
+                onBulkDelete={handleBulkDelete}
+                onBulkMove={handleBulkMove}
+                projects={projects}
+                totalCount={activeTasks.length}
+              />
+
               {/* Search and Sort */}
               <TaskSearch
                 searchQuery={searchQuery}
@@ -784,6 +920,8 @@ export default function Dashboard() {
                     onDelete={handleTaskDelete}
                     onEdit={handleTaskEdit}
                     onSaveAsTemplate={handleSaveAsTemplate}
+                    isSelected={selectedTaskIds.has(task.id)}
+                    onToggleSelect={handleToggleSelect}
                   />
                 </motion.div>
               ))}
@@ -844,6 +982,8 @@ export default function Dashboard() {
                     onDelete={handleTaskDelete}
                     onEdit={handleTaskEdit}
                     onSaveAsTemplate={handleSaveAsTemplate}
+                    isSelected={selectedTaskIds.has(task.id)}
+                    onToggleSelect={handleToggleSelect}
                   />
                 </motion.div>
               ))}

@@ -34,6 +34,8 @@ interface TaskCardProps {
   onDelete: (taskId: string) => void;
   onEdit: (taskId: string) => void;
   onSaveAsTemplate?: (task: Task) => void;
+  isSelected?: boolean;
+  onToggleSelect?: (taskId: string) => void;
   className?: string;
 }
 
@@ -68,6 +70,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   onDelete, 
   onEdit,
   onSaveAsTemplate,
+  isSelected = false,
+  onToggleSelect,
   className = ''
 }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -108,7 +112,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
   return (
     <motion.div
-      className={`task-card ${className} task-priority-${task.priority} ${task.completed ? 'completed' : ''} ${urgency.isUrgent ? 'urgent' : ''} ${urgency.level === 'overdue' ? 'overdue' : ''}`}
+      className={`task-card ${className} task-priority-${task.priority} ${task.completed ? 'completed' : ''} ${urgency.isUrgent ? 'urgent' : ''} ${urgency.level === 'overdue' ? 'overdue' : ''} ${isSelected ? 'selected' : ''}`}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       whileHover={{ y: -2 }}
@@ -117,6 +121,26 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
+      {/* Selection Checkbox */}
+      {onToggleSelect && !task.completed && (
+        <div className="task-checkbox">
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={() => onToggleSelect(task.id)}
+            onClick={(e) => e.stopPropagation()}
+            className="checkbox-input"
+          />
+          <div className="checkbox-custom">
+            {isSelected && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                <polyline points="20,6 9,17 4,12"/>
+              </svg>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Confetti Celebration */}
       {showConfetti && (
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1000 }}>
