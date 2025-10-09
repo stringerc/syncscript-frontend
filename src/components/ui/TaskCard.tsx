@@ -28,6 +28,7 @@ interface TaskCardProps {
   onComplete: (taskId: string) => void;
   onDelete: (taskId: string) => void;
   onEdit: (taskId: string) => void;
+  onSaveAsTemplate?: (task: Task) => void;
   className?: string;
 }
 
@@ -55,12 +56,13 @@ const PRIORITY_COLORS = {
   5: 'var(--gradient-ribbon)'
 };
 
-export const TaskCard: React.FC<TaskCardProps> = ({
-  task,
-  currentEnergy,
-  onComplete,
-  onDelete,
+export const TaskCard: React.FC<TaskCardProps> = ({ 
+  task, 
+  currentEnergy, 
+  onComplete, 
+  onDelete, 
   onEdit,
+  onSaveAsTemplate,
   className = ''
 }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -257,6 +259,23 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               </svg>
               Edit
             </motion.button>
+            
+            {onSaveAsTemplate && (
+              <motion.button
+                className="btn btn-sm btn-ghost"
+                onClick={() => onSaveAsTemplate(task)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                title="Save as template"
+              >
+                <svg className="neural-icon" viewBox="0 0 24 24">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" stroke="currentColor" strokeWidth="2" fill="none" />
+                  <polyline points="17 21 17 13 7 13 7 21" stroke="currentColor" strokeWidth="2" fill="none" />
+                  <polyline points="7 3 7 8 15 8" stroke="currentColor" strokeWidth="2" fill="none" />
+                </svg>
+                Template
+              </motion.button>
+            )}
             
             <motion.button
               className="btn btn-sm btn-ghost"

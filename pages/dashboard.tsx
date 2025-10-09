@@ -16,6 +16,7 @@ import TaskFilter from '../src/components/ui/TaskFilter';
 import TaskSearch, { SortOption } from '../src/components/ui/TaskSearch';
 import KeyboardHint from '../src/components/ui/KeyboardHint';
 import StreakCounter from '../src/components/ui/StreakCounter';
+import SaveTemplateModal from '../src/components/ui/SaveTemplateModal';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { useKeyboardShortcuts } from '../src/hooks/useKeyboardShortcuts';
 import { updateLoginStreak, updateCompletionStreak, getStreakData, checkNewMilestone } from '../src/utils/streakUtils';
@@ -74,6 +75,8 @@ export default function Dashboard() {
   const [sortBy, setSortBy] = React.useState<SortOption>('energy_match');
   const [streakData, setStreakData] = React.useState(getStreakData());
   const [showMilestoneConfetti, setShowMilestoneConfetti] = React.useState(false);
+  const [isSaveTemplateModalOpen, setIsSaveTemplateModalOpen] = React.useState(false);
+  const [templateTaskData, setTemplateTaskData] = React.useState<any>(null);
 
   // Keyboard shortcuts for power users
   useKeyboardShortcuts({
@@ -375,6 +378,19 @@ export default function Dashboard() {
     } else {
       setSelectedProject(null);
     }
+  };
+
+  const handleSaveAsTemplate = (task: Task) => {
+    setTemplateTaskData({
+      title: task.title,
+      description: task.description,
+      priority: task.priority,
+      energy_requirement: task.energy_requirement,
+      estimated_duration: task.estimated_duration,
+      project_id: task.project_id,
+      tags: task.tags
+    });
+    setIsSaveTemplateModalOpen(true);
   };
 
   // Calculate stats from tasks
@@ -734,6 +750,7 @@ export default function Dashboard() {
                     onComplete={handleTaskComplete}
                     onDelete={handleTaskDelete}
                     onEdit={handleTaskEdit}
+                    onSaveAsTemplate={handleSaveAsTemplate}
                   />
                 </motion.div>
               ))}
@@ -788,6 +805,7 @@ export default function Dashboard() {
                     onComplete={handleTaskComplete}
                     onDelete={handleTaskDelete}
                     onEdit={handleTaskEdit}
+                    onSaveAsTemplate={handleSaveAsTemplate}
                   />
                 </motion.div>
               ))}
@@ -826,6 +844,16 @@ export default function Dashboard() {
         onSuccess={handleTaskEditSuccess}
         task={editingTask}
         projects={projects}
+      />
+
+      {/* Save Template Modal */}
+      <SaveTemplateModal
+        isOpen={isSaveTemplateModalOpen}
+        onClose={() => {
+          setIsSaveTemplateModalOpen(false);
+          setTemplateTaskData(null);
+        }}
+        taskData={templateTaskData}
       />
 
       {/* Keyboard Shortcuts Hint */}
