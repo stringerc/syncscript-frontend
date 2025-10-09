@@ -765,58 +765,43 @@ export default function Dashboard() {
             </p>
           </div>
           
-          {/* Center - Cohesive Stats Section */}
-          <div className="cohesive-stats-section">
-            <div className="stats-grid">
-              {/* Points */}
-              <div className="stat-card points-card">
-                <div className="stat-icon">⚡</div>
-                <div className="stat-content">
-                  <div className="stat-value">{userPoints}</div>
-                  <div className="stat-label">Points</div>
+          {/* Right Side - Stats and Actions */}
+          <div className="header-right">
+            {/* Stats Row - Compact and Clean */}
+            <div className="header-stats-compact">
+              {/* Level Progress - Prominent */}
+              <div className="level-progress-card">
+                <div className="level-info">
+                  <span className="level-badge">Level {userLevel}</span>
+                  <span className="points-text">⚡ {userPoints} pts</span>
+                </div>
+                <div className="progress-bar">
+                  <div 
+                    className="progress-fill" 
+                    style={{ width: `${(userPoints % 1000) / 10}%` }}
+                  />
                 </div>
               </div>
               
-              {/* Level */}
-              <div className="stat-card level-card">
-                <div className="stat-icon">🎯</div>
-                <div className="stat-content">
-                  <div className="stat-value">Level {userLevel}</div>
-                  <div className="stat-label">Progress</div>
+              {/* Compact Stats */}
+              <div className="compact-stats">
+                <div className="stat-item">
+                  <span className="stat-icon">✅</span>
+                  <span className="stat-text">{completedTasks.length}</span>
                 </div>
-              </div>
-              
-              {/* Completed Tasks */}
-              <div className="stat-card completed-card">
-                <div className="stat-icon">✅</div>
-                <div className="stat-content">
-                  <div className="stat-value">{completedTasks.length}</div>
-                  <div className="stat-label">Completed</div>
+                <div className="stat-item">
+                  <span className="stat-icon">🔥</span>
+                  <span className="stat-text">{streakData.loginStreak}</span>
                 </div>
-              </div>
-              
-              {/* Login Streak */}
-              <div className="stat-card streak-card">
-                <div className="stat-icon">🔥</div>
-                <div className="stat-content">
-                  <div className="stat-value">{streakData.loginStreak}</div>
-                  <div className="stat-label">Day Streak</div>
-                </div>
-              </div>
-              
-              {/* Daily Tasks */}
-              <div className="stat-card daily-card">
-                <div className="stat-icon">📋</div>
-                <div className="stat-content">
-                  <div className="stat-value">{tasks.filter(t => !t.completed).length}</div>
-                  <div className="stat-label">Tasks Today</div>
+                <div className="stat-item">
+                  <span className="stat-icon">📋</span>
+                  <span className="stat-text">{tasks.filter(t => !t.completed).length}</span>
                 </div>
               </div>
             </div>
-          </div>
-          
-          {/* Right Side - Actions */}
-          <div className="header-actions">
+            
+            {/* Action Buttons */}
+            <div className="header-actions">
               <button
                 className="btn btn-secondary notif-btn"
                 onClick={() => setShowNotifications(true)}

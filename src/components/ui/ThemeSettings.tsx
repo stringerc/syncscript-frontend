@@ -22,7 +22,20 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ isOpen, onClose }) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 10000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px'
+          }}
+        >
           <motion.div
             className="modal-overlay"
             initial={{ opacity: 0 }}
@@ -30,16 +43,13 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ isOpen, onClose }) => {
             exit={{ opacity: 0 }}
             onClick={onClose}
             style={{
-              position: 'fixed',
+              position: 'absolute',
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
               background: 'rgba(0, 0, 0, 0.5)',
-              zIndex: 9999,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
+              zIndex: 1
             }}
           />
           <motion.div
@@ -49,21 +59,17 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ isOpen, onClose }) => {
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             style={{
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
+              position: 'relative',
               background: '#FFFDF7',
               borderRadius: '16px',
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
               maxWidth: '600px',
-              width: '90vw',
+              width: '100%',
               maxHeight: '85vh',
               display: 'flex',
               flexDirection: 'column',
-              zIndex: 10000,
-              border: '1px solid #E5E7EB',
-              margin: '20px'
+              zIndex: 2,
+              border: '1px solid #E5E7EB'
             }}
           >
             {/* Header */}
@@ -274,7 +280,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ isOpen, onClose }) => {
               </div>
             </div>
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );
