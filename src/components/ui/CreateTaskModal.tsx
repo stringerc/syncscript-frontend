@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Tag, parseTags, tagsToString } from '../../utils/tagUtils';
+import { Tag, parseTags } from '../../utils/tagUtils';
 
 interface Project {
   id: string;

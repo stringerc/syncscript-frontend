@@ -19,7 +19,7 @@ import StreakCounter from '../src/components/ui/StreakCounter';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { useKeyboardShortcuts } from '../src/hooks/useKeyboardShortcuts';
 import { updateLoginStreak, updateCompletionStreak, getStreakData, checkNewMilestone } from '../src/utils/streakUtils';
-import { Tag, parseTags } from '../src/utils/tagUtils';
+import { Tag } from '../src/utils/tagUtils';
 
 interface Task {
   id: string;
@@ -668,7 +668,7 @@ export default function Dashboard() {
                 sortBy={sortBy}
                 onSortChange={setSortBy}
                 resultsCount={activeTasks.length}
-                totalCount={filteredByProject.length}
+                totalCount={filteredTasks.length}
               />
 
               {activeTasks.length === 0 ? (
