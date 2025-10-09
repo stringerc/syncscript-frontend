@@ -14,7 +14,9 @@ import CreateProjectModal from '../src/components/ui/CreateProjectModal';
 import EditTaskModal from '../src/components/ui/EditTaskModal';
 import TaskFilter from '../src/components/ui/TaskFilter';
 import TaskSearch, { SortOption } from '../src/components/ui/TaskSearch';
+import KeyboardHint from '../src/components/ui/KeyboardHint';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
+import { useKeyboardShortcuts } from '../src/hooks/useKeyboardShortcuts';
 
 interface Task {
   id: string;
@@ -65,6 +67,24 @@ export default function Dashboard() {
   const [filterProjectId, setFilterProjectId] = React.useState<string | null>(null);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [sortBy, setSortBy] = React.useState<SortOption>('energy_match');
+
+  // Keyboard shortcuts for power users
+  useKeyboardShortcuts({
+    onNewTask: () => setIsCreateModalOpen(true),
+    onNewProject: () => setIsCreateProjectModalOpen(true),
+    onFocusSearch: () => {
+      const searchInput = document.querySelector('.search-input') as HTMLInputElement;
+      searchInput?.focus();
+    },
+    onEscapePressed: () => {
+      setIsCreateModalOpen(false);
+      setIsCreateProjectModalOpen(false);
+      setIsEditTaskModalOpen(false);
+    },
+    onQuickEnergy: (level) => {
+      handleEnergyChange(level);
+    }
+  });
 
   // Load user data on mount - PARALLELIZED for 3x faster loading!
   const loadUserData = React.useCallback(async () => {
@@ -736,6 +756,9 @@ export default function Dashboard() {
         task={editingTask}
         projects={projects}
       />
+
+      {/* Keyboard Shortcuts Hint */}
+      <KeyboardHint />
     </div>
   );
 }
