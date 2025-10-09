@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getTaskUrgency, getUrgencyColor, getUrgencyIcon } from '../../utils/dateUtils';
 
 interface Task {
   id: string;
@@ -60,6 +61,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   className = ''
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const urgency = getTaskUrgency(task.dueDate);
 
   const energyMatch = Math.abs(task.energyRequirement - currentEnergy);
   const isPerfectMatch = energyMatch === 0;
@@ -92,7 +94,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
   return (
     <motion.div
-      className={`task-card ${className} task-priority-${task.priority} ${task.completed ? 'completed' : ''}`}
+      className={`task-card ${className} task-priority-${task.priority} ${task.completed ? 'completed' : ''} ${urgency.isUrgent ? 'urgent' : ''} ${urgency.level === 'overdue' ? 'overdue' : ''}`}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       whileHover={{ y: -2 }}
@@ -153,6 +155,16 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             <span className="points-label">Points</span>
             <span className="points-value">{task.points}</span>
           </div>
+
+          {urgency.level !== 'none' && (
+            <div 
+              className={`urgency-badge urgency-${urgency.level}`}
+              style={{ color: getUrgencyColor(urgency.level) }}
+            >
+              <span className="urgency-icon">{getUrgencyIcon(urgency.level)}</span>
+              <span className="urgency-label">{urgency.label}</span>
+            </div>
+          )}
         </div>
 
         {/* Neural Circuit Pattern */}
