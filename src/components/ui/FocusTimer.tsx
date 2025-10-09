@@ -112,6 +112,12 @@ const FocusTimer: React.FC<FocusTimerProps> = ({ taskTitle, onComplete, onCancel
               {isBreak ? '☕ Break Time' : '🎯 Focus Session'}
             </h3>
             <p className="focus-task">{taskTitle}</p>
+            {!isBreak && (
+              <p className="pomodoro-info">
+                🍅 Pomodoro Technique: 25min focused work → 5min break. 
+                This scientifically-proven method maximizes productivity and prevents burnout.
+              </p>
+            )}
           </div>
 
           {/* Timer Circle */}
