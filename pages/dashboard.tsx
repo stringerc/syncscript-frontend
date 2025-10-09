@@ -845,10 +845,16 @@ export default function Dashboard() {
 
   if (isLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-syncscript-cream-50">
         <div className="loading-spinner">
           <div className="spinner"></div>
-          <p>Loading your SyncScript dashboard...</p>
+          <p style={{ 
+            fontSize: '18px', 
+            color: 'var(--syncscript-charcoal-600)', 
+            margin: '0',
+            transform: 'none',
+            animation: 'none'
+          }}>Loading your SyncScript dashboard...</p>
         </div>
       </div>
     );

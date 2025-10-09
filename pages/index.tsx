@@ -15,10 +15,16 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-syncscript-cream-50">
         <div className="loading-spinner">
           <div className="spinner"></div>
-          <p>Loading SyncScript...</p>
+          <p style={{ 
+            fontSize: '18px', 
+            color: 'var(--syncscript-charcoal-600)', 
+            margin: '0',
+            transform: 'none',
+            animation: 'none'
+          }}>Loading SyncScript...</p>
         </div>
       </div>
     );
