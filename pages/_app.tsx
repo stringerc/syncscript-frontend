@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '../src/contexts/ThemeContext';
 import Head from 'next/head';
 import '../src/styles/globals.css';
+import '../src/styles/SmartSuggestions.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
