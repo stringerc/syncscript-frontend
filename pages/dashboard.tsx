@@ -24,6 +24,7 @@ import AnalyticsDashboard from '../src/components/ui/AnalyticsDashboard';
 import ThemeSettings from '../src/components/ui/ThemeSettings';
 import NotificationCenter from '../src/components/ui/NotificationCenter';
 import InstallPWA from '../src/components/ui/InstallPWA';
+import SmartSuggestions from '../src/components/ui/SmartSuggestions';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { useNotifications } from '../src/hooks/useNotifications';
 import { TaskTemplate, createTaskFromTemplate } from '../src/utils/templateUtils';
@@ -106,6 +107,7 @@ export default function Dashboard() {
   const [focusTaskId, setFocusTaskId] = React.useState<string | null>(null);
   const [focusTaskTitle, setFocusTaskTitle] = React.useState<string>('');
   const [showAnalytics, setShowAnalytics] = React.useState(false);
+  const [showSuggestions, setShowSuggestions] = React.useState(false);
   const [showThemeSettings, setShowThemeSettings] = React.useState(false);
   const [showNotifications, setShowNotifications] = React.useState(false);
 
@@ -840,6 +842,16 @@ export default function Dashboard() {
                 )}
               </button>
               <button
+                className="btn btn-primary"
+                onClick={() => setShowSuggestions(true)}
+                title="Get AI-powered task suggestions"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '16px', height: '16px' }}>
+                  <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>
+                </svg>
+                Suggestions
+              </button>
+              <button
                 className="btn btn-secondary"
                 onClick={() => setShowAnalytics(!showAnalytics)}
               >
@@ -1267,6 +1279,21 @@ export default function Dashboard() {
         onDelete={deleteNotif}
         onClearAll={clearAllNotifications}
         onUpdatePreferences={updateNotificationPreferences}
+      />
+
+      {/* Smart Suggestions */}
+      <SmartSuggestions
+        isOpen={showSuggestions}
+        onClose={() => setShowSuggestions(false)}
+        onAcceptSuggestion={(taskId) => {
+          setShowSuggestions(false);
+          // Find the task and open it
+          const task = tasks.find(t => t.id === taskId);
+          if (task) {
+            setEditingTask(task);
+            setIsEditTaskModalOpen(true);
+          }
+        }}
       />
 
       {/* PWA Install Prompt */}
