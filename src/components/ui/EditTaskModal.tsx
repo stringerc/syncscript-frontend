@@ -5,6 +5,7 @@ import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { Tag, parseTags, tagsToString } from '../../utils/tagUtils';
 import { Subtask, createSubtask, toggleSubtask, deleteSubtask } from '../../utils/subtaskUtils';
 import { TaskNote, createNote, deleteNote, formatNoteTime } from '../../utils/noteUtils';
+import { RecurrenceConfig, RecurrenceFrequency, createDefaultRecurrence } from '../../utils/recurrenceUtils';
 
 interface Task {
   id: string;
@@ -20,6 +21,7 @@ interface Task {
   tags?: Tag[];
   subtasks?: Subtask[];
   notes?: TaskNote[];
+  recurrence?: RecurrenceConfig;
 }
 
 interface Project {
@@ -56,6 +58,8 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
   const [newSubtaskText, setNewSubtaskText] = useState('');
   const [notes, setNotes] = useState<TaskNote[]>([]);
   const [newNoteText, setNewNoteText] = useState('');
+  const [recurrenceFreq, setRecurrenceFreq] = useState<RecurrenceFrequency>('none');
+  const [recurrenceInterval, setRecurrenceInterval] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const authenticatedFetch = useAuthenticatedFetch();
 
@@ -73,6 +77,8 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
       });
       setSubtasks(task.subtasks || []);
       setNotes(task.notes || []);
+      setRecurrenceFreq(task.recurrence?.frequency || 'none');
+      setRecurrenceInterval(task.recurrence?.interval || 1);
     }
   }, [task]);
 
@@ -104,6 +110,7 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
         tags?: Tag[];
         subtasks?: Subtask[];
         notes?: TaskNote[];
+        recurrence?: RecurrenceConfig;
       } = {
         title: formData.title.trim(),
         priority: formData.priority,
@@ -133,6 +140,17 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
 
       if (notes.length > 0) {
         requestData.notes = notes;
+      }
+
+      // Build recurrence config
+      if (recurrenceFreq !== 'none') {
+        requestData.recurrence = {
+          frequency: recurrenceFreq,
+          interval: recurrenceInterval,
+          is_active: true
+        };
+      } else {
+        requestData.recurrence = undefined;
       }
 
       const response = await authenticatedFetch(`/api/tasks/${task.id}`, {
@@ -491,6 +509,52 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
                 </div>
                 <p className="form-hint">
                   Track progress, thoughts, and important details
+                </p>
+              </div>
+
+              {/* Recurrence */}
+              <div className="form-group">
+                <label htmlFor="task-recurrence-edit" className="form-label">
+                  Repeat Task (Optional)
+                </label>
+                <div className="recurrence-controls">
+                  <select
+                    id="task-recurrence-edit"
+                    value={recurrenceFreq}
+                    onChange={(e) => setRecurrenceFreq(e.target.value as RecurrenceFrequency)}
+                    className="form-select"
+                    disabled={isSubmitting}
+                  >
+                    <option value="none">Does not repeat</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
+                  
+                  {recurrenceFreq !== 'none' && (
+                    <div className="interval-control">
+                      <label htmlFor="recurrence-interval-edit" className="interval-label">
+                        Every
+                      </label>
+                      <input
+                        id="recurrence-interval-edit"
+                        type="number"
+                        value={recurrenceInterval}
+                        onChange={(e) => setRecurrenceInterval(Math.max(1, parseInt(e.target.value) || 1))}
+                        min="1"
+                        max="30"
+                        className="form-input interval-input"
+                        disabled={isSubmitting}
+                      />
+                      <span className="interval-unit">
+                        {recurrenceFreq === 'daily' ? 'day(s)' : 
+                         recurrenceFreq === 'weekly' ? 'week(s)' : 'month(s)'}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <p className="form-hint">
+                  Task will auto-create when completed {recurrenceFreq !== 'none' && '🔄'}
                 </p>
               </div>
 
