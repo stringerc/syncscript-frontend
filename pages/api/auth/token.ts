@@ -1,32 +1,45 @@
-import { getSession } from '@auth0/nextjs-auth0';
+import { getAccessToken, withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function token(
+export default withApiAuthRequired(async function token(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    // Get the user session
+    // Try to get access token from Auth0
+    try {
+      const { accessToken } = await getAccessToken(req, res);
+      
+      if (accessToken) {
+        return res.status(200).json({ accessToken });
+      }
+    } catch (accessTokenError) {
+      console.log('getAccessToken failed, trying alternate method:', accessTokenError);
+    }
+
+    // Fallback: Get session and extract access token from it
     const session = await getSession(req, res);
     
-    if (!session || !session.user) {
+    if (!session) {
       return res.status(401).json({ 
         error: 'Not authenticated',
         message: 'No active session found'
       });
     }
 
-    // For now, return a mock token since getAccessToken is failing
-    // In production, this would be the actual access token from Auth0
-    const mockToken = Buffer.from(JSON.stringify({
-      sub: session.user.sub,
-      email: session.user.email,
-      name: session.user.name,
-      iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + 3600
-    })).toString('base64');
+    // Auth0 session should have accessToken in it
+    const accessToken = (session as any).accessToken;
+    
+    if (accessToken) {
+      return res.status(200).json({ accessToken });
+    }
 
-    res.status(200).json({ accessToken: mockToken });
+    // Last resort: Return error
+    return res.status(500).json({ 
+      error: 'Failed to get access token',
+      message: 'Unable to retrieve access token from Auth0 session'
+    });
+    
   } catch (error) {
     console.error('Token endpoint error:', error);
     res.status(500).json({ 
@@ -34,5 +47,5 @@ export default async function token(
       message: error instanceof Error ? error.message : 'Unknown error'
     });
   }
-}
+});
 
