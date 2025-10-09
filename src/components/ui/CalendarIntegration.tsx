@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 
-interface CalendarIntegrationProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onImportTasks: (events: Array<{ id: string; summary: string; description?: string; start: string; end: string }>) => void;
-}
-
 interface CalendarEvent {
   id: string;
   summary: string;
   description?: string;
   start: string;
   end: string;
-  selected: boolean;
+  selected?: boolean;
+}
+
+interface CalendarIntegrationProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onImportTasks: (events: CalendarEvent[]) => void;
 }
 
 const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
