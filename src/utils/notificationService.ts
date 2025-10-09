@@ -84,15 +84,28 @@ export const clearAllNotifications = (): void => {
   localStorage.removeItem('syncscript-notifications');
 };
 
-export const addNotification = (notification: Omit<Notification, 'id' | 'timestamp' | 'read'>): Notification => {
+export const addNotification = (notification: Omit<Notification, 'id' | 'timestamp' | 'read'> & { id?: string }): Notification => {
+  const notifications = getStoredNotifications();
+  
+  // If ID provided, check if it already exists to prevent duplicates
+  const existingId = notification.id || `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const exists = notifications.some(n => n.id === existingId);
+  
+  if (exists) {
+    return notifications.find(n => n.id === existingId)!;
+  }
+  
   const newNotification: Notification = {
-    ...notification,
-    id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    type: notification.type,
+    title: notification.title,
+    message: notification.message,
+    icon: notification.icon,
+    action: notification.action,
+    id: existingId,
     timestamp: new Date().toISOString(),
     read: false
   };
   
-  const notifications = getStoredNotifications();
   const updated = [newNotification, ...notifications];
   saveNotifications(updated);
   

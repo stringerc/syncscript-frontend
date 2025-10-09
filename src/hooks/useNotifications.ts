@@ -43,6 +43,7 @@ export const useNotifications = (tasks: Task[], currentEnergy: number, streakDat
 
     const now = new Date();
     const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+    const storedNotifications = getStoredNotifications(); // Get fresh from storage
 
     tasks.forEach(task => {
       if (task.completed || !task.due_date) return;
@@ -53,29 +54,31 @@ export const useNotifications = (tasks: Task[], currentEnergy: number, streakDat
 
       if (isOverdue) {
         const notifId = `overdue-${task.id}`;
-        const exists = notifications.some(n => n.id.includes(notifId));
+        const exists = storedNotifications.some(n => n.id === notifId);
         if (!exists) {
           addNotification({
             type: 'due_date',
             title: '⚠️ Overdue Task',
             message: `"${task.title}" is overdue!`,
-            icon: '⏰'
+            icon: '⏰',
+            id: notifId
           });
         }
       } else if (isDueSoon) {
         const notifId = `due-soon-${task.id}`;
-        const exists = notifications.some(n => n.id.includes(notifId));
+        const exists = storedNotifications.some(n => n.id === notifId);
         if (!exists) {
           addNotification({
             type: 'due_date',
             title: '📅 Task Due Soon',
             message: `"${task.title}" is due in less than 1 hour!`,
-            icon: '⏰'
+            icon: '⏰',
+            id: notifId
           });
         }
       }
     });
-  }, [tasks, preferences.dueDateReminders, notifications]);
+  }, [tasks, preferences.dueDateReminders]);
 
   // Check for energy-based suggestions
   const checkEnergySuggestions = useCallback(() => {
@@ -173,7 +176,7 @@ export const useNotifications = (tasks: Task[], currentEnergy: number, streakDat
       checkStreakAlerts();
       checkFocusReminders();
       setNotifications(getStoredNotifications());
-    }, 60 * 1000); // Check every minute
+    }, 5 * 60 * 1000); // Check every 5 minutes (less aggressive)
 
     // Initial check
     checkDueDateNotifications();
