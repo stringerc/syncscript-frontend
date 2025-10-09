@@ -4,6 +4,7 @@
 
 /* 🎨 SYNCSCRIPT THEME IMPORTS */
 @import './tokens.css';
+@import './theme-variables.css';
 @import './components.css';
 @import './EnergySelector.css';
 @import './TaskCard.css';
@@ -25,3 +26,4 @@
 @import './BulkActionToolbar.css';
 @import './FocusTimer.css';
 @import './AnalyticsDashboard.css';
+@import './ThemeSettings.css';

@@ -21,6 +21,7 @@ import TemplateLibrary from '../src/components/ui/TemplateLibrary';
 import BulkActionToolbar from '../src/components/ui/BulkActionToolbar';
 import FocusTimer from '../src/components/ui/FocusTimer';
 import AnalyticsDashboard from '../src/components/ui/AnalyticsDashboard';
+import ThemeSettings from '../src/components/ui/ThemeSettings';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { TaskTemplate, createTaskFromTemplate } from '../src/utils/templateUtils';
 import { useKeyboardShortcuts } from '../src/hooks/useKeyboardShortcuts';
@@ -102,6 +103,7 @@ export default function Dashboard() {
   const [focusTaskId, setFocusTaskId] = React.useState<string | null>(null);
   const [focusTaskTitle, setFocusTaskTitle] = React.useState<string>('');
   const [showAnalytics, setShowAnalytics] = React.useState(false);
+  const [showThemeSettings, setShowThemeSettings] = React.useState(false);
 
   // Keyboard shortcuts for power users
   useKeyboardShortcuts({
@@ -748,36 +750,53 @@ export default function Dashboard() {
           </div>
           
           <div className="header-right">
-            <UserStats
-              points={userPoints}
-              level={userLevel}
-              tasksCompleted={completedTasks.length}
-            />
-            <StreakCounter
-              loginStreak={streakData.loginStreak}
-              completionStreak={streakData.completionStreak}
-              longestLoginStreak={streakData.longestLoginStreak}
-              longestCompletionStreak={streakData.longestCompletionStreak}
-            />
-            <button
-              className="btn btn-secondary"
-              onClick={() => setShowAnalytics(!showAnalytics)}
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '16px', height: '16px' }}>
-                <line x1="18" y1="20" x2="18" y2="10"/>
-                <line x1="12" y1="20" x2="12" y2="4"/>
-                <line x1="6" y1="20" x2="6" y2="14"/>
-              </svg>
-              {showAnalytics ? 'Hide Analytics' : 'Analytics'}
-            </button>
-            <Link href="/api/auth/logout" className="btn btn-ghost">
-              <svg className="neural-icon" viewBox="0 0 24 24">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" strokeWidth="2" fill="none" />
-                <polyline points="16,17 21,12 16,7" stroke="currentColor" strokeWidth="2" fill="none" />
-                <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2" fill="none" />
-              </svg>
-              Logout
-            </Link>
+            {/* Stats Row */}
+            <div className="header-stats">
+              <UserStats
+                points={userPoints}
+                level={userLevel}
+                tasksCompleted={completedTasks.length}
+              />
+              <StreakCounter
+                loginStreak={streakData.loginStreak}
+                completionStreak={streakData.completionStreak}
+                longestLoginStreak={streakData.longestLoginStreak}
+                longestCompletionStreak={streakData.longestCompletionStreak}
+              />
+            </div>
+            
+            {/* Actions Row */}
+            <div className="header-actions">
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAnalytics(!showAnalytics)}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '16px', height: '16px' }}>
+                  <line x1="18" y1="20" x2="18" y2="10"/>
+                  <line x1="12" y1="20" x2="12" y2="4"/>
+                  <line x1="6" y1="20" x2="6" y2="14"/>
+                </svg>
+                Analytics
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowThemeSettings(true)}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '16px', height: '16px' }}>
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24"/>
+                </svg>
+                Theme
+              </button>
+              <Link href="/api/auth/logout" className="btn btn-ghost">
+                <svg className="neural-icon" viewBox="0 0 24 24">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" strokeWidth="2" fill="none" />
+                  <polyline points="16,17 21,12 16,7" stroke="currentColor" strokeWidth="2" fill="none" />
+                  <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2" fill="none" />
+                </svg>
+                Logout
+              </Link>
+            </div>
           </div>
         </div>
       </motion.header>
@@ -1158,6 +1177,12 @@ export default function Dashboard() {
           onCancel={handleFocusCancel}
         />
       )}
+
+      {/* Theme Settings Modal */}
+      <ThemeSettings
+        isOpen={showThemeSettings}
+        onClose={() => setShowThemeSettings(false)}
+      />
 
       {/* Keyboard Shortcuts Hint */}
       <KeyboardHint />

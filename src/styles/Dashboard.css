@@ -61,9 +61,22 @@
 
 .header-right {
   display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: flex-end;
+}
+
+.header-stats {
+  display: flex;
   align-items: center;
   gap: var(--space-3);
   flex-wrap: wrap;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 /* Responsive Header */

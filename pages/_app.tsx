@@ -2,6 +2,7 @@ import React from 'react';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
+import { ThemeProvider } from '../src/contexts/ThemeContext';
 import '../src/styles/globals.css';
 
 const queryClient = new QueryClient({
@@ -26,9 +27,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <UserProvider>
       <QueryClientProvider client={queryClient}>
-        <div className="min-h-screen bg-syncscript-cream-50">
-          <Component {...pageProps} />
-          <Toaster
+        <ThemeProvider>
+          <div className="min-h-screen bg-syncscript-cream-50">
+            <Component {...pageProps} />
+            <Toaster
             position="top-right"
             toastOptions={{
               duration: 4000,
@@ -53,7 +55,8 @@ function MyApp({ Component, pageProps }: AppProps) {
               },
             }}
           />
-        </div>
+          </div>
+        </ThemeProvider>
       </QueryClientProvider>
     </UserProvider>
   );
