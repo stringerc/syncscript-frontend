@@ -17,7 +17,9 @@ import TaskSearch, { SortOption } from '../src/components/ui/TaskSearch';
 import KeyboardHint from '../src/components/ui/KeyboardHint';
 import StreakCounter from '../src/components/ui/StreakCounter';
 import SaveTemplateModal from '../src/components/ui/SaveTemplateModal';
+import TemplateLibrary from '../src/components/ui/TemplateLibrary';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
+import { TaskTemplate, createTaskFromTemplate } from '../src/utils/templateUtils';
 import { useKeyboardShortcuts } from '../src/hooks/useKeyboardShortcuts';
 import { updateLoginStreak, updateCompletionStreak, getStreakData, checkNewMilestone } from '../src/utils/streakUtils';
 import { Tag } from '../src/utils/tagUtils';
@@ -402,6 +404,16 @@ export default function Dashboard() {
     setIsSaveTemplateModalOpen(true);
   };
 
+  const handleUseTemplate = async (template: TaskTemplate) => {
+    try {
+      const taskData = createTaskFromTemplate(template);
+      await handleCreateTask(taskData);
+    } catch (error) {
+      console.error('Error creating task from template:', error);
+      toast.error('Failed to create task from template');
+    }
+  };
+
   // Calculate stats from tasks
   const allActiveTasks = tasks.filter(task => !task.completed);
   const completedTasks = tasks.filter(task => task.completed);
@@ -676,6 +688,9 @@ export default function Dashboard() {
               New Task
             </button>
           </div>
+
+          {/* Template Library */}
+          <TemplateLibrary onUseTemplate={handleUseTemplate} />
 
           {/* Task Filter and Tasks Grid Layout */}
           <div className="tasks-section-layout">
