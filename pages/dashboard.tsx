@@ -13,6 +13,7 @@ import ProjectCard from '../src/components/ui/ProjectCard';
 import CreateProjectModal from '../src/components/ui/CreateProjectModal';
 import EditTaskModal from '../src/components/ui/EditTaskModal';
 import TaskFilter from '../src/components/ui/TaskFilter';
+import TaskSearch, { SortOption } from '../src/components/ui/TaskSearch';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 
 interface Task {
@@ -62,6 +63,8 @@ export default function Dashboard() {
   const [isEditTaskModalOpen, setIsEditTaskModalOpen] = React.useState(false);
   const [editingTask, setEditingTask] = React.useState<Task | null>(null);
   const [filterProjectId, setFilterProjectId] = React.useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [sortBy, setSortBy] = React.useState<SortOption>('energy_match');
 
   // Load user data on mount
   const loadUserData = React.useCallback(async () => {
@@ -310,16 +313,54 @@ export default function Dashboard() {
   const allActiveTasks = tasks.filter(task => !task.completed);
   const completedTasks = tasks.filter(task => task.completed);
 
-  // Apply filter
+  // Apply filter, search, and sort
   const activeTasks = React.useMemo(() => {
-    if (!filterProjectId) {
-      return allActiveTasks;
+    let filtered = allActiveTasks;
+
+    // Apply project filter
+    if (filterProjectId) {
+      if (filterProjectId === 'none') {
+        filtered = filtered.filter(task => !task.project_id);
+      } else {
+        filtered = filtered.filter(task => task.project_id === filterProjectId);
+      }
     }
-    if (filterProjectId === 'none') {
-      return allActiveTasks.filter(task => !task.project_id);
+
+    // Apply search
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(task => 
+        task.title.toLowerCase().includes(query) ||
+        (task.description?.toLowerCase().includes(query))
+      );
     }
-    return allActiveTasks.filter(task => task.project_id === filterProjectId);
-  }, [allActiveTasks, filterProjectId]);
+
+    // Apply sort
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case 'priority':
+          return b.priority - a.priority;
+        case 'due_date':
+          if (!a.due_date && !b.due_date) return 0;
+          if (!a.due_date) return 1;
+          if (!b.due_date) return -1;
+          return new Date(a.due_date).getTime() - new Date(b.due_date).getTime();
+        case 'points':
+          return b.points - a.points;
+        case 'energy_match':
+          const matchA = Math.abs(a.energy_requirement - currentEnergy);
+          const matchB = Math.abs(b.energy_requirement - currentEnergy);
+          if (matchA === matchB) return b.priority - a.priority;
+          return matchA - matchB;
+        case 'created_at':
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        default:
+          return 0;
+      }
+    });
+
+    return sorted;
+  }, [allActiveTasks, filterProjectId, searchQuery, sortBy, currentEnergy]);
 
   // Calculate task counts for filter
   const taskCounts = React.useMemo(() => {
@@ -540,6 +581,16 @@ export default function Dashboard() {
 
             {/* Tasks Content */}
             <div className="tasks-content">
+              {/* Search and Sort */}
+              <TaskSearch
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                sortBy={sortBy}
+                onSortChange={setSortBy}
+                resultsCount={activeTasks.length}
+                totalCount={allActiveTasks.length}
+              />
+
               {activeTasks.length === 0 ? (
             <div className="empty-state card card-md">
               <div className="empty-icon">
