@@ -41,14 +41,27 @@ const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
       
       setIsConnected(true);
       
-      // Generate upcoming US holidays and placeholder events
+      // Generate upcoming US holidays and sample personal events
       const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(10, 0, 0, 0); // 10 AM tomorrow
+      
       const mockEvents: CalendarEvent[] = [
+        // User's upcoming events (sample - would come from Google Calendar)
+        {
+          id: 'personal-1',
+          summary: '📅 Your Event Tomorrow',
+          description: 'This is a sample event. Connect Google Calendar to see your real events!',
+          start: tomorrow.toISOString(),
+          end: new Date(tomorrow.getTime() + 60 * 60 * 1000).toISOString(), // 1 hour duration
+          selected: false
+        },
         // Upcoming US Holidays
         {
           id: 'holiday-1',
           summary: '🎃 Halloween',
-          description: 'US Holiday',
+          description: 'US Holiday - Import as reminder',
           start: new Date(2025, 9, 31, 0, 0).toISOString(), // Oct 31, 2025
           end: new Date(2025, 9, 31, 23, 59).toISOString(),
           selected: false
@@ -56,7 +69,7 @@ const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
         {
           id: 'holiday-2',
           summary: '🦃 Thanksgiving',
-          description: 'US Holiday',
+          description: 'US Holiday - Import as reminder',
           start: new Date(2025, 10, 27, 0, 0).toISOString(), // Nov 27, 2025
           end: new Date(2025, 10, 27, 23, 59).toISOString(),
           selected: false
@@ -64,7 +77,7 @@ const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
         {
           id: 'holiday-3',
           summary: '🎄 Christmas',
-          description: 'US Holiday',
+          description: 'US Holiday - Import as reminder',
           start: new Date(2025, 11, 25, 0, 0).toISOString(), // Dec 25, 2025
           end: new Date(2025, 11, 25, 23, 59).toISOString(),
           selected: false
@@ -72,7 +85,7 @@ const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
         {
           id: 'holiday-4',
           summary: '🎆 New Year\'s Day',
-          description: 'US Holiday',
+          description: 'US Holiday - Import as reminder',
           start: new Date(2026, 0, 1, 0, 0).toISOString(), // Jan 1, 2026
           end: new Date(2026, 0, 1, 23, 59).toISOString(),
           selected: false
@@ -80,21 +93,13 @@ const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
         {
           id: 'holiday-5',
           summary: '❤️ Valentine\'s Day',
-          description: 'US Holiday',
+          description: 'US Holiday - Import as reminder',
           start: new Date(2026, 1, 14, 0, 0).toISOString(), // Feb 14, 2026
           end: new Date(2026, 1, 14, 23, 59).toISOString(),
           selected: false
-        },
-        // Sample placeholder events (will be replaced with real Google Calendar)
-        {
-          id: 'sample-1',
-          summary: '📅 Connect Google Calendar to see your events',
-          description: 'Click "Connect Google Calendar" above to sync your real events and holidays',
-          start: new Date(today.getTime() + 24 * 60 * 60 * 1000).toISOString(),
-          end: new Date(today.getTime() + 25 * 60 * 60 * 1000).toISOString(),
-          selected: false
         }
-      ].filter(event => new Date(event.start) >= today); // Only show future events
+      ].filter(event => new Date(event.start) >= today) // Only show future events
+       .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()); // Sort by date
       
       setEvents(mockEvents);
       
