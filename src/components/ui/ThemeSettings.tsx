@@ -29,6 +29,18 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 9999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
           />
           <motion.div
             className="theme-settings-modal"
@@ -46,11 +58,12 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ isOpen, onClose }) => {
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
               maxWidth: '600px',
               width: '90vw',
-              maxHeight: '90vh',
+              maxHeight: '85vh',
               display: 'flex',
               flexDirection: 'column',
               zIndex: 10000,
-              border: '1px solid #E5E7EB'
+              border: '1px solid #E5E7EB',
+              margin: '20px'
             }}
           >
             {/* Header */}

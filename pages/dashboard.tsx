@@ -755,6 +755,7 @@ export default function Dashboard() {
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <div className="header-content">
+          {/* Left Side - Title and Welcome */}
           <div className="header-left">
             <h1 className="dashboard-title">
               <span className="title-gradient">SyncScript</span>
@@ -764,24 +765,58 @@ export default function Dashboard() {
             </p>
           </div>
           
-          <div className="header-right">
-            {/* Stats Row */}
-            <div className="header-stats">
-              <UserStats
-                points={userPoints}
-                level={userLevel}
-                tasksCompleted={completedTasks.length}
-              />
-              <StreakCounter
-                loginStreak={streakData.loginStreak}
-                completionStreak={streakData.completionStreak}
-                longestLoginStreak={streakData.longestLoginStreak}
-                longestCompletionStreak={streakData.longestCompletionStreak}
-              />
+          {/* Center - Cohesive Stats Section */}
+          <div className="cohesive-stats-section">
+            <div className="stats-grid">
+              {/* Points */}
+              <div className="stat-card points-card">
+                <div className="stat-icon">⚡</div>
+                <div className="stat-content">
+                  <div className="stat-value">{userPoints}</div>
+                  <div className="stat-label">Points</div>
+                </div>
+              </div>
+              
+              {/* Level */}
+              <div className="stat-card level-card">
+                <div className="stat-icon">🎯</div>
+                <div className="stat-content">
+                  <div className="stat-value">Level {userLevel}</div>
+                  <div className="stat-label">Progress</div>
+                </div>
+              </div>
+              
+              {/* Completed Tasks */}
+              <div className="stat-card completed-card">
+                <div className="stat-icon">✅</div>
+                <div className="stat-content">
+                  <div className="stat-value">{completedTasks.length}</div>
+                  <div className="stat-label">Completed</div>
+                </div>
+              </div>
+              
+              {/* Login Streak */}
+              <div className="stat-card streak-card">
+                <div className="stat-icon">🔥</div>
+                <div className="stat-content">
+                  <div className="stat-value">{streakData.loginStreak}</div>
+                  <div className="stat-label">Day Streak</div>
+                </div>
+              </div>
+              
+              {/* Daily Tasks */}
+              <div className="stat-card daily-card">
+                <div className="stat-icon">📋</div>
+                <div className="stat-content">
+                  <div className="stat-value">{tasks.filter(t => !t.completed).length}</div>
+                  <div className="stat-label">Tasks Today</div>
+                </div>
+              </div>
             </div>
-            
-            {/* Actions Row */}
-            <div className="header-actions">
+          </div>
+          
+          {/* Right Side - Actions */}
+          <div className="header-actions">
               <button
                 className="btn btn-secondary notif-btn"
                 onClick={() => setShowNotifications(true)}
