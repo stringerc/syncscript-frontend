@@ -12,6 +12,7 @@ import UserStats from '../src/components/ui/UserStats';
 import ProjectCard from '../src/components/ui/ProjectCard';
 import CreateProjectModal from '../src/components/ui/CreateProjectModal';
 import EditTaskModal from '../src/components/ui/EditTaskModal';
+import TaskFilter from '../src/components/ui/TaskFilter';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 
 interface Task {
@@ -60,6 +61,7 @@ export default function Dashboard() {
   const [selectedProject, setSelectedProject] = React.useState<Project | null>(null);
   const [isEditTaskModalOpen, setIsEditTaskModalOpen] = React.useState(false);
   const [editingTask, setEditingTask] = React.useState<Task | null>(null);
+  const [filterProjectId, setFilterProjectId] = React.useState<string | null>(null);
 
   // Load user data on mount
   const loadUserData = React.useCallback(async () => {
@@ -291,11 +293,48 @@ export default function Dashboard() {
 
   const handleProjectSelect = (project: Project) => {
     setSelectedProject(project);
+    setFilterProjectId(project.id);
+  };
+
+  const handleFilterChange = (projectId: string | null) => {
+    setFilterProjectId(projectId);
+    if (projectId) {
+      const project = projects.find(p => p.id === projectId);
+      setSelectedProject(project || null);
+    } else {
+      setSelectedProject(null);
+    }
   };
 
   // Calculate stats from tasks
-  const activeTasks = tasks.filter(task => !task.completed);
+  const allActiveTasks = tasks.filter(task => !task.completed);
   const completedTasks = tasks.filter(task => task.completed);
+
+  // Apply filter
+  const activeTasks = React.useMemo(() => {
+    if (!filterProjectId) {
+      return allActiveTasks;
+    }
+    if (filterProjectId === 'none') {
+      return allActiveTasks.filter(task => !task.project_id);
+    }
+    return allActiveTasks.filter(task => task.project_id === filterProjectId);
+  }, [allActiveTasks, filterProjectId]);
+
+  // Calculate task counts for filter
+  const taskCounts = React.useMemo(() => {
+    const counts = {
+      all: allActiveTasks.length,
+      noProject: allActiveTasks.filter(t => !t.project_id).length,
+      byProject: {} as { [key: string]: number }
+    };
+    
+    projects.forEach(project => {
+      counts.byProject[project.id] = allActiveTasks.filter(t => t.project_id === project.id).length;
+    });
+    
+    return counts;
+  }, [allActiveTasks, projects]);
   const totalPoints = completedTasks.reduce((sum, task) => sum + (task.points || 0), 0);
   const calculatedLevel = Math.floor(totalPoints / 1000) + 1;
 
@@ -484,8 +523,24 @@ export default function Dashboard() {
               New Task
             </button>
           </div>
-          
-          {activeTasks.length === 0 ? (
+
+          {/* Task Filter and Tasks Grid Layout */}
+          <div className="tasks-section-layout">
+            {/* Filter Sidebar */}
+            {(projects.length > 0 || allActiveTasks.length > 0) && (
+              <div className="filter-sidebar">
+                <TaskFilter
+                  projects={projects}
+                  selectedProjectId={filterProjectId}
+                  onFilterChange={handleFilterChange}
+                  taskCounts={taskCounts}
+                />
+              </div>
+            )}
+
+            {/* Tasks Content */}
+            <div className="tasks-content">
+              {activeTasks.length === 0 ? (
             <div className="empty-state card card-md">
               <div className="empty-icon">
                 <svg className="neural-icon" viewBox="0 0 24 24">
@@ -542,6 +597,8 @@ export default function Dashboard() {
               ))}
             </div>
           )}
+            </div>
+          </div>
         </motion.section>
 
         {/* Completed Tasks Section */}
