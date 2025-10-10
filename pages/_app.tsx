@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '../src/contexts/ThemeContext';
 import Head from 'next/head';
+import '../src/styles/tokens.css';
 import '../src/styles/globals.css';
 import '../src/styles/SmartSuggestions.css';
 import '../src/styles/AdvancedAnalytics.css';
