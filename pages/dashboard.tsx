@@ -2075,7 +2075,7 @@ export default function Dashboard() {
         }} 
       />
       <GanttChart isOpen={showGantt} onClose={() => setShowGantt(false)} tasks={activeTasks} />
-      <MindMap isOpen={showMindMap} onClose={() => setShowMindMap(false)} tasks={activeTasks} />
+      <MindMap isOpen={showMindMap} onClose={() => setShowMindMap(false)} tasks={activeTasks} projects={projects} />
       <EisenhowerMatrix isOpen={showMatrix} onClose={() => setShowMatrix(false)} tasks={activeTasks} onUpdateTask={(taskId) => handleTaskEdit(taskId)} />
       <GoalTracker isOpen={showGoals} onClose={() => setShowGoals(false)} />
       <HabitTracker isOpen={showHabits} onClose={() => setShowHabits(false)} />
