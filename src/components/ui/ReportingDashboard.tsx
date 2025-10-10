@@ -80,7 +80,7 @@ const ReportingDashboard: React.FC<ReportingDashboardProps> = ({ isOpen, onClose
               <button
                 key={type}
                 className={`type-btn ${reportType === type ? 'active' : ''}`}
-                onClick={() => setReportType(type as any)}
+                onClick={() => setReportType(type as 'overview' | 'tasks' | 'energy' | 'productivity')}
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </button>
@@ -89,7 +89,7 @@ const ReportingDashboard: React.FC<ReportingDashboardProps> = ({ isOpen, onClose
 
           <select
             value={dateRange}
-            onChange={(e) => setDateRange(e.target.value as any)}
+            onChange={(e) => setDateRange(e.target.value as 'week' | 'month' | 'quarter')}
             className="date-range-select"
           >
             <option value="week">Last 7 Days</option>
