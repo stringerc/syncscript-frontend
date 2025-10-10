@@ -1927,7 +1927,7 @@ export default function Dashboard() {
           toast.success('⚡ Energy selector in sidebar!');
         }}
         onStartFocus={() => {
-          const firstTask = filteredAndSortedTasks[0];
+          const firstTask = activeTasks[0];
           if (firstTask) {
             setFocusTaskId(firstTask.id);
             setFocusTaskTitle(firstTask.title);
