@@ -17,6 +17,7 @@ interface Task {
   completed: boolean;
   priority: number;
   estimated_duration?: number;
+  due_date?: string;
   [key: string]: unknown;
 }
 
