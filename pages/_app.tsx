@@ -20,6 +20,13 @@ import '../src/styles/LearningCenter.css';
 import '../src/styles/WhiteLabelSettings.css';
 import '../src/styles/MobileAppPromo.css';
 import '../src/styles/DesktopAppPromo.css';
+import '../src/styles/UnifiedCommandCenter.css';
+import '../src/styles/FloatingActionButton.css';
+import '../src/styles/QuickSwitcher.css';
+import '../src/styles/CompactHeader.css';
+import '../src/styles/ViewSwitcher.css';
+import '../src/styles/EnhancedWelcomeTour.css';
+import '../src/styles/FeatureUsageAnalytics.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
