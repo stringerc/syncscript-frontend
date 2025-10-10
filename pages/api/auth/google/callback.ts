@@ -27,8 +27,8 @@ export default async function googleCallback(
       },
       body: new URLSearchParams({
         code: code as string,
-        client_id: process.env.GOOGLE_CLIENT_ID!,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET!,
+        client_id: 'GOOGLE_CLIENT_ID_FROM_ENV',
+        client_secret: 'GOOGLE_CLIENT_SECRET_FROM_ENV',
         redirect_uri: 'https://www.syncscript.app/api/auth/google/callback',
         grant_type: 'authorization_code',
       }),
