@@ -2066,7 +2066,15 @@ export default function Dashboard() {
       />
 
       {/* ALL 34 FEATURE MODALS - BLOCKER #1 FIX! */}
-      <KanbanBoard isOpen={showKanban} onClose={() => setShowKanban(false)} tasks={activeTasks} onUpdateTask={(task) => handleEditTask(task)} />
+      <KanbanBoard 
+        isOpen={showKanban} 
+        onClose={() => setShowKanban(false)} 
+        tasks={activeTasks.map(t => ({ ...t, status: t.completed ? 'done' : 'todo' as 'todo' | 'in_progress' | 'done' }))} 
+        onUpdateTask={(taskId, updates) => {
+          const task = tasks.find(t => t.id === taskId);
+          if (task) handleEditTask({ ...task, ...updates });
+        }} 
+      />
       <GanttChart isOpen={showGantt} onClose={() => setShowGantt(false)} tasks={activeTasks} projects={projects} />
       <MindMap isOpen={showMindMap} onClose={() => setShowMindMap(false)} tasks={activeTasks} />
       <EisenhowerMatrix isOpen={showMatrix} onClose={() => setShowMatrix(false)} tasks={activeTasks} onUpdateTask={(task) => handleEditTask(task)} />
