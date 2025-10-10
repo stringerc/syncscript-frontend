@@ -3,11 +3,24 @@ import { motion } from 'framer-motion';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import '../../styles/ReportingDashboard.css';
 
+interface Task {
+  completed: boolean;
+  created_at: string;
+  completed_at?: string;
+  [key: string]: unknown;
+}
+
+interface EnergyLog {
+  energy_level: number;
+  created_at: string;
+  [key: string]: unknown;
+}
+
 interface ReportingDashboardProps {
   isOpen: boolean;
   onClose: () => void;
-  tasks: any[];
-  energyLogs: any[];
+  tasks: Task[];
+  energyLogs: EnergyLog[];
 }
 
 const ReportingDashboard: React.FC<ReportingDashboardProps> = ({ isOpen, onClose, tasks, energyLogs }) => {
@@ -20,7 +33,7 @@ const ReportingDashboard: React.FC<ReportingDashboardProps> = ({ isOpen, onClose
   const completed = tasks.filter(t => t.completed).length;
   const completionRate = tasks.length > 0 ? (completed / tasks.length * 100).toFixed(1) : 0;
   const avgEnergy = energyLogs.length > 0
-    ? Math.round(energyLogs.reduce((sum: number, log: any) => sum + log.energy_level, 0) / energyLogs.length)
+    ? Math.round(energyLogs.reduce((sum: number, log: EnergyLog) => sum + log.energy_level, 0) / energyLogs.length)
     : 0;
 
   // Prepare chart data
@@ -38,10 +51,10 @@ const ReportingDashboard: React.FC<ReportingDashboardProps> = ({ isOpen, onClose
         const completedDate = new Date(t.completed_at);
         return completedDate.toDateString() === date.toDateString();
       }).length,
-      energy: energyLogs.filter((log: any) => {
+      energy: energyLogs.filter((log: EnergyLog) => {
         const logDate = new Date(log.created_at);
         return logDate.toDateString() === date.toDateString();
-      }).reduce((sum: number, log: any) => sum + log.energy_level, 0) / energyLogs.filter((log: any) => {
+      }).reduce((sum: number, log: EnergyLog) => sum + log.energy_level, 0) / energyLogs.filter((log: EnergyLog) => {
         const logDate = new Date(log.created_at);
         return logDate.toDateString() === date.toDateString();
       }).length || 0

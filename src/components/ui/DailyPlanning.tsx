@@ -28,8 +28,8 @@ interface DailyPlan {
 interface DailyPlanningProps {
   isOpen: boolean;
   onClose: () => void;
-  tasks: any[];
-  energyPredictions: any[];
+  tasks: Array<Record<string, unknown>>;
+  energyPredictions: Array<Record<string, unknown>>;
 }
 
 const DailyPlanning: React.FC<DailyPlanningProps> = ({ isOpen, onClose, tasks, energyPredictions }) => {

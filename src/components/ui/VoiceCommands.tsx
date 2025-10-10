@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import '../../styles/VoiceCommands.css';
 
 interface VoiceCommandsProps {
-  onCommand: (command: { type: string; data?: any }) => void;
+  onCommand: (command: { type: string; data?: Record<string, unknown> }) => void;
 }
 
 const VoiceCommands: React.FC<VoiceCommandsProps> = ({ onCommand }) => {

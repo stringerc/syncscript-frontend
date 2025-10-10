@@ -15,9 +15,9 @@ interface WorkloadAnalysis {
 interface WorkloadBalancerProps {
   isOpen: boolean;
   onClose: () => void;
-  tasks: any[];
+  tasks: Array<Record<string, unknown>>;
   energyLevel: number;
-  teamMembers?: any[];
+  teamMembers?: Array<Record<string, unknown>>;
 }
 
 const WorkloadBalancer: React.FC<WorkloadBalancerProps> = ({ 

@@ -15,9 +15,9 @@ interface CoachingData {
 interface AICoachProps {
   isOpen: boolean;
   onClose: () => void;
-  userStats: any;
-  recentActivity: any[];
-  goals: any[];
+  userStats: Record<string, unknown>;
+  recentActivity: Array<Record<string, unknown>>;
+  goals: Array<Record<string, unknown>>;
 }
 
 const AICoach: React.FC<AICoachProps> = ({ isOpen, onClose, userStats, recentActivity, goals }) => {

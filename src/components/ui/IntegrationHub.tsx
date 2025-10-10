@@ -10,7 +10,7 @@ interface Integration {
   icon: string;
   category: string;
   isConnected: boolean;
-  config?: any;
+  config?: Record<string, unknown>;
 }
 
 interface IntegrationHubProps {
