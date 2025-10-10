@@ -151,7 +151,7 @@ const FeatureUsageAnalytics: React.FC<FeatureUsageAnalyticsProps> = ({ isOpen, o
                 <span className="rec-icon">🎯</span>
                 <div>
                   <strong>Try Eisenhower Matrix</strong>
-                  <p>You haven't used this yet! Perfect for prioritizing tasks.</p>
+                  <p>You haven&apos;t used this yet! Perfect for prioritizing tasks.</p>
                 </div>
               </div>
               <div className="recommendation-item">
