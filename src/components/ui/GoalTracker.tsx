@@ -160,7 +160,7 @@ const GoalTracker: React.FC<GoalTrackerProps> = ({ isOpen, onClose, tasks }) => 
                         </span>
                         <button 
                           className="link-task-btn"
-                          onClick={() => toast.info('Link tasks feature coming soon!')}
+                          onClick={() => toast.success('Link tasks feature coming soon!')}
                         >
                           + Link Task
                         </button>

@@ -68,11 +68,11 @@ const PomodoroPlus: React.FC<PomoroPlusProps> = ({ isOpen, onClose }) => {
       if (newSessionCount % currentPreset.sessionsUntilLongBreak === 0) {
         setCurrentPhase('longBreak');
         setTimeLeft(currentPreset.longBreak * 60);
-        toast.info(`☕ Time for a long break! (${currentPreset.longBreak} min)`);
+        toast.success(`☕ Time for a long break! (${currentPreset.longBreak} min)`);
       } else {
         setCurrentPhase('break');
         setTimeLeft(currentPreset.break * 60);
-        toast.info(`☕ Short break time! (${currentPreset.break} min)`);
+        toast.success(`☕ Short break time! (${currentPreset.break} min)`);
       }
     } else {
       toast.success('✅ Break complete! Ready for another session?');

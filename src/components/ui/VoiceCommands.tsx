@@ -67,7 +67,7 @@ const VoiceCommands: React.FC<VoiceCommandsProps> = ({ onCommand }) => {
     if (isListening) {
       recognition?.stop();
       setIsListening(false);
-      toast.info('🎤 Voice commands off');
+      toast.success('🎤 Voice commands off');
     } else {
       recognition?.start();
       setIsListening(true);

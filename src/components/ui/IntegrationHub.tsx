@@ -80,7 +80,7 @@ const IntegrationHub: React.FC<IntegrationHubProps> = ({ isOpen, onClose }) => {
 
   const handleConnect = (integrationId: string) => {
     // In production, trigger OAuth flow
-    toast.info(`🔌 Connecting to ${integrations.find(i => i.id === integrationId)?.name}...`);
+    toast.success(`🔌 Connecting to ${integrations.find(i => i.id === integrationId)?.name}...`);
     
     setIntegrations(integrations.map(i =>
       i.id === integrationId ? { ...i, isConnected: !i.isConnected } : i

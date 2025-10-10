@@ -71,7 +71,7 @@ const MeetingNotes: React.FC<MeetingNotesProps> = ({ isOpen, onClose, onCreateTa
 
   const startRecording = () => {
     setIsRecording(true);
-    toast.info('🎤 Recording started (feature requires Web Speech API)');
+    toast.success('🎤 Recording started (feature requires Web Speech API)');
     // In production, implement voice recording
   };
 
