@@ -12,10 +12,17 @@ interface WorkloadAnalysis {
   suggestedActions: string[];
 }
 
+interface Task {
+  completed: boolean;
+  priority: number;
+  estimated_duration?: number;
+  [key: string]: unknown;
+}
+
 interface WorkloadBalancerProps {
   isOpen: boolean;
   onClose: () => void;
-  tasks: Array<Record<string, unknown>>;
+  tasks: Task[];
   energyLevel: number;
   teamMembers?: Array<Record<string, unknown>>;
 }
