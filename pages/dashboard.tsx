@@ -2102,7 +2102,7 @@ export default function Dashboard() {
         <TimeTracker taskId={focusTaskId} taskTitle={focusTaskTitle} onSaveTime={(minutes) => { toast.success(`⏱️ Tracked ${minutes} minutes!`); setShowTimeTracker(false); }} />
       )}
       <TemplatesGallery isOpen={showTemplatesGallery} onClose={() => setShowTemplatesGallery(false)} onUseTemplate={(template) => { handleUseTemplate(template as unknown as TaskTemplate); setShowTemplatesGallery(false); }} />
-      {editingTask && <TaskSharing isOpen={showTaskSharing} onClose={() => setShowTaskSharing(false)} task={editingTask} />}
+      {showTaskSharing && editingTask && <TaskSharing task={editingTask} />}
       <DailyPlanning isOpen={showDailyPlanning} onClose={() => setShowDailyPlanning(false)} tasks={activeTasks} energyPredictions={[]} />
       <IntegrationHub isOpen={showIntegrationHub} onClose={() => setShowIntegrationHub(false)} />
       <TaskComments isOpen={showTaskComments} onClose={() => setShowTaskComments(false)} taskId={editingTask?.id || ''} />
