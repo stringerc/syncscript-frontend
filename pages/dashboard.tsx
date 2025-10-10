@@ -2082,7 +2082,7 @@ export default function Dashboard() {
       <WeeklyReview isOpen={showWeeklyReview} onClose={() => setShowWeeklyReview(false)} tasks={tasks} energyLogs={energyLogs.map(log => ({ energy_level: log.level, created_at: log.timestamp }))} />
       <TimeBlocking isOpen={showTimeBlocking} onClose={() => setShowTimeBlocking(false)} tasks={activeTasks} energyPredictions={[]} />
       <AICoach isOpen={showAICoach} onClose={() => setShowAICoach(false)} userStats={{}} recentActivity={[]} goals={[]} />
-      <ReportingDashboard isOpen={showReporting} onClose={() => setShowReporting(false)} tasks={tasks as Array<{ completed: boolean; created_at: string; completed_at?: string; [key: string]: unknown }>} energyLogs={energyLogs.map(log => ({ energy_level: log.level, created_at: log.timestamp }))} />
+      <ReportingDashboard isOpen={showReporting} onClose={() => setShowReporting(false)} tasks={tasks as unknown as Array<{ completed: boolean; created_at: string; completed_at?: string; [key: string]: unknown }>} energyLogs={energyLogs.map(log => ({ energy_level: log.level, created_at: log.timestamp }))} />
       <BudgetTracker isOpen={showBudget} onClose={() => setShowBudget(false)} tasks={activeTasks} projects={projects} />
       <ClientPortal isOpen={showClientPortal} onClose={() => setShowClientPortal(false)} projects={projects} />
       <TeamChat isOpen={showTeamChat} onClose={() => setShowTeamChat(false)} teamId="default" userName={user?.name || 'User'} userId={user?.sub || ''} />
