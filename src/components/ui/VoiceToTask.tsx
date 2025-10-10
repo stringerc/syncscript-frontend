@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { parseNaturalLanguageToTask } from '../../utils/aiHelper';
-import '../../styles/VoiceToTask.css';
 
 interface VoiceToTaskProps {
   isOpen: boolean;

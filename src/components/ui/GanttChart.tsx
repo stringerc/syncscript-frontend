@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import '../../styles/GanttChart.css';
 
 interface Task {
   id: string;

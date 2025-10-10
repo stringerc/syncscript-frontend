@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import '../../styles/FocusRooms.css';
 
 interface FocusRoom {
   id: string;

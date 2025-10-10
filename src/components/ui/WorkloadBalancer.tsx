@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import '../../styles/WorkloadBalancer.css';
 
 interface WorkloadAnalysis {
   isOverloaded: boolean;

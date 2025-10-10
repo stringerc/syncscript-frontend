@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import '../../styles/DocumentScanner.css';
 
 interface DocumentScannerProps {
   isOpen: boolean;

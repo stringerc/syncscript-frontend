@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import '../../styles/TaskComments.css';
 
 interface Comment {
   id: string;

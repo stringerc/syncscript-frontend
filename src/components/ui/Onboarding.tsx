@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import '../../styles/Onboarding.css';
 
 interface OnboardingStep {
   title: string;

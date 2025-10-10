@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import '../../styles/PomodoroPlus.css';
 
 interface Preset {
   name: string;
