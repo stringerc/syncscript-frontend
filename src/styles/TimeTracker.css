@@ -1,0 +1,73 @@
+/* Time Tracker */
+.time-tracker {
+  background: rgba(59, 130, 246, 0.05);
+  border: 2px solid rgba(59, 130, 246, 0.2);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  margin-top: var(--space-3);
+}
+
+.tracker-display {
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+
+.timer-value {
+  font-size: 48px;
+  font-weight: var(--font-bold);
+  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+  color: var(--syncscript-blue-600);
+  margin-bottom: var(--space-2);
+}
+
+.timer-value.over-estimate {
+  color: #EF4444;
+}
+
+.estimate-comparison {
+  font-size: var(--text-sm);
+  color: var(--syncscript-charcoal-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.over-badge {
+  background: #FEE2E2;
+  color: #DC2626;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-bold);
+  font-size: var(--text-xs);
+}
+
+.tracker-controls {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-warning {
+  background: #F59E0B;
+  color: white;
+}
+
+.btn-warning:hover {
+  background: #D97706;
+}
+
+.btn-success {
+  background: #10B981;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #059669;
+}
+
+[data-theme="dark"] .time-tracker {
+  background: rgba(59, 130, 246, 0.1) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
