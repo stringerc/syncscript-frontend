@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import '../../styles/DesktopAppPromo.css';
 
 interface DesktopAppPromoProps {
   isOpen: boolean;

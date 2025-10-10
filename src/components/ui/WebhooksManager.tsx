@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import '../../styles/WebhooksManager.css';
 
 interface Webhook {
   id: string;

@@ -14,6 +14,12 @@ import '../src/styles/CalendarIntegration.css';
 import '../src/styles/TaskDependencies.css';
 import '../src/styles/TeamDashboard.css';
 import '../src/styles/TeamInvitation.css';
+import '../src/styles/APIDocs.css';
+import '../src/styles/WebhooksManager.css';
+import '../src/styles/LearningCenter.css';
+import '../src/styles/WhiteLabelSettings.css';
+import '../src/styles/MobileAppPromo.css';
+import '../src/styles/DesktopAppPromo.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {

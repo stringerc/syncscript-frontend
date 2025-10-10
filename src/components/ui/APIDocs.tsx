@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import '../../styles/APIDocs.css';
 
 interface APIDocsProps {
   isOpen: boolean;
