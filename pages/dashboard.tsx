@@ -2107,7 +2107,7 @@ export default function Dashboard() {
       <IntegrationHub isOpen={showIntegrationHub} onClose={() => setShowIntegrationHub(false)} />
       {showTaskComments && editingTask && <TaskComments taskId={editingTask.id} userName={user?.name || 'User'} />}
       {showOnboarding && <Onboarding onComplete={() => setShowOnboarding(false)} />}
-      <VoiceToTask isOpen={showVoiceToTask} onClose={() => setShowVoiceToTask(false)} onCreateTask={(task) => handleCreateTask({ ...task, priority: task.priority || 2, energy_requirement: task.energy_requirement || 3 })} />
+      <VoiceToTask isOpen={showVoiceToTask} onClose={() => setShowVoiceToTask(false)} onCreateTask={(task) => handleCreateTask({ ...task, priority: (task.priority || 2) as 1 | 2 | 3 | 4 | 5, energy_requirement: (task.energy_requirement || 3) as 1 | 2 | 3 | 4 | 5 })} />
       <QuickCapture onQuickAdd={(task) => handleCreateTask(task)} />
     </div>
   );
