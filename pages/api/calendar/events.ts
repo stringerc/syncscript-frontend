@@ -58,7 +58,7 @@ export default async function calendarEvents(
     const calendarData = await calendarResponse.json();
     
     // Transform Google Calendar events to our format
-    const events = calendarData.items?.map((item: any) => ({
+    const events = calendarData.items?.map((item: { id: string; summary?: string; description?: string; start?: { dateTime?: string; date?: string }; end?: { dateTime?: string; date?: string }; location?: string; attendees?: unknown[] }) => ({
       id: item.id,
       summary: item.summary || 'Untitled Event',
       description: item.description || '',

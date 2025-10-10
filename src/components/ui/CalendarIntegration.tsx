@@ -42,7 +42,7 @@ const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
       if (response.ok) {
         const data = await response.json();
         setIsConnected(true);
-        setEvents(data.data.events.map((e: any) => ({ ...e, selected: false })));
+        setEvents(data.data.events.map((e: { id: string; summary: string; description?: string; start: string; end: string }) => ({ ...e, selected: false })));
       } else {
         // Not connected, show holidays as fallback
         loadHolidaysAndSampleEvents();

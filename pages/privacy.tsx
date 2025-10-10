@@ -35,7 +35,7 @@ export default function Privacy() {
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '15px' }}>2. How We Use Your Information</h2>
           <p style={{ lineHeight: '1.6', marginBottom: '15px' }}>We use your information to:</p>
           <ul style={{ lineHeight: '1.8', marginLeft: '20px' }}>
-            <li>Provide and improve SyncScript's productivity features</li>
+            <li>Provide and improve SyncScript&apos;s productivity features</li>
             <li>Analyze energy patterns and provide intelligent task recommendations</li>
             <li>Sync calendar events with your tasks (only when you authorize)</li>
             <li>Enable team collaboration features</li>
@@ -52,8 +52,8 @@ export default function Privacy() {
             <li>We request <strong>read-only access</strong> to your calendar events</li>
             <li>We <strong>never modify</strong> your Google Calendar without explicit permission</li>
             <li>Calendar data is used only to import events as tasks in SyncScript</li>
-            <li>You can disconnect at any time, and we'll delete cached calendar data</li>
-            <li>We don't share your calendar data with third parties</li>
+            <li>You can disconnect at any time, and we&apos;ll delete cached calendar data</li>
+            <li>We don&apos;t share your calendar data with third parties</li>
           </ul>
         </section>
 

@@ -21,7 +21,7 @@ export default function Terms() {
         <section style={{ marginBottom: '30px' }}>
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '15px' }}>1. Acceptance of Terms</h2>
           <p style={{ lineHeight: '1.6' }}>
-            By accessing and using SyncScript ("the Service"), you agree to be bound by these Terms of Service. 
+            By accessing and using SyncScript (&ldquo;the Service&rdquo;), you agree to be bound by these Terms of Service. 
             If you do not agree to these terms, please do not use the Service.
           </p>
         </section>
@@ -108,7 +108,7 @@ export default function Terms() {
         <section style={{ marginBottom: '30px' }}>
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '15px' }}>9. Limitation of Liability</h2>
           <p style={{ lineHeight: '1.6' }}>
-            SyncScript is provided "as is" without warranties. We are not liable for any damages arising from 
+            SyncScript is provided &ldquo;as is&rdquo; without warranties. We are not liable for any damages arising from 
             your use of the Service, including but not limited to data loss, missed deadlines, or productivity impacts.
           </p>
         </section>
@@ -116,7 +116,7 @@ export default function Terms() {
         <section style={{ marginBottom: '30px' }}>
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '15px' }}>10. Changes to Terms</h2>
           <p style={{ lineHeight: '1.6' }}>
-            We may update these Terms of Service. We'll notify users of significant changes via email or in-app notification. 
+            We may update these Terms of Service. We&apos;ll notify users of significant changes via email or in-app notification. 
             Continued use after changes constitutes acceptance of new terms.
           </p>
         </section>
