@@ -2080,7 +2080,7 @@ export default function Dashboard() {
       <GoalTracker isOpen={showGoals} onClose={() => setShowGoals(false)} tasks={tasks} />
       <HabitTracker isOpen={showHabits} onClose={() => setShowHabits(false)} />
       <WeeklyReview isOpen={showWeeklyReview} onClose={() => setShowWeeklyReview(false)} tasks={tasks} energyLogs={energyLogs.map(log => ({ energy_level: log.level, created_at: log.timestamp }))} />
-      <TimeBlocking isOpen={showTimeBlocking} onClose={() => setShowTimeBlocking(false)} tasks={activeTasks} />
+      <TimeBlocking isOpen={showTimeBlocking} onClose={() => setShowTimeBlocking(false)} tasks={activeTasks} energyPredictions={[]} />
       <AICoach isOpen={showAICoach} onClose={() => setShowAICoach(false)} userStats={{}} recentActivity={[]} goals={[]} />
       <ReportingDashboard isOpen={showReporting} onClose={() => setShowReporting(false)} tasks={tasks} energyLogs={energyLogs.map(log => ({ energy_level: log.level, created_at: log.timestamp }))} />
       <BudgetTracker isOpen={showBudget} onClose={() => setShowBudget(false)} tasks={activeTasks} projects={projects} />
