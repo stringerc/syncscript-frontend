@@ -2087,7 +2087,7 @@ export default function Dashboard() {
       <ClientPortal isOpen={showClientPortal} onClose={() => setShowClientPortal(false)} projects={projects} />
       <TeamChat isOpen={showTeamChat} onClose={() => setShowTeamChat(false)} teamId="default" userName={user?.name || 'User'} userId={user?.sub || ''} />
       <FocusRooms isOpen={showFocusRooms} onClose={() => setShowFocusRooms(false)} />
-      <WorkloadBalancer isOpen={showWorkloadBalancer} onClose={() => setShowWorkloadBalancer(false)} tasks={activeTasks} energyLevel={currentEnergy} />
+      <WorkloadBalancer isOpen={showWorkloadBalancer} onClose={() => setShowWorkloadBalancer(false)} tasks={activeTasks as unknown as Array<{ id: string; completed: boolean; priority: number; estimated_duration?: number; due_date?: string; [key: string]: unknown }>} energyLevel={currentEnergy} />
       <DocumentScanner isOpen={showDocumentScanner} onClose={() => setShowDocumentScanner(false)} onCreateTask={(task) => { handleCreateTask(task); toast.success('📸 Task created from scan!'); }} />
       <MeetingNotes isOpen={showMeetingNotes} onClose={() => setShowMeetingNotes(false)} onCreateTasks={(tasks) => toast.success(`📝 Created ${tasks.length} action items!`)} />
       <Automations isOpen={showAutomations} onClose={() => setShowAutomations(false)} />
