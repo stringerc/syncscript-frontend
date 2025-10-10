@@ -2071,13 +2071,12 @@ export default function Dashboard() {
         onClose={() => setShowKanban(false)} 
         tasks={activeTasks.map(t => ({ ...t, status: t.completed ? 'done' : 'todo' as 'todo' | 'in_progress' | 'done' }))} 
         onUpdateTask={(taskId, updates) => {
-          const task = tasks.find(t => t.id === taskId);
-          if (task) handleEditTask({ ...task, ...updates });
+          handleTaskEdit(taskId);
         }} 
       />
       <GanttChart isOpen={showGantt} onClose={() => setShowGantt(false)} tasks={activeTasks} projects={projects} />
       <MindMap isOpen={showMindMap} onClose={() => setShowMindMap(false)} tasks={activeTasks} />
-      <EisenhowerMatrix isOpen={showMatrix} onClose={() => setShowMatrix(false)} tasks={activeTasks} onUpdateTask={(task) => handleEditTask(task)} />
+      <EisenhowerMatrix isOpen={showMatrix} onClose={() => setShowMatrix(false)} tasks={activeTasks} onUpdateTask={(taskId) => handleTaskEdit(taskId)} />
       <GoalTracker isOpen={showGoals} onClose={() => setShowGoals(false)} />
       <HabitTracker isOpen={showHabits} onClose={() => setShowHabits(false)} />
       <WeeklyReview isOpen={showWeeklyReview} onClose={() => setShowWeeklyReview(false)} tasks={activeTasks} completedTasks={completedTasks} />
