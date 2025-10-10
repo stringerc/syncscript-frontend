@@ -2103,7 +2103,7 @@ export default function Dashboard() {
       )}
       <TemplatesGallery isOpen={showTemplatesGallery} onClose={() => setShowTemplatesGallery(false)} onUseTemplate={(template) => { handleUseTemplate(template as unknown as TaskTemplate); setShowTemplatesGallery(false); }} />
       {showTaskSharing && editingTask && <TaskSharing task={editingTask} />}
-      <DailyPlanning isOpen={showDailyPlanning} onClose={() => setShowDailyPlanning(false)} tasks={activeTasks} energyPredictions={[]} />
+      <DailyPlanning isOpen={showDailyPlanning} onClose={() => setShowDailyPlanning(false)} tasks={activeTasks as unknown as Array<{ id: string; title: string; [key: string]: unknown }>} energyPredictions={[]} />
       <IntegrationHub isOpen={showIntegrationHub} onClose={() => setShowIntegrationHub(false)} />
       <TaskComments isOpen={showTaskComments} onClose={() => setShowTaskComments(false)} taskId={editingTask?.id || ''} />
       <Onboarding isOpen={showOnboarding} onClose={() => setShowOnboarding(false)} />
