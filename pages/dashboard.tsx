@@ -2079,10 +2079,10 @@ export default function Dashboard() {
       <EisenhowerMatrix isOpen={showMatrix} onClose={() => setShowMatrix(false)} tasks={activeTasks} onUpdateTask={(taskId) => handleTaskEdit(taskId)} />
       <GoalTracker isOpen={showGoals} onClose={() => setShowGoals(false)} tasks={tasks} />
       <HabitTracker isOpen={showHabits} onClose={() => setShowHabits(false)} />
-      <WeeklyReview isOpen={showWeeklyReview} onClose={() => setShowWeeklyReview(false)} tasks={tasks} energyLogs={energyLogs} />
+      <WeeklyReview isOpen={showWeeklyReview} onClose={() => setShowWeeklyReview(false)} tasks={tasks} energyLogs={energyLogs.map(log => ({ energy_level: log.level, created_at: log.timestamp }))} />
       <TimeBlocking isOpen={showTimeBlocking} onClose={() => setShowTimeBlocking(false)} tasks={activeTasks} />
       <AICoach isOpen={showAICoach} onClose={() => setShowAICoach(false)} userStats={{}} recentActivity={[]} goals={[]} />
-      <ReportingDashboard isOpen={showReporting} onClose={() => setShowReporting(false)} tasks={tasks} energyLogs={energyLogs} />
+      <ReportingDashboard isOpen={showReporting} onClose={() => setShowReporting(false)} tasks={tasks} energyLogs={energyLogs.map(log => ({ energy_level: log.level, created_at: log.timestamp }))} />
       <BudgetTracker isOpen={showBudget} onClose={() => setShowBudget(false)} tasks={activeTasks} projects={projects} />
       <ClientPortal isOpen={showClientPortal} onClose={() => setShowClientPortal(false)} projects={projects} />
       <TeamChat isOpen={showTeamChat} onClose={() => setShowTeamChat(false)} teamId="default" userName={user?.name || 'User'} userId={user?.sub || ''} />
