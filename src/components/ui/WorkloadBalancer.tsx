@@ -13,6 +13,7 @@ interface WorkloadAnalysis {
 }
 
 interface Task {
+  id: string;
   completed: boolean;
   priority: number;
   estimated_duration?: number;
