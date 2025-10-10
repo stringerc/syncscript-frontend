@@ -3,25 +3,32 @@ import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { exportTasksToCSV, exportTasksToJSON, exportEnergyLogsToCSV, exportAnalyticsToCSV, exportCompleteBackup, filterTasksByDateRange, generateProductivityReport } from '../../utils/exportUtils';
 
-interface Task {
+interface DataExportTask {
   id: string;
   title: string;
+  description?: string;
+  priority: number;
+  energy_requirement: number;
   completed: boolean;
+  due_date?: string;
+  project_name?: string;
   created_at: string;
+  completed_at?: string;
 }
 
-interface Project {
+interface DataExportProject {
   id: string;
   name: string;
+  color: string;
 }
 
-interface EnergyLog {
+interface DataExportEnergyLog {
   id: string;
   energy_level: number;
   created_at: string;
 }
 
-interface User {
+interface DataExportUser {
   sub: string;
   email: string;
   name: string;
@@ -30,10 +37,10 @@ interface User {
 interface DataExportProps {
   isOpen: boolean;
   onClose: () => void;
-  tasks: Task[];
-  projects: Project[];
-  energyLogs: EnergyLog[];
-  user: User;
+  tasks: DataExportTask[];
+  projects: DataExportProject[];
+  energyLogs: DataExportEnergyLog[];
+  user: DataExportUser;
 }
 
 const DataExport: React.FC<DataExportProps> = ({ 
@@ -88,7 +95,7 @@ const DataExport: React.FC<DataExportProps> = ({
             totalTasks: tasks.length,
             completedTasks: tasks.filter(t => t.completed).length,
             completionRate: tasks.length > 0 ? (tasks.filter(t => t.completed).length / tasks.length * 100).toFixed(1) : 0,
-            avgEnergy: energyLogs.length > 0 ? (energyLogs.reduce((sum: number, log: EnergyLog) => sum + log.energy_level, 0) / energyLogs.length).toFixed(1) : 0,
+            avgEnergy: energyLogs.length > 0 ? (energyLogs.reduce((sum: number, log: DataExportEnergyLog) => sum + log.energy_level, 0) / energyLogs.length).toFixed(1) : 0,
             productivityScore: 85, // Calculate this properly
             streak: 0, // Get from streak utils
             totalPoints: 0 // Get from gamification

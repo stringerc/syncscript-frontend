@@ -7,18 +7,20 @@ import '../../styles/VoiceToTask.css';
 interface VoiceToTaskProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreateTask: (task: any) => void;
+  onCreateTask: (task: { title: string; description?: string; priority?: number; energy_requirement?: number }) => void;
 }
 
 const VoiceToTask: React.FC<VoiceToTaskProps> = ({ isOpen, onClose, onCreateTask }) => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [recognition, setRecognition] = useState<any>(null);
 
   useEffect(() => {
     // Initialize speech recognition
     if (typeof window !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       
       if (SpeechRecognition) {
@@ -27,6 +29,7 @@ const VoiceToTask: React.FC<VoiceToTaskProps> = ({ isOpen, onClose, onCreateTask
         recognitionInstance.interimResults = true;
         recognitionInstance.lang = 'en-US';
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         recognitionInstance.onresult = (event: any) => {
           const current = event.resultIndex;
           const transcriptResult = event.results[current][0].transcript;
@@ -37,6 +40,7 @@ const VoiceToTask: React.FC<VoiceToTaskProps> = ({ isOpen, onClose, onCreateTask
           setIsListening(false);
         };
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         recognitionInstance.onerror = (event: any) => {
           console.error('Speech recognition error:', event.error);
           setIsListening(false);
@@ -168,10 +172,10 @@ const VoiceToTask: React.FC<VoiceToTaskProps> = ({ isOpen, onClose, onCreateTask
                 <div className="voice-examples">
                   <h4>Try saying:</h4>
                   <ul>
-                    <li>"Schedule dentist appointment next Tuesday at 3pm"</li>
-                    <li>"Call mom tomorrow afternoon"</li>
-                    <li>"Buy groceries after work today"</li>
-                    <li>"Finish project proposal by Friday"</li>
+                    <li>&ldquo;Schedule dentist appointment next Tuesday at 3pm&rdquo;</li>
+                    <li>&ldquo;Call mom tomorrow afternoon&rdquo;</li>
+                    <li>&ldquo;Buy groceries after work today&rdquo;</li>
+                    <li>&ldquo;Finish project proposal by Friday&rdquo;</li>
                   </ul>
                 </div>
               )}

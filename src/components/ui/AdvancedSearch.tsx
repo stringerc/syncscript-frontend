@@ -44,7 +44,7 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
   const [savedSearches, setSavedSearches] = useState<Array<{ name: string; filters: SearchFilters }>>([]);
   const [searchName, setSearchName] = useState('');
 
-  const handleFilterChange = (key: keyof SearchFilters, value: any) => {
+  const handleFilterChange = (key: keyof SearchFilters, value: string | string[] | number) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
 
