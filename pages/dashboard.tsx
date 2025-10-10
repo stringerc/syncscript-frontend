@@ -2077,7 +2077,7 @@ export default function Dashboard() {
       <GanttChart isOpen={showGantt} onClose={() => setShowGantt(false)} tasks={activeTasks} />
       <MindMap isOpen={showMindMap} onClose={() => setShowMindMap(false)} tasks={activeTasks} projects={projects} />
       <EisenhowerMatrix isOpen={showMatrix} onClose={() => setShowMatrix(false)} tasks={activeTasks} onUpdateTask={(taskId) => handleTaskEdit(taskId)} />
-      <GoalTracker isOpen={showGoals} onClose={() => setShowGoals(false)} />
+      <GoalTracker isOpen={showGoals} onClose={() => setShowGoals(false)} tasks={tasks} />
       <HabitTracker isOpen={showHabits} onClose={() => setShowHabits(false)} />
       <WeeklyReview isOpen={showWeeklyReview} onClose={() => setShowWeeklyReview(false)} tasks={activeTasks} completedTasks={completedTasks} />
       <TimeBlocking isOpen={showTimeBlocking} onClose={() => setShowTimeBlocking(false)} tasks={activeTasks} />
@@ -2085,10 +2085,10 @@ export default function Dashboard() {
       <ReportingDashboard isOpen={showReporting} onClose={() => setShowReporting(false)} tasks={tasks} energyLogs={energyLogs} />
       <BudgetTracker isOpen={showBudget} onClose={() => setShowBudget(false)} tasks={activeTasks} projects={projects} />
       <ClientPortal isOpen={showClientPortal} onClose={() => setShowClientPortal(false)} projects={projects} />
-      <TeamChat isOpen={showTeamChat} onClose={() => setShowTeamChat(false)} />
+      <TeamChat isOpen={showTeamChat} onClose={() => setShowTeamChat(false)} teamId="default" userName={user?.name || 'User'} userId={user?.sub || ''} />
       <FocusRooms isOpen={showFocusRooms} onClose={() => setShowFocusRooms(false)} />
       <WorkloadBalancer isOpen={showWorkloadBalancer} onClose={() => setShowWorkloadBalancer(false)} tasks={activeTasks} energyLevel={currentEnergy} />
-      <DocumentScanner isOpen={showDocumentScanner} onClose={() => setShowDocumentScanner(false)} onTasksExtracted={(tasks) => toast.success(`📸 Extracted ${tasks.length} tasks!`)} />
+      <DocumentScanner isOpen={showDocumentScanner} onClose={() => setShowDocumentScanner(false)} onCreateTask={(task) => { handleCreateTask(task); toast.success('📸 Task created from scan!'); }} />
       <MeetingNotes isOpen={showMeetingNotes} onClose={() => setShowMeetingNotes(false)} onCreateTasks={(tasks) => toast.success(`📝 Created ${tasks.length} action items!`)} />
       <Automations isOpen={showAutomations} onClose={() => setShowAutomations(false)} />
       <VoiceCommands onCommand={(cmd) => toast.success(`🎤 Voice command: ${cmd.type}`)} />
