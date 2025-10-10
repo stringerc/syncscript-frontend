@@ -1337,46 +1337,86 @@ export default function Dashboard() {
             }}
           />
 
-          {/* Energy Insights */}
+          {/* Energy Insights - Collapsible */}
           {energyLogs.length > 0 && (
-            <motion.div
+            <motion.details
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.3 }}
-              style={{ marginTop: 'var(--space-6)' }}
+              style={{ 
+                marginTop: 'var(--space-6)',
+                padding: 'var(--space-4)',
+                background: 'var(--card-bg)',
+                borderRadius: 'var(--card-radius)',
+                border: '1px solid var(--card-border)',
+                cursor: 'pointer'
+              }}
+              open
             >
+              <summary style={{ 
+                fontWeight: 'var(--font-weight-semibold)',
+                fontSize: 'var(--font-size-md)',
+                marginBottom: 'var(--space-4)',
+                listStyle: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-2)'
+              }}>
+                <span style={{ transition: 'transform var(--transition-fast)' }}>▼</span>
+                📊 Energy Insights
+              </summary>
               <EnergyInsights
                 energyLogs={energyLogs}
                 currentEnergy={currentEnergy}
               />
-            </motion.div>
+            </motion.details>
           )}
         </motion.section>
 
-        {/* Projects Section */}
+        {/* Projects Section - Collapsible */}
         <motion.section 
           className="dashboard-section"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
         >
-          <div className="section-header">
-            <div>
-              <h2 className="section-title">Projects</h2>
-              <p className="section-description">
-                Organize your tasks into projects for better focus
-              </p>
-            </div>
-            <button
-              className="btn btn-primary"
-              onClick={handleCreateProject}
+          <details
+            style={{
+              background: 'var(--card-bg)',
+              borderRadius: 'var(--card-radius)',
+              border: '1px solid var(--card-border)',
+              padding: 'var(--space-5)'
+            }}
+            open
+          >
+            <summary
+              style={{
+                fontWeight: 'var(--font-weight-bold)',
+                fontSize: 'var(--font-size-lg)',
+                marginBottom: 'var(--space-4)',
+                listStyle: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                cursor: 'pointer'
+              }}
             >
-              <svg className="neural-icon" viewBox="0 0 24 24">
-                <path d="M12 5v14m-7-7h14" stroke="currentColor" strokeWidth="2" fill="none" />
-              </svg>
-              New Project
-            </button>
-          </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                <span style={{ transition: 'transform var(--transition-fast)' }}>▼</span>
+                <span>📁 Projects ({projects.length})</span>
+              </div>
+              <button
+                className="btn btn-primary"
+                onClick={(e) => { e.preventDefault(); handleCreateProject(); }}
+                style={{ pointerEvents: 'all' }}
+              >
+                <svg className="neural-icon" viewBox="0 0 24 24">
+                  <path d="M12 5v14m-7-7h14" stroke="currentColor" strokeWidth="2" fill="none" />
+                </svg>
+                New Project
+              </button>
+            </summary>
+            <div style={{ marginTop: 'var(--space-4)' }}>
 
           {projects.length > 0 ? (
             <div className="projects-grid">
@@ -1414,6 +1454,8 @@ export default function Dashboard() {
               </button>
             </div>
           )}
+            </div>
+          </details>
         </motion.section>
 
         {/* Active Tasks Section */}
