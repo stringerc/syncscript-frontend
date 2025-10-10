@@ -1305,14 +1305,14 @@ export default function Dashboard() {
               >
                 ✨ All Features
               </button>
-              <Link href="/api/auth/logout" className="btn btn-ghost">
-                <svg className="neural-icon" viewBox="0 0 24 24">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" strokeWidth="2" fill="none" />
-                  <polyline points="16,17 21,12 16,7" stroke="currentColor" strokeWidth="2" fill="none" />
-                  <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2" fill="none" />
-                </svg>
-                Logout
-              </Link>
+            <Link href="/api/auth/logout" className="btn btn-ghost">
+              <svg className="neural-icon" viewBox="0 0 24 24">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" strokeWidth="2" fill="none" />
+                <polyline points="16,17 21,12 16,7" stroke="currentColor" strokeWidth="2" fill="none" />
+                <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2" fill="none" />
+              </svg>
+              Logout
+            </Link>
             </div>
           </div>
         </div>
@@ -1478,10 +1478,10 @@ export default function Dashboard() {
         >
           <div className="section-header">
             <div>
-              <h2 className="section-title">Active Tasks</h2>
-              <p className="section-description">
-                Tasks matched to your current energy level ({currentEnergy}/5)
-              </p>
+            <h2 className="section-title">Active Tasks</h2>
+            <p className="section-description">
+              Tasks matched to your current energy level ({currentEnergy}/5)
+            </p>
             </div>
             <button
               className="btn btn-primary"
@@ -1540,8 +1540,8 @@ export default function Dashboard() {
                 resultsCount={activeTasks.length}
                 totalCount={filteredTasks.length}
               />
-
-              {activeTasks.length === 0 ? (
+          
+          {activeTasks.length === 0 ? (
             <div className="empty-state card card-md">
               <div className="empty-icon">
                 <svg className="neural-icon" viewBox="0 0 24 24">
@@ -2097,7 +2097,7 @@ export default function Dashboard() {
       <EmailSettings isOpen={showEmailSettings} onClose={() => setShowEmailSettings(false)} />
       <ShortcutsPanel isOpen={showShortcutsPanel} onClose={() => setShowShortcutsPanel(false)} />
       <DataExport isOpen={showDataExport} onClose={() => setShowDataExport(false)} tasks={tasks} projects={projects} energyLogs={energyLogs.map((log, i) => ({ id: `log-${i}`, energy_level: log.level, created_at: log.timestamp }))} user={{ sub: user?.sub || '', email: user?.email || '', name: user?.name || '' }} />
-      <AIQuickCreate isOpen={showAIQuickCreate} onClose={() => setShowAIQuickCreate(false)} onTaskCreated={(task) => handleCreateTask(task)} />
+      <AIQuickCreate isOpen={showAIQuickCreate} onClose={() => setShowAIQuickCreate(false)} onCreateTask={(task) => handleCreateTask(task)} />
       <TimeTracker isOpen={showTimeTracker} onClose={() => setShowTimeTracker(false)} taskId={focusTaskId || ''} />
       <TemplatesGallery isOpen={showTemplatesGallery} onClose={() => setShowTemplatesGallery(false)} onSelectTemplate={(template) => toast.success(`📋 Template "${template.name}" loaded!`)} />
       <TaskSharing isOpen={showTaskSharing} onClose={() => setShowTaskSharing(false)} task={editingTask} />
