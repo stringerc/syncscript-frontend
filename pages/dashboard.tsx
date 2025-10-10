@@ -1519,16 +1519,16 @@ export default function Dashboard() {
         onImportTasks={(events) => {
           // Convert calendar events to tasks
           events.forEach(event => {
-            // Parse and format the date properly
+            // Parse and format the date as full ISO datetime (backend requires this)
             const dueDate = new Date(event.start);
-            const formattedDate = dueDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+            const formattedDateTime = dueDate.toISOString(); // Full ISO 8601 format with time
             
             const taskData: NewTaskData = {
               title: event.summary.substring(0, 200), // Limit title length
               description: (event.description || 'Imported from Google Calendar').substring(0, 1000), // Limit description
               priority: 3,
               energy_requirement: 3,
-              due_date: formattedDate
+              due_date: formattedDateTime // Full datetime string
             };
             handleCreateTask(taskData);
           });
