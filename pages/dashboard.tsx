@@ -31,6 +31,12 @@ import DailyChallenges from '../src/components/ui/DailyChallenges';
 import CalendarIntegration from '../src/components/ui/CalendarIntegration';
 import TeamDashboard from '../src/components/ui/TeamDashboard';
 import TeamInvitation from '../src/components/ui/TeamInvitation';
+import APIDocs from '../src/components/ui/APIDocs';
+import WebhooksManager from '../src/components/ui/WebhooksManager';
+import LearningCenter from '../src/components/ui/LearningCenter';
+import WhiteLabelSettings from '../src/components/ui/WhiteLabelSettings';
+import MobileAppPromo from '../src/components/ui/MobileAppPromo';
+import DesktopAppPromo from '../src/components/ui/DesktopAppPromo';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { useNotifications } from '../src/hooks/useNotifications';
 import { useAchievements } from '../src/hooks/useAchievements';
@@ -124,6 +130,12 @@ export default function Dashboard() {
   const [totalFocusMinutes, setTotalFocusMinutes] = React.useState(0);
   const [showTeamDashboard, setShowTeamDashboard] = React.useState(false);
   const [showTeamInvitation, setShowTeamInvitation] = React.useState(false);
+  const [showAPIDocs, setShowAPIDocs] = React.useState(false);
+  const [showWebhooks, setShowWebhooks] = React.useState(false);
+  const [showLearning, setShowLearning] = React.useState(false);
+  const [showWhiteLabel, setShowWhiteLabel] = React.useState(false);
+  const [showMobilePromo, setShowMobilePromo] = React.useState(false);
+  const [showDesktopPromo, setShowDesktopPromo] = React.useState(false);
 
   // Notifications
   const {
@@ -1066,6 +1078,27 @@ export default function Dashboard() {
                 </svg>
                 Theme
               </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowLearning(true)}
+                title="Learning Center"
+              >
+                🎓 Learn
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAPIDocs(true)}
+                title="API Documentation"
+              >
+                📚 API
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowWebhooks(true)}
+                title="Webhooks"
+              >
+                🔗 Webhooks
+              </button>
               <Link href="/api/auth/logout" className="btn btn-ghost">
                 <svg className="neural-icon" viewBox="0 0 24 24">
                   <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" strokeWidth="2" fill="none" />
@@ -1725,6 +1758,43 @@ export default function Dashboard() {
           toast.success('Invitation declined');
           setShowTeamInvitation(false);
         }}
+      />
+
+      {/* NEW FEATURES 91-100 */}
+      {/* API Documentation */}
+      <APIDocs
+        isOpen={showAPIDocs}
+        onClose={() => setShowAPIDocs(false)}
+      />
+
+      {/* Webhooks Manager */}
+      <WebhooksManager
+        isOpen={showWebhooks}
+        onClose={() => setShowWebhooks(false)}
+      />
+
+      {/* Learning Center */}
+      <LearningCenter
+        isOpen={showLearning}
+        onClose={() => setShowLearning(false)}
+      />
+
+      {/* White Label Settings */}
+      <WhiteLabelSettings
+        isOpen={showWhiteLabel}
+        onClose={() => setShowWhiteLabel(false)}
+      />
+
+      {/* Mobile App Promo */}
+      <MobileAppPromo
+        isOpen={showMobilePromo}
+        onClose={() => setShowMobilePromo(false)}
+      />
+
+      {/* Desktop App Promo */}
+      <DesktopAppPromo
+        isOpen={showDesktopPromo}
+        onClose={() => setShowDesktopPromo(false)}
       />
     </div>
   );
