@@ -120,8 +120,8 @@ const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
     
     try {
       // Build Google OAuth URL
-      const googleClientId = 'GOOGLE_CLIENT_ID_FROM_ENV';
-      const redirectUri = 'https://www.syncscript.app/api/auth/google/callback';
+      const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
+      const redirectUri = process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI || 'https://www.syncscript.app/api/auth/google/callback';
       const scope = 'https://www.googleapis.com/auth/calendar.readonly';
       
       const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` + new URLSearchParams({
