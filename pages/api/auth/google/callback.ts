@@ -29,7 +29,7 @@ export default async function googleCallback(
         code: code as string,
         client_id: process.env.GOOGLE_CLIENT_ID!,
         client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-        redirect_uri: `${process.env.AUTH0_BASE_URL || 'https://www.syncscript.app'}/api/auth/google/callback`,
+        redirect_uri: 'https://www.syncscript.app/api/auth/google/callback',
         grant_type: 'authorization_code',
       }),
     });
