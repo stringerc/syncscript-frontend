@@ -914,12 +914,6 @@ export default function Dashboard() {
 
   // Calculate level progress percentage
   const levelProgress = Math.floor(((totalPoints % 1000) / 1000) * 100);
-  const tasksCompletedToday = completedTasks.filter(t => {
-    if (!t.completed_at) return false;
-    const completedDate = new Date(t.completed_at);
-    const today = new Date();
-    return completedDate.toDateString() === today.toDateString();
-  }).length;
 
   // Feature selector handler for Command Center
   const handleFeatureSelect = (featureId: string) => {
