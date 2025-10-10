@@ -1,0 +1,96 @@
+/* Desktop App Promo */
+.desktop-app-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.desktop-app-modal {
+  background: var(--syncscript-cream-50);
+  border-radius: var(--radius-2xl);
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+}
+
+.desktop-app-content {
+  padding: var(--space-8);
+  text-align: center;
+}
+
+.desktop-icon {
+  font-size: 80px;
+  display: block;
+  margin-bottom: var(--space-4);
+}
+
+.desktop-app-content h2 {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.platforms-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+  margin: var(--space-6) 0;
+}
+
+.platform-card {
+  padding: var(--space-4);
+  background: white;
+  border: 2px solid var(--syncscript-charcoal-200);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.platform-icon {
+  font-size: 32px;
+}
+
+.features-list {
+  background: rgba(59, 130, 246, 0.05);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-6);
+  text-align: left;
+}
+
+.features-list h4 {
+  font-size: var(--text-base);
+  font-weight: var(--font-bold);
+  margin: 0 0 var(--space-3) 0;
+  text-align: center;
+}
+
+.features-list ul {
+  margin: 0;
+  padding-left: var(--space-4);
+  list-style: none;
+}
+
+.features-list li {
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+}
+
+[data-theme="dark"] .desktop-app-modal {
+  background: #2a2a2a !important;
+}
+
+[data-theme="dark"] .platform-card {
+  background: #333333 !important;
+  border-color: #444444 !important;
+}
