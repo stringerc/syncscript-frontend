@@ -43,7 +43,7 @@ const FocusRooms: React.FC<FocusRoomsProps> = ({ isOpen, onClose }) => {
 
   const handleLeaveRoom = () => {
     setActiveRoom(null);
-    toast.info('👋 Left focus room');
+    toast.success('👋 Left focus room');
   };
 
   return (
