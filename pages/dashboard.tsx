@@ -2098,7 +2098,9 @@ export default function Dashboard() {
       <ShortcutsPanel isOpen={showShortcutsPanel} onClose={() => setShowShortcutsPanel(false)} />
       <DataExport isOpen={showDataExport} onClose={() => setShowDataExport(false)} tasks={tasks} projects={projects} energyLogs={energyLogs.map((log, i) => ({ id: `log-${i}`, energy_level: log.level, created_at: log.timestamp }))} user={{ sub: user?.sub || '', email: user?.email || '', name: user?.name || '' }} />
       <AIQuickCreate isOpen={showAIQuickCreate} onClose={() => setShowAIQuickCreate(false)} onCreateTask={(task) => handleCreateTask(task)} />
-      <TimeTracker isOpen={showTimeTracker} onClose={() => setShowTimeTracker(false)} taskId={focusTaskId || ''} />
+      {showTimeTracker && focusTaskId && (
+        <TimeTracker taskId={focusTaskId} taskTitle={focusTaskTitle} onSaveTime={(minutes) => { toast.success(`⏱️ Tracked ${minutes} minutes!`); setShowTimeTracker(false); }} />
+      )}
       <TemplatesGallery isOpen={showTemplatesGallery} onClose={() => setShowTemplatesGallery(false)} onSelectTemplate={(template) => toast.success(`📋 Template "${template.name}" loaded!`)} />
       <TaskSharing isOpen={showTaskSharing} onClose={() => setShowTaskSharing(false)} task={editingTask} />
       <DailyPlanning isOpen={showDailyPlanning} onClose={() => setShowDailyPlanning(false)} tasks={activeTasks} energyPredictions={[]} />
