@@ -25,10 +25,16 @@ interface DailyPlan {
   tips: string[];
 }
 
+interface Task {
+  id: string;
+  title: string;
+  [key: string]: unknown;
+}
+
 interface DailyPlanningProps {
   isOpen: boolean;
   onClose: () => void;
-  tasks: Array<Record<string, unknown>>;
+  tasks: Task[];
   energyPredictions: Array<Record<string, unknown>>;
 }
 
