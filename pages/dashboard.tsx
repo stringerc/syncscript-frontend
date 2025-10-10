@@ -37,6 +37,13 @@ import LearningCenter from '../src/components/ui/LearningCenter';
 import WhiteLabelSettings from '../src/components/ui/WhiteLabelSettings';
 import MobileAppPromo from '../src/components/ui/MobileAppPromo';
 import DesktopAppPromo from '../src/components/ui/DesktopAppPromo';
+import UnifiedCommandCenter from '../src/components/ui/UnifiedCommandCenter';
+import FloatingActionButton from '../src/components/ui/FloatingActionButton';
+import QuickSwitcher from '../src/components/ui/QuickSwitcher';
+import CompactHeader from '../src/components/ui/CompactHeader';
+import ViewSwitcher, { ViewMode } from '../src/components/ui/ViewSwitcher';
+import EnhancedWelcomeTour from '../src/components/ui/EnhancedWelcomeTour';
+import FeatureUsageAnalytics from '../src/components/ui/FeatureUsageAnalytics';
 import { useAuthenticatedFetch } from '../src/hooks/useAuthenticatedFetch';
 import { useNotifications } from '../src/hooks/useNotifications';
 import { useAchievements } from '../src/hooks/useAchievements';
@@ -136,6 +143,16 @@ export default function Dashboard() {
   const [showWhiteLabel, setShowWhiteLabel] = React.useState(false);
   const [showMobilePromo, setShowMobilePromo] = React.useState(false);
   const [showDesktopPromo, setShowDesktopPromo] = React.useState(false);
+  const [showCommandCenter, setShowCommandCenter] = React.useState(false);
+  const [showQuickSwitcher, setShowQuickSwitcher] = React.useState(false);
+  const [showWelcomeTour, setShowWelcomeTour] = React.useState(() => {
+    if (typeof window !== 'undefined') {
+      return !localStorage.getItem('tour_completed');
+    }
+    return false;
+  });
+  const [showUsageAnalytics, setShowUsageAnalytics] = React.useState(false);
+  const [currentView, setCurrentView] = React.useState<ViewMode>('list');
 
   // Notifications
   const {
@@ -289,6 +306,26 @@ export default function Dashboard() {
       return () => clearTimeout(loadingTimeout);
     }
   }, [user, isLoading, loadUserData]);
+
+  // Global keyboard shortcuts for new UI
+  React.useEffect(() => {
+    const handleGlobalShortcuts = (e: KeyboardEvent) => {
+      // Cmd/Ctrl + K = Command Center
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k' && !e.shiftKey) {
+        e.preventDefault();
+        setShowCommandCenter(true);
+      }
+      
+      // Cmd/Ctrl + Shift + P = Quick Switcher
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'p') {
+        e.preventDefault();
+        setShowQuickSwitcher(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalShortcuts);
+    return () => window.removeEventListener('keydown', handleGlobalShortcuts);
+  }, []);
 
   // Load focus session data from localStorage
   React.useEffect(() => {
@@ -875,6 +912,44 @@ export default function Dashboard() {
     setUserLevel(calculatedLevel);
   }, [totalPoints, calculatedLevel]);
 
+  // Calculate level progress percentage
+  const levelProgress = Math.floor(((totalPoints % 1000) / 1000) * 100);
+  const tasksCompletedToday = completedTasks.filter(t => {
+    if (!t.completed_at) return false;
+    const completedDate = new Date(t.completed_at);
+    const today = new Date();
+    return completedDate.toDateString() === today.toDateString();
+  }).length;
+
+  // Feature selector handler for Command Center
+  const handleFeatureSelect = (featureId: string) => {
+    const featureMap: Record<string, () => void> = {
+      'analytics': () => setShowAnalytics(true),
+      'kanban': () => setCurrentView('kanban'),
+      'calendar-view': () => setCurrentView('calendar'),
+      'gantt': () => setCurrentView('gantt'),
+      'mind-map': () => setCurrentView('mind-map'),
+      'matrix': () => setCurrentView('matrix'),
+      'learning': () => setShowLearning(true),
+      'api-docs': () => setShowAPIDocs(true),
+      'webhooks': () => setShowWebhooks(true),
+      'achievements': () => setShowAchievements(true),
+      'themes': () => setShowThemeSettings(true),
+      'team-dashboard': () => setShowTeamDashboard(true),
+      'calendar': () => setShowCalendar(true),
+    };
+
+    if (featureMap[featureId]) {
+      featureMap[featureId]();
+      // Track feature usage
+      if (typeof window !== 'undefined') {
+        const usage = JSON.parse(localStorage.getItem('feature_usage') || '{}');
+        usage[featureId] = (usage[featureId] || 0) + 1;
+        localStorage.setItem('feature_usage', JSON.stringify(usage));
+      }
+    }
+  };
+
   if (isLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-syncscript-cream-50">
@@ -1098,6 +1173,18 @@ export default function Dashboard() {
                 title="Webhooks"
               >
                 🔗 Webhooks
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={() => setShowCommandCenter(true)}
+                title="All Features (Cmd+K)"
+                style={{ 
+                  background: 'linear-gradient(135deg, #4A90E2, #8B5CF6)',
+                  fontWeight: 700,
+                  boxShadow: '0 4px 12px rgba(74, 144, 226, 0.3)'
+                }}
+              >
+                ✨ All Features
               </button>
               <Link href="/api/auth/logout" className="btn btn-ghost">
                 <svg className="neural-icon" viewBox="0 0 24 24">
@@ -1795,6 +1882,68 @@ export default function Dashboard() {
       <DesktopAppPromo
         isOpen={showDesktopPromo}
         onClose={() => setShowDesktopPromo(false)}
+      />
+
+      {/* LEGENDARY UI OVERHAUL - NEW COMPONENTS */}
+      {/* Unified Command Center */}
+      <UnifiedCommandCenter
+        isOpen={showCommandCenter}
+        onClose={() => setShowCommandCenter(false)}
+        onFeatureSelect={handleFeatureSelect}
+      />
+
+      {/* Quick Switcher (Cmd+Shift+P) */}
+      <QuickSwitcher
+        isOpen={showQuickSwitcher}
+        onClose={() => setShowQuickSwitcher(false)}
+        actions={[
+          { id: 'new-task', title: 'Create New Task', description: 'Add a new task to your list', icon: '➕', category: 'Actions', keywords: ['add', 'create', 'new'], action: () => setIsCreateModalOpen(true) },
+          { id: 'analytics', title: 'View Analytics', description: 'See your productivity insights', icon: '📊', category: 'Views', keywords: ['stats', 'insights'], action: () => setShowAnalytics(true) },
+          { id: 'kanban', title: 'Kanban Board', description: 'Drag-and-drop task management', icon: '📋', category: 'Views', keywords: ['board', 'columns'], action: () => setCurrentView('kanban') },
+          { id: 'calendar', title: 'Calendar View', description: 'See tasks on calendar', icon: '📅', category: 'Views', keywords: ['schedule', 'timeline'], action: () => setCurrentView('calendar') },
+          { id: 'gantt', title: 'Gantt Chart', description: 'Project timeline visualization', icon: '📊', category: 'Views', keywords: ['timeline', 'project'], action: () => setCurrentView('gantt') },
+          { id: 'matrix', title: 'Eisenhower Matrix', description: 'Urgency vs Importance grid', icon: '🎯', category: 'Views', keywords: ['priority', 'eisenhower'], action: () => setCurrentView('matrix') },
+          { id: 'mind-map', title: 'Mind Map', description: 'Visual task relationships', icon: '🧠', category: 'Views', keywords: ['visual', 'brain'], action: () => setCurrentView('mind-map') },
+          { id: 'achievements', title: 'Achievements', description: 'View your unlocked achievements', icon: '🏆', category: 'Gamification', keywords: ['badges', 'rewards'], action: () => setShowAchievements(true) },
+          { id: 'team', title: 'Team Dashboard', description: 'Collaborate with your team', icon: '👥', category: 'Team', keywords: ['collaborate', 'members'], action: () => setShowTeamDashboard(true) },
+          { id: 'learning', title: 'Learning Center', description: 'Productivity courses', icon: '🎓', category: 'Learning', keywords: ['courses', 'education'], action: () => setShowLearning(true) },
+        ]}
+      />
+
+      {/* Enhanced Welcome Tour */}
+      <EnhancedWelcomeTour
+        isOpen={showWelcomeTour}
+        onClose={() => setShowWelcomeTour(false)}
+        onComplete={() => {
+          toast.success('🎉 Welcome to SyncScript! You\'re ready to be incredibly productive!');
+          localStorage.setItem('tour_completed', 'true');
+        }}
+      />
+
+      {/* Feature Usage Analytics */}
+      <FeatureUsageAnalytics
+        isOpen={showUsageAnalytics}
+        onClose={() => setShowUsageAnalytics(false)}
+      />
+
+      {/* Floating Action Button */}
+      <FloatingActionButton
+        onQuickTask={() => setIsCreateModalOpen(true)}
+        onLogEnergy={() => {
+          toast.success('⚡ Energy selector in sidebar!');
+        }}
+        onStartFocus={() => {
+          const firstTask = filteredAndSortedTasks[0];
+          if (firstTask) {
+            setFocusTaskId(firstTask.id);
+            setFocusTaskTitle(firstTask.title);
+          } else {
+            toast.success('Create a task first to start focus mode!');
+          }
+        }}
+        onViewAnalytics={() => setShowAnalytics(true)}
+        onSearch={() => setShowQuickSwitcher(true)}
+        onOpenFeatures={() => setShowCommandCenter(true)}
       />
     </div>
   );
