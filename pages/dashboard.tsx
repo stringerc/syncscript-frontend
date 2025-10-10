@@ -2106,7 +2106,7 @@ export default function Dashboard() {
       <DailyPlanning isOpen={showDailyPlanning} onClose={() => setShowDailyPlanning(false)} tasks={activeTasks as unknown as Array<{ id: string; title: string; [key: string]: unknown }>} energyPredictions={[]} />
       <IntegrationHub isOpen={showIntegrationHub} onClose={() => setShowIntegrationHub(false)} />
       {showTaskComments && editingTask && <TaskComments taskId={editingTask.id} userName={user?.name || 'User'} />}
-      <Onboarding isOpen={showOnboarding} onClose={() => setShowOnboarding(false)} />
+      {showOnboarding && <Onboarding onComplete={() => setShowOnboarding(false)} />}
       <VoiceToTask isOpen={showVoiceToTask} onClose={() => setShowVoiceToTask(false)} onCreateTask={(task) => handleCreateTask(task)} />
       <QuickCapture onQuickAdd={(task) => handleCreateTask(task)} />
     </div>
