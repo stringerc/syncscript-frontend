@@ -185,13 +185,29 @@ export default function Dashboard() {
     try {
       setLoading(true);
       
+      // Add timeout to prevent infinite loading
+      const timeout = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 5000)
+      );
+      
       // Load all data in parallel for maximum speed
-      const [tasksResponse, projectsResponse, energyResponse, energyLogsResponse] = await Promise.all([
-        authenticatedFetch('/api/tasks'),
-        authenticatedFetch('/api/projects'),
-        authenticatedFetch('/api/energy/latest'),
-        authenticatedFetch('/api/energy?limit=100')
-      ]);
+      const [tasksResponse, projectsResponse, energyResponse, energyLogsResponse] = await Promise.race([
+        Promise.all([
+          authenticatedFetch('/api/tasks'),
+          authenticatedFetch('/api/projects'),
+          authenticatedFetch('/api/energy/latest'),
+          authenticatedFetch('/api/energy?limit=100')
+        ]),
+        timeout
+      ]).catch(err => {
+        console.error('API timeout or error:', err);
+        return [
+          new Response(JSON.stringify({ tasks: [] }), { status: 200 }),
+          new Response(JSON.stringify({ projects: [] }), { status: 200 }),
+          new Response(JSON.stringify({ energy: null }), { status: 200 }),
+          new Response(JSON.stringify({ logs: [] }), { status: 200 })
+        ];
+      }) as Response[];
 
       // Process tasks
       if (tasksResponse.ok) {
