@@ -2079,7 +2079,7 @@ export default function Dashboard() {
       <EisenhowerMatrix isOpen={showMatrix} onClose={() => setShowMatrix(false)} tasks={activeTasks} onUpdateTask={(taskId) => handleTaskEdit(taskId)} />
       <GoalTracker isOpen={showGoals} onClose={() => setShowGoals(false)} tasks={tasks} />
       <HabitTracker isOpen={showHabits} onClose={() => setShowHabits(false)} />
-      <WeeklyReview isOpen={showWeeklyReview} onClose={() => setShowWeeklyReview(false)} tasks={activeTasks} completedTasks={completedTasks} />
+      <WeeklyReview isOpen={showWeeklyReview} onClose={() => setShowWeeklyReview(false)} tasks={tasks} energyLogs={energyLogs} />
       <TimeBlocking isOpen={showTimeBlocking} onClose={() => setShowTimeBlocking(false)} tasks={activeTasks} />
       <AICoach isOpen={showAICoach} onClose={() => setShowAICoach(false)} userStats={{}} recentActivity={[]} goals={[]} />
       <ReportingDashboard isOpen={showReporting} onClose={() => setShowReporting(false)} tasks={tasks} energyLogs={energyLogs} />
