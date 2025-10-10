@@ -27,86 +27,120 @@ const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
   const [loading, setLoading] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState<Set<string>>(new Set());
 
-  // Simulate Google Calendar connection
+  // Check if connected and fetch events on open
+  React.useEffect(() => {
+    if (isOpen) {
+      checkConnectionAndFetchEvents();
+    }
+  }, [isOpen]);
+
+  const checkConnectionAndFetchEvents = async () => {
+    try {
+      // Try to fetch events - if successful, we're connected
+      const response = await fetch('/api/calendar/events');
+      
+      if (response.ok) {
+        const data = await response.json();
+        setIsConnected(true);
+        setEvents(data.data.events.map((e: any) => ({ ...e, selected: false })));
+      } else {
+        // Not connected, show holidays as fallback
+        loadHolidaysAndSampleEvents();
+      }
+    } catch (error) {
+      console.error('Error checking calendar connection:', error);
+      loadHolidaysAndSampleEvents();
+    }
+  };
+
+  const loadHolidaysAndSampleEvents = () => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(10, 0, 0, 0);
+    
+    const mockEvents: CalendarEvent[] = [
+      {
+        id: 'personal-1',
+        summary: '📅 Your Event Tomorrow',
+        description: 'Sample event - Connect Google Calendar to see your real events!',
+        start: tomorrow.toISOString(),
+        end: new Date(tomorrow.getTime() + 60 * 60 * 1000).toISOString(),
+        selected: false
+      },
+      {
+        id: 'holiday-1',
+        summary: '🎃 Halloween',
+        description: 'US Holiday',
+        start: new Date(2025, 9, 31, 0, 0).toISOString(),
+        end: new Date(2025, 9, 31, 23, 59).toISOString(),
+        selected: false
+      },
+      {
+        id: 'holiday-2',
+        summary: '🦃 Thanksgiving',
+        description: 'US Holiday',
+        start: new Date(2025, 10, 27, 0, 0).toISOString(),
+        end: new Date(2025, 10, 27, 23, 59).toISOString(),
+        selected: false
+      },
+      {
+        id: 'holiday-3',
+        summary: '🎄 Christmas',
+        description: 'US Holiday',
+        start: new Date(2025, 11, 25, 0, 0).toISOString(),
+        end: new Date(2025, 11, 25, 23, 59).toISOString(),
+        selected: false
+      },
+      {
+        id: 'holiday-4',
+        summary: '🎆 New Year\'s Day',
+        description: 'US Holiday',
+        start: new Date(2026, 0, 1, 0, 0).toISOString(),
+        end: new Date(2026, 0, 1, 23, 59).toISOString(),
+        selected: false
+      },
+      {
+        id: 'holiday-5',
+        summary: '❤️ Valentine\'s Day',
+        description: 'US Holiday',
+        start: new Date(2026, 1, 14, 0, 0).toISOString(),
+        end: new Date(2026, 1, 14, 23, 59).toISOString(),
+        selected: false
+      }
+    ].filter(event => new Date(event.start) >= today)
+     .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
+    
+    setEvents(mockEvents);
+  };
+
+  // Real Google Calendar OAuth connection
   const handleConnect = async () => {
     setLoading(true);
     
     try {
-      // In production, this would use Google OAuth
-      // For now, we'll create a mock connection
+      // Build Google OAuth URL
+      const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+      const redirectUri = `${window.location.origin}/api/auth/google/callback`;
+      const scope = 'https://www.googleapis.com/auth/calendar.readonly';
       
-      toast.success('🗓️ Google Calendar connected!', {
-        duration: 3000
-      });
+      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` + new URLSearchParams({
+        client_id: googleClientId!,
+        redirect_uri: redirectUri,
+        response_type: 'code',
+        scope: scope,
+        access_type: 'offline',
+        prompt: 'consent',
+        state: 'calendar_connect'
+      }).toString();
       
-      setIsConnected(true);
+      // Redirect to Google OAuth
+      window.location.href = authUrl;
       
-      // Generate upcoming US holidays and sample personal events
-      const today = new Date();
-      const tomorrow = new Date(today);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      tomorrow.setHours(10, 0, 0, 0); // 10 AM tomorrow
-      
-      const mockEvents: CalendarEvent[] = [
-        // User's upcoming events (sample - would come from Google Calendar)
-        {
-          id: 'personal-1',
-          summary: '📅 Your Event Tomorrow',
-          description: 'This is a sample event. Connect Google Calendar to see your real events!',
-          start: tomorrow.toISOString(),
-          end: new Date(tomorrow.getTime() + 60 * 60 * 1000).toISOString(), // 1 hour duration
-          selected: false
-        },
-        // Upcoming US Holidays
-        {
-          id: 'holiday-1',
-          summary: '🎃 Halloween',
-          description: 'US Holiday - Import as reminder',
-          start: new Date(2025, 9, 31, 0, 0).toISOString(), // Oct 31, 2025
-          end: new Date(2025, 9, 31, 23, 59).toISOString(),
-          selected: false
-        },
-        {
-          id: 'holiday-2',
-          summary: '🦃 Thanksgiving',
-          description: 'US Holiday - Import as reminder',
-          start: new Date(2025, 10, 27, 0, 0).toISOString(), // Nov 27, 2025
-          end: new Date(2025, 10, 27, 23, 59).toISOString(),
-          selected: false
-        },
-        {
-          id: 'holiday-3',
-          summary: '🎄 Christmas',
-          description: 'US Holiday - Import as reminder',
-          start: new Date(2025, 11, 25, 0, 0).toISOString(), // Dec 25, 2025
-          end: new Date(2025, 11, 25, 23, 59).toISOString(),
-          selected: false
-        },
-        {
-          id: 'holiday-4',
-          summary: '🎆 New Year\'s Day',
-          description: 'US Holiday - Import as reminder',
-          start: new Date(2026, 0, 1, 0, 0).toISOString(), // Jan 1, 2026
-          end: new Date(2026, 0, 1, 23, 59).toISOString(),
-          selected: false
-        },
-        {
-          id: 'holiday-5',
-          summary: '❤️ Valentine\'s Day',
-          description: 'US Holiday - Import as reminder',
-          start: new Date(2026, 1, 14, 0, 0).toISOString(), // Feb 14, 2026
-          end: new Date(2026, 1, 14, 23, 59).toISOString(),
-          selected: false
-        }
-      ].filter(event => new Date(event.start) >= today) // Only show future events
-       .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()); // Sort by date
-      
-      setEvents(mockEvents);
-      
+      // Note: The rest happens in the callback - page will reload after OAuth
     } catch (error) {
       console.error('Error connecting to calendar:', error);
       toast.error('Failed to connect to Google Calendar');
-    } finally {
       setLoading(false);
     }
   };
