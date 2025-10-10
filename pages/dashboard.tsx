@@ -2093,7 +2093,7 @@ export default function Dashboard() {
       <Automations isOpen={showAutomations} onClose={() => setShowAutomations(false)} />
       <VoiceCommands onCommand={(cmd) => toast.success(`🎤 Voice command: ${cmd.type}`)} />
       <PomodoroPlus isOpen={showPomodoroPlus} onClose={() => setShowPomodoroPlus(false)} />
-      <AdvancedSearch isOpen={showAdvancedSearch} onClose={() => setShowAdvancedSearch(false)} projects={projects} availableTags={Array.from(new Set(tasks.flatMap(t => (t.tags || []).map(tag => typeof tag === 'string' ? tag : tag.name))))} onSearch={(_filters) => toast.success('🔍 Search applied!')} />
+      <AdvancedSearch isOpen={showAdvancedSearch} onClose={() => setShowAdvancedSearch(false)} projects={projects} availableTags={Array.from(new Set(tasks.flatMap(t => (t.tags || []).map(tag => typeof tag === 'string' ? tag : tag.label))))} onSearch={(_filters) => toast.success('🔍 Search applied!')} />
       <EmailSettings isOpen={showEmailSettings} onClose={() => setShowEmailSettings(false)} />
       <ShortcutsPanel isOpen={showShortcutsPanel} onClose={() => setShowShortcutsPanel(false)} />
       <DataExport isOpen={showDataExport} onClose={() => setShowDataExport(false)} tasks={tasks} projects={projects} energyLogs={energyLogs} user={{}} />
