@@ -8,6 +8,7 @@ import '../src/design-system/variables.css'; // Design token system
 import '../src/styles/accessibility.css'; // WCAG 2.1 AA compliance
 import '../src/styles/mobile-responsive.css'; // Mobile optimizations
 import '../src/styles/motion-system.css'; // Standardized animations
+import '../src/styles/button-polish.css'; // Button visibility & spacing fixes
 import '../src/styles/tokens.css';
 import '../src/styles/globals.css';
 import '../src/styles/SmartSuggestions.css';
