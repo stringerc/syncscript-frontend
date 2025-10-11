@@ -32,7 +32,7 @@ export default function ComfortBandSlider({
   }, [initialBand]);
   
   const handleChange = (handle: 'min' | 'ideal' | 'max', newValue: number) => {
-    let newBand = { ...band };
+    const newBand = { ...band };
     
     // Constrain values to maintain min < ideal < max
     if (handle === 'min') {
