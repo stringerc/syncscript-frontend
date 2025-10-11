@@ -1,0 +1,299 @@
+/**
+ * Button Polish & Accessibility
+ * Fixes for button visibility, spacing, and overlap issues
+ */
+
+/* ====================================
+   BUTTON FOUNDATION
+   ==================================== */
+
+/* Ensure all buttons have minimum touch targets */
+button, .btn {
+  min-height: 44px;
+  min-width: 44px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+/* Better focus states for keyboard navigation */
+button:focus-visible, .btn:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 2px;
+  z-index: 10;
+}
+
+/* ====================================
+   BUTTON SPACING & LAYOUT
+   ==================================== */
+
+/* Header action buttons - ensure proper spacing */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px !important; /* Increased from var(--space-3) for clarity */
+  flex-wrap: wrap; /* Prevent overflow on smaller screens */
+}
+
+.header-actions button {
+  flex-shrink: 0; /* Prevent squishing */
+}
+
+/* ====================================
+   BUTTON VISIBILITY IMPROVEMENTS
+   ==================================== */
+
+/* Secondary buttons - improve visibility */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 2px solid #E5E7EB !important;
+  color: #4B5563 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+}
+
+.btn-secondary:hover {
+  background: #F9FAFB !important;
+  border-color: #667EEA !important;
+  color: #667EEA !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15) !important;
+  transform: translateY(-1px);
+}
+
+/* Primary buttons - ensure they stand out */
+.btn-primary {
+  background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+  border: none !important;
+  z-index: 2;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+  transform: translateY(-2px);
+}
+
+/* ====================================
+   MODAL BUTTON FIXES
+   ==================================== */
+
+/* Modal footer buttons - prevent overlap */
+.modal-footer,
+[style*="borderTop: '1px solid #E5E7EB'"] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 32px;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+.modal-footer button {
+  white-space: nowrap; /* Prevent text wrapping */
+  min-width: 100px; /* Ensure readable */
+}
+
+/* ====================================
+   SMART SUGGESTIONS BUTTON FIXES
+   ==================================== */
+
+/* "Why this?" and "Accept" buttons - ensure they don't overlap */
+.suggestion-card [style*="display: 'flex'"][style*="gap: '8px'"] {
+  display: flex !important;
+  gap: 12px !important; /* Increased spacing */
+  flex-wrap: wrap !important; /* Allow wrapping */
+  margin-top: 16px !important;
+}
+
+.suggestion-card button {
+  flex: 1 1 auto; /* Allow flexible sizing */
+  min-width: 120px; /* Ensure readable */
+}
+
+/* Specific fix for "Why this?" button */
+.btn-ghost {
+  background: #F3F4F6 !important;
+  color: #4B5563 !important;
+  border: 1px solid #E5E7EB !important;
+  padding: 10px 20px !important;
+  font-weight: 600 !important;
+}
+
+.btn-ghost:hover {
+  background: #E5E7EB !important;
+  border-color: #667EEA !important;
+  color: #667EEA !important;
+}
+
+/* ====================================
+   TASK CARD BUTTON FIXES
+   ==================================== */
+
+/* Task card actions - prevent crowding */
+.task-actions, .task-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap; /* Allow wrapping */
+}
+
+.task-actions button {
+  flex-shrink: 0; /* Don't squish buttons */
+}
+
+/* ====================================
+   Z-INDEX HIERARCHY
+   ==================================== */
+
+/* Ensure proper layering */
+.modal-overlay {
+  z-index: 1000 !important;
+}
+
+.suggestions-panel {
+  z-index: 1001 !important;
+}
+
+.onboarding-overlay {
+  z-index: 1002 !important;
+}
+
+.command-center {
+  z-index: 1003 !important;
+}
+
+/* Discovery tips should be below modals */
+[style*="position: fixed"][style*="bottom: '24px'"][style*="right: '24px'"] {
+  z-index: 999 !important;
+}
+
+/* ====================================
+   IMPROVED CONTRAST
+   ==================================== */
+
+/* Ensure text is readable on all buttons */
+button {
+  text-shadow: none; /* Remove any existing text shadows */
+}
+
+/* Light buttons on dark backgrounds */
+.btn-light-on-dark {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #1F2937 !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-light-on-dark:hover {
+  background: white !important;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* ====================================
+   MOBILE RESPONSIVENESS
+   ==================================== */
+
+@media (max-width: 768px) {
+  /* Stack header buttons vertically if needed */
+  .header-actions {
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 8px !important;
+  }
+  
+  .header-actions button {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+  }
+  
+  /* Ensure modal buttons don't overlap on mobile */
+  .modal-footer {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .modal-footer button {
+    width: 100%; /* Full width on mobile */
+  }
+  
+  /* Suggestion card buttons stack on mobile */
+  .suggestion-card [style*="display: 'flex'"] {
+    flex-direction: column !important;
+  }
+  
+  .suggestion-card button {
+    width: 100% !important;
+  }
+}
+
+/* ====================================
+   SPECIFIC COMPONENT FIXES
+   ==================================== */
+
+/* Energy selector - ensure it's always visible */
+#energy-button {
+  z-index: 10 !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2) !important;
+}
+
+/* Create task button - make it prominent */
+#create-task-button {
+  background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%) !important;
+  color: white !important;
+  font-weight: 700 !important;
+  padding: 12px 24px !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+}
+
+#create-task-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+}
+
+/* ====================================
+   ACCESSIBILITY IMPROVEMENTS
+   ==================================== */
+
+/* Ensure disabled buttons are clearly disabled */
+button:disabled,
+.btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+}
+
+button:disabled:hover,
+.btn:disabled:hover {
+  transform: none !important;
+}
+
+/* Skip link should be very prominent when focused */
+.skip-link:focus {
+  z-index: 10000 !important;
+  outline: 4px solid #667EEA !important;
+  outline-offset: 4px !important;
+}
+
+/* ====================================
+   LOADING STATES
+   ==================================== */
+
+/* Loading buttons should show clear state */
+button[aria-busy="true"],
+.btn-loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+button[aria-busy="true"]::after,
+.btn-loading::after {
+  content: " ...";
+  animation: ellipsis 1.5s infinite;
+}
+
+@keyframes ellipsis {
+  0% { content: " ."; }
+  33% { content: " .."; }
+  66% { content: " ..."; }
+}
+
