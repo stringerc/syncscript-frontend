@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ExplanationModal from './ExplanationModal';
 import { generateExplanation, TaskExplanation } from '../../utils/aiExplainability';
+import { 
+  calculateRecommendationBudgetFit, 
+  hasBudgetPreferences,
+  trackBudgetFitInteraction,
+  BudgetFitResult
+} from '../../utils/budgetFitScoring';
 
 interface Task {
   id: string;
@@ -19,6 +25,9 @@ interface Suggestion {
   reason: string;
   confidence: number;
   energyMatch: number;
+  estimatedCost?: number; // WP-FIN-02: Budget awareness
+  categoryId?: string; // WP-FIN-02: Budget category
+  budgetFit?: BudgetFitResult; // WP-FIN-02: Budget fit score
 }
 
 interface Insights {
@@ -45,10 +54,15 @@ const SmartSuggestions: React.FC<SmartSuggestionsProps> = ({ isOpen, onClose, on
   const [showExplanation, setShowExplanation] = useState(false);
   const [currentExplanation, setCurrentExplanation] = useState<TaskExplanation | null>(null);
   const [explainingSuggestion, setExplainingSuggestion] = useState<Suggestion | null>(null);
+  
+  // WP-FIN-02: Budget preferences
+  const [budgetEnabled, setBudgetEnabled] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       fetchSuggestions();
+      // WP-FIN-02: Check if user has budget preferences
+      setBudgetEnabled(hasBudgetPreferences());
     }
   }, [isOpen]);
 
@@ -65,7 +79,20 @@ const SmartSuggestions: React.FC<SmartSuggestionsProps> = ({ isOpen, onClose, on
       }
 
       const data = await response.json();
-      setSuggestions(data.data.suggestions || []);
+      let fetchedSuggestions = data.data.suggestions || [];
+      
+      // WP-FIN-02: Add budget fit if available
+      if (hasBudgetPreferences()) {
+        fetchedSuggestions = fetchedSuggestions.map((s: Suggestion) => {
+          if (s.estimatedCost && s.categoryId) {
+            const budgetFit = calculateRecommendationBudgetFit(s.estimatedCost, s.categoryId);
+            return { ...s, budgetFit };
+          }
+          return s;
+        });
+      }
+      
+      setSuggestions(fetchedSuggestions);
       setInsights(data.data.insights || null);
     } catch (err) {
       console.error('Error fetching suggestions:', err);
@@ -347,6 +374,38 @@ const SmartSuggestions: React.FC<SmartSuggestionsProps> = ({ isOpen, onClose, on
                             </span>
                           )}
                         </div>
+
+                        {/* WP-FIN-02: Budget Fit Badge */}
+                        {suggestion.budgetFit && budgetEnabled && (
+                          <div style={{
+                            marginTop: '12px',
+                            padding: '12px',
+                            background: 'linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%)',
+                            borderRadius: '8px',
+                            border: `2px solid ${suggestion.budgetFit.color}20`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px'
+                          }}>
+                            <span style={{ fontSize: '24px' }}>{suggestion.budgetFit.icon}</span>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ 
+                                fontSize: '14px', 
+                                fontWeight: '700', 
+                                color: suggestion.budgetFit.color,
+                                marginBottom: '4px'
+                              }}>
+                                {suggestion.budgetFit.stars} {suggestion.budgetFit.rating.toUpperCase()} FIT
+                              </div>
+                              <div style={{ fontSize: '13px', color: '#6B7280' }}>
+                                ${suggestion.estimatedCost} · {suggestion.budgetFit.categoryName}
+                              </div>
+                              <div style={{ fontSize: '12px', color: '#9CA3AF', marginTop: '2px' }}>
+                                {suggestion.budgetFit.message}
+                              </div>
+                            </div>
+                          </div>
+                        )}
 
                         <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
                           <button 
