@@ -57,6 +57,7 @@ import ReportingDashboard from '../src/components/ui/ReportingDashboard';
 import BudgetTracker from '../src/components/ui/BudgetTracker';
 import BudgetSettings from '../src/components/ui/BudgetSettings';
 import SavingsGoalsManager from '../src/components/ui/SavingsGoalsManager';
+import DiscoveryTipBanner from '../src/components/ui/DiscoveryTipBanner';
 import ClientPortal from '../src/components/ui/ClientPortal';
 import TeamChat from '../src/components/ui/TeamChat';
 import FocusRooms from '../src/components/ui/FocusRooms';
@@ -2264,6 +2265,9 @@ export default function Dashboard() {
       
       {/* WP-FIN-03: Savings Goals */}
       <SavingsGoalsManager isOpen={showGoals} onClose={() => setShowGoals(false)} />
+      
+      {/* WP-PAR-01: Feature Discovery Tips */}
+      <DiscoveryTipBanner />
       <ClientPortal isOpen={showClientPortal} onClose={() => setShowClientPortal(false)} projects={projects} />
       <TeamChat isOpen={showTeamChat} onClose={() => setShowTeamChat(false)} teamId="default" userName={user?.name || 'User'} userId={user?.sub || ''} />
       <FocusRooms isOpen={showFocusRooms} onClose={() => setShowFocusRooms(false)} />
