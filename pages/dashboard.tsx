@@ -234,6 +234,7 @@ export default function Dashboard() {
   const [showOnboarding, setShowOnboarding] = React.useState(false);
   const [showVoiceToTask, setShowVoiceToTask] = React.useState(false);
   const [showQuickCapture, setShowQuickCapture] = React.useState(false);
+  const [showAdvancedAnalytics, setShowAdvancedAnalytics] = React.useState(false);
   
   // WP-ENG-02: Emblem breakdown state
   const [showEmblemBreakdown, setShowEmblemBreakdown] = React.useState(false);
