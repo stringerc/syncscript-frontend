@@ -518,7 +518,7 @@ export default function LandingPage() {
                     marginBottom: '20px',
                     fontStyle: 'italic'
                   }}>
-                    &quot;{testimonial.quote}&quot;
+                    &ldquo;{testimonial.quote}&rdquo;
                   </p>
                   <div style={{ fontSize: '14px', fontWeight: '600', color: '#667EEA' }}>
                     {testimonial.author}
