@@ -303,7 +303,7 @@ export function getDiscoveryStats(): {
   discovered: number;
   total: number;
   percentage: number;
-  category Breakdown: { [key: string]: { discovered: number; total: number } };
+  categoryBreakdown: { [key: string]: { discovered: number; total: number } };
 } {
   const progress = loadDiscoveryProgress();
   const total = DISCOVERY_TIPS.length;
