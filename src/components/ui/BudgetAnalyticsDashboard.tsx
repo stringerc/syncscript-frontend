@@ -303,12 +303,12 @@ export default function BudgetAnalyticsDashboard({
             
             {underBudgetRate >= 80 ? (
               <p style={{ fontSize: '15px', color: '#10B981', fontWeight: '600' }}>
-                🎉 Excellent! You're staying within budget {underBudgetRate}% of the time!
+                🎉 Excellent! You&apos;re staying within budget {underBudgetRate}% of the time!
               </p>
             ) : (
               <div>
                 <p style={{ fontSize: '15px', color: '#F59E0B', fontWeight: '600', marginBottom: '12px' }}>
-                  ⚠️ You're over budget {100 - underBudgetRate}% of the time
+                  ⚠️ You&apos;re over budget {100 - underBudgetRate}% of the time
                 </p>
                 <ul style={{ fontSize: '14px', color: '#6B7280', paddingLeft: '20px', lineHeight: '1.8' }}>
                   <li>Consider tightening comfort bands for top spending categories</li>
