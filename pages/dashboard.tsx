@@ -59,6 +59,7 @@ import BudgetSettings from '../src/components/ui/BudgetSettings';
 import SavingsGoalsManager from '../src/components/ui/SavingsGoalsManager';
 import DiscoveryTipBanner from '../src/components/ui/DiscoveryTipBanner';
 import AISafetyControls from '../src/components/ui/AISafetyControls';
+import EnergyAnalyticsDashboard from '../src/components/ui/EnergyAnalyticsDashboard';
 import ClientPortal from '../src/components/ui/ClientPortal';
 import TeamChat from '../src/components/ui/TeamChat';
 import FocusRooms from '../src/components/ui/FocusRooms';
@@ -2272,6 +2273,9 @@ export default function Dashboard() {
       
       {/* Phase 2: AI Safety Controls */}
       <AISafetyControls isOpen={showAICoach} onClose={() => setShowAICoach(false)} />
+      
+      {/* Feature #25: Energy Analytics Dashboard */}
+      <EnergyAnalyticsDashboard isOpen={showAdvancedAnalytics} onClose={() => setShowAdvancedAnalytics(false)} energyLogs={energyLogs.map(log => ({ level: log.level, timestamp: log.timestamp }))} />
       <ClientPortal isOpen={showClientPortal} onClose={() => setShowClientPortal(false)} projects={projects} />
       <TeamChat isOpen={showTeamChat} onClose={() => setShowTeamChat(false)} teamId="default" userName={user?.name || 'User'} userId={user?.sub || ''} />
       <FocusRooms isOpen={showFocusRooms} onClose={() => setShowFocusRooms(false)} />
