@@ -56,6 +56,7 @@ import AICoach from '../src/components/ui/AICoach';
 import ReportingDashboard from '../src/components/ui/ReportingDashboard';
 import BudgetTracker from '../src/components/ui/BudgetTracker';
 import BudgetSettings from '../src/components/ui/BudgetSettings';
+import SavingsGoalsManager from '../src/components/ui/SavingsGoalsManager';
 import ClientPortal from '../src/components/ui/ClientPortal';
 import TeamChat from '../src/components/ui/TeamChat';
 import FocusRooms from '../src/components/ui/FocusRooms';
@@ -2260,6 +2261,9 @@ export default function Dashboard() {
       
       {/* WP-FIN-01: Budget Settings (Comfort Bands) */}
       <BudgetSettings isOpen={showBudget} onClose={() => setShowBudget(false)} />
+      
+      {/* WP-FIN-03: Savings Goals */}
+      <SavingsGoalsManager isOpen={showGoals} onClose={() => setShowGoals(false)} />
       <ClientPortal isOpen={showClientPortal} onClose={() => setShowClientPortal(false)} projects={projects} />
       <TeamChat isOpen={showTeamChat} onClose={() => setShowTeamChat(false)} teamId="default" userName={user?.name || 'User'} userId={user?.sub || ''} />
       <FocusRooms isOpen={showFocusRooms} onClose={() => setShowFocusRooms(false)} />

@@ -8,6 +8,10 @@ import {
   trackBudgetFitInteraction,
   BudgetFitResult
 } from '../../utils/budgetFitScoring';
+import { 
+  calculateSavingsImpact,
+  getActiveGoal
+} from '../../utils/savingsGoals';
 
 interface Task {
   id: string;
@@ -403,6 +407,33 @@ const SmartSuggestions: React.FC<SmartSuggestionsProps> = ({ isOpen, onClose, on
                               <div style={{ fontSize: '12px', color: '#9CA3AF', marginTop: '2px' }}>
                                 {suggestion.budgetFit.message}
                               </div>
+                              
+                              {/* WP-FIN-03: Savings Impact (for over-budget items) */}
+                              {!suggestion.budgetFit.withinBudget && (() => {
+                                const activeGoal = getActiveGoal();
+                                if (!activeGoal) return null;
+                                const impact = calculateSavingsImpact(suggestion.estimatedCost || 0);
+                                if (!impact) return null;
+                                return (
+                                  <div style={{
+                                    marginTop: '8px',
+                                    padding: '8px 12px',
+                                    background: 'linear-gradient(135deg, #EC489920 0%, #8B5CF620 100%)',
+                                    borderRadius: '6px',
+                                    border: '1px solid #EC489940'
+                                  }}>
+                                    <div style={{ fontSize: '12px', fontWeight: '700', color: '#EC4899', marginBottom: '2px' }}>
+                                      💡 Skip this for your goal:
+                                    </div>
+                                    <div style={{ fontSize: '11px', color: '#6B7280' }}>
+                                      {impact.message}
+                                    </div>
+                                    <div style={{ fontSize: '11px', color: '#8B5CF6', marginTop: '2px', fontStyle: 'italic' }}>
+                                      {impact.motivationalText}
+                                    </div>
+                                  </div>
+                                );
+                              })()}
                             </div>
                           </div>
                         )}
