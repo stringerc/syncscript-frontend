@@ -92,6 +92,7 @@ import { checkQuickWins, saveQuickWinPoints } from '../src/utils/quickWinBadges'
 import { recalibrateEnergy, isEnergyMatched, formatEnergyDelta, getEnergyLabel } from '../src/utils/energyRecalibration';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
+import { checkAntiGaming, recordCompletion } from '../src/utils/antiGaming';
 
 interface Task {
   id: string;
@@ -506,8 +507,58 @@ export default function Dashboard() {
           streakData.completionStreak
         );
         
+        // WP-ENG-03: Anti-gaming check
+        const antiGamingResult = checkAntiGaming(
+          taskId,
+          emblemBreakdown.total,
+          user?.sub || 'user'
+        );
+        
+        // Apply anti-gaming penalties if needed
+        let finalEmblemCharge = antiGamingResult.adjustedCharge;
+        
+        if (!antiGamingResult.allowed) {
+          // Cooldown active - don't allow completion
+          toast.error(antiGamingResult.warning || 'Please wait before completing more tasks', {
+            duration: 4000,
+            icon: '⏸️'
+          });
+          
+          console.log('🛡️ Anti-Gaming: Completion blocked', {
+            reason: antiGamingResult.reason,
+            pattern: antiGamingResult.pattern
+          });
+          
+          return; // Exit without completing task
+        }
+        
+        if (antiGamingResult.penalty > 0) {
+          // Penalty applied
+          toast.warning(antiGamingResult.warning || 'Charge reduced - complete tasks thoughtfully!', {
+            duration: 4000,
+            icon: '⚠️'
+          });
+          
+          console.log('🛡️ Anti-Gaming: Penalty applied', {
+            original: emblemBreakdown.total,
+            adjusted: finalEmblemCharge,
+            penalty: antiGamingResult.penalty,
+            reason: antiGamingResult.reason,
+            pattern: antiGamingResult.pattern
+          });
+        }
+        
+        // Record completion for future checks
+        recordCompletion(taskId, finalEmblemCharge, user?.sub || 'user');
+        
+        // Update breakdown to show adjusted charge
+        const adjustedBreakdown = {
+          ...emblemBreakdown,
+          total: finalEmblemCharge
+        };
+        
         // Store for modal display
-        setCurrentEmblemBreakdown(emblemBreakdown);
+        setCurrentEmblemBreakdown(adjustedBreakdown);
         setTotalEmblemCharge(userPoints); // Current points (will update with new points)
         
         // Log to console for now (will add analytics later)
@@ -587,7 +638,12 @@ export default function Dashboard() {
                 fontWeight: '700',
                 color: '#F5A623'
               }}>
-                +{emblemBreakdown.total}⚡ Emblem • Tap for breakdown
+                +{finalEmblemCharge}⚡ Emblem • Tap for breakdown
+                {antiGamingResult.penalty > 0 && (
+                  <span style={{ marginLeft: '8px', fontSize: '12px', opacity: 0.8 }}>
+                    (-{Math.round(antiGamingResult.penalty * 100)}% penalty)
+                  </span>
+                )}
               </div>
             </div>
           ),
