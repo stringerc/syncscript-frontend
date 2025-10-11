@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ExplanationModal from './ExplanationModal';
+import { generateExplanation, TaskExplanation } from '../../utils/aiExplainability';
 
 interface Task {
   id: string;
@@ -38,6 +40,11 @@ const SmartSuggestions: React.FC<SmartSuggestionsProps> = ({ isOpen, onClose, on
   const [insights, setInsights] = useState<Insights | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // WP-PERS-01: Explainability state
+  const [showExplanation, setShowExplanation] = useState(false);
+  const [currentExplanation, setCurrentExplanation] = useState<TaskExplanation | null>(null);
+  const [explainingSuggestion, setExplainingSuggestion] = useState<Suggestion | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -87,8 +94,78 @@ const SmartSuggestions: React.FC<SmartSuggestionsProps> = ({ isOpen, onClose, on
       onAcceptSuggestion(taskId);
       // Remove suggestion from list
       setSuggestions(prev => prev.filter(s => s.task.id !== taskId));
+      
+      // Close explanation modal if open
+      setShowExplanation(false);
+      setCurrentExplanation(null);
+      setExplainingSuggestion(null);
     } catch (err) {
       console.error('Error accepting suggestion:', err);
+    }
+  };
+  
+  // WP-PERS-01: Show explanation
+  const handleShowExplanation = (suggestion: Suggestion) => {
+    // Convert suggestion task to proper Task type
+    const task = {
+      id: suggestion.task.id,
+      title: suggestion.task.title,
+      description: suggestion.task.description,
+      priority: suggestion.task.priority === 'high' ? 4 :
+                suggestion.task.priority === 'medium' ? 3 : 2,
+      energy_requirement: suggestion.task.energy_level as (1 | 2 | 3 | 4 | 5),
+      due_date: suggestion.task.due_date,
+      estimated_duration: 45, // Default estimate
+      project_id: suggestion.task.project_name ? 'project-1' : undefined
+    };
+    
+    // Generate explanation
+    const explanation = generateExplanation(task, {
+      currentEnergy: insights?.currentEnergy || 70,
+      currentTime: new Date(),
+      availableTime: 120, // Assume 2 hours available
+      habits: {
+        'review': { bestTime: 'Tuesday afternoons', frequency: 3 },
+        'email': { bestTime: 'morning', frequency: 5 },
+        'meeting': { bestTime: 'afternoon', frequency: 2 }
+      }
+    });
+    
+    setCurrentExplanation(explanation);
+    setExplainingSuggestion(suggestion);
+    setShowExplanation(true);
+    
+    // Track analytics
+    console.log('💡 AI Explanation Shown:', {
+      taskId: suggestion.task.id,
+      confidence: explanation.confidence,
+      reasons_count: explanation.reasons.length,
+      timestamp: new Date().toISOString()
+    });
+  };
+  
+  // WP-PERS-01: Handle dismiss (not interested)
+  const handleDismissExplanation = () => {
+    console.log('❌ Suggestion dismissed after viewing explanation:', {
+      taskId: currentExplanation?.taskId,
+      viewed_reasons: true
+    });
+    
+    setShowExplanation(false);
+    setCurrentExplanation(null);
+    setExplainingSuggestion(null);
+  };
+  
+  // WP-PERS-01: Handle accept from explanation modal
+  const handleAcceptFromExplanation = () => {
+    if (explainingSuggestion) {
+      console.log('✅ Suggestion accepted after viewing explanation:', {
+        taskId: explainingSuggestion.task.id,
+        viewed_reasons: true,
+        confidence: currentExplanation?.confidence
+      });
+      
+      handleAccept(explainingSuggestion.task.id);
     }
   };
 
@@ -271,15 +348,41 @@ const SmartSuggestions: React.FC<SmartSuggestionsProps> = ({ isOpen, onClose, on
                           )}
                         </div>
 
-                        <button 
-                          className="btn btn-primary suggestion-accept-btn"
-                          onClick={() => handleAccept(suggestion.task.id)}
-                        >
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <polyline points="20,6 9,17 4,12"/>
-                          </svg>
-                          Start This Task
-                        </button>
+                        <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+                          <button 
+                            className="btn btn-ghost"
+                            onClick={() => handleShowExplanation(suggestion)}
+                            style={{
+                              flex: '0 0 auto',
+                              padding: '10px 16px',
+                              fontSize: '14px',
+                              background: '#F3F4F6',
+                              color: '#4B5563',
+                              border: 'none',
+                              borderRadius: '8px',
+                              cursor: 'pointer',
+                              fontWeight: '600',
+                              transition: 'all 0.2s',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '6px'
+                            }}
+                          >
+                            <span style={{ fontSize: '16px' }}>💡</span>
+                            Why this?
+                          </button>
+                          
+                          <button 
+                            className="btn btn-primary suggestion-accept-btn"
+                            onClick={() => handleAccept(suggestion.task.id)}
+                            style={{ flex: 1 }}
+                          >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <polyline points="20,6 9,17 4,12"/>
+                            </svg>
+                            Start This Task
+                          </button>
+                        </div>
                       </motion.div>
                     ))}
                   </div>
@@ -289,6 +392,15 @@ const SmartSuggestions: React.FC<SmartSuggestionsProps> = ({ isOpen, onClose, on
           </motion.div>
         </div>
       )}
+      
+      {/* WP-PERS-01: Explanation Modal */}
+      <ExplanationModal
+        explanation={currentExplanation}
+        isOpen={showExplanation}
+        onClose={() => setShowExplanation(false)}
+        onAccept={handleAcceptFromExplanation}
+        onDismiss={handleDismissExplanation}
+      />
     </AnimatePresence>
   );
 };
