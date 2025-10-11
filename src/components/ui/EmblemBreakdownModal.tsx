@@ -95,7 +95,7 @@ export default function EmblemBreakdownModal({
               color: '#9CA3AF',
               margin: 0
             }}>
-              Here's how you earned <span style={{ color: '#F5A623', fontWeight: '700' }}>+{breakdown.total}⚡</span>
+              Here&apos;s how you earned <span style={{ color: '#F5A623', fontWeight: '700' }}>+{breakdown.total}⚡</span>
             </p>
           </div>
           
