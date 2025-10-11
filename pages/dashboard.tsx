@@ -55,6 +55,7 @@ import TimeBlocking from '../src/components/ui/TimeBlocking';
 import AICoach from '../src/components/ui/AICoach';
 import ReportingDashboard from '../src/components/ui/ReportingDashboard';
 import BudgetTracker from '../src/components/ui/BudgetTracker';
+import BudgetSettings from '../src/components/ui/BudgetSettings';
 import ClientPortal from '../src/components/ui/ClientPortal';
 import TeamChat from '../src/components/ui/TeamChat';
 import FocusRooms from '../src/components/ui/FocusRooms';
@@ -2256,6 +2257,9 @@ export default function Dashboard() {
       <AICoach isOpen={showAICoach} onClose={() => setShowAICoach(false)} userStats={{}} recentActivity={[]} goals={[]} />
       <ReportingDashboard isOpen={showReporting} onClose={() => setShowReporting(false)} tasks={tasks as unknown as Array<{ completed: boolean; created_at: string; completed_at?: string; [key: string]: unknown }>} energyLogs={energyLogs.map(log => ({ energy_level: log.level, created_at: log.timestamp }))} />
       <BudgetTracker isOpen={showBudget} onClose={() => setShowBudget(false)} tasks={activeTasks} projects={projects} />
+      
+      {/* WP-FIN-01: Budget Settings (Comfort Bands) */}
+      <BudgetSettings isOpen={showBudget} onClose={() => setShowBudget(false)} />
       <ClientPortal isOpen={showClientPortal} onClose={() => setShowClientPortal(false)} projects={projects} />
       <TeamChat isOpen={showTeamChat} onClose={() => setShowTeamChat(false)} teamId="default" userName={user?.name || 'User'} userId={user?.sub || ''} />
       <FocusRooms isOpen={showFocusRooms} onClose={() => setShowFocusRooms(false)} />
