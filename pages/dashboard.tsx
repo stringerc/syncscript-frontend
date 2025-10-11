@@ -534,9 +534,14 @@ export default function Dashboard() {
         
         if (antiGamingResult.penalty > 0) {
           // Penalty applied
-          toast.warning(antiGamingResult.warning || 'Charge reduced - complete tasks thoughtfully!', {
+          toast(antiGamingResult.warning || 'Charge reduced - complete tasks thoughtfully!', {
             duration: 4000,
-            icon: '⚠️'
+            icon: '⚠️',
+            style: {
+              background: '#FEF3C7',
+              color: '#92400E',
+              border: '1px solid #F59E0B'
+            }
           });
           
           console.log('🛡️ Anti-Gaming: Penalty applied', {
