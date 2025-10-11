@@ -218,7 +218,7 @@ export default function LandingPage() {
                   <li>✅ Comfort band system</li>
                   <li>✅ 5-star budget fit ratings</li>
                   <li>✅ Savings goal integration</li>
-                  <li>✅ "Skip = $X saved" motivation</li>
+                  <li>✅ &ldquo;Skip = $X saved&rdquo; motivation</li>
                 </ul>
               </motion.div>
               
@@ -403,7 +403,7 @@ export default function LandingPage() {
                   <li>💰 Set min/ideal/max spending per category</li>
                   <li>⭐ 5-star budget fit on all recommendations</li>
                   <li>🎯 Link spending to savings goals</li>
-                  <li>💡 "Skip this = $50 closer to vacation"</li>
+                  <li>💡 &ldquo;Skip this = $50 closer to vacation&rdquo;</li>
                 </ul>
               </div>
             </div>
@@ -436,7 +436,7 @@ export default function LandingPage() {
                   The <strong>only app</strong> that combines real-world context with productivity.
                 </p>
                 <ul style={{ fontSize: '16px', color: '#4B5563', lineHeight: '2' }}>
-                  <li>🚗 "Leave by 2:25 PM" with traffic awareness</li>
+                  <li>🚗 &ldquo;Leave by 2:25 PM&rdquo; with traffic awareness</li>
                   <li>🌤️ Weather badges on all events</li>
                   <li>⚠️ Severe weather warnings</li>
                   <li>🎯 85% on-time arrival rate</li>
@@ -636,9 +636,9 @@ export default function LandingPage() {
             textAlign: 'center'
           }}>
             © 2025 SyncScript. All rights reserved. Triple Intelligence™ is a trademark of SyncScript.
-          </div>
+        </div>
         </footer>
       </div>
     </>
-  );
-}
+    );
+  }
