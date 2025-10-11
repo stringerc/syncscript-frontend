@@ -90,6 +90,8 @@ import { TaskNote } from '../src/utils/noteUtils';
 import { RecurrenceConfig, calculateNextDueDate, shouldEndRecurrence } from '../src/utils/recurrenceUtils';
 import { checkQuickWins, saveQuickWinPoints } from '../src/utils/quickWinBadges';
 import { recalibrateEnergy, isEnergyMatched, formatEnergyDelta, getEnergyLabel } from '../src/utils/energyRecalibration';
+import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
+import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 
 interface Task {
   id: string;
@@ -225,6 +227,11 @@ export default function Dashboard() {
   const [showOnboarding, setShowOnboarding] = React.useState(false);
   const [showVoiceToTask, setShowVoiceToTask] = React.useState(false);
   const [showQuickCapture, setShowQuickCapture] = React.useState(false);
+  
+  // WP-ENG-02: Emblem breakdown state
+  const [showEmblemBreakdown, setShowEmblemBreakdown] = React.useState(false);
+  const [currentEmblemBreakdown, setCurrentEmblemBreakdown] = React.useState<EmblemBreakdown | null>(null);
+  const [totalEmblemCharge, setTotalEmblemCharge] = React.useState(0);
 
   // Notifications
   const {
@@ -492,6 +499,17 @@ export default function Dashboard() {
         // Track PRIMARY KPI: Energy-Matched Completion
         const matched = isEnergyMatched(currentEnergy, completedTask.energy_requirement);
         
+        // WP-ENG-02: Calculate emblem charge breakdown
+        const emblemBreakdown = calculateEmblemCharge(
+          completedTask,
+          currentEnergy,
+          streakData.completionStreak
+        );
+        
+        // Store for modal display
+        setCurrentEmblemBreakdown(emblemBreakdown);
+        setTotalEmblemCharge(userPoints); // Current points (will update with new points)
+        
         // Log to console for now (will add analytics later)
         console.log('🎯 Energy-Matched Completion:', {
           taskId,
@@ -502,6 +520,8 @@ export default function Dashboard() {
           delta: recalibrationResult.delta,
           reason: recalibrationResult.reason
         });
+        
+        console.log('⚡ Emblem Charge Breakdown:', emblemBreakdown);
         
         // Performance measurement
         const performanceEnd = performance.now();
@@ -540,14 +560,39 @@ export default function Dashboard() {
           });
         }
 
-        // Enhanced toast with energy update
+        // Enhanced toast with energy update & emblem breakdown
         const energyDelta = formatEnergyDelta(recalibrationResult.delta);
         const energyLabel = getEnergyLabel(recalibrationResult.newEnergy);
         
+        // WP-ENG-02: Make emblem charge clickable
         toast.success(
-          `Task completed! +${data.points_earned} points | Energy: ${recalibrationResult.newEnergy.toFixed(1)}⚡ ${energyDelta} (${energyLabel})${matched ? ' 🎯' : ''}`,
+          (t) => (
+            <div onClick={() => {
+              toast.dismiss(t.id);
+              setShowEmblemBreakdown(true);
+            }} style={{ cursor: 'pointer' }}>
+              <div style={{ fontWeight: '700', marginBottom: '4px' }}>
+                Task completed! +{data.points_earned} points
+              </div>
+              <div style={{ fontSize: '13px', opacity: 0.9 }}>
+                Energy: {recalibrationResult.newEnergy.toFixed(1)}⚡ {energyDelta} ({energyLabel})
+                {matched && ' 🎯'}
+              </div>
+              <div style={{
+                marginTop: '8px',
+                padding: '8px 12px',
+                background: 'rgba(245, 166, 35, 0.2)',
+                borderRadius: '6px',
+                fontSize: '14px',
+                fontWeight: '700',
+                color: '#F5A623'
+              }}>
+                +{emblemBreakdown.total}⚡ Emblem • Tap for breakdown
+              </div>
+            </div>
+          ),
           {
-            duration: 5000,
+            duration: 6000,
             icon: matched ? '🎯' : '✅',
           }
         );
