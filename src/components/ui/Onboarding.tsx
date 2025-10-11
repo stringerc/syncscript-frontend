@@ -19,40 +19,40 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
     return !localStorage.getItem('onboardingComplete');
   });
 
+  // WP-PAR-02: Energy-First Onboarding (Showcases Unique Value)
   const steps: OnboardingStep[] = [
     {
-      title: 'Welcome to SyncScript! 👋',
-      description: 'The world&apos;s first energy-based productivity platform. Let&apos;s get you started!',
-      icon: '🚀'
+      title: 'Welcome to Something Different 💎',
+      description: 'SyncScript is the ONLY productivity app that matches tasks to your ENERGY. Let us show you why this changes everything...',
+      icon: '⚡'
     },
     {
-      title: 'Track Your Energy ⚡',
-      description: 'Log how you feel throughout the day. We&apos;ll match tasks to your energy levels.',
+      title: 'Here&apos;s The Problem We Solve 🤔',
+      description: 'Ever feel drained trying to do high-energy work when you&apos;re tired? Or restless doing boring tasks when you&apos;re energized? Most apps ignore this. We don&apos;t.',
+      icon: '💡'
+    },
+    {
+      title: 'Your Energy = Your Superpower ⚡',
+      description: 'Try it now: Log your current energy level. SyncScript will ONLY suggest tasks that match how you feel RIGHT NOW. No more fighting yourself.',
       icon: '⚡',
       targetElement: '#energy-button',
-      action: 'Click "Log Energy" to track your energy'
+      action: 'Log your energy to see the magic ✨'
     },
     {
-      title: 'Create Your First Task ✨',
-      description: 'Add tasks and we&apos;ll suggest the best time to do them based on your energy.',
-      icon: '✨',
+      title: 'Watch: Energy Matching in Action 🎯',
+      description: 'When you complete a task, your energy updates AUTOMATICALLY. Suggestions refresh instantly. You stay in flow, matched to YOUR capacity.',
+      icon: '🎯',
       targetElement: '#create-task-button',
-      action: 'Click "Create Task" to add your first task'
+      action: 'Create a task to try it!'
     },
     {
-      title: 'AI-Powered Suggestions 🤖',
-      description: 'Get smart recommendations for what to work on based on your current energy.',
-      icon: '🤖',
-      targetElement: '#smart-suggestions'
+      title: 'Why This is Unique 🏆',
+      description: 'Notion doesn&apos;t have this. Todoist doesn&apos;t have this. Motion doesn&apos;t have this. ONLY SyncScript matches tasks to your energy + budget + context.',
+      icon: '💎'
     },
     {
-      title: 'Keyboard Shortcuts ⌨️',
-      description: 'Press Cmd+K for command palette, ? for shortcuts, and Cmd+Shift+A for quick capture.',
-      icon: '⌨️'
-    },
-    {
-      title: 'You&apos;re All Set! 🎉',
-      description: 'Start being productive with SyncScript. Remember: match tasks to your energy!',
+      title: 'You&apos;re Ready! Start Your Trial ✨',
+      description: 'You now understand what makes SyncScript legendary. Try it free for 14 days. Match your energy, hit your goals, and never work against yourself again.',
       icon: '🎉'
     }
   ];
