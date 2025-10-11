@@ -111,8 +111,8 @@ const SmartSuggestions: React.FC<SmartSuggestionsProps> = ({ isOpen, onClose, on
       id: suggestion.task.id,
       title: suggestion.task.title,
       description: suggestion.task.description,
-      priority: suggestion.task.priority === 'high' ? 4 :
-                suggestion.task.priority === 'medium' ? 3 : 2,
+      priority: (suggestion.task.priority === 'high' ? 4 :
+                suggestion.task.priority === 'medium' ? 3 : 2) as (1 | 2 | 3 | 4 | 5),
       energy_requirement: suggestion.task.energy_level as (1 | 2 | 3 | 4 | 5),
       due_date: suggestion.task.due_date,
       estimated_duration: 45, // Default estimate
