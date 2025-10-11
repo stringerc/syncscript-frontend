@@ -1,312 +1,322 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ACHIEVEMENTS, 
-  Achievement,
-  AchievementCategory,
-  AchievementTier,
-  AchievementProgress,
-  TIER_GRADIENTS,
-  TIER_COLORS
-} from '../../utils/achievementSystem';
+'use client'
 
-interface AchievementGalleryProps {
-  achievementProgress: AchievementProgress[];
-  unlockedCount: number;
-  totalPoints: number;
-  completionPercentage: number;
+import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  getAchievements,
+  getAchievementStats,
+  getAchievementsByCategory,
+  AchievementCategory,
+  Achievement
+} from '@/utils/achievementSystem'
+
+const CATEGORY_LABELS: Record<AchievementCategory, string> = {
+  tasks: 'Tasks & Productivity',
+  energy: 'Energy Management',
+  budget: 'Budget & Finance',
+  streaks: 'Streaks & Consistency',
+  goals: 'Goals & Milestones',
+  social: 'Social & Collaboration',
+  mastery: 'Platform Mastery',
+  events: 'Special Events'
 }
 
-const CATEGORY_INFO: Record<AchievementCategory, { name: string; icon: string; color: string }> = {
-  tasks: { name: 'Tasks', icon: '✅', color: '#4A90E2' },
-  streaks: { name: 'Streaks', icon: '🔥', color: '#FF6B6B' },
-  energy: { name: 'Energy', icon: '⚡', color: '#FFD700' },
-  focus: { name: 'Focus', icon: '🎯', color: '#9B59B6' },
-  projects: { name: 'Projects', icon: '📁', color: '#3498DB' },
-  speed: { name: 'Speed', icon: '⚡', color: '#E74C3C' },
-  consistency: { name: 'Consistency', icon: '📊', color: '#2ECC71' }
-};
+const RARITY_COLORS = {
+  common: {
+    bg: 'from-gray-400 to-gray-600',
+    border: 'border-gray-400',
+    glow: 'shadow-gray-400/50'
+  },
+  rare: {
+    bg: 'from-blue-400 to-blue-600',
+    border: 'border-blue-400',
+    glow: 'shadow-blue-400/50'
+  },
+  epic: {
+    bg: 'from-purple-400 to-purple-600',
+    border: 'border-purple-400',
+    glow: 'shadow-purple-400/50'
+  },
+  legendary: {
+    bg: 'from-yellow-400 to-orange-600',
+    border: 'border-yellow-400',
+    glow: 'shadow-yellow-400/50'
+  }
+}
 
-const AchievementGallery: React.FC<AchievementGalleryProps> = ({
-  achievementProgress,
-  unlockedCount,
-  totalPoints,
-  completionPercentage
-}) => {
-  const [selectedCategory, setSelectedCategory] = useState<AchievementCategory | 'all'>('all');
-  const [selectedTier, setSelectedTier] = useState<AchievementTier | 'all'>('all');
-  const [selectedAchievement, setSelectedAchievement] = useState<Achievement | null>(null);
-
-  // Filter achievements
-  const filteredAchievements = ACHIEVEMENTS.filter(achievement => {
-    const categoryMatch = selectedCategory === 'all' || achievement.category === selectedCategory;
-    const tierMatch = selectedTier === 'all' || achievement.tier === selectedTier;
-    return categoryMatch && tierMatch;
-  });
-
-  // Get progress for an achievement
-  const getProgress = (achievementId: string): AchievementProgress | undefined => {
-    return achievementProgress.find(p => p.achievementId === achievementId);
-  };
+export default function AchievementGallery() {
+  const [selectedCategory, setSelectedCategory] = useState<AchievementCategory | 'all'>('all')
+  const [showLocked, setShowLocked] = useState(true)
+  const [selectedAchievement, setSelectedAchievement] = useState<Achievement | null>(null)
+  
+  const stats = getAchievementStats()
+  const allAchievements = getAchievements()
+  
+  const filteredAchievements = selectedCategory === 'all'
+    ? allAchievements
+    : getAchievementsByCategory(selectedCategory)
+  
+  const displayedAchievements = showLocked
+    ? filteredAchievements.filter(a => !a.secret || a.unlocked)
+    : filteredAchievements.filter(a => a.unlocked)
+  
+  const categories: Array<AchievementCategory | 'all'> = [
+    'all', 'tasks', 'energy', 'budget', 'streaks', 'goals', 'mastery', 'events'
+  ]
 
   return (
-    <div className="achievement-gallery">
+    <div className="max-w-7xl mx-auto p-6">
       {/* Header Stats */}
-      <div className="gallery-header">
-        <div className="gallery-stats">
-          <div className="stat-card">
-            <div className="stat-icon">🏆</div>
-            <div className="stat-content">
-              <div className="stat-value">{unlockedCount}/{ACHIEVEMENTS.length}</div>
-              <div className="stat-label">Achievements</div>
-            </div>
+      <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-white mb-8">
+        <h1 className="text-4xl font-bold mb-4">Achievement Gallery 🏆</h1>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+            <div className="text-3xl font-bold">{stats.unlocked}/{stats.total}</div>
+            <div className="text-sm text-white/80">Achievements</div>
           </div>
-          
-          <div className="stat-card">
-            <div className="stat-icon">💎</div>
-            <div className="stat-content">
-              <div className="stat-value">{totalPoints}</div>
-              <div className="stat-label">Achievement Points</div>
-            </div>
+          <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+            <div className="text-3xl font-bold">{stats.percentage.toFixed(0)}%</div>
+            <div className="text-sm text-white/80">Complete</div>
           </div>
-          
-          <div className="stat-card">
-            <div className="stat-icon">📊</div>
-            <div className="stat-content">
-              <div className="stat-value">{Math.round(completionPercentage)}%</div>
-              <div className="stat-label">Completion</div>
-            </div>
+          <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+            <div className="text-3xl font-bold">{stats.earnedRewards}</div>
+            <div className="text-sm text-white/80">Emblems Earned</div>
+          </div>
+          <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+            <div className="text-3xl font-bold">{stats.totalRewards - stats.earnedRewards}</div>
+            <div className="text-sm text-white/80">Available</div>
           </div>
         </div>
 
-        {/* Progress Bar */}
-        <div className="completion-progress">
-          <div className="progress-info">
-            <span>Overall Progress</span>
-            <span>{Math.round(completionPercentage)}%</span>
-          </div>
-          <div className="progress-bar-container">
-            <motion.div
-              className="progress-bar-fill"
-              initial={{ width: 0 }}
-              animate={{ width: `${completionPercentage}%` }}
-              transition={{ duration: 1, ease: "easeOut" }}
-            />
-          </div>
+        {/* Rarity Breakdown */}
+        <div className="mt-6 flex flex-wrap gap-3">
+          {Object.entries(stats.byRarity).map(([rarity, data]) => (
+            <div key={rarity} className="bg-white/10 rounded-full px-4 py-2 backdrop-blur-sm">
+              <span className="capitalize font-semibold">{rarity}:</span>{' '}
+              <span>{data.unlocked}/{data.total}</span>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* Filters */}
-      <div className="gallery-filters">
-        {/* Category Filter */}
-        <div className="filter-group">
-          <label className="filter-label">Category</label>
-          <div className="filter-buttons">
+      <div className="mb-8 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <div className="flex flex-wrap gap-2">
+          {categories.map((cat) => (
             <button
-              className={`filter-btn ${selectedCategory === 'all' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('all')}
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                selectedCategory === cat
+                  ? 'bg-purple-600 text-white shadow-lg'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+              }`}
             >
-              All
+              {cat === 'all' ? 'All' : CATEGORY_LABELS[cat]}
             </button>
-            {Object.entries(CATEGORY_INFO).map(([category, info]) => (
-              <button
-                key={category}
-                className={`filter-btn ${selectedCategory === category ? 'active' : ''}`}
-                onClick={() => setSelectedCategory(category as AchievementCategory)}
-              >
-                <span>{info.icon}</span>
-                <span>{info.name}</span>
-              </button>
-            ))}
-          </div>
+          ))}
         </div>
-
-        {/* Tier Filter */}
-        <div className="filter-group">
-          <label className="filter-label">Tier</label>
-          <div className="filter-buttons">
-            <button
-              className={`filter-btn ${selectedTier === 'all' ? 'active' : ''}`}
-              onClick={() => setSelectedTier('all')}
-            >
-              All Tiers
-            </button>
-            {(['bronze', 'silver', 'gold', 'platinum', 'legendary'] as AchievementTier[]).map(tier => (
-              <button
-                key={tier}
-                className={`filter-btn tier-${tier} ${selectedTier === tier ? 'active' : ''}`}
-                onClick={() => setSelectedTier(tier)}
-              >
-                {tier.charAt(0).toUpperCase() + tier.slice(1)}
-              </button>
-            ))}
-          </div>
-        </div>
+        
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={showLocked}
+            onChange={(e) => setShowLocked(e.target.checked)}
+            className="w-5 h-5 rounded"
+          />
+          <span className="text-gray-700 dark:text-gray-300 font-medium">
+            Show Locked
+          </span>
+        </label>
       </div>
 
       {/* Achievement Grid */}
-      <div className="achievement-grid">
-        {filteredAchievements.map((achievement, index) => {
-          const progress = getProgress(achievement.id);
-          const isUnlocked = progress?.isUnlocked || false;
-          const percentage = progress?.percentage || 0;
-
-          return (
-            <motion.div
-              key={achievement.id}
-              className={`achievement-card ${isUnlocked ? 'unlocked' : 'locked'} tier-${achievement.tier}`}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.05, duration: 0.3 }}
-              onClick={() => setSelectedAchievement(achievement)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {displayedAchievements.map((achievement, index) => (
+          <motion.div
+            key={achievement.id}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.05 }}
+            onClick={() => setSelectedAchievement(achievement)}
+            className="cursor-pointer"
+          >
+            <div
+              className={`relative rounded-xl p-6 ${
+                achievement.unlocked
+                  ? `bg-gradient-to-br ${RARITY_COLORS[achievement.rarity].bg} text-white ${RARITY_COLORS[achievement.rarity].glow} shadow-xl`
+                  : 'bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-600'
+              } transition-transform hover:scale-105`}
             >
-              <div 
-                className="achievement-card-bg"
-                style={{ background: isUnlocked ? TIER_GRADIENTS[achievement.tier] : 'transparent' }}
-              />
-              
-              <div className="achievement-icon-container">
-                <div 
-                  className={`achievement-icon ${!isUnlocked ? 'locked-icon' : ''}`}
-                  style={{ 
-                    filter: isUnlocked ? 'none' : 'grayscale(100%) brightness(0.5)'
-                  }}
-                >
-                  {achievement.icon}
-                </div>
-                {!isUnlocked && percentage > 0 && (
-                  <div className="progress-ring">
-                    <svg viewBox="0 0 36 36" className="circular-chart">
-                      <path
-                        className="circle-bg"
-                        d="M18 2.0845
-                          a 15.9155 15.9155 0 0 1 0 31.831
-                          a 15.9155 15.9155 0 0 1 0 -31.831"
-                      />
-                      <path
-                        className="circle"
-                        strokeDasharray={`${percentage}, 100`}
-                        d="M18 2.0845
-                          a 15.9155 15.9155 0 0 1 0 31.831
-                          a 15.9155 15.9155 0 0 1 0 -31.831"
-                      />
-                    </svg>
-                    <span className="progress-text">{Math.round(percentage)}%</span>
-                  </div>
-                )}
+              {/* Rarity Badge */}
+              <div
+                className={`absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-bold uppercase ${
+                  achievement.unlocked
+                    ? 'bg-white/20 backdrop-blur-sm'
+                    : 'bg-gray-300 dark:bg-gray-700'
+                }`}
+              >
+                {achievement.rarity}
               </div>
 
-              <div className="achievement-info">
-                <h4 className="achievement-name">{achievement.name}</h4>
-                <p className="achievement-description">{achievement.description}</p>
-                
-                {!isUnlocked && progress && (
-                  <div className="achievement-progress-info">
-                    <span>{progress.currentValue} / {progress.targetValue}</span>
-                  </div>
-                )}
-                
-                {isUnlocked && (
-                  <div className="achievement-reward">
-                    <span className="reward-points">+{achievement.reward.points} pts</span>
-                  </div>
-                )}
+              {/* Icon */}
+              <div className={`text-5xl mb-3 ${!achievement.unlocked && 'opacity-30 grayscale'}`}>
+                {achievement.unlocked ? achievement.icon : '🔒'}
               </div>
 
-              {isUnlocked && (
-                <div className="unlocked-badge">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                    <polyline points="20,6 9,17 4,12"/>
-                  </svg>
+              {/* Title */}
+              <h3 className={`font-bold text-lg mb-2 ${!achievement.unlocked && 'text-gray-400'}`}>
+                {achievement.unlocked || !achievement.secret ? achievement.title : '???'}
+              </h3>
+
+              {/* Description */}
+              <p className={`text-sm mb-3 ${
+                achievement.unlocked 
+                  ? 'text-white/90' 
+                  : 'text-gray-600 dark:text-gray-500'
+              }`}>
+                {achievement.unlocked || !achievement.secret 
+                  ? achievement.description 
+                  : 'Secret achievement - unlock to reveal!'}
+              </p>
+
+              {/* Progress Bar (if applicable) */}
+              {achievement.target && (
+                <div className="mb-3">
+                  <div className="h-2 bg-white/20 rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ 
+                        width: `${((achievement.progress || 0) / achievement.target) * 100}%` 
+                      }}
+                      className="h-full bg-white rounded-full"
+                    />
+                  </div>
+                  <div className={`text-xs mt-1 ${
+                    achievement.unlocked ? 'text-white/80' : 'text-gray-500'
+                  }`}>
+                    {achievement.progress || 0} / {achievement.target}
+                  </div>
                 </div>
               )}
-            </motion.div>
-          );
-        })}
+
+              {/* Reward */}
+              <div className={`flex items-center justify-between text-sm font-semibold ${
+                achievement.unlocked ? 'text-white' : 'text-gray-400'
+              }`}>
+                <span>💎 {achievement.reward} emblems</span>
+                {achievement.unlocked && (
+                  <span className="text-xs text-white/70">
+                    ✓ Unlocked
+                  </span>
+                )}
+              </div>
+
+              {/* Unlocked date */}
+              {achievement.unlocked && achievement.unlockedAt && (
+                <div className="text-xs text-white/60 mt-2">
+                  {new Date(achievement.unlockedAt).toLocaleDateString()}
+                </div>
+              )}
+            </div>
+          </motion.div>
+        ))}
       </div>
+
+      {/* Empty State */}
+      {displayedAchievements.length === 0 && (
+        <div className="text-center py-16 text-gray-500">
+          <div className="text-6xl mb-4">🏆</div>
+          <p className="text-xl">No achievements to display</p>
+          <p className="text-sm mt-2">Try changing your filters</p>
+        </div>
+      )}
 
       {/* Achievement Detail Modal */}
       <AnimatePresence>
         {selectedAchievement && (
-          <div className="achievement-modal-overlay" onClick={() => setSelectedAchievement(null)}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedAchievement(null)}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          >
             <motion.div
-              className="achievement-modal"
-              initial={{ opacity: 0, scale: 0.8, y: 50 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8, y: 50 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              style={{
-                background: TIER_GRADIENTS[selectedAchievement.tier]
-              }}
+              className={`max-w-md w-full rounded-2xl p-8 ${
+                selectedAchievement.unlocked
+                  ? `bg-gradient-to-br ${RARITY_COLORS[selectedAchievement.rarity].bg}`
+                  : 'bg-gray-800'
+              } text-white shadow-2xl`}
             >
-              <button 
-                className="modal-close-btn"
-                onClick={() => setSelectedAchievement(null)}
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="18" y1="6" x2="6" y2="18"/>
-                  <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-              </button>
-
-              <div className="modal-icon">{selectedAchievement.icon}</div>
-              <h2 className="modal-title">{selectedAchievement.name}</h2>
-              <div className="modal-tier">{selectedAchievement.tier.toUpperCase()}</div>
-              <p className="modal-description">{selectedAchievement.description}</p>
-              
-              <div className="modal-details">
-                <div className="detail-item">
-                  <span className="detail-label">Category</span>
-                  <span className="detail-value">
-                    {CATEGORY_INFO[selectedAchievement.category].icon} {CATEGORY_INFO[selectedAchievement.category].name}
-                  </span>
+              <div className="text-center">
+                <div className="text-7xl mb-4">
+                  {selectedAchievement.unlocked ? selectedAchievement.icon : '🔒'}
                 </div>
-                <div className="detail-item">
-                  <span className="detail-label">Reward</span>
-                  <span className="detail-value">💎 {selectedAchievement.reward.points} points</span>
+                <div className={`inline-block px-4 py-1 rounded-full text-sm font-bold uppercase mb-4 ${
+                  selectedAchievement.unlocked
+                    ? 'bg-white/20'
+                    : 'bg-white/10'
+                }`}>
+                  {selectedAchievement.rarity}
                 </div>
-                {selectedAchievement.reward.title && (
-                  <div className="detail-item">
-                    <span className="detail-label">Title</span>
-                    <span className="detail-value">🏅 {selectedAchievement.reward.title}</span>
-                  </div>
-                )}
-              </div>
-
-              {(() => {
-                const progress = getProgress(selectedAchievement.id);
-                return progress && !progress.isUnlocked ? (
-                  <div className="modal-progress">
-                    <div className="progress-stats">
-                      <span>Progress: {progress.currentValue} / {progress.targetValue}</span>
-                      <span>{Math.round(progress.percentage)}%</span>
-                    </div>
-                    <div className="progress-bar-container">
-                      <div 
-                        className="progress-bar-fill"
-                        style={{ width: `${progress.percentage}%` }}
+                <h2 className="text-3xl font-bold mb-3">
+                  {selectedAchievement.unlocked || !selectedAchievement.secret 
+                    ? selectedAchievement.title 
+                    : 'Secret Achievement'}
+                </h2>
+                <p className="text-white/90 mb-6">
+                  {selectedAchievement.unlocked || !selectedAchievement.secret
+                    ? selectedAchievement.description
+                    : 'This is a secret achievement. Unlock it to reveal details!'}
+                </p>
+                
+                {selectedAchievement.target && (
+                  <div className="mb-6">
+                    <div className="h-3 bg-white/20 rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ 
+                          width: `${((selectedAchievement.progress || 0) / selectedAchievement.target) * 100}%` 
+                        }}
+                        className="h-full bg-white rounded-full"
                       />
                     </div>
+                    <div className="text-sm mt-2">
+                      {selectedAchievement.progress || 0} / {selectedAchievement.target}
+                    </div>
                   </div>
-                ) : progress?.isUnlocked ? (
-                  <div className="modal-unlocked">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polyline points="20,6 9,17 4,12"/>
-                    </svg>
-                    <span>Achievement Unlocked!</span>
+                )}
+
+                <div className="bg-white/10 rounded-lg p-4 mb-4">
+                  <div className="text-4xl font-bold mb-1">
+                    💎 {selectedAchievement.reward}
                   </div>
-                ) : null;
-              })()}
+                  <div className="text-sm text-white/80">Emblem Reward</div>
+                </div>
+
+                {selectedAchievement.unlocked && selectedAchievement.unlockedAt && (
+                  <div className="text-sm text-white/60">
+                    Unlocked: {new Date(selectedAchievement.unlockedAt).toLocaleString()}
+                  </div>
+                )}
+
+                <button
+                  onClick={() => setSelectedAchievement(null)}
+                  className="mt-6 px-6 py-3 bg-white/20 hover:bg-white/30 rounded-lg font-semibold transition-colors"
+                >
+                  Close
+                </button>
+              </div>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
-  );
-};
-
-export default AchievementGallery;
-
+  )
+}
