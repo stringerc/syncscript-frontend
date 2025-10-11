@@ -2220,6 +2220,14 @@ export default function Dashboard() {
       {showOnboarding && <Onboarding onComplete={() => setShowOnboarding(false)} />}
       <VoiceToTask isOpen={showVoiceToTask} onClose={() => setShowVoiceToTask(false)} onCreateTask={(task) => handleCreateTask({ ...task, priority: (task.priority || 2) as 1 | 2 | 3 | 4 | 5, energy_requirement: (task.energy_requirement || 3) as 1 | 2 | 3 | 4 | 5 })} />
       <QuickCapture onCreateTask={(task) => handleCreateTask({ ...task, priority: 2, energy_requirement: 3 })} />
+      
+      {/* WP-ENG-02: Emblem Breakdown Modal */}
+      <EmblemBreakdownModal
+        breakdown={currentEmblemBreakdown}
+        totalEmblemCharge={totalEmblemCharge}
+        isOpen={showEmblemBreakdown}
+        onClose={() => setShowEmblemBreakdown(false)}
+      />
     </div>
   );
 }
