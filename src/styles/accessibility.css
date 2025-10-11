@@ -1,0 +1,391 @@
+/**
+ * SyncScript Accessibility Styles
+ * WCAG 2.1 AA Compliant
+ */
+
+/* ==========================================
+   SKIP LINKS
+   ========================================== */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary-500);
+  color: var(--color-neutral-0);
+  padding: var(--space-2) var(--space-4);
+  text-decoration: none;
+  font-weight: var(--font-semibold);
+  border-radius: var(--radius-md);
+  z-index: var(--z-max);
+  transition: var(--transition-all);
+}
+
+.skip-link:focus {
+  top: var(--space-4);
+  outline: 3px solid var(--color-info);
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   FOCUS INDICATORS
+   ========================================== */
+
+/* Remove default outline and add custom one */
+*:focus {
+  outline: none;
+}
+
+/* Visible focus for all interactive elements */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus,
+[role="button"]:focus,
+[role="link"]:focus,
+[role="tab"]:focus,
+[tabindex]:focus {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.2);
+  transition: var(--transition-all);
+}
+
+/* Focus visible (keyboard only, not mouse) */
+*:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.2);
+}
+
+/* Energy-specific focus indicators */
+[data-energy="1"]:focus {
+  outline-color: var(--color-energy-1);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+}
+
+[data-energy="2"]:focus {
+  outline-color: var(--color-energy-2);
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.2);
+}
+
+[data-energy="3"]:focus {
+  outline-color: var(--color-energy-3);
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+}
+
+[data-energy="4"]:focus {
+  outline-color: var(--color-energy-4);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+}
+
+[data-energy="5"]:focus {
+  outline-color: var(--color-energy-5);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
+}
+
+/* ==========================================
+   SCREEN READER ONLY CONTENT
+   ========================================== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Allow screen reader content to be focusable */
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ==========================================
+   HIGH CONTRAST MODE
+   ========================================== */
+@media (prefers-contrast: high) {
+  * {
+    border-width: 2px !important;
+  }
+  
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    border: 2px solid currentColor !important;
+  }
+  
+  :focus {
+    outline-width: 3px !important;
+  }
+}
+
+/* ==========================================
+   COLOR CONTRAST FIXES
+   ========================================== */
+
+/* Ensure minimum 4.5:1 contrast for text */
+.text-low-contrast {
+  /* Old gray text that failed: #9CA3AF */
+  color: var(--color-neutral-600); /* Passes 4.5:1 */
+}
+
+.disabled-text {
+  /* Ensure disabled text still has 3:1 contrast */
+  color: var(--color-neutral-500);
+  opacity: 1; /* Don't use opacity for disabled state */
+}
+
+/* Link contrast */
+a {
+  color: var(--color-primary-600); /* Darker blue for better contrast */
+  text-decoration: underline;
+}
+
+a:visited {
+  color: var(--color-primary-700); /* Even darker for visited */
+}
+
+/* ==========================================
+   REDUCED MOTION
+   ========================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Keep essential animations for state changes */
+  .loading-spinner {
+    animation: spin 1s linear infinite !important;
+  }
+}
+
+/* ==========================================
+   KEYBOARD NAVIGATION HELPERS
+   ========================================== */
+
+/* Show when navigating with keyboard */
+body.using-keyboard *:focus {
+  outline: 2px solid var(--color-primary-500) !important;
+  outline-offset: 2px !important;
+}
+
+/* Hide when navigating with mouse */
+body.using-mouse *:focus {
+  outline: none;
+}
+
+/* Tab panel focus */
+[role="tabpanel"]:focus {
+  outline: 2px dashed var(--color-primary-500);
+  outline-offset: 4px;
+}
+
+/* ==========================================
+   MODAL ACCESSIBILITY
+   ========================================== */
+
+/* Modal overlay should be dark enough to see */
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.75); /* WCAG compliant */
+}
+
+/* Modal should have visible border */
+.modal-content {
+  border: 1px solid var(--color-neutral-300);
+}
+
+/* First/last focusable element indicators (for dev) */
+.modal-content [data-first-focusable]:focus {
+  /* Styling for debugging */
+}
+
+/* ==========================================
+   FORM ACCESSIBILITY
+   ========================================== */
+
+/* Required field indicators */
+.required::after {
+  content: " *";
+  color: var(--color-error);
+  font-weight: var(--font-bold);
+}
+
+/* Error messages */
+.error-message {
+  color: var(--color-error-dark);
+  font-size: var(--text-sm);
+  margin-top: var(--space-1);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.error-message::before {
+  content: "⚠️";
+}
+
+/* Success messages */
+.success-message {
+  color: var(--color-success-dark);
+  font-size: var(--text-sm);
+  margin-top: var(--space-1);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.success-message::before {
+  content: "✓";
+}
+
+/* Label associations (visual indicator for dev) */
+label[for] {
+  cursor: pointer;
+}
+
+/* ==========================================
+   TOUCH TARGET SIZES (Mobile)
+   ========================================== */
+@media (max-width: 768px) {
+  /* Minimum 44x44px touch targets */
+  button,
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  [role="button"],
+  [role="link"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Add padding if content is smaller */
+  button:not(.has-padding),
+  [role="button"]:not(.has-padding) {
+    padding: var(--space-2) var(--space-3);
+  }
+}
+
+/* ==========================================
+   ARIA LIVE REGIONS
+   ========================================== */
+.live-region {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Announce changes politely */
+[aria-live="polite"] {
+  /* Screen reader will announce when idle */
+}
+
+/* Announce changes immediately */
+[aria-live="assertive"] {
+  /* Screen reader will interrupt to announce */
+}
+
+/* ==========================================
+   LOADING STATES
+   ========================================== */
+[aria-busy="true"] {
+  cursor: wait;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* ==========================================
+   DISABLED STATES
+   ========================================== */
+[aria-disabled="true"],
+:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* But maintain contrast */
+[aria-disabled="true"] *,
+:disabled * {
+  color: var(--color-neutral-600); /* Still readable */
+}
+
+/* ==========================================
+   TABLES
+   ========================================== */
+table {
+  /* Ensure proper structure for screen readers */
+}
+
+th {
+  font-weight: var(--font-semibold);
+  text-align: left;
+}
+
+caption {
+  font-weight: var(--font-bold);
+  text-align: left;
+  padding: var(--space-2);
+}
+
+/* ==========================================
+   TOOLTIPS
+   ========================================== */
+[role="tooltip"] {
+  background: var(--color-neutral-900);
+  color: var(--color-neutral-0);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  max-width: 250px;
+  z-index: var(--z-tooltip);
+}
+
+/* ==========================================
+   UTILITY CLASSES
+   ========================================== */
+
+/* Visually hidden but accessible to screen readers */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Not visually hidden but not readable by screen readers */
+.aria-hidden {
+  /* Use aria-hidden="true" attribute instead */
+}
+

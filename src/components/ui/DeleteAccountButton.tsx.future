@@ -1,0 +1,123 @@
+/**
+ * Delete Account Button
+ * GDPR Article 17: Right to Erasure
+ */
+
+import React, { useState } from 'react';
+import { useUser } from '@auth0/nextjs-auth0/client';
+
+export default function DeleteAccountButton() {
+  const { user } = useUser();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmText, setConfirmText] = useState('');
+
+  const handleDelete = async () => {
+    if (confirmText !== 'DELETE') {
+      alert('Please type DELETE to confirm');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/user/delete-account', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (response.ok) {
+        alert('Your account has been deleted. You will be logged out.');
+        window.location.href = '/api/auth/logout';
+      } else {
+        alert('Failed to delete account. Please contact support.');
+      }
+    } catch (error) {
+      alert('Error deleting account. Please try again or contact support.');
+    }
+  };
+
+  return (
+    <div style={{
+      padding: 'var(--space-6)',
+      background: 'var(--color-error-light)',
+      borderRadius: 'var(--radius-lg)',
+      border: '2px solid var(--color-error)'
+    }}>
+      <h3 style={{ color: 'var(--color-error-dark)', marginBottom: 'var(--space-3)', fontWeight: 'var(--font-semibold)' }}>
+        ⚠️ Danger Zone
+      </h3>
+      
+      <p style={{ marginBottom: 'var(--space-4)', fontSize: 'var(--text-sm)' }}>
+        Deleting your account will permanently remove all your data including tasks, projects, and settings. 
+        This action cannot be undone.
+      </p>
+      
+      {!showConfirm ? (
+        <button
+          onClick={() => setShowConfirm(true)}
+          style={{
+            background: 'var(--color-error)',
+            color: 'white',
+            padding: '12px 24px',
+            borderRadius: 'var(--radius-lg)',
+            border: 'none',
+            cursor: 'pointer',
+            fontWeight: 'var(--font-semibold)'
+          }}
+        >
+          Delete My Account
+        </button>
+      ) : (
+        <div>
+          <p style={{ fontWeight: 'var(--font-semibold)', marginBottom: 'var(--space-2)' }}>
+            Type DELETE to confirm:
+          </p>
+          <input
+            type="text"
+            value={confirmText}
+            onChange={(e) => setConfirmText(e.target.value)}
+            placeholder="Type DELETE"
+            style={{
+              width: '100%',
+              padding: 'var(--space-3)',
+              borderRadius: 'var(--radius-lg)',
+              border: '2px solid var(--color-error)',
+              marginBottom: 'var(--space-3)',
+              fontSize: '16px'
+            }}
+          />
+          <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+            <button
+              onClick={handleDelete}
+              disabled={confirmText !== 'DELETE'}
+              style={{
+                background: confirmText === 'DELETE' ? 'var(--color-error)' : 'var(--color-neutral-300)',
+                color: 'white',
+                padding: '12px 24px',
+                borderRadius: 'var(--radius-lg)',
+                border: 'none',
+                cursor: confirmText === 'DELETE' ? 'pointer' : 'not-allowed',
+                fontWeight: 'var(--font-semibold)',
+                flex: 1
+              }}
+            >
+              Permanently Delete
+            </button>
+            <button
+              onClick={() => { setShowConfirm(false); setConfirmText(''); }}
+              style={{
+                background: 'var(--color-neutral-200)',
+                padding: '12px 24px',
+                borderRadius: 'var(--radius-lg)',
+                border: 'none',
+                cursor: 'pointer',
+                flex: 1
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+

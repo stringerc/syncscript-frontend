@@ -1,0 +1,560 @@
+# SyncScript Legendary UX - Issue Tree
+# Generated from Implementation Plan
+# Ready for GitHub/Linear import
+
+version: 1.0
+project: syncscript-legendary-ux
+total_issues: 42
+epics: 14
+
+# ============================================================================
+# EPIC 1: WP-ENG-01 - Instantaneous Energy Recalibration 🚨 PRIMARY KPI
+# ============================================================================
+
+- epic:
+    id: WP-ENG-01
+    title: "🚨 PRIMARY: Instantaneous Energy Recalibration (<200ms)"
+    description: |
+      Ensure energy recalibrates automatically and instantly after task completion.
+      BLOCKS: Primary north-star KPI (Energy-Matched Completion 90%)
+    labels: [p0, energy, primary-kpi, phase-1]
+    priority: critical
+    estimated_effort: 6 person-days
+    kpi: energy-matched-completion
+    target: "90% energy-matched completion rate"
+    
+    stories:
+      - story:
+          id: ENG-01-S1
+          title: "Performance audit current energy recalibration"
+          description: "Measure current recalibration latency to establish baseline"
+          acceptance: "Documented: Current recalibration time in ms, bottlenecks identified"
+          effort: 0.5 days
+          
+          tasks:
+            - "Set up performance monitoring for energy updates"
+            - "Complete 20 tasks, measure time from click to energy update"
+            - "Document current implementation (automatic or manual?)"
+            - "Identify bottlenecks (API calls, state updates, re-renders)"
+            - "Create performance baseline report"
+            
+      - story:
+          id: ENG-01-S2
+          title: "Optimize energy recalibration algorithm"
+          description: "Ensure calculation completes in <100ms"
+          acceptance: "Algorithm executes in <100ms for 99% of cases"
+          effort: 2 days
+          
+          tasks:
+            - "Review current energy calculation logic"
+            - "Optimize algorithm (remove unnecessary calculations)"
+            - "Use memoization for repeated calculations"
+            - "Consider Web Worker if needed (probably not)"
+            - "Unit test: 1000 calculations in <100ms total"
+            
+      - story:
+          id: ENG-01-S3
+          title: "Real-time suggestion update on energy change"
+          description: "When energy updates, next suggestion updates immediately"
+          acceptance: "Suggestion refreshes within 100ms of energy change"
+          effort: 2 days
+          
+          tasks:
+            - "Add energy change listener to suggestion engine"
+            - "Re-rank suggestions on energy change"
+            - "Update UI without full re-render (React optimization)"
+            - "Add transition animation (smooth, not jarring)"
+            - "Test: Energy 3→4, suggestion updates instantly"
+            
+      - story:
+          id: ENG-01-S4
+          title: "Visual feedback animation (energy number update)"
+          description: "Animate energy number change so user perceives it"
+          acceptance: "Energy number animates smoothly, users notice change"
+          effort: 1 day
+          
+          tasks:
+            - "Add CSS/Framer Motion animation to energy display"
+            - "Number morphs from 3 to 3.5 (not instant replace)"
+            - "Subtle highlight effect (brief glow)"
+            - "Respects prefers-reduced-motion"
+            - "User testing: 90% notice energy changed"
+            
+      - story:
+          id: ENG-01-S5
+          title: "Instrument energy-matched completion KPI"
+          description: "Track PRIMARY KPI in analytics"
+          acceptance: "Dashboard shows energy-matched completion rate in real-time"
+          effort: 0.5 days
+          
+          tasks:
+            - "Add telemetry event: energy_matched_completion"
+            - "Track: user_energy, task_energy, matched (boolean)"
+            - "Create analytics dashboard widget"
+            - "Set up alerts (if drops below 80%)"
+            - "Baseline measurement: What's current rate?"
+
+# ============================================================================
+# EPIC 2: WP-CTX-01 - Leave-By Chip with Confidence
+# ============================================================================
+
+- epic:
+    id: WP-CTX-01
+    title: "Leave-By Chip with Confidence Level"
+    description: |
+      Display "Leave by 2:30pm (85% confident)" on all location-based events.
+      KPI: On-Time Arrival 65% → 85% (+20pp)
+    labels: [p0, context, table-stakes, phase-1]
+    priority: critical
+    estimated_effort: 18 person-days
+    kpi: on-time-arrival
+    target: "85% on-time arrival rate"
+    
+    stories:
+      - story:
+          id: CTX-01-S1
+          title: "Google Maps API integration"
+          effort: 3 days
+          tasks:
+            - "Set up Google Maps Directions API credentials"
+            - "Create backend proxy endpoint /api/directions"
+            - "Implement caching layer (5min cache per route)"
+            - "Add rate limiting (prevent cost explosion)"
+            - "Test: Get directions for sample address"
+            
+      - story:
+          id: CTX-01-S2
+          title: "Leave-by calculation logic"
+          effort: 3 days
+          tasks:
+            - "Geocode event location (if not already)"
+            - "Fetch directions from user home/current location"
+            - "Extract travel time + traffic delay"
+            - "Add user buffer preference (default +5min)"
+            - "Calculate: leave_by = event_time - travel - buffer"
+            - "Calculate confidence (based on traffic variability)"
+            
+      - story:
+          id: CTX-01-S3
+          title: "Leave-by chip UI component"
+          effort: 3 days
+          tasks:
+            - "Design chip component (Figma → Code)"
+            - "Show: 🚗 Leave by 2:30pm [85% ✓]"
+            - "Color code: Green (plenty), Yellow (tight), Red (late)"
+            - "Tappable to show breakdown modal"
+            - "Responsive (mobile + desktop)"
+            
+      - story:
+          id: CTX-01-S4
+          title: "Real-time traffic monitoring"
+          effort: 2 days
+          tasks:
+            - "Poll traffic API every 5 minutes for upcoming events"
+            - "If travel time changes >5min, recalculate leave-by"
+            - "Update chip in real-time"
+            - "Send notification if user should leave earlier"
+            
+      - story:
+          id: CTX-01-S5
+          title: "Leave-by notifications"
+          effort: 3 days
+          tasks:
+            - "Push notification at leave-by time"
+            - "Early warning (10min before leave-by)"
+            - "Traffic delay alert ('Leave now!')"
+            - "Respect silent hours (no 3am alerts)"
+            - "Test notification delivery (iOS + Android)"
+            
+      - story:
+          id: CTX-01-S6
+          title: "Navigate button (Google Maps handoff)"
+          effort: 2 days
+          tasks:
+            - "Add 'Navigate' button on chip breakdown"
+            - "Deep link to Google Maps with destination"
+            - "Pre-fill navigation app"
+            - "Track handoff rate (analytics)"
+            
+      - story:
+          id: CTX-01-S7
+          title: "Historical accuracy tracking"
+          effort: 2 days
+          tasks:
+            - "Track predicted vs actual arrival times"
+            - "Calculate confidence based on historical accuracy"
+            - "Show user: 'Usually accurate within 7min'"
+            - "Improve predictions over time (learning)"
+
+# ============================================================================
+# EPIC 3: WP-FIN-01 - Comfort Band System
+# ============================================================================
+
+- epic:
+    id: WP-FIN-01
+    title: "Comfort Band System (Min/Ideal/Max Budget)"
+    description: |
+      Users set spending comfort zones per category.
+      KPI: Under-Budget Event Rate 52% → 80% (+28pp)
+    labels: [p0, finance, differentiation, phase-1]
+    priority: critical
+    estimated_effort: 12 person-days
+    kpi: under-budget-event-rate
+    
+    stories:
+      - story:
+          id: FIN-01-S1
+          title: "Comfort band slider UI component"
+          effort: 3 days
+          tasks:
+            - "Design three-handle slider (min/ideal/max)"
+            - "Visual examples for context"
+            - "Smooth dragging interaction"
+            - "Mobile-optimized (touch targets ≥44px)"
+            - "Accessibility: Keyboard adjustable"
+            
+      - story:
+          id: FIN-01-S2
+          title: "Budget categories and defaults"
+          effort: 2 days
+          tasks:
+            - "Define categories: Dining, Entertainment, Shopping, Travel, Custom"
+            - "Research: Average spend by city for defaults"
+            - "Suggest intelligent defaults based on user location"
+            - "Allow custom categories"
+            
+      - story:
+          id: FIN-01-S3
+          title: "Comfort band storage (local-first)"
+          effort: 1 day
+          tasks:
+            - "Store in localStorage (primary)"
+            - "Optional: Encrypted cloud backup"
+            - "Privacy: No server storage by default"
+            - "Export/import functionality"
+            
+      - story:
+          id: FIN-01-S4
+          title: "Comfort band onboarding flow"
+          effort: 3 days
+          tasks:
+            - "Add to new user onboarding"
+            - "'Set your dining budget' step"
+            - "Skip option (can set later)"
+            - "Examples: 'Most users in Seattle spend $30-50 on casual dining'"
+            
+      - story:
+          id: FIN-01-S5
+          title: "Comfort band analytics & experimentation"
+          effort: 3 days
+          tasks:
+            - "Track: comfort_band_set event"
+            - "A/B test: With vs without comfort bands"
+            - "Measure: Under-budget rate over 4 weeks"
+            - "Target: 52% → 75%"
+
+# ============================================================================
+# EPIC 4: WP-PERS-01 - AI Explainability
+# ============================================================================
+
+- epic:
+    id: WP-PERS-01
+    title: "AI Explainability ('Why This?' Tooltips)"
+    description: |
+      Add explanations to every AI suggestion.
+      KPI: Recommendation Acceptance 40% → 60% (+20pp)
+    labels: [p0, ai, trust, phase-1]
+    priority: critical
+    estimated_effort: 8 person-days
+    kpi: recommendation-acceptance
+    
+    stories:
+      - story:
+          id: PERS-01-S1
+          title: "AI reasoning capture system"
+          effort: 3 days
+          tasks:
+            - "Modify AI model to track reasoning (input features used)"
+            - "Capture: urgency_score, energy_match_score, pattern_score, priority_score"
+            - "Store reasoning with each suggestion"
+            - "Return in API: suggestion + reasons array"
+            
+      - story:
+          id: PERS-01-S2
+          title: "'Why this?' modal UI"
+          effort: 3 days
+          tasks:
+            - "Design explanation modal"
+            - "Show 5 reasons with icons:"
+            - "  ✓ Due tomorrow (urgent)"
+            - "  ✓ Matches your energy (3)"
+            - "  ✓ You usually do this Tuesday afternoons"
+            - "  ✓ Priority 4 (important)"
+            - "  ✓ Estimated 45min (you have time)"
+            - "Accessible (screen reader friendly)"
+            
+      - story:
+          id: PERS-01-S3
+          title: "Experiment: Explainability impact"
+          effort: 2 days
+          tasks:
+            - "A/B test: 50% see 'Why?' button, 50% don't"
+            - "Duration: 3 weeks"
+            - "Measure: Acceptance rate, trust survey"
+            - "Hypothesis: 40% → 60% acceptance"
+            - "Success: ≥55% acceptance, 85% find helpful"
+
+# ============================================================================
+# EPIC 5: WP-PAR-01 - Feature Discovery System
+# ============================================================================
+
+- epic:
+    id: WP-PAR-01
+    title: "Progressive Onboarding & Contextual Tips"
+    description: |
+      Fix feature discovery from 40% to 75%.
+      Prevents 26% of churn ($23K/month revenue loss)
+    labels: [p0, discovery, churn-prevention, phase-1]
+    priority: critical
+    estimated_effort: 18 person-days
+    kpi: feature-discovery
+    
+    stories:
+      - story:
+          id: PAR-01-S1
+          title: "Feature categorization system"
+          effort: 2 days
+          tasks:
+            - "Categorize all 105 features: Core (8) / Productivity (15) / Advanced (20+)"
+            - "Define unlock triggers (Day 1, Day 2, Day 4, contextual)"
+            - "Document: Why each feature in each category"
+            
+      - story:
+          id: PAR-01-S2
+          title: "Progressive unlock system"
+          effort: 4 days
+          tasks:
+            - "Day 1: Show only core 8 features"
+            - "Day 2: Reveal productivity features with 'You're ready!'"
+            - "Day 4: Unlock advanced features"
+            - "Hide advanced features initially (not overwhelming)"
+            - "Celebration animation on unlock"
+            
+      - story:
+          id: PAR-01-S3
+          title: "Contextual tip system (50+ tips)"
+          effort: 6 days
+          tasks:
+            - "Define triggers:"
+            - "  - 3 projects → suggest Kanban"
+            - "  - 10 tasks → suggest Gantt"
+            - "  - Complex project → suggest Mind Map"
+            - "Write 50+ contextual tips"
+            - "Design tip UI (non-intrusive popover)"
+            - "Track engagement: tip_shown, tip_action"
+            
+      - story:
+          id: PAR-01-S4
+          title: "Weekly feature spotlight"
+          effort: 3 days
+          tasks:
+            - "Sunday evening modal: 'This week, try: Mind Map!'"
+            - "Explain what it does, when to use"
+            - "One-tap to try with sample data"
+            - "Track engagement"
+            
+      - story:
+          id: PAR-01-S5
+          title: "Discovery analytics dashboard"
+          effort: 2 days
+          tasks:
+            - "Track: feature_discovered event"
+            - "Dashboard: % users discovering each feature"
+            - "Cohort analysis: Day 1 vs Day 30 discovery"
+            - "Target: 75% discover 10+ features"
+            
+      - story:
+          id: PAR-01-S6
+          title: "A/B test: New vs old onboarding"
+          effort: 1 day
+          tasks:
+            - "50/50 split, 4 weeks"
+            - "Measure: Discovery rate, satisfaction"
+            - "Success: Discovery ≥65%"
+
+# ============================================================================
+# QUICK WINS (Week 1-2)
+# ============================================================================
+
+- epic:
+    id: WP-ENG-02
+    title: "Emblem Charge Transparency"
+    labels: [p0, energy, quick-win, phase-1]
+    effort: 4 days
+    stories:
+      - {id: ENG-02-S1, title: "Charge breakdown modal", effort: 2d}
+      - {id: ENG-02-S2, title: "Formula documentation in UI", effort: 1d}
+      - {id: ENG-02-S3, title: "User testing (understand formula?)", effort: 1d}
+
+- epic:
+    id: WP-ENG-03
+    title: "Anti-Gaming System"
+    labels: [p0, energy, integrity, phase-1]
+    effort: 5 days
+    stories:
+      - {id: ENG-03-S1, title: "Cooldown system (10 charges/5min)", effort: 1.5d}
+      - {id: ENG-03-S2, title: "Rapid-fire penalty (-50% charge)", effort: 1.5d}
+      - {id: ENG-03-S3, title: "Pattern detection (undo farming)", effort: 1d}
+      - {id: ENG-03-S4, title: "Audit logging (all charge events)", effort: 1d}
+
+- epic:
+    id: WP-PAR-02
+    title: "Energy-First Onboarding Showcase"
+    labels: [p0, onboarding, differentiation, phase-1]
+    effort: 6 days
+    stories:
+      - {id: PAR-02-S1, title: "Energy-first welcome flow", effort: 3d}
+      - {id: PAR-02-S2, title: "First energy log experience", effort: 2d}
+      - {id: PAR-02-S3, title: "Conversion tracking", effort: 1d}
+
+- epic:
+    id: WP-PAR-03
+    title: "SyncScript vs Competitors Comparison Page"
+    labels: [p1, marketing, quick-win, phase-1]
+    effort: 2 days
+    stories:
+      - {id: PAR-03-S1, title: "Comparison table (features matrix)", effort: 1d}
+      - {id: PAR-03-S2, title: "Highlight unique features (energy, emblems, budget)", effort: 1d}
+
+# ============================================================================
+# BUDGET INTELLIGENCE
+# ============================================================================
+
+- epic:
+    id: WP-FIN-02
+    title: "Budget Fit Scoring with Estimated Costs"
+    labels: [p0, finance, differentiation, phase-1]
+    effort: 15 days
+    dependencies: [WP-FIN-01]
+    stories:
+      - {id: FIN-02-S1, title: "Yelp/Google pricing API integration", effort: 3d}
+      - {id: FIN-02-S2, title: "Budget fit algorithm (0-100 score)", effort: 3d}
+      - {id: FIN-02-S3, title: "Star rating UI (⭐⭐⭐⭐)", effort: 2d}
+      - {id: FIN-02-S4, title: "Filter/sort by budget fit", effort: 3d}
+      - {id: FIN-02-S5, title: "Estimated cost display UI", effort: 2d}
+      - {id: FIN-02-S6, title: "A/B test and validation", effort: 2d}
+
+- epic:
+    id: WP-FIN-03
+    title: "Savings Goal Integration"
+    labels: [p0, finance, behavioral-econ, phase-1]
+    effort: 10 days
+    dependencies: [WP-FIN-01, WP-FIN-02]
+    stories:
+      - {id: FIN-03-S1, title: "Goal creation UI", effort: 2d}
+      - {id: FIN-03-S2, title: "Goal progress widget", effort: 2d}
+      - {id: FIN-03-S3, title: "Choice impact calculation", effort: 2d}
+      - {id: FIN-03-S4, title: "'Saves $10 toward Vacation' display", effort: 2d}
+      - {id: FIN-03-S5, title: "Goal ETA projection", effort: 2d}
+
+# ============================================================================
+# CONTEXT INTELLIGENCE
+# ============================================================================
+
+- epic:
+    id: WP-CTX-02
+    title: "Weather Badges with Severe Weather Warnings"
+    labels: [p0, context, user-delight, phase-1]
+    effort: 10 days
+    stories:
+      - {id: CTX-02-S1, title: "Weather API integration (OpenWeatherMap)", effort: 2d}
+      - {id: CTX-02-S2, title: "Weather icon + temp display inline", effort: 2d}
+      - {id: CTX-02-S3, title: "Severe weather warning badge", effort: 2d}
+      - {id: CTX-02-S4, title: "Hourly forecast modal", effort: 2d}
+      - {id: CTX-02-S5, title: "Reschedule/indoor alternative suggestions", effort: 2d}
+
+# ============================================================================
+# AI ENHANCEMENT
+# ============================================================================
+
+- epic:
+    id: WP-PERS-02
+    title: "Context-Aware AI Ranking"
+    labels: [p0, ai, intelligence, phase-1]
+    effort: 15 days
+    dependencies: [WP-ENG-01, WP-CTX-01, WP-FIN-01, WP-FIN-02]
+    stories:
+      - {id: PERS-02-S1, title: "Collect 6 context signals (energy/budget/location/time/weather/habits)", effort: 3d}
+      - {id: PERS-02-S2, title: "Enhance ranking algorithm with context weights", effort: 5d}
+      - {id: PERS-02-S3, title: "ML model retraining with context features", effort: 4d}
+      - {id: PERS-02-S4, title: "Context badge display ('Energy match!')", effort: 2d}
+      - {id: PERS-02-S5, title: "Validation: Acceptance rate improvement", effort: 1d}
+
+- epic:
+    id: WP-PERS-03
+    title: "Rejection Feedback Loop"
+    labels: [p1, ai, learning, phase-1]
+    effort: 7 days
+    stories:
+      - {id: PERS-03-S1, title: "Rejection reason UI", effort: 2d}
+      - {id: PERS-03-S2, title: "Feedback API endpoint", effort: 2d}
+      - {id: PERS-03-S3, title: "ML model adaptation from feedback", effort: 2d}
+      - {id: PERS-03-S4, title: "Test: Reject 3x, verify learns", effort: 1d}
+
+# ============================================================================
+# INSIGHTS & POLISH
+# ============================================================================
+
+- epic:
+    id: WP-ENG-04
+    title: "Weekly Energy Insights"
+    labels: [p0, energy, insights, phase-1]
+    effort: 8 days
+    stories:
+      - {id: ENG-04-S1, title: "Energy pattern analysis algorithm", effort: 3d}
+      - {id: ENG-04-S2, title: "Heatmap visualization (day × hour)", effort: 2d}
+      - {id: ENG-04-S3, title: "Actionable suggestions generation", effort: 2d}
+      - {id: ENG-04-S4, title: "Weekly summary modal (Sunday 8pm)", effort: 1d}
+
+# ============================================================================
+# METADATA
+# ============================================================================
+
+labels:
+  - p0: "Priority 0 - Must Have (blocks KPIs)"
+  - p1: "Priority 1 - Should Have (enhances KPIs)"
+  - p2: "Priority 2 - Nice to Have"
+  - energy: "Energy/Emblem system"
+  - context: "Context intelligence (location/time/weather)"
+  - finance: "Budget/financial features"
+  - ai: "AI/ML recommendations"
+  - discovery: "Feature discovery/onboarding"
+  - primary-kpi: "Blocks primary north-star KPI"
+  - table-stakes: "Competitive parity requirement"
+  - differentiation: "Unique to SyncScript"
+  - quick-win: "Low effort, high impact"
+  - phase-1: "Ships in Phase 1 (12 weeks)"
+  - phase-2: "Deferred to Phase 2"
+
+milestones:
+  - name: "Quick Wins Complete"
+    date: "Oct 25, 2025"
+    wps: [WP-PAR-03, WP-ENG-02, WP-PAR-02, WP-PERS-01]
+    
+  - name: "Foundation Systems Complete"
+    date: "Nov 15, 2025"
+    wps: [WP-ENG-01, WP-ENG-03, WP-FIN-01, WP-PAR-01]
+    
+  - name: "Intelligence Systems Complete"
+    date: "Dec 20, 2025"
+    wps: [WP-CTX-01, WP-CTX-02, WP-FIN-02, WP-FIN-03, WP-PERS-02]
+    
+  - name: "Phase 1 Complete"
+    date: "Jan 10, 2026"
+    wps: [all]
+    kpis_achieved: [energy-matched-90%, on-time-85%, under-budget-80%, acceptance-70%, discovery-75%]
+
+total_stories: 42
+total_tasks: 150+
+ready_for_import: true
+

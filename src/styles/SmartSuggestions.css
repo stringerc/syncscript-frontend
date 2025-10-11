@@ -363,7 +363,7 @@
 
 .priority-badge.priority-medium {
   background: rgba(245, 166, 35, 0.15);
-  color: #F5A623;
+  color: var(--color-gold);
 }
 
 .due-badge {

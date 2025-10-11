@@ -23,9 +23,9 @@
 }
 
 .voice-toggle-btn.listening {
-  background: linear-gradient(135deg, #10B981, #059669);
+  background: linear-gradient(135deg, var(--color-energy-4), var(--color-success));
   color: white;
-  border-color: #10B981;
+  border-color: var(--color-energy-4);
   animation: pulse-border 2s ease-in-out infinite;
 }
 
@@ -52,14 +52,14 @@
   gap: var(--space-2);
   font-size: var(--text-sm);
   font-weight: var(--font-semibold);
-  color: #10B981;
+  color: var(--color-energy-4);
   margin-bottom: var(--space-3);
 }
 
 .pulse {
   width: 8px;
   height: 8px;
-  background: #10B981;
+  background: var(--color-energy-4);
   border-radius: 50%;
   animation: pulse 1.5s ease-in-out infinite;
 }
@@ -104,17 +104,17 @@
 }
 
 [data-theme="dark"] .voice-status {
-  background: #333333 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  border-color: var(--color-neutral-700) !important;
 }
 
 [data-theme="dark"] .voice-toggle-btn {
-  background: #333333 !important;
-  color: #f5f5f5 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
+  border-color: var(--color-neutral-700) !important;
 }
 
 [data-theme="dark"] .voice-toggle-btn.listening {
-  background: linear-gradient(135deg, #10B981, #059669) !important;
+  background: linear-gradient(135deg, var(--color-energy-4), var(--color-success)) !important;
   color: white !important;
 }

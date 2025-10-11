@@ -139,13 +139,13 @@
 }
 
 [data-theme="dark"] .kanban-modal {
-  background: #2a2a2a !important;
+  background: var(--color-neutral-800) !important;
 }
 
 [data-theme="dark"] .kanban-task-card {
-  background: #333333 !important;
-  color: #f5f5f5 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
+  border-color: var(--color-neutral-700) !important;
 }
 
 @media (max-width: 1024px) {

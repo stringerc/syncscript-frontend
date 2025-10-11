@@ -157,20 +157,20 @@
 }
 
 .filter-btn.tier-gold.active {
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-  border-color: #FFD700;
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-energy-2) 100%);
+  border-color: var(--color-gold);
   color: #333;
 }
 
 .filter-btn.tier-platinum.active {
-  background: linear-gradient(135deg, #E5E4E2 0%, #B0B0B0 100%);
+  background: linear-gradient(135deg, #E5E4E2 0%, var(--color-neutral-400) 100%);
   border-color: #E5E4E2;
   color: #333;
 }
 
 .filter-btn.tier-legendary.active {
-  background: linear-gradient(135deg, #FF6B6B 0%, #8B0000 100%);
-  border-color: #FF6B6B;
+  background: linear-gradient(135deg, var(--color-energy-1) 0%, #8B0000 100%);
+  border-color: var(--color-energy-1);
 }
 
 /* Achievement Grid */

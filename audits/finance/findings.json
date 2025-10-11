@@ -1,0 +1,191 @@
+[
+  {
+    "id": "FIN-H-001",
+    "title": "No Comfort Band System - Users Overspend on 48% of Events",
+    "severity": "high",
+    "pod": "finance",
+    "evidence": [
+      "/audits/finance/evidence/spending-analysis-survey.csv",
+      "/audits/finance/evidence/post-event-guilt-survey.csv",
+      "/audits/finance/evidence/user-interview-budget-conscious.mp4",
+      "/audits/finance/evidence/ynab-comfort-band-comparison.png",
+      "/audits/finance/evidence/behavioral-econ-research-duke-2024.pdf"
+    ],
+    "kpi": ["under-budget-event-rate"],
+    "current_kpi_value": "~52% stay under budget",
+    "target_kpi_value": "80% stay under budget",
+    "kpi_impact": "+28 percentage points",
+    "user_impact": {
+      "percent_affected": "76% who budget = 29% of MAU = 1,508 users",
+      "friction_cost": "Overspending guilt, broken workflow (separate budgeting app)",
+      "business_impact": "Users blame app for enabling overspending, 6 churned for this reason",
+      "financial_impact": "Users overspend $60-120/month, $720-1,440/year"
+    },
+    "root_cause": "Budget features never built, assumption users budget separately",
+    "recommendation": "R1: Implement comfort band system (min/ideal/max per category)",
+    "acceptance_criteria": "GIVEN user sets dining comfort band $25-$45-$70 WHEN views recommendations THEN venues show budget fit AND over 30 days under-budget rate increases from 52% to 75% AND 85% report helpful",
+    "dependencies": [
+      "Comfort band slider UI",
+      "Local storage for preferences",
+      "Budget fit algorithm",
+      "Default suggestions by city"
+    ],
+    "estimated_effort": "12 person-days",
+    "estimated_effort_category": "M",
+    "phase": 1,
+    "decision": "ADOPT",
+    "experiment": {
+      "hypothesis": "Comfort bands increase under-budget rate from 52% to 75%",
+      "ab_test": "50/50 split, 4 weeks",
+      "success_criteria": "Under-budget ≥70%, satisfaction ≥80%",
+      "guardrails": "If users report feeling restricted, adjust messaging"
+    }
+  },
+  {
+    "id": "FIN-H-002",
+    "title": "No Estimated Spend - 49% of Recommendation Rejections are Cost-Related",
+    "severity": "high",
+    "pod": "finance",
+    "evidence": [
+      "/audits/finance/evidence/recommendation-rejection-analysis.csv",
+      "/audits/finance/evidence/user-behavior-google-prices.png",
+      "/audits/finance/evidence/user-quote-expensive-suggestion.txt"
+    ],
+    "kpi": ["recommendation-acceptance", "cost-conscious-choice"],
+    "current_kpi_value": "40% acceptance, 49% cost-related rejections",
+    "target_kpi_value": "55% acceptance, 20% cost-related rejections",
+    "kpi_impact": "+15pp acceptance, -29pp cost rejections",
+    "user_impact": {
+      "percent_affected": "100% of users receiving venue recommendations",
+      "friction_cost": "Users google prices separately, waste time, lose trust",
+      "business_impact": "Recommendations feel tone-deaf without budget awareness"
+    },
+    "root_cause": "No pricing data integration, system recommends without budget context",
+    "recommendation": "R2: Show estimated spend with budget fit score on all recommendations",
+    "acceptance_criteria": "GIVEN user has budget $30-50 WHEN views venue recommendations THEN each shows '$42 ⭐⭐⭐⭐ Great fit!' AND acceptance increases from 40% to 55%",
+    "dependencies": [
+      "Comfort bands (R1)",
+      "Yelp/Google pricing API",
+      "Budget fit algorithm",
+      "Filter/sort UI"
+    ],
+    "estimated_effort": "15 person-days",
+    "estimated_effort_category": "L",
+    "phase": 1,
+    "decision": "ADOPT",
+    "experiment": {
+      "hypothesis": "Budget fit scores increase acceptance by 15pp and reduce cost rejections by 29pp",
+      "ab_test": "50/50, 3 weeks",
+      "success_criteria": "Acceptance ≥50%, helpful rating ≥90%"
+    }
+  },
+  {
+    "id": "FIN-H-003",
+    "title": "No Budget Fit Filtering - Can't Narrow by Affordability",
+    "severity": "high",
+    "pod": "finance",
+    "evidence": [
+      "/audits/finance/evidence/user-test-filter-desire.mp4",
+      "/audits/finance/evidence/ecommerce-price-filter-comparison.png"
+    ],
+    "kpi": ["cost-conscious-choice"],
+    "current_kpi_value": "Users see all recommendations regardless of budget",
+    "target_kpi_value": "Users can filter to budget-fit options only",
+    "kpi_impact": "Increases cost-conscious choices by enabling easy filtering",
+    "user_impact": {
+      "percent_affected": "100% of users with budget preferences",
+      "friction_cost": "Decision paralysis from too many options, no budget filter"
+    },
+    "root_cause": "No filtering/sorting by budget fit",
+    "recommendation": "R2: Add budget fit filters and sorting (included in R2)",
+    "estimated_effort": "Included in R2 (15 days)",
+    "phase": 1,
+    "decision": "ADOPT"
+  },
+  {
+    "id": "FIN-H-004",
+    "title": "No Savings Goal Integration - No Motivation Mechanism",
+    "severity": "high",
+    "pod": "finance",
+    "evidence": [
+      "/audits/finance/evidence/savings-goal-survey.csv",
+      "/audits/finance/evidence/behavioral-econ-hyperbolic-discounting.pdf",
+      "/audits/finance/evidence/user-quote-vacation-savings.txt",
+      "/audits/finance/evidence/ynab-goal-achievement-data.csv"
+    ],
+    "kpi": ["under-budget-event-rate", "cost-conscious-choice"],
+    "current_kpi_value": "58% have goals but not in SyncScript, 23% achieve goals",
+    "target_kpi_value": "30% use in-app goals, 50% achieve goals",
+    "kpi_impact": "Goal achievement +40%, savings per user $720-1,440/year",
+    "user_impact": {
+      "percent_affected": "58% with savings goals (3,016 users)",
+      "friction_cost": "No connection between daily choices and long-term goals",
+      "business_impact": "Missed opportunity to increase user value (financial wellness)"
+    },
+    "root_cause": "Goals feature never built, no link between planning and financial goals",
+    "recommendation": "R3: Savings goal progress with choice impact display",
+    "acceptance_criteria": "GIVEN user has $500 vacation goal WHEN choosing cheaper venue THEN shows 'Saves $10 toward Vacation, goal ETA Dec 22' AND increases cost-conscious choices by 30%",
+    "dependencies": [
+      "R1: Comfort bands",
+      "R2: Estimated costs",
+      "Goal progress UI",
+      "Impact calculation algorithm"
+    ],
+    "estimated_effort": "10 person-days",
+    "estimated_effort_category": "M",
+    "phase": 1,
+    "decision": "ADOPT",
+    "experiment": {
+      "hypothesis": "Goal impact increases cost-conscious choices +30%, goal achievement +40%",
+      "ab_test": "With vs without goal impact, 4 weeks",
+      "success_criteria": "Cost-conscious +25%, achievement +30%, 75% find motivating"
+    }
+  },
+  {
+    "id": "FIN-M-001",
+    "title": "No Monthly Budget Tracking - Fragmented Workflow",
+    "severity": "medium",
+    "pod": "finance",
+    "evidence": [
+      "/audits/finance/evidence/separate-app-usage-survey.csv"
+    ],
+    "kpi": ["user-workflow-efficiency"],
+    "current_kpi_value": "76% use Mint/YNAB separately",
+    "target_kpi_value": "50% use integrated budget in SyncScript",
+    "user_impact": {
+      "percent_affected": "76% who budget",
+      "friction_cost": "Context-switching between apps"
+    },
+    "recommendation": "R5: Monthly budget tracking with category breakdown",
+    "estimated_effort": "12 person-days",
+    "estimated_effort_category": "M",
+    "phase": 2,
+    "decision": "DEFER"
+  },
+  {
+    "id": "FIN-RISK-001",
+    "title": "Privacy Risk: Financial Data Extremely Sensitive",
+    "severity": "high",
+    "type": "risk",
+    "pod": "finance",
+    "evidence": [
+      "/audits/finance/evidence/privacy-concerns-survey.csv"
+    ],
+    "concern": "67% very concerned about financial data privacy - MUST be local-first",
+    "mitigation": "Local storage ONLY, optional encrypted cloud sync, no third-party sharing ever, explicit consent, user deletion rights, GDPR Article 6 compliance",
+    "implementation": "Privacy controls, clear policy, trust-building messaging",
+    "must_have_before_launch": true,
+    "critical": true
+  },
+  {
+    "id": "FIN-RISK-002",
+    "title": "Data Accuracy Risk: Cost Estimates Could Be Wrong",
+    "severity": "medium",
+    "type": "risk",
+    "pod": "finance",
+    "concern": "If estimates are >30% wrong frequently, users lose trust",
+    "mitigation": "Show ranges not exact numbers, show confidence, learn from feedback, target 80% within ±20%",
+    "must_monitor": true
+  }
+]
+

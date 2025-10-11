@@ -1,0 +1,189 @@
+/* Daily Planning */
+.daily-planning-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.daily-planning-modal {
+  background: var(--syncscript-cream-50);
+  border-radius: var(--radius-2xl);
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+}
+
+.daily-planning-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-6);
+  border-bottom: 2px solid var(--syncscript-charcoal-200);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 146, 60, 0.1));
+}
+
+.daily-planning-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.generating-state {
+  text-align: center;
+  padding: var(--space-8);
+}
+
+.time-block {
+  background: white;
+  border: 2px solid;
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+}
+
+.time-block.morning {
+  border-color: #F59E0B;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(251, 191, 36, 0.05));
+}
+
+.time-block.afternoon {
+  border-color: #3B82F6;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(96, 165, 250, 0.05));
+}
+
+.time-block.evening {
+  border-color: #8B5CF6;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(168, 85, 247, 0.05));
+}
+
+.block-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.block-header h3 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  margin: 0;
+}
+
+.energy-badge {
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  color: white;
+}
+
+.energy-badge.high {
+  background: #10B981;
+}
+
+.energy-badge.medium {
+  background: #F59E0B;
+}
+
+.energy-badge.low {
+  background: #6B7280;
+}
+
+.focus-time {
+  padding: 4px 12px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+}
+
+.block-message {
+  font-size: var(--text-base);
+  color: var(--syncscript-charcoal-700);
+  margin: 0 0 var(--space-3) 0;
+  line-height: 1.5;
+}
+
+.block-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.plan-task {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}
+
+.task-icon {
+  color: var(--syncscript-blue-500);
+}
+
+.tips-section {
+  background: rgba(139, 92, 246, 0.05);
+  border: 2px solid rgba(139, 92, 246, 0.2);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+}
+
+.tips-section h4 {
+  font-size: var(--text-base);
+  font-weight: var(--font-bold);
+  margin: 0 0 var(--space-3) 0;
+}
+
+.tips-section ul {
+  margin: 0;
+  padding-left: var(--space-4);
+}
+
+.tips-section li {
+  margin-bottom: var(--space-2);
+  color: var(--syncscript-charcoal-700);
+}
+
+.daily-planning-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-6);
+  border-top: 2px solid var(--syncscript-charcoal-200);
+}
+
+[data-theme="dark"] .daily-planning-modal {
+  background: #2a2a2a !important;
+}
+
+[data-theme="dark"] .time-block {
+  background: #333333 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme="dark"] .plan-task {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+@media (max-width: 768px) {
+  .block-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

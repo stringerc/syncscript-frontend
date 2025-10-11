@@ -265,7 +265,7 @@
 
 /* Dark Mode */
 [data-theme="dark"] .advanced-search-modal {
-  background: #2a2a2a !important;
+  background: var(--color-neutral-800) !important;
 }
 
 [data-theme="dark"] .search-input,
@@ -273,9 +273,9 @@
 [data-theme="dark"] .sort-order-btn,
 [data-theme="dark"] .tag-btn,
 [data-theme="dark"] .save-search-input {
-  background: #333333 !important;
-  color: #f5f5f5 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
+  border-color: var(--color-neutral-700) !important;
 }
 
 [data-theme="dark"] .tag-btn.selected {
@@ -286,7 +286,7 @@
 [data-theme="dark"] .saved-search-btn {
   background: rgba(59, 130, 246, 0.15) !important;
   border-color: rgba(59, 130, 246, 0.4) !important;
-  color: #f5f5f5 !important;
+  color: var(--color-neutral-100) !important;
 }
 
 /* Responsive */

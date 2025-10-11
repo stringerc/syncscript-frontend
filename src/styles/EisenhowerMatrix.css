@@ -64,22 +64,22 @@
 }
 
 .q1-urgent-important {
-  border-color: #EF4444;
+  border-color: var(--color-energy-1);
   background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(239, 68, 68, 0.1));
 }
 
 .q2-not-urgent-important {
-  border-color: #F59E0B;
+  border-color: var(--color-energy-3);
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(245, 158, 11, 0.1));
 }
 
 .q3-urgent-not-important {
-  border-color: #F97316;
+  border-color: var(--color-energy-2);
   background: linear-gradient(135deg, rgba(249, 115, 22, 0.05), rgba(249, 115, 22, 0.1));
 }
 
 .q4-not-urgent-not-important {
-  border-color: #9CA3AF;
+  border-color: var(--color-neutral-400);
   background: linear-gradient(135deg, rgba(156, 163, 175, 0.05), rgba(156, 163, 175, 0.1));
 }
 
@@ -187,18 +187,18 @@
   border-radius: 50%;
 }
 
-.legend-dot.red { background: #EF4444; }
-.legend-dot.yellow { background: #F59E0B; }
-.legend-dot.orange { background: #F97316; }
-.legend-dot.gray { background: #9CA3AF; }
+.legend-dot.red { background: var(--color-energy-1); }
+.legend-dot.yellow { background: var(--color-energy-3); }
+.legend-dot.orange { background: var(--color-energy-2); }
+.legend-dot.gray { background: var(--color-neutral-400); }
 
 [data-theme="dark"] .eisenhower-modal {
-  background: #2a2a2a !important;
+  background: var(--color-neutral-800) !important;
 }
 
 [data-theme="dark"] .eisenhower-task-card {
-  background: #333333 !important;
-  color: #f5f5f5 !important;
+  background: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
 }
 
 @media (max-width: 1024px) {

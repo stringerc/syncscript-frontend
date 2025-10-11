@@ -299,7 +299,7 @@
 }
 
 .insight-card.insight-warning {
-  border-left-color: #F59E0B;
+  border-left-color: var(--color-energy-3);
   background: linear-gradient(to right, rgba(245, 158, 11, 0.05), white);
 }
 

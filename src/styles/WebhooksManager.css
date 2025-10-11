@@ -98,7 +98,7 @@
 }
 
 .webhook-toggle input:checked + .toggle-slider {
-  background-color: #10B981;
+  background-color: var(--color-energy-4);
 }
 
 .webhook-toggle input:checked + .toggle-slider:before {
@@ -202,11 +202,11 @@
 }
 
 [data-theme="dark"] .webhooks-modal {
-  background: #2a2a2a !important;
+  background: var(--color-neutral-800) !important;
 }
 
 [data-theme="dark"] .webhook-card,
 [data-theme="dark"] .event-checkbox {
-  background: #333333 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  border-color: var(--color-neutral-700) !important;
 }

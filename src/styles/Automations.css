@@ -122,7 +122,7 @@
 }
 
 .automation-toggle input:checked + .toggle-slider {
-  background-color: #10B981;
+  background-color: var(--color-energy-4);
 }
 
 .automation-toggle input:checked + .toggle-slider:before {
@@ -208,8 +208,8 @@
 }
 
 .add-automation-btn:hover {
-  border-color: #8B5CF6;
-  color: #8B5CF6;
+  border-color: var(--color-energy-5);
+  color: var(--color-energy-5);
   background: rgba(139, 92, 246, 0.05);
 }
 
@@ -234,10 +234,10 @@
 }
 
 [data-theme="dark"] .automations-modal {
-  background: #2a2a2a !important;
+  background: var(--color-neutral-800) !important;
 }
 
 [data-theme="dark"] .automation-card {
-  background: #333333 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  border-color: var(--color-neutral-700) !important;
 }

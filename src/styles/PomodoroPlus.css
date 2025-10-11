@@ -60,7 +60,7 @@
 }
 
 .preset-btn.active {
-  border-color: #EF4444;
+  border-color: var(--color-energy-1);
   background: rgba(239, 68, 68, 0.05);
 }
 
@@ -96,7 +96,7 @@
 }
 
 .timer-value.active {
-  color: #EF4444;
+  color: var(--color-energy-1);
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -159,16 +159,16 @@
 }
 
 [data-theme="dark"] .pomodoro-plus-modal {
-  background: #2a2a2a !important;
+  background: var(--color-neutral-800) !important;
 }
 
 [data-theme="dark"] .preset-btn {
-  background: #333333 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  border-color: var(--color-neutral-700) !important;
 }
 
 [data-theme="dark"] .timer-value {
-  color: #f5f5f5 !important;
+  color: var(--color-neutral-100) !important;
 }
 
 @media (max-width: 768px) {

@@ -78,7 +78,7 @@
 
 [data-theme="dark"] .share-link-input,
 [data-theme="dark"] .qr-placeholder {
-  background: #333333 !important;
-  color: #f5f5f5 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
+  border-color: var(--color-neutral-700) !important;
 }

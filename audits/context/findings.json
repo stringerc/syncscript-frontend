@@ -1,0 +1,227 @@
+[
+  {
+    "id": "CTX-H-001",
+    "title": "No Leave-By Calculations - Users Arrive Late 30-40% of Time",
+    "severity": "high",
+    "pod": "context",
+    "evidence": [
+      "/audits/context/evidence/user-test-oct10.mp4",
+      "/audits/context/evidence/support-tickets.csv",
+      "/audits/context/evidence/google-calendar-comparison.png",
+      "/audits/context/evidence/user-quote-sarah-m.txt"
+    ],
+    "kpi": ["on-time-arrival"],
+    "current_kpi_value": "~65% (estimated)",
+    "target_kpi_value": "85%",
+    "kpi_impact": "+20 percentage points",
+    "user_impact": {
+      "percent_affected": "100% of users with location events (85% of active users)",
+      "friction_cost": "3.5 minutes per event, 14 minutes per day",
+      "business_impact": "Primary churn reason, -15 NPS points, $15K/month revenue loss"
+    },
+    "root_cause": "No integration with maps/traffic APIs, no UI component for leave-by display",
+    "recommendation": "R1: Implement Leave-By Chip with confidence level",
+    "acceptance_criteria": "GIVEN user creates event at 3pm with location WHEN saved THEN leave-by chip shows '2:30pm ±5min' with 85% confidence AND on-time arrival increases to 85%",
+    "dependencies": [
+      "Google Maps Directions API",
+      "Real-time traffic monitoring",
+      "User buffer preferences",
+      "Notification system"
+    ],
+    "estimated_effort": "18 person-days",
+    "estimated_effort_category": "L",
+    "phase": 1,
+    "decision": "ADOPT",
+    "experiment": {
+      "hypothesis": "Leave-by chips increase on-time arrival from 65% to 85%",
+      "ab_test": "50/50 split, 4 weeks",
+      "success_criteria": "On-time rate ≥80%, trust ≥60%, engagement ≥70%",
+      "guardrails": "LCP <1.6s, accuracy >85%, costs <$500/month"
+    }
+  },
+  {
+    "id": "CTX-H-002",
+    "title": "No Weather Integration - 31% of Cancellations Weather-Related",
+    "severity": "high",
+    "pod": "context",
+    "evidence": [
+      "/audits/context/evidence/weather-cancellations.csv",
+      "/audits/context/evidence/user-interview-oct9.mp4",
+      "/audits/context/evidence/fantastical-weather.png",
+      "/audits/context/evidence/feature-requests.csv"
+    ],
+    "kpi": ["user-satisfaction", "feature-discovery"],
+    "current_kpi_value": "46 weather-related failures per week",
+    "target_kpi_value": "14 failures per week (-70%)",
+    "kpi_impact": "70% reduction in weather failures",
+    "user_impact": {
+      "percent_affected": "40% of events (outdoor, weather-sensitive)",
+      "friction_cost": "Users check weather app separately for every outdoor event",
+      "business_impact": "Ruined events damage trust, #2 most requested feature"
+    },
+    "root_cause": "No weather API integration, no UI for weather display",
+    "recommendation": "R2: Implement weather badges with severe weather warnings",
+    "acceptance_criteria": "GIVEN outdoor event tomorrow WHEN viewing calendar THEN weather shows '🌧️ 65°F, 80% rain' AND warning '⚠️ Thunderstorms' AND alternatives suggested AND failures drop 70%",
+    "dependencies": [
+      "Weather API (OpenWeatherMap)",
+      "Event location geocoding",
+      "Severe weather thresholds",
+      "Recommendation engine"
+    ],
+    "estimated_effort": "10 person-days",
+    "estimated_effort_category": "M",
+    "phase": 1,
+    "decision": "ADOPT",
+    "experiment": {
+      "hypothesis": "Weather badges reduce cancellations by 70%, increase satisfaction by 25%",
+      "ab_test": "50/50 split, 2 weeks",
+      "success_criteria": "Cancellation rate -50%, satisfaction +20%, 90% report helpful",
+      "guardrails": "Performance impact <100ms, API costs <$200/month"
+    }
+  },
+  {
+    "id": "CTX-H-003",
+    "title": "No ETA Reliability - Only 23% Trust Platform for Time-Sensitive Events",
+    "severity": "high",
+    "pod": "context",
+    "evidence": [
+      "/audits/context/evidence/trust-survey-oct8.csv",
+      "/audits/context/evidence/user-behavior-analysis.png",
+      "/audits/context/evidence/competitor-motion-confidence.png"
+    ],
+    "kpi": ["user-trust", "platform-positioning"],
+    "current_kpi_value": "23% trust for time-sensitive events",
+    "target_kpi_value": "70% trust",
+    "kpi_impact": "+47 percentage points trust",
+    "user_impact": {
+      "percent_affected": "77% don't fully trust scheduling features",
+      "friction_cost": "Users double-check every event in Google Calendar",
+      "business_impact": "Platform seen as 'task app only', blocks enterprise sales"
+    },
+    "root_cause": "No historical accuracy tracking, no confidence levels, no learning from arrivals",
+    "recommendation": "R1: Confidence levels as part of leave-by feature",
+    "acceptance_criteria": "GIVEN user uses leave-by for 2 weeks WHEN surveyed THEN 70% trust predictions AND 85% follow leave-by recommendations",
+    "dependencies": [
+      "Historical arrival tracking",
+      "Confidence calculation algorithm",
+      "User feedback loop"
+    ],
+    "estimated_effort": "Included in R1 (18 days)",
+    "estimated_effort_category": "L",
+    "phase": 1,
+    "decision": "ADOPT",
+    "experiment": {
+      "hypothesis": "Showing confidence levels increases trust from 23% to 70%",
+      "measurement": "Pre/post surveys, behavioral tracking (do users follow recommendations?)",
+      "success_criteria": "Trust ≥60%, follow-through ≥75%"
+    }
+  },
+  {
+    "id": "CTX-H-004",
+    "title": "No Multi-Modal Transit - 22% of Users (Non-Drivers) Underserved",
+    "severity": "high",
+    "pod": "context",
+    "evidence": [
+      "/audits/context/evidence/urban-user-demographics.csv",
+      "/audits/context/evidence/transit-feature-requests.csv",
+      "/audits/context/evidence/user-quote-transit.txt"
+    ],
+    "kpi": ["addressable-market", "feature-discovery"],
+    "current_kpi_value": "0% transit support, 22% users underserved",
+    "target_kpi_value": "100% multi-modal support",
+    "kpi_impact": "+22% addressable market",
+    "user_impact": {
+      "percent_affected": "22% of user base (1,144 users) - urban, non-drivers",
+      "friction_cost": "Feature completely unavailable, users feel excluded",
+      "business_impact": "Can't target urban professional market, losing 22% potential conversions"
+    },
+    "root_cause": "Car-centric assumption, no transit API integration",
+    "recommendation": "R3: Multi-modal transit support (Car/Transit/Walk/Bike/Rideshare)",
+    "acceptance_criteria": "GIVEN urban user planning commute WHEN selects Transit mode THEN sees accurate subway/bus times with delays AND leave-by accounts for walking to station",
+    "dependencies": [
+      "Google Maps Transit API or Transit app APIs",
+      "Mode selector UI",
+      "Transit-specific calculations (walking to station, waiting time)"
+    ],
+    "estimated_effort": "25 person-days",
+    "estimated_effort_category": "XL",
+    "phase": 2,
+    "decision": "DEFER",
+    "rationale": "Critical for urban market but complex - ship car mode first, add transit in Phase 2"
+  },
+  {
+    "id": "CTX-M-001",
+    "title": "No Time-Zone Intelligence - Remote Users Miss Meetings",
+    "severity": "medium",
+    "pod": "context",
+    "evidence": [
+      "/audits/context/evidence/remote-user-feedback.txt",
+      "/audits/context/evidence/timezone-confusion-tickets.csv"
+    ],
+    "kpi": ["on-time-arrival"],
+    "current_kpi_value": "Unknown missed meeting rate for remote users",
+    "target_kpi_value": "0 timezone-related missed meetings",
+    "kpi_impact": "Eliminates timezone confusion for 18% of users",
+    "user_impact": {
+      "percent_affected": "18% of users (937 users) - remote workers, travelers",
+      "friction_cost": "Confusion about meeting times, occasional missed meetings",
+      "business_impact": "Professional embarrassment, reduces platform trust for remote teams"
+    },
+    "root_cause": "Only shows local timezone, no dual-timezone display",
+    "recommendation": "R4: Time-zone intelligence (show both local and event timezone)",
+    "acceptance_criteria": "GIVEN remote meeting at 9am EST WHEN user in PST views THEN shows '9am EST (6am PST)' clearly",
+    "dependencies": [
+      "Timezone detection",
+      "Dual-timezone UI component"
+    ],
+    "estimated_effort": "5 person-days",
+    "estimated_effort_category": "S",
+    "phase": 2,
+    "decision": "ADOPT"
+  },
+  {
+    "id": "CTX-M-002",
+    "title": "No Offline ETA - Mobile Users Can't Access Info Without Internet",
+    "severity": "medium",
+    "pod": "context",
+    "evidence": [
+      "/audits/context/evidence/subway-user-complaint.txt"
+    ],
+    "kpi": ["mobile-satisfaction"],
+    "user_impact": {
+      "percent_affected": "40% of mobile users during commutes",
+      "friction_cost": "Can't access context info when offline (subway, airplane)"
+    },
+    "recommendation": "R5: Offline ETA caching",
+    "estimated_effort": "8 person-days",
+    "estimated_effort_category": "M",
+    "phase": "backlog",
+    "decision": "DEFER"
+  },
+  {
+    "id": "CTX-RISK-001",
+    "title": "Privacy Risk: Continuous Location Tracking Concerns",
+    "severity": "high",
+    "type": "risk",
+    "pod": "context",
+    "evidence": [
+      "/audits/context/evidence/privacy-survey-oct2025.csv"
+    ],
+    "concern": "34% of users concerned about location tracking for ETA features",
+    "mitigation": "Local-first storage, explicit opt-in, user controls, GDPR compliance, no server storage",
+    "implementation": "Privacy controls in Settings → Location → Context Awareness",
+    "must_have_before_launch": true
+  },
+  {
+    "id": "CTX-RISK-002",
+    "title": "Performance Risk: Maps/Weather API Latency",
+    "severity": "medium",
+    "type": "risk",
+    "pod": "context",
+    "concern": "External APIs could slow down app, impact LCP",
+    "mitigation": "Aggressive caching (5min traffic, 30min weather), background fetch, timeout fallbacks, performance monitoring",
+    "target": "LCP remains <1.4s, leave-by calculation <200ms total",
+    "must_monitor": true
+  }
+]
+

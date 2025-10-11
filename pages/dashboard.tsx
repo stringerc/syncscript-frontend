@@ -89,6 +89,7 @@ import { Subtask } from '../src/utils/subtaskUtils';
 import { TaskNote } from '../src/utils/noteUtils';
 import { RecurrenceConfig, calculateNextDueDate, shouldEndRecurrence } from '../src/utils/recurrenceUtils';
 import { checkQuickWins, saveQuickWinPoints } from '../src/utils/quickWinBadges';
+import { recalibrateEnergy, isEnergyMatched, formatEnergyDelta, getEnergyLabel } from '../src/utils/energyRecalibration';
 
 interface Task {
   id: string;
@@ -129,6 +130,7 @@ export default function Dashboard() {
   const authenticatedFetch = useAuthenticatedFetch();
   
   const [currentEnergy, setCurrentEnergy] = React.useState(3);
+  const [lastEnergyLogTime, setLastEnergyLogTime] = React.useState<number>(Date.now()); // WP-ENG-01: Track for recalibration
   const [tasks, setTasks] = React.useState<Task[]>([]);
   const [projects, setProjects] = React.useState<Project[]>([]);
   const [energyLogs, setEnergyLogs] = React.useState<Array<{ level: number; timestamp: string }>>([]);
@@ -413,6 +415,7 @@ export default function Dashboard() {
   const handleEnergyChange = async (energy: number) => {
     const previousEnergy = currentEnergy;
     setCurrentEnergy(energy);
+    setLastEnergyLogTime(Date.now()); // WP-ENG-01: Track manual energy logs
     
     const energyLabels = ['', 'Low', 'Medium-Low', 'Medium', 'High', 'Peak'];
     
@@ -455,7 +458,12 @@ export default function Dashboard() {
 
   const handleTaskComplete = async (taskId: string) => {
     try {
+      const performanceStart = performance.now(); // WP-ENG-01: Performance tracking
       const completedTask = tasks.find(t => t.id === taskId);
+      
+      if (!completedTask) {
+        throw new Error('Task not found');
+      }
       
       const response = await authenticatedFetch(`/api/tasks/${taskId}/complete`, {
         method: 'POST',
@@ -468,6 +476,37 @@ export default function Dashboard() {
         setTasks(prev => prev.map(task => 
           task.id === taskId ? { ...task, completed: true } : task
         ));
+        
+        // ✨ WP-ENG-01: AUTOMATIC ENERGY RECALIBRATION (PRIMARY KPI)
+        const recalibrationResult = recalibrateEnergy(
+          currentEnergy,
+          completedTask,
+          lastEnergyLogTime,
+          'success' // Assume success for now
+        );
+        
+        // Update energy state immediately
+        setCurrentEnergy(recalibrationResult.newEnergy);
+        setLastEnergyLogTime(Date.now());
+        
+        // Track PRIMARY KPI: Energy-Matched Completion
+        const matched = isEnergyMatched(currentEnergy, completedTask.energy_requirement);
+        
+        // Log to console for now (will add analytics later)
+        console.log('🎯 Energy-Matched Completion:', {
+          taskId,
+          user_energy: currentEnergy,
+          task_energy: completedTask.energy_requirement,
+          matched,
+          new_energy: recalibrationResult.newEnergy,
+          delta: recalibrationResult.delta,
+          reason: recalibrationResult.reason
+        });
+        
+        // Performance measurement
+        const performanceEnd = performance.now();
+        const recalibrationLatency = performanceEnd - performanceStart;
+        console.log(`⚡ Energy recalibration latency: ${recalibrationLatency.toFixed(2)}ms`);
         
         // Check for quick wins!
         const quickWins = checkQuickWins(
@@ -501,10 +540,17 @@ export default function Dashboard() {
           });
         }
 
-        toast.success(`Task completed! +${data.points_earned} points earned! 🎉`, {
-          duration: 4000,
-          icon: '✅',
-        });
+        // Enhanced toast with energy update
+        const energyDelta = formatEnergyDelta(recalibrationResult.delta);
+        const energyLabel = getEnergyLabel(recalibrationResult.newEnergy);
+        
+        toast.success(
+          `Task completed! +${data.points_earned} points | Energy: ${recalibrationResult.newEnergy.toFixed(1)}⚡ ${energyDelta} (${energyLabel})${matched ? ' 🎯' : ''}`,
+          {
+            duration: 5000,
+            icon: matched ? '🎯' : '✅',
+          }
+        );
 
         // Handle recurring task - create next instance
         if (completedTask?.recurrence && completedTask.recurrence.frequency !== 'none' && completedTask.recurrence.is_active) {
@@ -1102,9 +1148,38 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard">
+      {/* Skip Link for Accessibility - BLOCKER #4 */}
+      <a 
+        href="#main-content" 
+        className="skip-link"
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          zIndex: 'var(--z-max)',
+          padding: 'var(--space-4)',
+          background: 'var(--color-primary-500)',
+          color: 'white',
+          textDecoration: 'none',
+          borderRadius: 'var(--radius-md)',
+          fontWeight: 'var(--font-weight-semibold)'
+        }}
+        onFocus={(e) => {
+          e.currentTarget.style.left = 'var(--space-4)';
+          e.currentTarget.style.top = 'var(--space-4)';
+        }}
+        onBlur={(e) => {
+          e.currentTarget.style.left = '-9999px';
+          e.currentTarget.style.top = '0';
+        }}
+      >
+        Skip to main content
+      </a>
+
       {/* Header */}
       <motion.header 
         className="dashboard-header"
+        role="banner"
+        aria-label="Dashboard header"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
@@ -1146,24 +1221,24 @@ export default function Dashboard() {
               </div>
               
               {/* Compact Stats */}
-              <div className="compact-stats">
-                <div className="stat-item">
-                  <span className="stat-icon">✅</span>
+              <div className="compact-stats" role="group" aria-label="User statistics">
+                <div className="stat-item" role="status" aria-label={`${completedTasks.length} tasks completed today`}>
+                  <span className="stat-icon" aria-hidden="true">✅</span>
                   <span className="stat-text">{completedTasks.length}</span>
                 </div>
-                <div className="stat-item">
-                  <span className="stat-icon">🔥</span>
+                <div className="stat-item" role="status" aria-label={`${streakData.loginStreak} day login streak`}>
+                  <span className="stat-icon" aria-hidden="true">🔥</span>
                   <span className="stat-text">{streakData.loginStreak}</span>
                 </div>
-                <div className="stat-item">
-                  <span className="stat-icon">📋</span>
+                <div className="stat-item" role="status" aria-label={`${tasks.filter(t => !t.completed).length} active tasks`}>
+                  <span className="stat-icon" aria-hidden="true">📋</span>
                   <span className="stat-text">{tasks.filter(t => !t.completed).length}</span>
                 </div>
               </div>
             </div>
             
             {/* Action Buttons - BLOCKER #3: Simplified to 6 items */}
-            <div className="header-actions" style={{ gap: 'var(--space-3)' }}>
+            <nav className="header-actions" aria-label="Main navigation" style={{ gap: 'var(--space-3)' }}>
               {/* Notifications */}
               <button
                 className="btn btn-secondary notif-btn"
@@ -1260,13 +1335,13 @@ export default function Dashboard() {
                 </svg>
                 Logout
               </Link>
-            </div>
+            </nav>
           </div>
         </div>
       </motion.header>
 
       {/* Main Content */}
-      <main className="dashboard-main">
+      <main id="main-content" className="dashboard-main" role="main" aria-label="Dashboard content">
         {/* Analytics Dashboard */}
         {showAnalytics && (
           <motion.div
@@ -1306,12 +1381,13 @@ export default function Dashboard() {
         {/* Energy Selector Section */}
         <motion.section 
           className="dashboard-section"
+          aria-labelledby="energy-section-title"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
         >
           <div className="section-header">
-            <h2 className="section-title">Current Energy Level</h2>
+            <h2 id="energy-section-title" className="section-title">Current Energy Level</h2>
             <p className="section-description">
               Select your current energy to see tasks matched to your capacity
             </p>
@@ -1376,6 +1452,7 @@ export default function Dashboard() {
         {/* Projects Section - Collapsible */}
         <motion.section 
           className="dashboard-section"
+          aria-labelledby="projects-section-title"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}

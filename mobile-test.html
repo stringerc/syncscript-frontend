@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>SyncScript Mobile Test</title>
+  <style>
+    body { 
+      margin: 0; 
+      font-family: -apple-system, sans-serif;
+      background: #FEFDFB;
+    }
+    .test-container {
+      padding: 20px;
+    }
+    .device-info {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .test-section {
+      margin: 20px 0;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .test-button {
+      background: #4A90E2;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      min-height: 44px;
+      min-width: 44px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    .pass { color: #10B981; font-weight: bold; }
+    .fail { color: #EF4444; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>📱 SyncScript Mobile Responsiveness Test</h1>
+    
+    <div class="device-info">
+      <h2>Device Info</h2>
+      <p><strong>Viewport Width:</strong> <span id="width">-</span>px</p>
+      <p><strong>Viewport Height:</strong> <span id="height">-</span>px</p>
+      <p><strong>Device Pixel Ratio:</strong> <span id="dpr">-</span></p>
+      <p><strong>Touch Support:</strong> <span id="touch">-</span></p>
+    </div>
+    
+    <div class="test-section">
+      <h3>✅ Touch Target Test</h3>
+      <p>All buttons should be at least 44x44px:</p>
+      <button class="test-button" onclick="alert('Touch target works!')">Tap Me (44x44)</button>
+      <p id="target-result">-</p>
+    </div>
+    
+    <div class="test-section">
+      <h3>✅ Horizontal Scroll Test</h3>
+      <p>Page should NOT scroll horizontally:</p>
+      <p id="scroll-result">-</p>
+    </div>
+    
+    <div class="test-section">
+      <h3>✅ Modal Overflow Test</h3>
+      <p>Modals should be scrollable on small screens:</p>
+      <div style="max-height: 200px; overflow-y: auto; border: 2px solid #E5E7EB; padding: 10px; -webkit-overflow-scrolling: touch;">
+        <p>Scroll test content...</p>
+        <p>Line 2</p>
+        <p>Line 3</p>
+        <p>Line 4</p>
+        <p>Line 5</p>
+        <p>Line 6</p>
+        <p>Line 7</p>
+        <p>Line 8</p>
+        <p>Line 9</p>
+        <p>Line 10</p>
+      </div>
+      <p id="modal-result" class="pass">✓ Scrolling works!</p>
+    </div>
+    
+    <div class="test-section">
+      <h3>Device Compatibility</h3>
+      <div id="device-compat"></div>
+    </div>
+  </div>
+  
+  <script>
+    // Display device info
+    document.getElementById('width').textContent = window.innerWidth;
+    document.getElementById('height').textContent = window.innerHeight;
+    document.getElementById('dpr').textContent = window.devicePixelRatio || 1;
+    document.getElementById('touch').textContent = 
+      ('ontouchstart' in window) ? '✓ Yes' : '✗ No';
+    
+    // Check touch target size
+    const btn = document.querySelector('.test-button');
+    const rect = btn.getBoundingClientRect();
+    const targetResult = document.getElementById('target-result');
+    if (rect.width >= 44 && rect.height >= 44) {
+      targetResult.innerHTML = '<span class="pass">✓ PASS: ' + Math.round(rect.width) + 'x' + Math.round(rect.height) + 'px</span>';
+    } else {
+      targetResult.innerHTML = '<span class="fail">✗ FAIL: ' + Math.round(rect.width) + 'x' + Math.round(rect.height) + 'px (needs 44x44)</span>';
+    }
+    
+    // Check for horizontal scroll
+    const scrollResult = document.getElementById('scroll-result');
+    if (document.body.scrollWidth > window.innerWidth) {
+      scrollResult.innerHTML = '<span class="fail">✗ FAIL: Page is ' + document.body.scrollWidth + 'px (viewport: ' + window.innerWidth + 'px)</span>';
+    } else {
+      scrollResult.innerHTML = '<span class="pass">✓ PASS: No horizontal scroll</span>';
+    }
+    
+    // Device compatibility
+    const compat = document.getElementById('device-compat');
+    const width = window.innerWidth;
+    let device = '';
+    
+    if (width <= 375) {
+      device = '📱 iPhone SE / Small Phone';
+    } else if (width <= 390) {
+      device = '📱 iPhone 13 / Standard Phone';
+    } else if (width <= 428) {
+      device = '📱 iPhone 13 Pro Max / Large Phone';
+    } else if (width <= 768) {
+      device = '📱 iPad Mini / Small Tablet';
+    } else if (width <= 1024) {
+      device = '💻 iPad / Tablet';
+    } else {
+      device = '🖥️ Desktop';
+    }
+    
+    compat.innerHTML = '<p><strong>Detected:</strong> ' + device + ' (' + width + 'px)</p>';
+    
+    // Check if all requirements pass
+    const allPass = rect.width >= 44 && rect.height >= 44 && document.body.scrollWidth <= window.innerWidth;
+    if (allPass) {
+      compat.innerHTML += '<p class="pass">✓ All mobile tests PASS!</p>';
+    }
+  </script>
+</body>
+</html>

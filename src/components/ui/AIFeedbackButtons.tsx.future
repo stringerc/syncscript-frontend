@@ -1,0 +1,88 @@
+/**
+ * AI Feedback Buttons
+ * AI Safety requirement: Allow users to rate AI suggestions
+ */
+
+import React, { useState } from 'react';
+
+interface AIFeedbackButtonsProps {
+  suggestionId: string;
+  onFeedback?: (rating: 'up' | 'down') => void;
+}
+
+export default function AIFeedbackButtons({ suggestionId, onFeedback }: AIFeedbackButtonsProps) {
+  const [feedback, setFeedback] = useState<'up' | 'down' | null>(null);
+
+  const handleFeedback = async (rating: 'up' | 'down') => {
+    setFeedback(rating);
+    
+    // Save feedback
+    try {
+      await fetch('/api/ai/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          suggestionId,
+          rating,
+          timestamp: new Date().toISOString()
+        })
+      });
+      
+      onFeedback?.(rating);
+    } catch (error) {
+      console.error('Failed to save feedback:', error);
+    }
+  };
+
+  return (
+    <div style={{
+      display: 'flex',
+      gap: 'var(--space-2)',
+      alignItems: 'center'
+    }}>
+      <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-neutral-600)' }}>
+        Helpful?
+      </span>
+      <button
+        onClick={() => handleFeedback('up')}
+        aria-label="This suggestion was helpful"
+        style={{
+          background: feedback === 'up' ? 'var(--color-success-light)' : 'transparent',
+          border: '1px solid var(--color-neutral-300)',
+          borderRadius: 'var(--radius-md)',
+          padding: 'var(--space-1) var(--space-2)',
+          cursor: 'pointer',
+          fontSize: '18px',
+          minWidth: '36px',
+          minHeight: '36px',
+          transition: 'var(--transition-all)'
+        }}
+      >
+        👍
+      </button>
+      <button
+        onClick={() => handleFeedback('down')}
+        aria-label="This suggestion was not helpful"
+        style={{
+          background: feedback === 'down' ? 'var(--color-error-light)' : 'transparent',
+          border: '1px solid var(--color-neutral-300)',
+          borderRadius: 'var(--radius-md)',
+          padding: 'var(--space-1) var(--space-2)',
+          cursor: 'pointer',
+          fontSize: '18px',
+          minWidth: '36px',
+          minHeight: '36px',
+          transition: 'var(--transition-all)'
+        }}
+      >
+        👎
+      </button>
+      {feedback && (
+        <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-neutral-500)' }}>
+          Thanks for your feedback!
+        </span>
+      )}
+    </div>
+  );
+}
+

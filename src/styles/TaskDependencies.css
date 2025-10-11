@@ -331,7 +331,7 @@
 .remove-dependency-btn svg {
   width: 14px;
   height: 14px;
-  color: #EF4444;
+  color: var(--color-energy-1);
 }
 
 /* Add Dependency */
@@ -413,15 +413,15 @@
 }
 
 .type-badge.blocks {
-  background: #EF4444;
+  background: var(--color-energy-1);
 }
 
 .type-badge.requires {
-  background: #F59E0B;
+  background: var(--color-energy-3);
 }
 
 .type-badge.suggests {
-  background: #10B981;
+  background: var(--color-energy-4);
 }
 
 .type-description {

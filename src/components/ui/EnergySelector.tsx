@@ -51,19 +51,28 @@ interface EnergySelectorProps {
   currentEnergy?: number;
   onEnergyChange: (energy: number) => void;
   className?: string;
+  autoUpdated?: boolean; // WP-ENG-01: Track if energy was auto-updated
 }
 
 export const EnergySelector: React.FC<EnergySelectorProps> = ({
   currentEnergy = 3,
   onEnergyChange,
-  className = ''
+  className = '',
+  autoUpdated = false
 }) => {
   const [selectedEnergy, setSelectedEnergy] = useState(currentEnergy);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showPulse, setShowPulse] = useState(false); // WP-ENG-01: Pulse on auto-update
 
   useEffect(() => {
     setSelectedEnergy(currentEnergy);
-  }, [currentEnergy]);
+    
+    // WP-ENG-01: Show pulse animation when energy auto-updates
+    if (autoUpdated) {
+      setShowPulse(true);
+      setTimeout(() => setShowPulse(false), 1000);
+    }
+  }, [currentEnergy, autoUpdated]);
 
   const handleEnergySelect = (energy: number) => {
     if (energy === selectedEnergy) return;
@@ -98,14 +107,46 @@ export const EnergySelector: React.FC<EnergySelectorProps> = ({
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
             <div 
-              className={`energy-indicator ${selectedLevel?.color} active`}
+              className={`energy-indicator ${selectedLevel?.color} active ${showPulse ? 'energy-pulse' : ''}`}
               style={{ background: selectedLevel?.gradient }}
             >
               {selectedEnergy}
+              {showPulse && (
+                <motion.div
+                  className="energy-pulse-ring"
+                  initial={{ scale: 1, opacity: 1 }}
+                  animate={{ scale: 1.8, opacity: 0 }}
+                  transition={{ duration: 1, ease: "easeOut" }}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    borderRadius: '50%',
+                    border: '3px solid currentColor',
+                    pointerEvents: 'none'
+                  }}
+                />
+              )}
             </div>
             <div className="energy-info">
               <span className="energy-label">{selectedLevel?.label}</span>
               <span className="energy-description">{selectedLevel?.description}</span>
+              {showPulse && (
+                <motion.span
+                  className="auto-update-badge"
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  style={{
+                    display: 'block',
+                    fontSize: '12px',
+                    color: 'var(--color-primary-500)',
+                    fontWeight: 600,
+                    marginTop: '4px'
+                  }}
+                >
+                  ⚡ Auto-updated
+                </motion.span>
+              )}
             </div>
           </motion.div>
         </AnimatePresence>

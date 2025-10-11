@@ -1,0 +1,153 @@
+[
+  {
+    "id": "ENG-H-001",
+    "title": "Energy Recalibration Speed Unknown - Must Be <200ms for Primary KPI",
+    "severity": "high",
+    "pod": "emblem-energy",
+    "evidence": [
+      "/audits/emblem-energy/evidence/performance-test-needed.md",
+      "/audits/emblem-energy/evidence/user-perception-instant.txt"
+    ],
+    "kpi": ["energy-matched-completion"],
+    "current_kpi_value": "Unknown (not instrumented)",
+    "target_kpi_value": "90% energy-matched completion",
+    "kpi_impact": "PRIMARY NORTH-STAR KPI - Blocked if recalibration is slow",
+    "user_impact": {
+      "percent_affected": "100% of users (energy is core feature)",
+      "friction_cost": "Slow recalibration = stale suggestions = mismatched tasks",
+      "business_impact": "PRIMARY VALUE PROPOSITION at risk"
+    },
+    "root_cause": "Unknown if automatic/manual, unknown speed, needs performance audit",
+    "recommendation": "R1: Guarantee <200ms recalibration with performance monitoring",
+    "acceptance_criteria": "GIVEN user completes task WHEN marks done THEN energy recalibrates in <200ms AND next suggestion updates AND user perceives instant AND energy-matched completion reaches 85-90%",
+    "dependencies": [
+      "Performance testing",
+      "Code optimization if needed",
+      "Real-time suggestion updates"
+    ],
+    "estimated_effort": "6 person-days (if major work) or 2 days (if just optimization)",
+    "estimated_effort_category": "M",
+    "phase": 1,
+    "decision": "ADOPT",
+    "testing_required": true,
+    "note": "MUST test current implementation speed first"
+  },
+  {
+    "id": "ENG-H-002",
+    "title": "Emblem Charge Formula Opaque - Users Don't Understand Why They Got X Charge",
+    "severity": "high",
+    "pod": "emblem-energy",
+    "evidence": [
+      "/audits/emblem-energy/evidence/user-confusion-charge.mp4",
+      "/audits/emblem-energy/evidence/support-ticket-charge-question.txt",
+      "/audits/emblem-energy/evidence/gamification-research-transparency.pdf"
+    ],
+    "kpi": ["emblem-engagement"],
+    "current_kpi_value": "Unknown engagement, users confused by formula",
+    "target_kpi_value": "60% DAU engage, 80% understand formula",
+    "kpi_impact": "Engagement +40% from transparency (research-backed)",
+    "user_impact": {
+      "percent_affected": "All users who use emblem system",
+      "friction_cost": "Confusion reduces motivation, feels arbitrary",
+      "business_impact": "Engagement at risk if system feels random"
+    },
+    "root_cause": "Formula not explained in UI, no transparency tooltip",
+    "recommendation": "R2: Show charge breakdown on completion (Base + Bonus + Streak = Total)",
+    "acceptance_criteria": "GIVEN user completes task WHEN sees +25⚡ THEN can tap to see breakdown AND 80% understand formula AND trust increases to 85%",
+    "dependencies": [
+      "Charge breakdown UI",
+      "Formula documentation",
+      "Help text"
+    ],
+    "estimated_effort": "4 person-days",
+    "estimated_effort_category": "S",
+    "phase": 1,
+    "decision": "ADOPT"
+  },
+  {
+    "id": "ENG-H-003",
+    "title": "Anti-Gaming Measures Unknown - System May Be Exploitable",
+    "severity": "high",
+    "pod": "emblem-energy",
+    "evidence": [
+      "/audits/emblem-energy/evidence/gaming-patterns-all-systems.txt",
+      "/audits/emblem-energy/evidence/goodharts-law.txt"
+    ],
+    "kpi": ["emblem-engagement", "system-integrity"],
+    "current_kpi_value": "Unknown if anti-gaming exists",
+    "target_kpi_value": "<2% of charge events flagged as suspicious",
+    "kpi_impact": "Protects emblem system integrity, prevents honest user demotivation",
+    "user_impact": {
+      "percent_affected": "All users (system integrity affects everyone)",
+      "friction_cost": "Gaming makes emblems meaningless, honest users quit",
+      "business_impact": "Gamification collapses if exploitable"
+    },
+    "root_cause": "Unknown if cooldowns, pattern detection, or penalties exist",
+    "recommendation": "R3: Implement comprehensive anti-gaming (cooldowns, pattern detection, diminishing returns)",
+    "acceptance_criteria": "GIVEN user attempts rapid-fire completions WHEN completes 20 tasks in 2 minutes THEN charge reduced by 50% AND pattern flagged AND <2% gaming over 30 days",
+    "dependencies": [
+      "Cooldown system",
+      "Pattern detection algorithm",
+      "Audit logging"
+    ],
+    "estimated_effort": "5 person-days",
+    "estimated_effort_category": "S",
+    "phase": 1,
+    "decision": "ADOPT",
+    "testing_required": true,
+    "note": "MUST attempt to game current system to test defenses"
+  },
+  {
+    "id": "ENG-H-004",
+    "title": "No Weekly Energy Insights - Rich Data Unused",
+    "severity": "high",
+    "pod": "emblem-energy",
+    "evidence": [
+      "/audits/emblem-energy/evidence/user-quote-want-insights.txt",
+      "/audits/emblem-energy/evidence/data-richness-analysis.csv",
+      "/audits/emblem-energy/evidence/oura-insights-comparison.png"
+    ],
+    "kpi": ["energy-matched-completion", "feature-discovery"],
+    "current_kpi_value": "36 data points/user/month collected, 0 insights generated",
+    "target_kpi_value": "Weekly insights with 75% engagement",
+    "kpi_impact": "Energy-matched completion +8% from better scheduling",
+    "user_impact": {
+      "percent_affected": "All users who log energy regularly",
+      "friction_cost": "Missed learning opportunity, data wasted",
+      "business_impact": "Differentiation opportunity missed"
+    },
+    "root_cause": "Feature doesn't exist or not prominent",
+    "recommendation": "R4: Weekly energy insights with actionable scheduling suggestions",
+    "acceptance_criteria": "GIVEN 7 days of energy logs WHEN Sunday 8pm THEN summary shows patterns AND suggests optimal task scheduling AND 75% engage AND energy-matched +8%",
+    "dependencies": [
+      "Pattern analysis algorithm",
+      "Insights UI",
+      "Scheduling optimization",
+      "Week-over-week comparison"
+    ],
+    "estimated_effort": "8 person-days",
+    "estimated_effort_category": "M",
+    "phase": 1,
+    "decision": "ADOPT"
+  },
+  {
+    "id": "ENG-M-001",
+    "title": "Energy Logging Takes 3.2s (Goal: <2s) - Friction Reduces Frequency",
+    "severity": "medium",
+    "pod": "emblem-energy",
+    "evidence": [
+      "/audits/emblem-energy/evidence/analytics-log-time.csv",
+      "/audits/emblem-energy/evidence/user-test-wants-faster.mp4"
+    ],
+    "kpi": ["energy-log-frequency"],
+    "current_kpi_value": "1.2 logs/day, 3.2s per log",
+    "target_kpi_value": "1.5 logs/day, <2s per log",
+    "kpi_impact": "Log frequency +25% from reduced friction",
+    "recommendation": "R5: Ultra-quick logging (keyboard shortcut, inline picker, voice)",
+    "estimated_effort": "3 person-days",
+    "estimated_effort_category": "S",
+    "phase": 2,
+    "decision": "DEFER"
+  }
+]
+

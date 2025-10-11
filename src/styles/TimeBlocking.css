@@ -222,18 +222,18 @@
 
 .energy-indicator.energy-4,
 .energy-indicator.energy-5 {
-  color: #10B981;
+  color: var(--color-energy-4);
   font-weight: var(--font-semibold);
 }
 
 .energy-indicator.energy-2,
 .energy-indicator.energy-3 {
-  color: #F59E0B;
+  color: var(--color-energy-3);
 }
 
 .energy-indicator.energy-0,
 .energy-indicator.energy-1 {
-  color: #EF4444;
+  color: var(--color-energy-1);
 }
 
 .time-slot-content {
@@ -309,7 +309,7 @@
 }
 
 .remove-block-btn:hover {
-  background: #EF4444;
+  background: var(--color-energy-1);
   color: white;
 }
 
@@ -342,36 +342,36 @@
 }
 
 .legend-dot.energy-high {
-  background: #10B981;
+  background: var(--color-energy-4);
 }
 
 .legend-dot.energy-medium {
-  background: #F59E0B;
+  background: var(--color-energy-3);
 }
 
 .legend-dot.energy-low {
-  background: #EF4444;
+  background: var(--color-energy-1);
 }
 
 /* Dark Mode */
 [data-theme="dark"] .time-blocking-modal {
-  background: #2a2a2a !important;
+  background: var(--color-neutral-800) !important;
 }
 
 [data-theme="dark"] .time-slot,
 [data-theme="dark"] .draggable-task,
 [data-theme="dark"] .time-block {
-  background: #333333 !important;
-  color: #f5f5f5 !important;
+  background: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
 }
 
 [data-theme="dark"] .time-label {
-  background: #1a1a1a !important;
+  background: var(--color-neutral-900) !important;
 }
 
 [data-theme="dark"] .empty-slot {
-  border-color: #555555 !important;
-  color: #888888 !important;
+  border-color: var(--color-neutral-600) !important;
+  color: var(--color-neutral-500) !important;
 }
 
 /* Responsive */

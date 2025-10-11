@@ -74,7 +74,7 @@
 }
 
 .sound-btn.active {
-  border-color: #EC4899;
+  border-color: var(--color-error);
   background: rgba(236, 72, 153, 0.05);
 }
 
@@ -109,7 +109,7 @@
 }
 
 .room-card.active {
-  border-color: #10B981;
+  border-color: var(--color-energy-4);
   background: rgba(16, 185, 129, 0.05);
 }
 
@@ -141,8 +141,8 @@
 }
 
 .room-action-btn.join {
-  background: #3B82F6;
-  border-color: #3B82F6;
+  background: var(--color-info);
+  border-color: var(--color-info);
   color: white;
 }
 
@@ -183,14 +183,14 @@
 }
 
 [data-theme="dark"] .focus-rooms-modal {
-  background: #2a2a2a !important;
+  background: var(--color-neutral-800) !important;
 }
 
 [data-theme="dark"] .room-card,
 [data-theme="dark"] .sound-btn {
-  background: #333333 !important;
-  color: #f5f5f5 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
+  border-color: var(--color-neutral-700) !important;
 }
 
 @media (max-width: 768px) {

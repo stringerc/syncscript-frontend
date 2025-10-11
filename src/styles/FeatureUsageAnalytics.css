@@ -69,7 +69,7 @@
 .stat-value {
   font-size: 36px;
   font-weight: 800;
-  background: linear-gradient(135deg, #4A90E2, #8B5CF6);
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-energy-5));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -174,15 +174,15 @@
 
 /* Dark Mode */
 [data-theme="dark"] .feature-usage-modal {
-  background: #1a1a1a !important;
+  background: var(--color-neutral-900) !important;
 }
 
 [data-theme="dark"] .usage-stat-card,
 [data-theme="dark"] .usage-chart,
 [data-theme="dark"] .recommendation-item,
 [data-theme="dark"] .range-btn {
-  background: #2a2a2a !important;
-  border-color: #404040 !important;
+  background: var(--color-neutral-800) !important;
+  border-color: var(--color-neutral-700) !important;
 }
 
 [data-theme="dark"] .range-btn.active {

@@ -4,6 +4,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '../src/contexts/ThemeContext';
 import Head from 'next/head';
+import '../src/design-system/variables.css'; // Design token system
+import '../src/styles/accessibility.css'; // WCAG 2.1 AA compliance
+import '../src/styles/mobile-responsive.css'; // Mobile optimizations
+import '../src/styles/motion-system.css'; // Standardized animations
 import '../src/styles/tokens.css';
 import '../src/styles/globals.css';
 import '../src/styles/SmartSuggestions.css';
@@ -80,6 +84,27 @@ interface AppProps {
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
+  // Keyboard navigation detection for accessibility
+  React.useEffect(() => {
+    const handleKeyDown = () => {
+      document.body.classList.add('using-keyboard');
+      document.body.classList.remove('using-mouse');
+    };
+    
+    const handleMouseDown = () => {
+      document.body.classList.add('using-mouse');
+      document.body.classList.remove('using-keyboard');
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('mousedown', handleMouseDown);
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handleMouseDown);
+    };
+  }, []);
+
   // Register service worker for PWA
   React.useEffect(() => {
     if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
@@ -111,7 +136,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <Head>
-            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
             <meta name="theme-color" content="#4A90E2" />
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -122,6 +147,18 @@ function MyApp({ Component, pageProps }: AppProps) {
             <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
           </Head>
           <div className="min-h-screen bg-syncscript-cream-50">
+            {/* Skip link for accessibility */}
+            <a href="#main-content" className="skip-link">
+              Skip to main content
+            </a>
+            {/* ARIA live region for screen reader announcements */}
+            <div
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              className="sr-only"
+              id="aria-live-region"
+            />
             <Component {...pageProps} />
             <Toaster
             position="top-right"

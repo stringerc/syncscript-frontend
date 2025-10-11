@@ -1,0 +1,138 @@
+/* View Switcher */
+.view-switcher {
+  background: white;
+  border-bottom: 2px solid var(--syncscript-charcoal-200);
+  padding: 0 32px;
+  position: sticky;
+  top: 73px; /* Below header */
+  z-index: 99;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.view-switcher-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+.view-tabs {
+  display: flex;
+  gap: 4px;
+  position: relative;
+}
+
+.view-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--syncscript-charcoal-600);
+  transition: all 0.2s;
+}
+
+.view-tab:hover {
+  color: var(--syncscript-blue-600);
+  background: rgba(74, 144, 226, 0.05);
+}
+
+.view-tab.active {
+  color: var(--syncscript-blue-600);
+}
+
+.view-icon {
+  font-size: 20px;
+}
+
+.view-label {
+  font-weight: 600;
+}
+
+.view-indicator {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #4A90E2, #8B5CF6);
+  border-radius: 3px 3px 0 0;
+}
+
+.view-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.task-count {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--syncscript-charcoal-600);
+  padding: 8px 16px;
+  background: rgba(74, 144, 226, 0.05);
+  border-radius: 12px;
+}
+
+/* Dark Mode */
+[data-theme="dark"] .view-switcher {
+  background: #1a1a1a !important;
+  border-bottom-color: #333 !important;
+}
+
+[data-theme="dark"] .view-tab {
+  color: #b0b0b0 !important;
+}
+
+[data-theme="dark"] .view-tab:hover,
+[data-theme="dark"] .view-tab.active {
+  color: var(--syncscript-blue-400) !important;
+}
+
+[data-theme="dark"] .task-count {
+  background: rgba(74, 144, 226, 0.1) !important;
+  color: #f5f5f5 !important;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .view-switcher {
+    padding: 0 16px;
+  }
+  
+  .view-tabs {
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .view-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .view-tab {
+    padding: 12px 16px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  
+  .view-label {
+    display: none;
+  }
+  
+  .view-icon {
+    font-size: 24px;
+  }
+  
+  .view-info {
+    display: none;
+  }
+}
+

@@ -65,7 +65,7 @@
 .budget-value {
   font-size: var(--text-4xl);
   font-weight: var(--font-bold);
-  color: #10B981;
+  color: var(--color-energy-4);
 }
 
 .budget-breakdown {
@@ -92,7 +92,7 @@
 .category-amount {
   font-size: var(--text-sm);
   font-weight: var(--font-bold);
-  color: #10B981;
+  color: var(--color-energy-4);
 }
 
 .budget-items h4 {
@@ -136,7 +136,7 @@
 .item-amount {
   font-size: var(--text-xl);
   font-weight: var(--font-bold);
-  color: #10B981;
+  color: var(--color-energy-4);
 }
 
 .empty-budget {
@@ -200,19 +200,19 @@
 }
 
 .add-budget-btn:hover {
-  border-color: #10B981;
-  color: #10B981;
+  border-color: var(--color-energy-4);
+  color: var(--color-energy-4);
 }
 
 [data-theme="dark"] .budget-modal {
-  background: #2a2a2a !important;
+  background: var(--color-neutral-800) !important;
 }
 
 [data-theme="dark"] .budget-summary,
 [data-theme="dark"] .budget-item-card,
 [data-theme="dark"] .form-field input,
 [data-theme="dark"] .form-field select {
-  background: #333333 !important;
-  color: #f5f5f5 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
+  border-color: var(--color-neutral-700) !important;
 }

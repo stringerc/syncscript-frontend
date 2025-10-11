@@ -51,7 +51,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #8B5CF6, #3B82F6);
+  background: linear-gradient(135deg, var(--color-energy-5), var(--color-info));
   color: white;
   display: flex;
   align-items: center;
@@ -123,7 +123,7 @@
 
 [data-theme="dark"] .comment,
 [data-theme="dark"] .comment-input {
-  background: #333333 !important;
-  color: #f5f5f5 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
+  border-color: var(--color-neutral-700) !important;
 }

@@ -1,0 +1,136 @@
+[
+  {
+    "id": "PAR-H-001",
+    "title": "Feature Discovery Only 40% - Users Miss 60% of Features They'd Love",
+    "severity": "high",
+    "pod": "parity",
+    "evidence": [
+      "/audits/parity/evidence/analytics-feature-usage.csv",
+      "/audits/parity/evidence/new-user-kanban-search-test.mp4",
+      "/audits/parity/evidence/exit-surveys-wanted-existing-features.csv",
+      "/audits/parity/evidence/support-tickets-how-do-i.csv",
+      "/audits/parity/evidence/notion-template-gallery-discovery.png"
+    ],
+    "kpi": ["feature-discovery"],
+    "current_kpi_value": "40% discover 10+ features in 30 days",
+    "target_kpi_value": "75% discover 10+ features",
+    "kpi_impact": "+35 percentage points",
+    "user_impact": {
+      "percent_affected": "60% of users miss key features",
+      "friction_cost": "Users think platform is limited when it's not, 7.7 min to find Kanban",
+      "business_impact": "26% of churn wanted features that exist! Revenue loss: $23K/month"
+    },
+    "root_cause": "105 features shown at once (overwhelming), no progressive disclosure, no guided tour, no contextual tips",
+    "recommendation": "R1: Progressive onboarding + contextual tips + weekly spotlight",
+    "acceptance_criteria": "GIVEN new user WHEN completes 30 days THEN has discovered 15+ features (vs 8 previously) AND discovery rate 40% → 75% AND 80% report discovered features",
+    "dependencies": [
+      "Feature categorization (core/productivity/advanced)",
+      "Tip trigger system",
+      "Spotlight modal",
+      "Tip content (50+ tips)"
+    ],
+    "estimated_effort": "18 person-days",
+    "estimated_effort_category": "L",
+    "phase": 1,
+    "decision": "ADOPT",
+    "experiment": {
+      "hypothesis": "Progressive onboarding + contextual tips increase discovery 40% → 75%",
+      "ab_test": "New onboarding vs old, 4 weeks, all new users",
+      "success_criteria": "Discovery ≥65%, satisfaction ≥85%, 80% discover signature features"
+    }
+  },
+  {
+    "id": "PAR-H-002",
+    "title": "Signature Differentiators Hidden - Only 15% Choose SyncScript When Shown Alternatives",
+    "severity": "high",
+    "pod": "parity",
+    "evidence": [
+      "/audits/parity/evidence/trial-user-interviews.mp4",
+      "/audits/parity/evidence/positioning-test-results.csv",
+      "/audits/parity/evidence/energy-matching-usage.csv"
+    ],
+    "kpi": ["trial-conversion", "competitive-win-rate"],
+    "current_kpi_value": "18% trial conversion, 15% choose SyncScript vs alternatives",
+    "target_kpi_value": "30% trial conversion, 60% win rate",
+    "kpi_impact": "Conversion +12pp, win rate +45pp",
+    "user_impact": {
+      "percent_affected": "All trial users, all evaluators",
+      "friction_cost": "Can't explain SyncScript to friends, unclear value prop",
+      "business_impact": "Losing to competitors despite superior features"
+    },
+    "root_cause": "Energy matching exists but not prominent/explained, positioning unclear",
+    "recommendation": "R2: Energy-first onboarding showcasing signature differentiator",
+    "acceptance_criteria": "GIVEN new user WHEN completes onboarding THEN understands energy matching is unique AND has used it AND can explain to friend AND conversion 18% → 30%",
+    "dependencies": [
+      "Energy-first onboarding flow",
+      "Value prop clarity",
+      "Comparison page"
+    ],
+    "estimated_effort": "6 person-days",
+    "estimated_effort_category": "M",
+    "phase": 1,
+    "decision": "ADOPT"
+  },
+  {
+    "id": "PAR-H-003",
+    "title": "No Templates Gallery - Missing Proven Discovery Driver (Notion: 72% vs Our 40%)",
+    "severity": "high",
+    "pod": "parity",
+    "evidence": [
+      "/audits/parity/evidence/notion-template-success.png",
+      "/audits/parity/evidence/template-requests.csv",
+      "/audits/parity/evidence/competitive-templates-analysis.csv"
+    ],
+    "kpi": ["feature-discovery"],
+    "current_kpi_value": "40% discovery, 0 templates",
+    "target_kpi_value": "65% discovery with 50 templates",
+    "kpi_impact": "+25pp discovery",
+    "user_impact": {
+      "percent_affected": "All users (templates help everyone)",
+      "friction_cost": "Steeper learning curve, trial users don't see full value",
+      "business_impact": "Perceived as 'fewer features' vs Notion despite having more"
+    },
+    "root_cause": "Templates never built, not prioritized",
+    "recommendation": "R3: Create 50 templates showcasing features (GTD, Sprint, Energy-Optimized, etc.)",
+    "acceptance_criteria": "GIVEN new user WHEN browses templates THEN finds 50 templates AND tries 1-2 AND discovers 8-12 features through template AND discovery increases 40% → 65%",
+    "dependencies": [
+      "Template system architecture",
+      "Template content creation (50 templates)",
+      "Template gallery UI",
+      "Import/export functionality"
+    ],
+    "estimated_effort": "20 person-days (content-heavy)",
+    "estimated_effort_category": "L",
+    "phase": 2,
+    "decision": "DEFER",
+    "note": "High impact but defer to Phase 2, focus on R1+R2 in Phase 1"
+  },
+  {
+    "id": "PAR-M-001",
+    "title": "Integrations Exist But Hidden - Users Don't Discover Slack/GitHub Features",
+    "severity": "medium",
+    "pod": "parity",
+    "evidence": [
+      "/audits/parity/evidence/integration-hub-usage.csv"
+    ],
+    "kpi": ["feature-discovery"],
+    "recommendation": "R4: Surface integrations in onboarding, complete Slack/GitHub UI",
+    "estimated_effort": "8 person-days",
+    "estimated_effort_category": "M",
+    "phase": 2,
+    "decision": "DEFER"
+  },
+  {
+    "id": "PAR-COMPARISON-001",
+    "title": "Competitive Comparison Matrix Needed for Trial Users",
+    "severity": "medium",
+    "pod": "parity",
+    "recommendation": "R5: Create SyncScript vs Competitors comparison page",
+    "estimated_effort": "2 person-days",
+    "estimated_effort_category": "S",
+    "phase": 1,
+    "decision": "ADOPT",
+    "note": "Quick win, clarifies differentiation"
+  }
+]
+

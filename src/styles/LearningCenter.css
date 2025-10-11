@@ -99,7 +99,7 @@
 }
 
 .level-badge.beginner { 
-  background: #10B981;
+  background: var(--color-energy-4);
 }
 
 .level-badge.beginner::before {
@@ -107,7 +107,7 @@
 }
 
 .level-badge.intermediate { 
-  background: #F59E0B;
+  background: var(--color-energy-3);
 }
 
 .level-badge.intermediate::before {
@@ -115,7 +115,7 @@
 }
 
 .level-badge.advanced { 
-  background: #EF4444;
+  background: var(--color-energy-1);
 }
 
 .level-badge.advanced::before {
@@ -140,10 +140,10 @@
 }
 
 [data-theme="dark"] .learning-modal {
-  background: #2a2a2a !important;
+  background: var(--color-neutral-800) !important;
 }
 
 [data-theme="dark"] .course-card {
-  background: #333333 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  border-color: var(--color-neutral-700) !important;
 }

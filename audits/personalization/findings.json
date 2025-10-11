@@ -1,0 +1,150 @@
+[
+  {
+    "id": "PERS-H-001",
+    "title": "No Explainability - 60% Reject Accurate Suggestions Due to Lack of Trust",
+    "severity": "high",
+    "pod": "personalization",
+    "evidence": [
+      "/audits/personalization/evidence/user-test-oct10-explanations.mp4",
+      "/audits/personalization/evidence/rejection-feedback-analysis.csv",
+      "/audits/personalization/evidence/mit-explainable-ai-study-2024.pdf",
+      "/audits/personalization/evidence/competitor-motion-explanations.png"
+    ],
+    "kpi": ["recommendation-acceptance"],
+    "current_kpi_value": "40% acceptance despite 87-92% accuracy",
+    "target_kpi_value": "60% acceptance (+20pp from explanations alone)",
+    "kpi_impact": "+20 percentage points from explainability",
+    "user_impact": {
+      "percent_affected": "100% of users receiving suggestions",
+      "friction_cost": "Users reject 60% of good suggestions, value loss",
+      "business_impact": "Trust deficit in AI features, engagement lower than potential"
+    },
+    "root_cause": "AI is black box, no 'Why this?' explanation shown in UI",
+    "recommendation": "R1: Add 'Why this?' explainability tooltip to every suggestion",
+    "acceptance_criteria": "GIVEN user sees suggestion WHEN taps 'Why?' THEN shows 5 reasons (urgency, energy match, pattern, priority, time) AND acceptance increases 40% → 60% AND trust increases to 85%",
+    "dependencies": [
+      "AI reasoning capture",
+      "Pattern learning system",
+      "Context data (energy, budget, location)",
+      "Explanation modal UI"
+    ],
+    "estimated_effort": "8 person-days",
+    "estimated_effort_category": "M",
+    "phase": 1,
+    "decision": "ADOPT",
+    "experiment": {
+      "hypothesis": "Explanations increase acceptance from 40% to 60%",
+      "ab_test": "50% with 'Why?' / 50% without, 3 weeks",
+      "success_criteria": "Acceptance ≥55%, trust ≥75%, 85% find helpful",
+      "research_backing": "MIT 2024: Explanations +64% trust, Google AI Principles"
+    }
+  },
+  {
+    "id": "PERS-H-002",
+    "title": "No Context-Aware Ranking - Suggestions Ignore Energy/Budget/Location/Time",
+    "severity": "high",
+    "pod": "personalization",
+    "evidence": [
+      "/audits/personalization/evidence/energy-mismatch-observation.txt",
+      "/audits/personalization/evidence/budget-mismatch-observation.txt",
+      "/audits/personalization/evidence/location-mismatch-observation.txt",
+      "/audits/personalization/evidence/time-pattern-mismatch.txt"
+    ],
+    "kpi": ["recommendation-acceptance", "energy-matched-completion"],
+    "current_kpi_value": "40% acceptance, suggestions ignore context",
+    "target_kpi_value": "55% acceptance with context-aware ranking",
+    "kpi_impact": "+15pp from context awareness",
+    "user_impact": {
+      "percent_affected": "100% of users",
+      "friction_cost": "Right task, wrong context = rejection",
+      "business_impact": "Value proposition weakened (suggestions feel generic)"
+    },
+    "root_cause": "AI model only uses task attributes, doesn't use current energy/budget/location/time-of-day",
+    "recommendation": "R2: Enhance ranking algorithm with 6 context factors (energy, budget, location, time, weather, habits)",
+    "acceptance_criteria": "GIVEN user at energy 2, at office, saving money WHEN AI ranks suggestions THEN top suggestion matches energy 2, doable at office, free/cheap AND acceptance increases 40% → 55%",
+    "dependencies": [
+      "Context Pod: Energy, location data",
+      "Finance Pod: Budget data",
+      "ML model retraining",
+      "Context API"
+    ],
+    "estimated_effort": "15 person-days",
+    "estimated_effort_category": "L",
+    "phase": 1,
+    "decision": "ADOPT",
+    "note": "Requires Context + Finance pod features to be implemented first"
+  },
+  {
+    "id": "PERS-H-003",
+    "title": "No Learning from Rejections - Same Mistakes Repeated",
+    "severity": "high",
+    "pod": "personalization",
+    "evidence": [
+      "/audits/personalization/evidence/repeated-gym-suggestion.txt",
+      "/audits/personalization/evidence/spotify-netflix-feedback-comparison.png"
+    ],
+    "kpi": ["recommendation-acceptance"],
+    "current_kpi_value": "40% acceptance, no learning from rejections",
+    "target_kpi_value": "50% acceptance with feedback loop (+10pp)",
+    "kpi_impact": "+10pp from learning",
+    "user_impact": {
+      "percent_affected": "Users who reject suggestions repeatedly",
+      "friction_cost": "Frustration from repeated unwanted suggestions",
+      "business_impact": "Users abandon suggestion feature, don't return"
+    },
+    "root_cause": "No rejection reason capture, no feedback to ML model",
+    "recommendation": "R3: Capture rejection reasons, implement feedback loop",
+    "acceptance_criteria": "GIVEN user rejects 'Gym' 3 times with reason 'Not interested' WHEN AI generates next batch THEN Gym tasks excluded AND acceptance increases by 10pp",
+    "dependencies": [
+      "Rejection reason UI",
+      "Feedback API",
+      "ML model retraining pipeline"
+    ],
+    "estimated_effort": "7 person-days",
+    "estimated_effort_category": "M",
+    "phase": 1,
+    "decision": "ADOPT"
+  },
+  {
+    "id": "PERS-H-004",
+    "title": "Poor Suggestion Timing - 23% Rejected Within 5s (Reflexive, Not Considered)",
+    "severity": "high",
+    "pod": "personalization",
+    "evidence": [
+      "/audits/personalization/evidence/rejection-timing-analysis.csv",
+      "/audits/personalization/evidence/flow-state-interruption-research.pdf"
+    ],
+    "kpi": ["recommendation-acceptance"],
+    "current_kpi_value": "23% reflexive rejections (within 5s)",
+    "target_kpi_value": "<10% reflexive rejections",
+    "kpi_impact": "+10pp from better timing",
+    "user_impact": {
+      "percent_affected": "All users",
+      "friction_cost": "Good suggestions dismissed due to bad timing",
+      "business_impact": "Suggestions associated with annoyance, not help"
+    },
+    "root_cause": "Suggestions shown at fixed times or always visible, no flow-state awareness",
+    "recommendation": "R4: Smart timing (after task completion, morning, after breaks, never during deep work)",
+    "acceptance_criteria": "GIVEN user in deep work WHEN 30min passes THEN suggestions wait until task complete THEN show AND reflexive rejections drop to <10%",
+    "estimated_effort": "4 person-days",
+    "estimated_effort_category": "S",
+    "phase": 2,
+    "decision": "DEFER"
+  },
+  {
+    "id": "PERS-M-001",
+    "title": "No Personalization Transparency - Users Can't See What AI Knows",
+    "severity": "medium",
+    "pod": "personalization",
+    "evidence": [
+      "/audits/personalization/evidence/user-question-what-ai-knows.txt"
+    ],
+    "kpi": ["ai-trust"],
+    "recommendation": "R5: AI transparency page showing what system knows",
+    "estimated_effort": "3 person-days",
+    "estimated_effort_category": "S",
+    "phase": 2,
+    "decision": "DEFER"
+  }
+]
+

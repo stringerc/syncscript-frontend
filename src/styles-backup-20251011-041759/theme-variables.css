@@ -1,0 +1,119 @@
+/* Theme Variables - Dark Mode Support */
+
+/* Light Mode (Default) */
+:root[data-theme="light"] {
+  --bg-primary: var(--syncscript-cream-50);
+  --bg-secondary: var(--syncscript-cream-100);
+  --bg-card: white;
+  --text-primary: var(--syncscript-charcoal-800);
+  --text-secondary: var(--syncscript-charcoal-600);
+  --text-tertiary: var(--syncscript-charcoal-500);
+  --border-color: var(--syncscript-charcoal-200);
+  --border-hover: var(--syncscript-charcoal-300);
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode */
+:root[data-theme="dark"] {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2a2a2a;
+  --bg-card: #333333;
+  --text-primary: #f5f5f5;
+  --text-secondary: #cccccc;
+  --text-tertiary: #999999;
+  --border-color: #444444;
+  --border-hover: #555555;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Accent Color Variations */
+:root[data-accent="blue"] {
+  --accent-primary: #4A90E2;
+  --accent-secondary: #357ABD;
+  --accent-light: rgba(74, 144, 226, 0.1);
+}
+
+:root[data-accent="green"] {
+  --accent-primary: #7ED321;
+  --accent-secondary: #6AB51A;
+  --accent-light: rgba(126, 211, 33, 0.1);
+}
+
+:root[data-accent="orange"] {
+  --accent-primary: #F5A623;
+  --accent-secondary: #E09415;
+  --accent-light: rgba(245, 166, 35, 0.1);
+}
+
+:root[data-accent="purple"] {
+  --accent-primary: #8B5CF6;
+  --accent-secondary: #7C3AED;
+  --accent-light: rgba(139, 92, 246, 0.1);
+}
+
+:root[data-accent="pink"] {
+  --accent-primary: #EC4899;
+  --accent-secondary: #DB2777;
+  --accent-light: rgba(236, 72, 153, 0.1);
+}
+
+:root[data-accent="teal"] {
+  --accent-primary: #14B8A6;
+  --accent-secondary: #0D9488;
+  --accent-light: rgba(20, 184, 166, 0.1);
+}
+
+/* Font Size Variations */
+:root[data-font-size="small"] {
+  --text-base: 14px;
+  --text-sm: 12px;
+  --text-xs: 11px;
+  --text-lg: 16px;
+  --text-xl: 18px;
+  --text-2xl: 20px;
+  --text-3xl: 24px;
+  --text-4xl: 30px;
+}
+
+:root[data-font-size="medium"] {
+  /* Default values - already defined */
+}
+
+:root[data-font-size="large"] {
+  --text-base: 18px;
+  --text-sm: 16px;
+  --text-xs: 14px;
+  --text-lg: 20px;
+  --text-xl: 24px;
+  --text-2xl: 28px;
+  --text-3xl: 32px;
+  --text-4xl: 40px;
+}
+
+/* Density Variations */
+:root[data-density="comfortable"] {
+  --space-unit: 8px;
+  --space-1: calc(var(--space-unit) * 0.25);
+  --space-2: calc(var(--space-unit) * 0.5);
+  --space-3: calc(var(--space-unit) * 0.75);
+  --space-4: var(--space-unit);
+  --space-5: calc(var(--space-unit) * 1.25);
+  --space-6: calc(var(--space-unit) * 1.5);
+  --space-8: calc(var(--space-unit) * 2);
+  --space-12: calc(var(--space-unit) * 3);
+  --space-16: calc(var(--space-unit) * 4);
+}
+
+:root[data-density="compact"] {
+  --space-unit: 6px;
+  --space-1: calc(var(--space-unit) * 0.25);
+  --space-2: calc(var(--space-unit) * 0.5);
+  --space-3: calc(var(--space-unit) * 0.75);
+  --space-4: var(--space-unit);
+  --space-5: calc(var(--space-unit) * 1.25);
+  --space-6: calc(var(--space-unit) * 1.5);
+  --space-8: calc(var(--space-unit) * 2);
+  --space-12: calc(var(--space-unit) * 3);
+  --space-16: calc(var(--space-unit) * 4);
+}
+

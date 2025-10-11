@@ -6,7 +6,7 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #F59E0B, #F97316);
+  background: linear-gradient(135deg, var(--color-energy-3), var(--color-energy-2));
   border: none;
   box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
   cursor: pointer;
@@ -79,8 +79,8 @@
 }
 
 .mode-btn.active {
-  background: #F59E0B;
-  border-color: #F59E0B;
+  background: var(--color-energy-3);
+  border-color: var(--color-energy-3);
   color: white;
   font-weight: var(--font-bold);
 }
@@ -95,7 +95,7 @@
 
 .quick-input:focus {
   outline: none;
-  border-color: #F59E0B;
+  border-color: var(--color-energy-3);
 }
 
 .quick-actions {
@@ -118,14 +118,14 @@
 }
 
 [data-theme="dark"] .quick-capture-modal {
-  background: #2a2a2a !important;
+  background: var(--color-neutral-800) !important;
 }
 
 [data-theme="dark"] .quick-input,
 [data-theme="dark"] .mode-btn {
-  background: #333333 !important;
-  color: #f5f5f5 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
+  border-color: var(--color-neutral-700) !important;
 }
 
 @media (max-width: 768px) {

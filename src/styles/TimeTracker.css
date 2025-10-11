@@ -21,7 +21,7 @@
 }
 
 .timer-value.over-estimate {
-  color: #EF4444;
+  color: var(--color-energy-1);
 }
 
 .estimate-comparison {
@@ -34,8 +34,8 @@
 }
 
 .over-badge {
-  background: #FEE2E2;
-  color: #DC2626;
+  background: var(--color-energy-1-light);
+  color: var(--color-error);
   padding: 2px 8px;
   border-radius: var(--radius-sm);
   font-weight: var(--font-bold);
@@ -50,21 +50,21 @@
 }
 
 .btn-warning {
-  background: #F59E0B;
+  background: var(--color-energy-3);
   color: white;
 }
 
 .btn-warning:hover {
-  background: #D97706;
+  background: var(--color-warning);
 }
 
 .btn-success {
-  background: #10B981;
+  background: var(--color-energy-4);
   color: white;
 }
 
 .btn-success:hover {
-  background: #059669;
+  background: var(--color-success);
 }
 
 [data-theme="dark"] .time-tracker {

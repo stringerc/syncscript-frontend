@@ -1,0 +1,23 @@
+{
+  "name": "syncscript-storybook",
+  "version": "1.0.0",
+  "description": "Component documentation for SyncScript",
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^7.5.0",
+    "@storybook/addon-interactions": "^7.5.0",
+    "@storybook/addon-links": "^7.5.0",
+    "@storybook/addon-onboarding": "^1.0.8",
+    "@storybook/addon-a11y": "^7.5.0",
+    "@storybook/blocks": "^7.5.0",
+    "@storybook/nextjs": "^7.5.0",
+    "@storybook/react": "^7.5.0",
+    "@storybook/testing-library": "^0.2.2",
+    "storybook": "^7.5.0"
+  },
+  "readme": "Run 'npm install' then 'npm run storybook' to view component documentation"
+}
+

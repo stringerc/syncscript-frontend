@@ -261,7 +261,7 @@ button.btn.notif-btn .notif-count {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  background: #ef4444 !important;
+  background: var(--color-energy-1) !important;
   color: white !important;
   border-radius: 50% !important;
   font-size: 11px !important;

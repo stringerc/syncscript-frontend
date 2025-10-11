@@ -184,20 +184,20 @@
 
 /* Dark Mode */
 [data-theme="dark"] .command-palette {
-  background: #2a2a2a !important;
-  border: 1px solid #444444;
+  background: var(--color-neutral-800) !important;
+  border: 1px solid var(--color-neutral-700);
 }
 
 [data-theme="dark"] .search-input {
-  color: #f5f5f5 !important;
+  color: var(--color-neutral-100) !important;
 }
 
 [data-theme="dark"] .search-input::placeholder {
-  color: #666666 !important;
+  color: var(--color-neutral-500) !important;
 }
 
 [data-theme="dark"] .command-item {
-  color: #f5f5f5 !important;
+  color: var(--color-neutral-100) !important;
 }
 
 [data-theme="dark"] .command-item:hover,
@@ -206,20 +206,20 @@
 }
 
 [data-theme="dark"] .command-label {
-  color: #cccccc !important;
+  color: var(--color-neutral-300) !important;
 }
 
 [data-theme="dark"] .command-shortcut,
 [data-theme="dark"] .search-hint,
 [data-theme="dark"] .command-hint kbd {
-  background: #333333 !important;
-  border-color: #444444 !important;
-  color: #cccccc !important;
+  background: var(--color-neutral-800) !important;
+  border-color: var(--color-neutral-700) !important;
+  color: var(--color-neutral-300) !important;
 }
 
 [data-theme="dark"] .command-footer {
   background: rgba(0, 0, 0, 0.3) !important;
-  border-color: #444444 !important;
+  border-color: var(--color-neutral-700) !important;
 }
 
 /* Scrollbar */

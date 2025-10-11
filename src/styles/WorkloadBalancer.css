@@ -71,8 +71,8 @@
   display: inline-block;
   margin-top: var(--space-3);
   padding: var(--space-2) var(--space-4);
-  background: #FEE2E2;
-  color: #DC2626;
+  background: var(--color-energy-1-light);
+  color: var(--color-error);
   border-radius: var(--radius-full);
   font-size: var(--text-sm);
   font-weight: var(--font-bold);
@@ -152,15 +152,15 @@
 }
 
 [data-theme="dark"] .workload-modal {
-  background: #2a2a2a !important;
+  background: var(--color-neutral-800) !important;
 }
 
 [data-theme="dark"] .workload-score-card,
 [data-theme="dark"] .recommendations-section,
 [data-theme="dark"] .actions-section,
 [data-theme="dark"] .tips-section {
-  background: #333333 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  border-color: var(--color-neutral-700) !important;
 }
 
 @media (max-width: 768px) {

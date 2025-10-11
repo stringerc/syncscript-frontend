@@ -125,10 +125,10 @@
   color: white;
 }
 
-.method-badge.get { background: #10B981; }
-.method-badge.post { background: #3B82F6; }
-.method-badge.put { background: #F59E0B; }
-.method-badge.delete { background: #EF4444; }
+.method-badge.get { background: var(--color-energy-4); }
+.method-badge.post { background: var(--color-info); }
+.method-badge.put { background: var(--color-energy-3); }
+.method-badge.delete { background: var(--color-energy-1); }
 
 .endpoint-path {
   font-family: monospace;
@@ -171,10 +171,10 @@
 }
 
 [data-theme="dark"] .api-docs-modal {
-  background: #2a2a2a !important;
+  background: var(--color-neutral-800) !important;
 }
 
 [data-theme="dark"] .method-card {
-  background: #333333 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  border-color: var(--color-neutral-700) !important;
 }

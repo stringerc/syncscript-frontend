@@ -337,7 +337,7 @@
 
 /* Dark Mode */
 [data-theme="dark"] .habit-tracker-modal {
-  background: #2a2a2a !important;
+  background: var(--color-neutral-800) !important;
 }
 
 [data-theme="dark"] .habit-card,
@@ -345,9 +345,9 @@
 [data-theme="dark"] .form-input,
 [data-theme="dark"] .form-select,
 [data-theme="dark"] .icon-btn {
-  background: #333333 !important;
-  color: #f5f5f5 !important;
-  border-color: #444444 !important;
+  background: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
+  border-color: var(--color-neutral-700) !important;
 }
 
 [data-theme="dark"] .add-habit-form {
@@ -356,8 +356,8 @@
 }
 
 [data-theme="dark"] .add-habit-btn {
-  border-color: #555555 !important;
-  color: #cccccc !important;
+  border-color: var(--color-neutral-600) !important;
+  color: var(--color-neutral-300) !important;
 }
 
 [data-theme="dark"] .add-habit-btn:hover {
