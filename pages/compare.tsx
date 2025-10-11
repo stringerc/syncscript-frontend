@@ -561,7 +561,7 @@ export default function ComparePage() {
               <p style={{
                 marginTop: '16px',
                 fontSize: '14px',
-                opacity: 0.8'
+                opacity: 0.8
               }}>
                 No credit card required • 14-day free trial
               </p>

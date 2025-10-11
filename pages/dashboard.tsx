@@ -515,7 +515,7 @@ export default function Dashboard() {
         );
         
         // Apply anti-gaming penalties if needed
-        let finalEmblemCharge = antiGamingResult.adjustedCharge;
+        const finalEmblemCharge = antiGamingResult.adjustedCharge;
         
         if (!antiGamingResult.allowed) {
           // Cooldown active - don't allow completion
