@@ -9,9 +9,13 @@ const NAVIGATION_ITEMS = [
   { href: '/features', label: 'Feature Hub', icon: '🌟', color: 'from-purple-500 to-pink-500' },
   { href: '/ai-breakdown', label: 'AI Task Breakdown', icon: '🤖', color: 'from-blue-600 to-indigo-600' },
   { href: '/smart-schedule', label: 'Smart Scheduling', icon: '🧠', color: 'from-cyan-500 to-blue-600' },
+  { href: '/calendar-sync', label: 'Calendar Sync', icon: '📅', color: 'from-blue-500 to-indigo-500' },
+  { href: '/voice-commands', label: 'Voice Commands', icon: '🎤', color: 'from-pink-500 to-purple-600' },
+  { href: '/analytics', label: 'Analytics', icon: '📈', color: 'from-green-500 to-blue-500' },
+  { href: '/team-collaboration', label: 'Team Collaboration', icon: '👥', color: 'from-indigo-600 to-purple-600' },
   { href: '/gamification', label: 'Gamification', icon: '🎮', color: 'from-orange-500 to-red-500' },
   { href: '/productivity', label: 'Productivity', icon: '⚡', color: 'from-green-500 to-emerald-500' },
-  { href: '/team', label: 'Team', icon: '👥', color: 'from-indigo-500 to-purple-500' },
+  { href: '/team', label: 'Team Workspace', icon: '🤝', color: 'from-indigo-500 to-purple-500' },
   { href: '/integrations', label: 'Integrations', icon: '🔌', color: 'from-pink-500 to-rose-500' },
   { href: '/settings', label: 'Settings', icon: '⚙️', color: 'from-gray-600 to-gray-800' }
 ]
