@@ -339,7 +339,7 @@ const AdvancedSearchHub: React.FC = () => {
               <Search className="w-16 h-16 mx-auto mb-4 opacity-50" />
               <p className="text-lg font-medium mb-2">Start searching</p>
               <p className="text-sm">
-                Try natural language like "high priority tasks for this week"
+                Try natural language like &quot;high priority tasks for this week&quot;
               </p>
             </div>
           )}
