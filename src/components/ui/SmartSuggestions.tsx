@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ExplanationModal from './ExplanationModal';
 import { generateExplanation, TaskExplanation } from '../../utils/aiExplainability';
+import { analytics } from '../../lib/analytics';
 import { 
   calculateRecommendationBudgetFit, 
   hasBudgetPreferences,
@@ -122,6 +123,20 @@ const SmartSuggestions: React.FC<SmartSuggestionsProps> = ({ isOpen, onClose, on
 
   const handleAccept = async (taskId: string) => {
     try {
+      // Find the suggestion being accepted
+      const suggestion = suggestions.find(s => s.task.id === taskId);
+      
+      // Track AI suggestion acceptance
+      if (typeof window !== 'undefined' && suggestion) {
+        const userId = localStorage.getItem('userId') || 'anonymous';
+        analytics.aiSuggestionAccepted(userId, taskId, {
+          confidence: suggestion.confidence,
+          energyMatch: suggestion.energyMatch,
+          viewedExplanation: showExplanation,
+          hasBudgetFit: suggestion.budgetFit !== undefined
+        });
+      }
+      
       onAcceptSuggestion(taskId);
       // Remove suggestion from list
       setSuggestions(prev => prev.filter(s => s.task.id !== taskId));

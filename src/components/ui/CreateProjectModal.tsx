@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
+import { analytics } from '../../lib/analytics';
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -92,6 +93,18 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 
       if (response.ok) {
         const action = editProject ? 'updated' : 'created';
+        const responseData = await response.json();
+        const projectId = responseData?.data?.id || responseData?.id || 'unknown';
+        
+        // Track project creation (only for new projects, not edits)
+        if (!editProject && typeof window !== 'undefined') {
+          const userId = localStorage.getItem('userId') || 'anonymous';
+          analytics.projectCreated(userId, projectId, {
+            hasDescription: formData.description.trim().length > 0,
+            color: formData.color
+          });
+        }
+        
         toast.success(`Project ${action} successfully! 🎯`, {
           duration: 3000,
           icon: '📁',

@@ -6,6 +6,7 @@ import { Tag } from '../../utils/tagUtils';
 import { Subtask, getSubtaskProgress } from '../../utils/subtaskUtils';
 import { TaskNote } from '../../utils/noteUtils';
 import { RecurrenceConfig, getRecurrenceLabel } from '../../utils/recurrenceUtils';
+import { analytics } from '../../lib/analytics';
 
 interface Task {
   id: string;
@@ -106,6 +107,24 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
   const handleComplete = () => {
     setShowConfetti(true);
+    
+    // Track task completion
+    if (typeof window !== 'undefined') {
+      const userId = localStorage.getItem('userId') || 'anonymous';
+      const timeToComplete = task.createdAt || task.created_at 
+        ? Math.floor((Date.now() - new Date(task.createdAt || task.created_at).getTime()) / (1000 * 60))
+        : undefined;
+      
+      analytics.taskCompleted(userId, task.id, {
+        priority: task.priority,
+        energyLevel: task.energyRequirement || task.energy_requirement,
+        wasEnergyMatch: isPerfectMatch,
+        timeToComplete,
+        hadSubtasks: (task.subtasks?.length || 0) > 0,
+        hadNotes: (task.notes?.length || 0) > 0
+      });
+    }
+    
     setTimeout(() => {
       onComplete(task.id);
     }, 500);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { analytics } from '../../lib/analytics';
 
 interface EnergyLevel {
   id: number;
@@ -80,6 +81,15 @@ export const EnergySelector: React.FC<EnergySelectorProps> = ({
     setIsAnimating(true);
     setSelectedEnergy(energy);
     onEnergyChange(energy);
+    
+    // Track energy update
+    if (typeof window !== 'undefined') {
+      const userId = localStorage.getItem('userId') || 'anonymous';
+      analytics.energyUpdated(userId, energy, {
+        previousLevel: selectedEnergy,
+        wasAutoUpdated: autoUpdated
+      });
+    }
     
     // Reset animation state after animation completes
     setTimeout(() => setIsAnimating(false), 500);
