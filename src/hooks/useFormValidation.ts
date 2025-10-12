@@ -76,7 +76,7 @@ export function useFormValidation<T extends Record<string, unknown>>(
           break
         
         case 'custom':
-          isInvalid = rule.validator ? !rule.validator(value) : false
+          isInvalid = rule.validator ? !rule.validator(String(value ?? '')) : false
           break
       }
 
