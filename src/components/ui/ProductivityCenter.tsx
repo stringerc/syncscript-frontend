@@ -1,9 +1,8 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { globalPomodoroTimer, globalTimeTracker, globalFocusMode } from '@/utils/powerUserFeatures'
-import { getNextMilestoneProgress } from '@/utils/streakSystem'
+import { globalFocusMode } from '@/utils/powerUserFeatures'
 
 export default function ProductivityCenter() {
   const [pomodoroTime, setPomodoroTime] = useState(25 * 60)
@@ -13,27 +12,42 @@ export default function ProductivityCenter() {
   const [trackedTime, setTrackedTime] = useState(0)
   const [focusModeActive, setFocusModeActive] = useState(false)
   const [completedPomodoros, setCompletedPomodoros] = useState(0)
+  
+  const pomodoroIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const trackingIntervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (pomodoroIntervalRef.current) clearInterval(pomodoroIntervalRef.current)
+      if (trackingIntervalRef.current) clearInterval(trackingIntervalRef.current)
+    }
+  }, [])
 
   const startPomodoro = () => {
     if (!isPomodoroActive) {
-      globalPomodoroTimer.start(
-        (time) => setPomodoroTime(time),
-        (phase) => {
-          console.log(`Pomodoro ${phase} completed!`)
-          if (phase === 'work') {
-            setCompletedPomodoros(prev => prev + 1)
-          }
-        }
-      )
       setIsPomodoroActive(true)
+      pomodoroIntervalRef.current = setInterval(() => {
+        setPomodoroTime(prev => {
+          if (prev <= 1) {
+            // Complete pomodoro
+            if (pomodoroPhase === 'work') {
+              setCompletedPomodoros(c => c + 1)
+            }
+            if (pomodoroIntervalRef.current) clearInterval(pomodoroIntervalRef.current)
+            setIsPomodoroActive(false)
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
     } else {
-      globalPomodoroTimer.pause()
+      if (pomodoroIntervalRef.current) clearInterval(pomodoroIntervalRef.current)
       setIsPomodoroActive(false)
     }
   }
 
   const resetPomodoro = () => {
-    globalPomodoroTimer.reset()
+    if (pomodoroIntervalRef.current) clearInterval(pomodoroIntervalRef.current)
     setIsPomodoroActive(false)
     setPomodoroTime(25 * 60)
   }
@@ -50,6 +64,19 @@ export default function ProductivityCenter() {
       })
     }
     setFocusModeActive(!focusModeActive)
+  }
+  
+  const toggleTimeTracking = () => {
+    if (!timeTrackingActive) {
+      setTimeTrackingActive(true)
+      trackingIntervalRef.current = setInterval(() => {
+        setTrackedTime(prev => prev + 1)
+      }, 1000)
+    } else {
+      if (trackingIntervalRef.current) clearInterval(trackingIntervalRef.current)
+      setTimeTrackingActive(false)
+      setTrackedTime(0)
+    }
   }
 
   const formatTime = (seconds: number): string => {
@@ -186,23 +213,7 @@ export default function ProductivityCenter() {
               </div>
               
               <button
-                onClick={() => {
-                  if (!timeTrackingActive) {
-                    globalTimeTracker.start('current-task')
-                    const interval = setInterval(() => {
-                      const current = globalTimeTracker.getCurrentEntry()
-                      if (current) {
-                        setTrackedTime(current.duration)
-                      } else {
-                        clearInterval(interval)
-                      }
-                    }, 1000)
-                  } else {
-                    globalTimeTracker.stop()
-                    setTrackedTime(0)
-                  }
-                  setTimeTrackingActive(!timeTrackingActive)
-                }}
+                onClick={toggleTimeTracking}
                 className={`w-full py-4 rounded-xl font-bold transition-all ${
                   timeTrackingActive
                     ? 'bg-red-500 hover:bg-red-600 text-white'
