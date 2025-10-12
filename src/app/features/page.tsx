@@ -172,7 +172,7 @@ const categories = [
 ]
 
 const getIcon = (iconName: string) => {
-  const icons: Record<string, any> = {
+  const icons: Record<string, React.ComponentType<{ className?: string }>> = {
     Brain, Sparkles, Users, DollarSign, Zap, BarChart3,
     Calendar, Settings, Trophy, Shield, Rocket, Target,
     Heart, Globe, CheckCircle, Clock, TrendingUp, Layers, Search

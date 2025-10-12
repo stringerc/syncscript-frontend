@@ -10,9 +10,8 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { 
   Rocket, Sparkles, Users, DollarSign, Brain, Zap, 
-  BarChart3, CheckCircle, ArrowRight, Star, TrendingUp,
-  Shield, Globe, Target, Clock, Heart, Trophy,
-  ChevronDown
+  BarChart3, CheckCircle, ArrowRight, Star, Trophy,
+  Globe, ChevronDown
 } from 'lucide-react'
 
 export default function LandingPage() {
@@ -469,7 +468,7 @@ export default function LandingPage() {
                   ))}
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 mb-6 italic">
-                  "{testimonial.text}"
+                  &ldquo;{testimonial.text}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="text-4xl">{testimonial.avatar}</div>
