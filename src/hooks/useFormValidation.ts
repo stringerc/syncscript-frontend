@@ -52,7 +52,7 @@ export function useFormValidation<T extends Record<string, unknown>>(
           break
         
         case 'email':
-          isInvalid = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+          isInvalid = typeof value !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
           break
         
         case 'minLength':
@@ -72,7 +72,7 @@ export function useFormValidation<T extends Record<string, unknown>>(
           break
         
         case 'pattern':
-          isInvalid = !(rule.value as RegExp).test(value)
+          isInvalid = typeof value !== 'string' || !(rule.value as RegExp).test(value)
           break
         
         case 'custom':
