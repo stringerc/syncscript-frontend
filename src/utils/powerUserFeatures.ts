@@ -349,7 +349,7 @@ export class VoiceInput {
     onResult: (transcript: string, isFinal: boolean) => void,
     onError?: (error: string) => void
   ): void {
-    if (!this.isSupported()) {
+    if (!this.isSupported() || !this.recognition) {
       onError?.('Voice input not supported in this browser')
       return
     }
@@ -370,7 +370,7 @@ export class VoiceInput {
   }
   
   stop(): void {
-    if (!this.isListening) return
+    if (!this.isListening || !this.recognition) return
     
     try {
       this.recognition.stop()
