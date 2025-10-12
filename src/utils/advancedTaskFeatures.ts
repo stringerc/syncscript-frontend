@@ -64,9 +64,11 @@ export function suggestOptimalTime(
       // Bonus for weekday mornings
       if (!isWeekend && hour >= 9 && hour <= 11) score += 15
       
+      // Calculate days until due
+      const daysUntilDue = dueDate ? Math.ceil((dueDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)) : undefined
+      
       // Bonus for proximity to due date if urgent
-      if (dueDate && priority >= 4) {
-        const daysUntilDue = Math.ceil((dueDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
+      if (dueDate && priority >= 4 && daysUntilDue !== undefined) {
         if (daysUntilDue <= 2) score += 25
       }
       
@@ -106,7 +108,7 @@ function generateScheduleReason(
   energyLevel: number,
   priority: number,
   isWeekend: boolean,
-  daysUntilDue?: number
+  daysUntilDue: number | undefined
 ): string {
   if (daysUntilDue !== undefined && daysUntilDue <= 1) {
     return '⚠️ Due soon - prioritize this time slot'
