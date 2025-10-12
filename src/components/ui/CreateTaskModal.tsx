@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tag, parseTags } from '../../utils/tagUtils';
 import { RecurrenceConfig, RecurrenceFrequency, createDefaultRecurrence } from '../../utils/recurrenceUtils';
+import { analytics } from '../../lib/analytics';
 
 interface Project {
   id: string;
@@ -79,7 +80,19 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         recurrence,
       };
 
-      await onCreateTask(taskData);
+      const newTask = await onCreateTask(taskData);
+      
+      // Track task creation
+      if (typeof window !== 'undefined') {
+        const userId = localStorage.getItem('userId') || 'anonymous';
+        analytics.taskCreated(userId, (newTask as any)?.id || Date.now().toString(), {
+          priority,
+          energyLevel: energyRequirement,
+          hasBudget: false, // TODO: Add budget tracking
+          estimatedDuration: estimatedDuration ? parseInt(estimatedDuration) : undefined,
+          source: 'manual'
+        });
+      }
       
       // Reset form
       setTitle('');
