@@ -7,10 +7,15 @@
 
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Webhook, Plus, Play, Pause, Trash2, Copy, AlertCircle, CheckCircle } from 'lucide-react'
+import { Webhook, Plus, Play, Pause, Trash2, Copy, AlertCircle, CheckCircle, X } from 'lucide-react'
 import { Webhook as WebhookType } from '../../utils/enterpriseFeatures'
 
-const WebhooksManager: React.FC = () => {
+interface WebhooksManagerProps {
+  isOpen: boolean
+  onClose: () => void
+}
+
+const WebhooksManager: React.FC<WebhooksManagerProps> = ({ isOpen, onClose }) => {
   const [webhooks, setWebhooks] = useState<WebhookType[]>([
     {
       id: '1',
@@ -29,9 +34,15 @@ const WebhooksManager: React.FC = () => {
     'project.created', 'project.updated', 'user.joined', 'goal.achieved'
   ]
 
+  if (!isOpen) return null
+
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-gray-50 dark:bg-gray-900 rounded-xl w-full max-w-6xl max-h-[90vh] overflow-y-auto p-6"
+      >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <Webhook className="w-8 h-8 text-blue-600 dark:text-blue-400" />
@@ -40,10 +51,18 @@ const WebhooksManager: React.FC = () => {
               <p className="text-sm text-gray-600 dark:text-gray-400">Event-driven integrations</p>
             </div>
           </div>
-          <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-            <Plus className="w-4 h-4" />
-            New Webhook
-          </button>
+          <div className="flex items-center gap-2">
+            <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+              <Plus className="w-4 h-4" />
+              New Webhook
+            </button>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         <div className="space-y-4">
@@ -101,7 +120,7 @@ const WebhooksManager: React.FC = () => {
             </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }
