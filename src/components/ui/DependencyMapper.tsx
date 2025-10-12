@@ -249,7 +249,9 @@ const DependencyMapper: React.FC<DependencyMapperProps> = ({
                         <div className="font-medium text-gray-900 dark:text-white flex items-center gap-2">
                           {task.title}
                           {task.isCriticalPath && (
-                            <Zap className="w-4 h-4 text-orange-500" title="Critical Path" />
+                            <span className="text-orange-500" title="Critical Path">
+                              <Zap className="w-4 h-4" />
+                            </span>
                           )}
                         </div>
                         <div className="text-xs text-gray-600 dark:text-gray-400">
