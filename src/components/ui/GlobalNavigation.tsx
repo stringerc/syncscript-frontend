@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useSwipeToClose } from '@/hooks/useSwipeGesture'
 
 const NAVIGATION_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: '📊', color: 'from-blue-500 to-cyan-500' },
@@ -22,6 +23,7 @@ const NAVIGATION_ITEMS = [
 
 export default function GlobalNavigation() {
   const [isOpen, setIsOpen] = useState(false)
+  const swipeHandlers = useSwipeToClose(() => setIsOpen(false), 'right')
 
   return (
     <>
@@ -56,6 +58,7 @@ export default function GlobalNavigation() {
               className="global-navigation fixed top-0 right-0 bottom-0 w-80 bg-white dark:bg-gray-900 shadow-2xl overflow-y-auto"
               role="dialog"
               aria-label="Navigation menu"
+              {...swipeHandlers}
             >
               <div className="p-6">
                 <div className="mb-8">
