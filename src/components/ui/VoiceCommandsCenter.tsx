@@ -212,7 +212,7 @@ export default function VoiceCommandsCenter() {
                     Voice Commands Not Supported
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Your browser doesn't support speech recognition. Try Chrome or Edge.
+                    Your browser doesn&apos;t support speech recognition. Try Chrome or Edge.
                   </p>
                 </div>
               ) : (
@@ -296,7 +296,7 @@ export default function VoiceCommandsCenter() {
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1">
                         <div className="font-semibold text-gray-900 dark:text-white">
-                          "{command.text}"
+                          &quot;{command.text}&quot;
                         </div>
                         <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                           {command.action}
