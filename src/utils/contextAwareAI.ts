@@ -18,6 +18,7 @@ export interface Task {
   energy_requirement: number;
   location?: string;
   estimated_duration?: number; // minutes
+  due_date?: string | Date;
   requires_outdoor?: boolean;
   estimated_cost?: number;
   category?: string;

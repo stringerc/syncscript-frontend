@@ -3,7 +3,7 @@
  * Comprehensive AI-powered productivity tools
  */
 
-import { Task, Project } from './types'
+import { Task } from './contextAwareAI'
 
 /**
  * Feature #83: Predictive Task Scheduling
