@@ -130,6 +130,10 @@ export interface SearchResult {
   matches: string[]
 }
 
+function isValidSearchType(type: string | undefined): type is 'task' | 'project' | 'note' | 'goal' {
+  return type === 'task' || type === 'project' || type === 'note' || type === 'goal'
+}
+
 export function searchAll(query: string, items: Array<{id: string; title?: string; description?: string; notes?: string; tags?: string[]; type?: string}>): SearchResult[] {
   if (!query || query.trim().length === 0) return []
   
@@ -177,8 +181,11 @@ export function searchAll(query: string, items: Array<{id: string; title?: strin
       // Generate snippet
       const snippet = generateSnippet(item, query)
       
+      // Ensure type is valid
+      const itemType = isValidSearchType(item.type) ? item.type : 'task'
+      
       results.push({
-        type: item.type || 'task',
+        type: itemType,
         id: item.id,
         title: item.title || 'Untitled',
         snippet,
