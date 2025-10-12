@@ -7,7 +7,7 @@
 
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { FileText, Upload, Download, Folder, Image, FileCode, Grid, List, Search } from 'lucide-react'
+import { FileText, Upload, Download, Folder, Image as ImageIcon, FileCode, Grid, List, Search } from 'lucide-react'
 
 interface SharedFile {
   id: string
@@ -37,7 +37,7 @@ const FileSharingHub: React.FC = () => {
   const getFileIcon = (type: string) => {
     if (type === 'pdf') return <FileText className="w-8 h-8 text-red-500" />
     if (type === 'figma') return <FileCode className="w-8 h-8 text-purple-500" />
-    if (type.startsWith('image')) return <Image className="w-8 h-8 text-blue-500" />
+    if (type.startsWith('image')) return <ImageIcon className="w-8 h-8 text-blue-500" />
     return <FileText className="w-8 h-8 text-gray-500" />
   }
 
