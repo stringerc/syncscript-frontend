@@ -27,7 +27,7 @@ export interface FormState<T> {
   isSubmitting: boolean
 }
 
-export function useFormValidation<T extends Record<string, any>>(
+export function useFormValidation<T extends Record<string, unknown>>(
   initialValues: T,
   fields: FieldConfig[]
 ) {
@@ -39,7 +39,7 @@ export function useFormValidation<T extends Record<string, any>>(
     isSubmitting: false
   })
 
-  const validateField = useCallback((fieldName: string, value: any): string | null => {
+  const validateField = useCallback((fieldName: string, value: unknown): string | null => {
     const field = fields.find(f => f.name === fieldName)
     if (!field) return null
 
@@ -104,7 +104,7 @@ export function useFormValidation<T extends Record<string, any>>(
     return isValid
   }, [fields, formState.values, validateField])
 
-  const handleChange = useCallback((name: keyof T, value: any) => {
+  const handleChange = useCallback((name: keyof T, value: unknown) => {
     setFormState(prev => ({
       ...prev,
       values: { ...prev.values, [name]: value }

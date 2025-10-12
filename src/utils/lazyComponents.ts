@@ -4,6 +4,20 @@
  */
 
 import dynamic from 'next/dynamic'
+import React from 'react'
+
+// Loading Spinner Component (defined first to use in loading prop)
+function LoadingSpinner({ message = 'Loading...' }: { message?: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-16">
+      <div className="relative w-16 h-16 mb-4">
+        <div className="absolute inset-0 border-4 border-purple-200 rounded-full"></div>
+        <div className="absolute inset-0 border-4 border-purple-600 rounded-full border-t-transparent animate-spin"></div>
+      </div>
+      <p className="text-gray-600 dark:text-gray-400 font-medium">{message}</p>
+    </div>
+  )
+}
 
 // Core feature hubs (lazy load these heavy components)
 export const FeatureHub = dynamic(() => import('@/components/ui/FeatureHub'), {
@@ -94,17 +108,4 @@ export const GanttChart = dynamic(() => import('@/components/ui/GanttChart'), {
 export const MindMap = dynamic(() => import('@/components/ui/MindMap'), {
   loading: () => <LoadingSpinner message="Loading mind map..." />
 })
-
-// Loading Spinner Component
-function LoadingSpinner({ message = 'Loading...' }: { message?: string }) {
-  return (
-    <div className="flex flex-col items-center justify-center py-16">
-      <div className="relative w-16 h-16 mb-4">
-        <div className="absolute inset-0 border-4 border-purple-200 rounded-full"></div>
-        <div className="absolute inset-0 border-4 border-purple-600 rounded-full border-t-transparent animate-spin"></div>
-      </div>
-      <p className="text-gray-600 dark:text-gray-400 font-medium">{message}</p>
-    </div>
-  )
-}
 

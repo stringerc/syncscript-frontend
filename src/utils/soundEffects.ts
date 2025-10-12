@@ -40,11 +40,11 @@ class SoundEffectsManager {
       
       // Initialize Web Audio API
       try {
-        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext
-        this.audioContext = new AudioContextClass()
-      } catch (error) {
-        console.warn('Web Audio API not supported')
-      }
+        const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+        this.audioContext = AudioContextClass ? new AudioContextClass() : null
+    } catch (err) {
+      console.warn('Web Audio API not supported', err)
+    }
     }
   }
 

@@ -132,7 +132,7 @@ export default function PolishShowcase() {
               ].map((sound) => (
                 <button
                   key={sound.type}
-                  onClick={() => handleTestSound(sound.type as any)}
+                  onClick={() => handleTestSound(sound.type as Parameters<typeof soundEffects.play>[0])}
                   disabled={!soundEnabled}
                   className="flex items-center gap-3 p-4 bg-gradient-to-br from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white rounded-xl font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -183,7 +183,7 @@ export default function PolishShowcase() {
                 ].map((haptic) => (
                   <button
                     key={haptic.type}
-                    onClick={() => handleTestHaptic(haptic.type as any)}
+                    onClick={() => handleTestHaptic(haptic.type as Parameters<typeof hapticFeedback.trigger>[0])}
                     disabled={!hapticEnabled}
                     className="flex items-center gap-3 p-4 bg-gradient-to-br from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >

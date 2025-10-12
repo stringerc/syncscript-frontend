@@ -209,7 +209,7 @@ export default function AdvancedTaskBreakdown({ task, onSubtasksGenerated, onClo
                     className="mt-4 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl"
                   >
                     <p className="text-sm text-gray-700 dark:text-gray-300">
-                      <strong>🧠 AI Analysis:</strong> I've broken down this task based on complexity, 
+                      <strong>🧠 AI Analysis:</strong> I&apos;ve broken down this task based on complexity, 
                       dependencies, and best practices. The subtasks are ordered for optimal workflow, 
                       with critical path items prioritized first.
                     </p>

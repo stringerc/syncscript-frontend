@@ -21,7 +21,7 @@ interface ResponsiveTableProps<T> {
   mobileCardRender?: (item: T) => React.ReactNode
 }
 
-export default function ResponsiveTable<T extends Record<string, any>>({
+export default function ResponsiveTable<T extends Record<string, unknown>>({
   data,
   columns,
   keyField,

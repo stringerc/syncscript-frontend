@@ -3,6 +3,46 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
+// Type declarations for Web Speech API
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean
+  interimResults: boolean
+  lang: string
+  start(): void
+  stop(): void
+  onresult: ((event: SpeechRecognitionEvent) => void) | null
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null
+  onend: (() => void) | null
+}
+
+interface SpeechRecognitionEvent extends Event {
+  resultIndex: number
+  results: SpeechRecognitionResultList
+}
+
+interface SpeechRecognitionResultList {
+  length: number
+  item(index: number): SpeechRecognitionResult
+  [index: number]: SpeechRecognitionResult
+}
+
+interface SpeechRecognitionResult {
+  length: number
+  item(index: number): SpeechRecognitionAlternative
+  [index: number]: SpeechRecognitionAlternative
+  isFinal: boolean
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string
+  confidence: number
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string
+  message: string
+}
+
 interface Command {
   id: string
   text: string
@@ -25,7 +65,7 @@ const VOICE_SHORTCUTS: VoiceShortcut[] = [
   { trigger: 'show', action: 'Displays view', example: 'Show my tasks for today', category: 'Navigation' },
   { trigger: 'complete', action: 'Marks as done', example: 'Complete task: Write report', category: 'Tasks' },
   { trigger: 'set priority', action: 'Changes priority', example: 'Set priority high for project review', category: 'Tasks' },
-  { trigger: 'add note', action: 'Adds a note', example: 'Add note to meeting: Discuss budget', category: 'Notes' },
+  { trigger: 'add note', action: 'Adds a note', example: 'Add note to meeting - Discuss budget', category: 'Notes' },
   { trigger: 'find', action: 'Searches items', example: 'Find tasks about marketing', category: 'Search' },
   { trigger: 'remind me', action: 'Sets reminder', example: 'Remind me to call John at 3pm', category: 'Reminders' },
   { trigger: 'open', action: 'Opens section', example: 'Open analytics dashboard', category: 'Navigation' },
@@ -38,7 +78,7 @@ export default function VoiceCommandsCenter() {
   const [commandHistory, setCommandHistory] = useState<Command[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [isSupported, setIsSupported] = useState(true)
-  const recognitionRef = useRef<any>(null)
+  const recognitionRef = useRef<SpeechRecognition | null>(null)
 
   useEffect(() => {
     // Check if browser supports speech recognition
@@ -53,7 +93,7 @@ export default function VoiceCommandsCenter() {
         recognition.interimResults = true
         recognition.lang = 'en-US'
         
-        recognition.onresult = (event: any) => {
+        recognition.onresult = (event: SpeechRecognitionEvent) => {
           let interimTranscript = ''
           let finalTranscript = ''
           
@@ -74,7 +114,7 @@ export default function VoiceCommandsCenter() {
           }
         }
         
-        recognition.onerror = (event: any) => {
+        recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
           console.error('Speech recognition error:', event.error)
           setIsListening(false)
         }
@@ -205,7 +245,7 @@ export default function VoiceCommandsCenter() {
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400">
                       {isListening 
-                        ? 'Say a command like "Create task: Buy groceries"' 
+                        ? 'Say a command like &quot;Create task - Buy groceries&quot;' 
                         : 'Press the microphone to start'
                       }
                     </p>
@@ -219,10 +259,10 @@ export default function VoiceCommandsCenter() {
                       className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-lg"
                     >
                       <div className="text-gray-600 dark:text-gray-400 text-sm mb-1">
-                        You're saying:
+                        You&apos;re saying:
                       </div>
                       <div className="text-xl font-semibold text-gray-900 dark:text-white">
-                        "{transcript}"
+                        &quot;{transcript}&quot;
                       </div>
                     </motion.div>
                   )}
@@ -324,7 +364,7 @@ export default function VoiceCommandsCenter() {
                     </div>
                     <div className="flex-1">
                       <div className="font-bold text-gray-900 dark:text-white mb-1">
-                        "{shortcut.trigger}"
+                        &quot;{shortcut.trigger}&quot;
                       </div>
                       <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                         {shortcut.action}
