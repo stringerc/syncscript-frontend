@@ -6,6 +6,9 @@ import { ThemeProvider } from '../src/contexts/ThemeContext';
 import GlobalNavigation from '../src/components/ui/GlobalNavigation';
 import Head from 'next/head';
 import '../src/design-system/variables.css'; // Design token system
+import '../src/styles/z-index-system.css'; // Centralized z-index layers
+import '../src/styles/focus-system.css'; // Accessible focus indicators
+import '../src/styles/responsive-audit-fixes.css'; // Responsive & touch target fixes
 import '../src/styles/accessibility.css'; // WCAG 2.1 AA compliance
 import '../src/styles/mobile-responsive.css'; // Mobile optimizations
 import '../src/styles/motion-system.css'; // Standardized animations

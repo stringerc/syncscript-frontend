@@ -22,7 +22,8 @@ export default function GlobalNavigation() {
       {/* Floating Action Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110 flex items-center justify-center text-3xl"
+        className="global-navigation fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110 flex items-center justify-center text-3xl focus:outline-none focus:ring-4 focus:ring-purple-300"
+        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
       >
         {isOpen ? '✕' : '🚀'}
       </button>
@@ -37,7 +38,8 @@ export default function GlobalNavigation() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+              className="modal-backdrop fixed inset-0 bg-black/50 backdrop-blur-sm"
+              aria-hidden="true"
             />
 
             {/* Menu Panel */}
@@ -45,7 +47,9 @@ export default function GlobalNavigation() {
               initial={{ x: 400, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 400, opacity: 0 }}
-              className="fixed top-0 right-0 bottom-0 w-80 bg-white dark:bg-gray-900 shadow-2xl z-40 overflow-y-auto"
+              className="global-navigation fixed top-0 right-0 bottom-0 w-80 bg-white dark:bg-gray-900 shadow-2xl overflow-y-auto"
+              role="dialog"
+              aria-label="Navigation menu"
             >
               <div className="p-6">
                 <div className="mb-8">

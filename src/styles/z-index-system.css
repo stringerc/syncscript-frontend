@@ -1,0 +1,69 @@
+/**
+ * Centralized Z-Index System
+ * Prevents overlap conflicts by defining clear layers
+ */
+
+:root {
+  /* Base layers */
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-fixed: 1200;
+  --z-modal-backdrop: 1300;
+  --z-modal: 1400;
+  --z-popover: 1500;
+  --z-toast: 1600;
+  --z-tooltip: 1700;
+  
+  /* Floating Action Buttons */
+  --z-fab-base: 1050;
+  --z-fab-menu: 1060;
+  
+  /* Navigation */
+  --z-nav-global: 1800;
+  --z-nav-mobile: 1250;
+  
+  /* Critical overlays */
+  --z-command-palette: 1900;
+  --z-tour: 2000;
+}
+
+/* Apply to components */
+.global-navigation {
+  z-index: var(--z-nav-global) !important;
+}
+
+.floating-action-button {
+  z-index: var(--z-fab-base) !important;
+}
+
+.fab-menu {
+  z-index: var(--z-fab-menu) !important;
+}
+
+.modal-backdrop {
+  z-index: var(--z-modal-backdrop) !important;
+}
+
+.modal {
+  z-index: var(--z-modal) !important;
+}
+
+.toast {
+  z-index: var(--z-toast) !important;
+}
+
+.tooltip {
+  z-index: var(--z-tooltip) !important;
+}
+
+.command-palette {
+  z-index: var(--z-command-palette) !important;
+}
+
+/* Ensure proper stacking context */
+.stacking-context {
+  position: relative;
+  z-index: 0;
+}
+

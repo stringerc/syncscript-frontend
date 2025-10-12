@@ -1,0 +1,99 @@
+/**
+ * Accessible Focus System
+ * WCAG 2.2 AA Compliant Focus Indicators
+ */
+
+/* Global focus ring */
+:focus {
+  outline: 3px solid var(--focus-ring-color, #4A90E2);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring-color, #4A90E2);
+  outline-offset: 2px;
+}
+
+/* Dark mode focus */
+@media (prefers-color-scheme: dark) {
+  :focus-visible {
+    outline-color: var(--focus-ring-color-dark, #60A5FA);
+  }
+}
+
+/* Focus for interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--focus-ring-color, #4A90E2);
+  outline-offset: 2px;
+}
+
+/* Custom focus for specific components */
+.button:focus-visible {
+  outline: 3px solid #4A90E2;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
+}
+
+.button-primary:focus-visible {
+  outline-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+}
+
+/* Card/interactive areas */
+.card:focus-within {
+  box-shadow: 0 0 0 3px #4A90E2;
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  z-index: 9999;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :focus-visible {
+    outline-width: 4px;
+  }
+}
+
+/* Keyboard navigation indicator */
+body.using-keyboard :focus {
+  outline: 3px solid #4A90E2 !important;
+  outline-offset: 2px;
+}
+
+body.using-mouse :focus {
+  outline: none;
+}
+
+/* Modal focus trap */
+[role="dialog"]:focus {
+  outline: none;
+}
+
+[role="dialog"] *:focus-visible {
+  outline: 3px solid #4A90E2;
+  outline-offset: 2px;
+}
+
