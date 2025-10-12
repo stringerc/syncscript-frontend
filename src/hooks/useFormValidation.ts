@@ -112,14 +112,14 @@ export function useFormValidation<T extends Record<string, unknown>>(
 
     // Only validate on change if explicitly configured
     const field = fields.find(f => f.name === name)
-    if (field?.validateOn === 'change' && prev.touched[name]) {
+    if (field?.validateOn === 'change' && formState.touched[name]) {
       const error = validateField(String(name), value)
       setFormState(prev => ({
         ...prev,
         errors: { ...prev.errors, [name]: error || undefined }
       }))
     }
-  }, [fields, validateField])
+  }, [fields, formState.touched, validateField])
 
   const handleBlur = useCallback((name: keyof T) => {
     // Mark field as touched
