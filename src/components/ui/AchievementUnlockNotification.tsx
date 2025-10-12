@@ -1,7 +1,14 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Achievement, TIER_GRADIENTS } from '../../utils/achievementSystem';
+import { Achievement } from '../../utils/achievementSystem';
+
+const RARITY_GRADIENTS = {
+  common: 'linear-gradient(135deg, #6B7280 0%, #4B5563 100%)',
+  rare: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)',
+  epic: 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)',
+  legendary: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'
+};
 
 interface AchievementUnlockNotificationProps {
   achievement: Achievement | null;
@@ -71,7 +78,7 @@ const AchievementUnlockNotification: React.FC<AchievementUnlockNotificationProps
             damping: 25 
           }}
           style={{
-            background: TIER_GRADIENTS[achievement.tier]
+            background: RARITY_GRADIENTS[achievement.rarity]
           }}
         >
           <button 
@@ -109,14 +116,14 @@ const AchievementUnlockNotification: React.FC<AchievementUnlockNotificationProps
               <h3 className="notification-title">Achievement Unlocked!</h3>
               <div className="notification-achievement">
                 <span className="achievement-icon-notif">{achievement.icon}</span>
-                <span className="achievement-name-notif">{achievement.name}</span>
+                <span className="achievement-name-notif">{achievement.title}</span>
               </div>
               <p className="notification-description">{achievement.description}</p>
               <div className="notification-reward">
-                <span className="reward-badge">+{achievement.reward.points} points</span>
-                {achievement.reward.title && (
-                  <span className="title-badge">🏅 {achievement.reward.title}</span>
-                )}
+                <span className="reward-badge">+{achievement.reward} emblems</span>
+                <span className="title-badge" style={{textTransform: 'uppercase'}}>
+                  {achievement.rarity}
+                </span>
               </div>
             </motion.div>
           </div>
