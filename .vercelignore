@@ -1,1 +1,3 @@
-# Trigger rebuild
+.next
+.vercel
+node_modules
