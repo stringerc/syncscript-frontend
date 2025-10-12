@@ -8,6 +8,9 @@ import { Inter } from 'next/font/google'
 import '../styles/globals.css'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ToastProvider } from '@/components/Toast'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
+import { AnalyticsProvider } from '@/components/AnalyticsProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -49,7 +52,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <ErrorBoundary>
           <ToastProvider>
-            {children}
+            <AnalyticsProvider>
+              {children}
+            </AnalyticsProvider>
+            <Analytics />
+            <SpeedInsights />
           </ToastProvider>
         </ErrorBoundary>
       </body>
