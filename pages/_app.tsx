@@ -11,6 +11,9 @@ import '../src/styles/focus-system.css'; // Accessible focus indicators
 import '../src/styles/typography-system.css'; // Typography scale (WCAG AA)
 import '../src/styles/contrast-system.css'; // Color contrast (WCAG AA)
 import '../src/styles/performance-animations.css'; // GPU-accelerated animations
+import '../src/styles/animation-curves.css'; // Perfect timing curves (L4)
+import '../src/styles/microinteractions.css'; // Delightful microinteractions (L1)
+import '../src/styles/illustration-system.css'; // Illustration style guide (L3)
 import '../src/styles/rtl-support.css'; // RTL language support (M3)
 import '../src/styles/dark-mode-complete.css'; // Complete dark mode (M2)
 import '../src/styles/responsive-audit-fixes.css'; // Responsive & touch target fixes

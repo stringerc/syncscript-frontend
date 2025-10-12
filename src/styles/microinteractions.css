@@ -1,0 +1,274 @@
+/**
+ * Microinteractions System
+ * Delightful subtle animations and feedback
+ */
+
+/* Button interactions */
+.btn-microinteraction {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-microinteraction:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-microinteraction:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Ripple effect on click */
+.btn-microinteraction::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-microinteraction:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Checkbox microinteraction */
+input[type="checkbox"] {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input[type="checkbox"]:checked {
+  animation: checkboxPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes checkboxPop {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* Toggle switch microinteraction */
+.toggle-switch {
+  transition: background-color 0.3s ease;
+}
+
+.toggle-switch .toggle-thumb {
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Card hover elevation */
+.card-interactive {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Icon bounce on hover */
+.icon-bounce:hover {
+  animation: iconBounce 0.5s ease;
+}
+
+@keyframes iconBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Pulse effect for notifications */
+.pulse-notification {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+  }
+  50% { 
+    box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+  }
+}
+
+/* Shake animation for errors */
+.shake-error {
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+/* Success checkmark animation */
+.success-checkmark {
+  animation: checkmarkDraw 0.6s cubic-bezier(0.65, 0, 0.45, 1);
+}
+
+@keyframes checkmarkDraw {
+  0% { 
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% { 
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+/* Loading spinner */
+.spinner-bounce {
+  animation: spinnerBounce 1s ease-in-out infinite;
+}
+
+@keyframes spinnerBounce {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.8); opacity: 0.7; }
+}
+
+/* Slide in from side */
+.slide-in-right {
+  animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Fade and scale */
+.fade-scale-in {
+  animation: fadeScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Progress bar fill */
+.progress-fill {
+  transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Tooltip appear */
+.tooltip-appear {
+  animation: tooltipAppear 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes tooltipAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Counter number change */
+.counter-change {
+  animation: counterPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes counterPop {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+/* Badge pulse */
+.badge-pulse {
+  animation: badgePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+/* Gradient shift on hover */
+.gradient-shift {
+  background-size: 200% 200%;
+  transition: background-position 0.5s ease;
+}
+
+.gradient-shift:hover {
+  background-position: 100% 100%;
+}
+
+/* Smooth morphing shapes */
+.morph-shape {
+  transition: border-radius 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.morph-shape:hover {
+  border-radius: 24px;
+}
+
+/* Glow effect */
+.glow-effect {
+  transition: box-shadow 0.3s ease;
+}
+
+.glow-effect:hover {
+  box-shadow: 
+    0 0 20px rgba(139, 92, 246, 0.3),
+    0 0 40px rgba(139, 92, 246, 0.1);
+}
+
+/* Loading dots */
+.loading-dots span {
+  animation: loadingDots 1.4s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes loadingDots {
+  0%, 60%, 100% { opacity: 0.3; }
+  30% { opacity: 1; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .btn-microinteraction:hover,
+  .card-interactive:hover,
+  .icon-bounce:hover {
+    transform: none;
+  }
+  
+  .pulse-notification,
+  .spinner-bounce,
+  .badge-pulse {
+    animation: none;
+  }
+}
+

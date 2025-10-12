@@ -8,6 +8,7 @@ import { useSwipeToClose } from '@/hooks/useSwipeGesture'
 const NAVIGATION_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: '📊', color: 'from-blue-500 to-cyan-500' },
   { href: '/features', label: 'Feature Hub', icon: '🌟', color: 'from-purple-500 to-pink-500' },
+  { href: '/polish', label: 'Polish Showcase', icon: '✨', color: 'from-yellow-500 to-orange-500', badge: 'New' },
   { href: '/ai-breakdown', label: 'AI Task Breakdown', icon: '🤖', color: 'from-blue-600 to-indigo-600' },
   { href: '/smart-schedule', label: 'Smart Scheduling', icon: '🧠', color: 'from-cyan-500 to-blue-600' },
   { href: '/calendar-sync', label: 'Calendar Sync', icon: '📅', color: 'from-blue-500 to-indigo-500' },

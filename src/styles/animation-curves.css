@@ -1,0 +1,250 @@
+/**
+ * Animation Timing Curves
+ * Industry-standard easing functions for natural motion
+ */
+
+:root {
+  /* Material Design easing curves */
+  --ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1);          /* Standard */
+  --ease-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1);        /* Deceleration */
+  --ease-accelerate: cubic-bezier(0.4, 0.0, 1, 1);          /* Acceleration */
+  --ease-sharp: cubic-bezier(0.4, 0.0, 0.6, 1);             /* Sharp */
+  
+  /* iOS easing curves */
+  --ease-ios-standard: cubic-bezier(0.25, 0.1, 0.25, 1);    /* iOS standard */
+  --ease-ios-snap: cubic-bezier(0.86, 0, 0.07, 1);          /* iOS snap */
+  
+  /* Custom easing for specific interactions */
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);    /* Bounce */
+  --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);   /* Elastic */
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);             /* Smooth entrance */
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);                  /* Quick exit */
+  
+  /* Duration standards (Material Design) */
+  --duration-instant: 50ms;       /* Instant feedback */
+  --duration-quick: 100ms;        /* Quick actions */
+  --duration-fast: 150ms;         /* Fast transitions */
+  --duration-normal: 200ms;       /* Standard duration */
+  --duration-moderate: 300ms;     /* Moderate animations */
+  --duration-slow: 400ms;         /* Slow reveals */
+  --duration-slower: 500ms;       /* Very slow */
+  --duration-page: 600ms;         /* Page transitions */
+}
+
+/* Apply standard curves to common elements */
+.transition-standard {
+  transition-timing-function: var(--ease-standard);
+  transition-duration: var(--duration-normal);
+}
+
+.transition-smooth {
+  transition-timing-function: var(--ease-smooth);
+  transition-duration: var(--duration-moderate);
+}
+
+.transition-bounce {
+  transition-timing-function: var(--ease-bounce);
+  transition-duration: var(--duration-moderate);
+}
+
+/* Button interactions */
+button {
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+button:hover {
+  transition-duration: var(--duration-quick);
+}
+
+button:active {
+  transition-duration: var(--duration-instant);
+}
+
+/* Modal/drawer animations */
+.modal-enter {
+  animation-duration: var(--duration-moderate);
+  animation-timing-function: var(--ease-smooth);
+}
+
+.modal-exit {
+  animation-duration: var(--duration-fast);
+  animation-timing-function: var(--ease-exit);
+}
+
+/* Tooltip animations */
+.tooltip-enter {
+  animation-duration: var(--duration-fast);
+  animation-timing-function: var(--ease-decelerate);
+}
+
+.tooltip-exit {
+  animation-duration: var(--duration-quick);
+  animation-timing-function: var(--ease-accelerate);
+}
+
+/* Dropdown animations */
+.dropdown-enter {
+  animation-duration: var(--duration-fast);
+  animation-timing-function: var(--ease-decelerate);
+}
+
+/* Loading animations */
+.loading-spinner {
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Hover effects */
+.hover-lift {
+  transition: transform var(--duration-normal) var(--ease-standard);
+}
+
+.hover-lift:hover {
+  transition-duration: var(--duration-quick);
+}
+
+/* Focus transitions */
+:focus-visible {
+  transition: outline-offset var(--duration-fast) var(--ease-standard);
+}
+
+/* Scroll-triggered animations */
+.scroll-fade-in {
+  animation-duration: var(--duration-slow);
+  animation-timing-function: var(--ease-smooth);
+  animation-fill-mode: both;
+}
+
+/* Stagger children animations */
+.stagger-container > * {
+  animation-duration: var(--duration-moderate);
+  animation-timing-function: var(--ease-smooth);
+  animation-fill-mode: both;
+}
+
+.stagger-container > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-container > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-container > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-container > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-container > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-container > *:nth-child(n+6) { animation-delay: 250ms; }
+
+/* Page transitions */
+.page-enter {
+  animation: pageEnter var(--duration-page) var(--ease-smooth);
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-exit {
+  animation: pageExit var(--duration-moderate) var(--ease-exit);
+}
+
+@keyframes pageExit {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Notification slide-in */
+.notification-enter {
+  animation: notificationSlide var(--duration-moderate) var(--ease-smooth);
+}
+
+@keyframes notificationSlide {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Achievement unlock */
+.achievement-unlock {
+  animation: achievementPop var(--duration-slow) var(--ease-bounce);
+}
+
+@keyframes achievementPop {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-45deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+/* Confetti burst */
+.confetti-burst {
+  animation: confettiBurst var(--duration-slower) var(--ease-decelerate);
+}
+
+@keyframes confettiBurst {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-200px) scale(0.5);
+  }
+}
+
+/* Shimmer effect */
+.shimmer {
+  animation: shimmer 2s var(--ease-standard) infinite;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* High refresh rate optimization */
+@media (min-resolution: 120dpi) {
+  :root {
+    --duration-quick: 83ms;      /* 1 frame at 120Hz */
+    --duration-fast: 125ms;
+    --duration-normal: 166ms;    /* 2 frames at 120Hz */
+  }
+}
+
+/* Reduce motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: var(--duration-instant) !important;
+    animation-duration: var(--duration-instant) !important;
+  }
+  
+  .stagger-container > * {
+    animation-delay: 0ms !important;
+  }
+}
+

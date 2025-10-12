@@ -1,0 +1,193 @@
+/**
+ * Illustration Style Guide
+ * Consistent visual language for empty states and onboarding
+ */
+
+:root {
+  /* Illustration colors */
+  --illus-primary: #6366f1;      /* Indigo-500 */
+  --illus-secondary: #8b5cf6;    /* Purple-500 */
+  --illus-accent: #3b82f6;       /* Blue-500 */
+  --illus-neutral: #9ca3af;      /* Gray-400 */
+  --illus-success: #10b981;      /* Green-500 */
+  --illus-warning: #f59e0b;      /* Amber-500 */
+  
+  /* Illustration sizing */
+  --illus-sm: 120px;
+  --illus-md: 200px;
+  --illus-lg: 320px;
+  --illus-xl: 480px;
+}
+
+/* Illustration container */
+.illustration-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* Illustration base styles */
+.illustration {
+  width: var(--illus-md);
+  height: auto;
+  margin: 0 auto;
+}
+
+.illustration-sm { width: var(--illus-sm); }
+.illustration-md { width: var(--illus-md); }
+.illustration-lg { width: var(--illus-lg); }
+.illustration-xl { width: var(--illus-xl); }
+
+/* Emoji-based illustrations (current approach) */
+.emoji-illustration {
+  font-size: 6rem;
+  line-height: 1;
+  text-align: center;
+  opacity: 0.9;
+}
+
+.emoji-illustration-sm { font-size: 3rem; }
+.emoji-illustration-md { font-size: 6rem; }
+.emoji-illustration-lg { font-size: 9rem; }
+
+/* Illustration with background circle */
+.illustration-circle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--illus-primary), var(--illus-secondary));
+  padding: 2rem;
+  box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
+}
+
+/* Illustration compositions */
+.empty-state-illustration {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.empty-state-illustration .emoji-illustration {
+  margin-bottom: 1.5rem;
+  opacity: 0.7;
+}
+
+.empty-state-illustration h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.empty-state-illustration p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Onboarding illustrations */
+.onboarding-illustration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 3rem;
+}
+
+.onboarding-illustration .emoji-illustration {
+  animation: floatAnimation 3s ease-in-out infinite;
+}
+
+@keyframes floatAnimation {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Success illustrations */
+.success-illustration {
+  position: relative;
+}
+
+.success-illustration::before {
+  content: '✨';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 2rem;
+  animation: sparkle 1s ease-in-out;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Error illustrations */
+.error-illustration {
+  filter: grayscale(0.3);
+  opacity: 0.8;
+}
+
+/* Loading illustrations */
+.loading-illustration {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Illustration shadow effects */
+.illustration-shadow-sm {
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+.illustration-shadow-md {
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.15));
+}
+
+.illustration-shadow-lg {
+  filter: drop-shadow(0 12px 36px rgba(0, 0, 0, 0.2));
+}
+
+/* Illustration backgrounds */
+.illustration-bg-gradient {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.05) 0%,
+    rgba(139, 92, 246, 0.05) 100%
+  );
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .emoji-illustration {
+    opacity: 0.95;
+  }
+  
+  .illustration-shadow-sm {
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+  }
+  
+  .illustration-bg-gradient {
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.1) 0%,
+      rgba(139, 92, 246, 0.1) 100%
+    );
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .onboarding-illustration .emoji-illustration {
+    animation: none;
+  }
+  
+  .success-illustration::before {
+    animation: none;
+    opacity: 1;
+  }
+}
+
