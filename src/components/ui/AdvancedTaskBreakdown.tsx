@@ -43,22 +43,18 @@ export default function AdvancedTaskBreakdown({ task, onSubtasksGenerated, onClo
     await new Promise(resolve => setTimeout(resolve, 2000))
     
     // Generate subtasks using AI
-    const breakdown = breakdownTask({
-      title: task.title,
-      description: task.description || '',
-      complexity: task.complexity || 'moderate'
-    })
+    const breakdown = breakdownTask(task.title, task.description || '')
     
     // Convert to subtask format
     const generatedSubtasks: Subtask[] = breakdown.subtasks.map((st, index) => ({
-      id: `subtask-${Date.now()}-${index}`,
+      id: st.id,
       title: st.title,
       description: st.description,
-      estimated_duration: st.estimated_duration,
-      priority: st.priority,
-      dependencies: st.dependencies || [],
+      estimated_duration: st.estimatedDuration,
+      priority: 3 as 1 | 2 | 3 | 4 | 5, // Default priority
+      dependencies: st.dependsOn || [],
       order: st.order,
-      completed: false
+      completed: st.completed
     }))
     
     setSubtasks(generatedSubtasks)
