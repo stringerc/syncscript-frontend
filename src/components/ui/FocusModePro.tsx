@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Zap, Play, Pause, SkipForward, Settings, Volume2, 
   VolumeX, Eye, EyeOff, Target, TrendingUp, Award,
-  Clock, Coffee, Brain, Moon
+  Clock, Coffee, Brain, Moon, CheckCircle
 } from 'lucide-react'
 
 interface FocusSession {
@@ -222,7 +222,7 @@ const FocusModePro: React.FC<FocusModeProProps> = ({
   const calculateStreak = () => {
     // Simple streak calculation - days with at least one session
     let streak = 0
-    let currentDate = new Date()
+    const currentDate = new Date()
     
     for (let i = 0; i < 30; i++) {
       const dateStr = currentDate.toDateString()

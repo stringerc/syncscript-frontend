@@ -508,7 +508,7 @@ const MeetingManager: React.FC<MeetingManagerProps> = ({
                   ))}
                   {selectedMeeting.actionItems.length === 0 && (
                     <div className="text-center py-6 text-gray-500 dark:text-gray-400 text-sm">
-                      No action items yet. Add notes with "TODO:" to auto-generate.
+                      No action items yet. Add notes with &quot;TODO:&quot; to auto-generate.
                     </div>
                   )}
                 </div>

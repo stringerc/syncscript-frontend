@@ -214,7 +214,7 @@ const AdvancedSearchHub: React.FC = () => {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && performSearch(query)}
-                placeholder='Try: "high priority tasks assigned to me" or "meetings this week"'
+                placeholder="Try: &quot;high priority tasks assigned to me&quot; or &quot;meetings this week&quot;"
                 className="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
               {query && (

@@ -252,7 +252,7 @@ const PerformanceDashboard2: React.FC = () => {
             <div className="bg-white/10 rounded-lg p-4">
               <div className="font-medium mb-2">📈 Trend Prediction</div>
               <p className="text-sm opacity-90">
-                Based on current pace, you'll complete 215 tasks this month (+15% vs last month)
+                Based on current pace, you&apos;ll complete 215 tasks this month (+15% vs last month)
               </p>
             </div>
             <div className="bg-white/10 rounded-lg p-4">
