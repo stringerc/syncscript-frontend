@@ -1,5 +1,5 @@
 import React from 'react'
-import TeamCollaboration from '@/components/ui/TeamCollaboration'
+import { TeamCollaboration } from '@/utils/lazyComponents'
 
 export default function TeamCollaborationPage() {
   return <TeamCollaboration />

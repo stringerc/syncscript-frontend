@@ -1,5 +1,5 @@
 import React from 'react'
-import IntegrationsHub from '@/components/ui/IntegrationsHub'
+import { IntegrationsHub } from '@/utils/lazyComponents'
 
 export default function IntegrationsPage() {
   return <IntegrationsHub />

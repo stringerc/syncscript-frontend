@@ -1,5 +1,5 @@
 import React from 'react'
-import VoiceCommandsCenter from '@/components/ui/VoiceCommandsCenter'
+import { VoiceCommandsCenter } from '@/utils/lazyComponents'
 
 export default function VoiceCommandsPage() {
   return <VoiceCommandsCenter />

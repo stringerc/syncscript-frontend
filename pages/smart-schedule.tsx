@@ -1,5 +1,5 @@
 import React from 'react'
-import SmartScheduler from '@/components/ui/SmartScheduler'
+import { SmartScheduler } from '@/utils/lazyComponents'
 
 export default function SmartSchedulePage() {
   // Example task for demo

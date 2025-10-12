@@ -1,5 +1,5 @@
 import React from 'react'
-import SettingsCentral from '@/components/ui/SettingsCentral'
+import { SettingsCentral } from '@/utils/lazyComponents'
 
 export default function SettingsPage() {
   return <SettingsCentral />

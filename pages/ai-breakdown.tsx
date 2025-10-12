@@ -1,5 +1,5 @@
 import React from 'react'
-import AdvancedTaskBreakdown from '@/components/ui/AdvancedTaskBreakdown'
+import { AdvancedTaskBreakdown } from '@/utils/lazyComponents'
 
 export default function AIBreakdownPage() {
   // Example task for demo

@@ -1,5 +1,5 @@
 import React from 'react'
-import GamificationDashboard from '@/components/ui/GamificationDashboard'
+import { GamificationDashboard } from '@/utils/lazyComponents'
 
 export default function GamificationPage() {
   return <GamificationDashboard />

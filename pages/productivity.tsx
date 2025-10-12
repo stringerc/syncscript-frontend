@@ -1,5 +1,5 @@
 import React from 'react'
-import ProductivityCenter from '@/components/ui/ProductivityCenter'
+import { ProductivityCenter } from '@/utils/lazyComponents'
 
 export default function ProductivityPage() {
   return <ProductivityCenter />

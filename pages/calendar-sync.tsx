@@ -1,5 +1,5 @@
 import React from 'react'
-import CalendarSync from '@/components/ui/CalendarSync'
+import { CalendarSync } from '@/utils/lazyComponents'
 
 export default function CalendarSyncPage() {
   return <CalendarSync />
