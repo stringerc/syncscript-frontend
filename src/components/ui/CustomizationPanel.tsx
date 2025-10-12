@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ENERGY_LABEL_PRESETS,
@@ -159,14 +159,19 @@ export default function CustomizationPanel() {
   )
 }
 
-function EnergyLabelsSection({ labelSets, selected, onSelect, purchased }: any) {
+function EnergyLabelsSection({ labelSets, selected, onSelect, purchased }: {
+  labelSets: typeof ENERGY_LABEL_PRESETS
+  selected: typeof ENERGY_LABEL_PRESETS[0]
+  onSelect: (id: string) => void
+  purchased: string[]
+}) {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
         Choose Your Energy Labels
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {labelSets.map((set: any) => {
+        {labelSets.map((set) => {
           const isLocked = set.isPremium && !purchased.includes(`label_${set.id}`)
           const isSelected = selected.id === set.id
           
@@ -196,7 +201,7 @@ function EnergyLabelsSection({ labelSets, selected, onSelect, purchased }: any) 
               
               {/* Label Preview */}
               <div className="space-y-2 mb-4">
-                {Object.entries(set.labels).slice(0, 3).map(([key, value]: any) => (
+                {Object.entries(set.labels).slice(0, 3).map(([key, value]) => (
                   <div key={key} className="text-xs bg-gray-100 dark:bg-gray-700 rounded px-2 py-1">
                     {value}
                   </div>
@@ -216,7 +221,11 @@ function EnergyLabelsSection({ labelSets, selected, onSelect, purchased }: any) 
   )
 }
 
-function MarketplaceSection({ items, onPurchase, currentEmblems }: any) {
+function MarketplaceSection({ items, onPurchase, currentEmblems }: {
+  items: MarketplaceItem[]
+  onPurchase: (item: MarketplaceItem) => void
+  currentEmblems: number
+}) {
   const [filter, setFilter] = useState<string>('all')
   const categories = ['all', 'label', 'theme', 'boost', 'feature', 'cosmetic']
   
@@ -295,7 +304,10 @@ function MarketplaceSection({ items, onPurchase, currentEmblems }: any) {
   )
 }
 
-function DailyRewardsSection({ status, onClaim }: any) {
+function DailyRewardsSection({ status, onClaim }: {
+  status: ReturnType<typeof getLoginRewardStatus>
+  onClaim: () => void
+}) {
   const DAILY_REWARDS_UI = [
     { day: 1, emblems: 10, icon: '🎁' },
     { day: 2, emblems: 15, icon: '🎁' },

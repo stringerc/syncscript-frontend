@@ -344,7 +344,7 @@ export function saveReportToHistory(
 /**
  * Get report history
  */
-export function getReportHistory(type: 'energy' | 'budget' | 'context'): Array<any> {
+export function getReportHistory(type: 'energy' | 'budget' | 'context'): Array<EnergyReport | BudgetReport | ContextReport> {
   if (typeof window === 'undefined') return []
   
   try {

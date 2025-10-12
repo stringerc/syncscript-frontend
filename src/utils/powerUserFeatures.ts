@@ -3,6 +3,46 @@
  * Features #46-50: Focus Mode, Quick Capture, Voice Input, Keyboard Shortcuts, Batch Operations
  */
 
+// Type declarations for Web Speech API
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean
+  interimResults: boolean
+  lang: string
+  start(): void
+  stop(): void
+  onresult: ((event: SpeechRecognitionEvent) => void) | null
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null
+  onend: (() => void) | null
+}
+
+interface SpeechRecognitionEvent extends Event {
+  resultIndex: number
+  results: SpeechRecognitionResultList
+}
+
+interface SpeechRecognitionResultList {
+  length: number
+  item(index: number): SpeechRecognitionResult
+  [index: number]: SpeechRecognitionResult
+}
+
+interface SpeechRecognitionResult {
+  length: number
+  item(index: number): SpeechRecognitionAlternative
+  [index: number]: SpeechRecognitionAlternative
+  isFinal: boolean
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string
+  confidence: number
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string
+  message: string
+}
+
 // ===== FEATURE #46: FOCUS MODE =====
 
 export interface FocusModeSettings {
@@ -244,14 +284,14 @@ export class QuickCapture {
 // ===== FEATURE #48: VOICE INPUT =====
 
 export class VoiceInput {
-  private recognition: any = null
+  private recognition: SpeechRecognition | null = null
   private isListening: boolean = false
   private onResult?: (transcript: string, isFinal: boolean) => void
   private onError?: (error: string) => void
   
   constructor() {
     if (typeof window !== 'undefined') {
-      // @ts-ignore - Web Speech API
+      // @ts-expect-error - Web Speech API types
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
       
       if (SpeechRecognition) {
@@ -260,7 +300,7 @@ export class VoiceInput {
         this.recognition.interimResults = true
         this.recognition.lang = 'en-US'
         
-        this.recognition.onresult = (event: any) => {
+        this.recognition.onresult = (event: SpeechRecognitionEvent) => {
           let interimTranscript = ''
           let finalTranscript = ''
           
@@ -283,7 +323,7 @@ export class VoiceInput {
           }
         }
         
-        this.recognition.onerror = (event: any) => {
+        this.recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
           console.error('Voice recognition error:', event.error)
           if (this.onError) {
             this.onError(event.error)
@@ -473,7 +513,7 @@ export class KeyboardShortcutManager {
 export interface BatchOperation {
   type: 'complete' | 'delete' | 'priority' | 'tag' | 'move' | 'schedule'
   itemIds: string[]
-  params?: any
+  params?: Record<string, unknown>
 }
 
 export class BatchOperations {
@@ -546,7 +586,7 @@ export class BatchOperations {
   }
   
   // Multi-select helpers
-  selectAll(items: any[]): string[] {
+  selectAll(items: Array<{id: string}>): string[] {
     return items.map(item => item.id)
   }
   
@@ -554,7 +594,7 @@ export class BatchOperations {
     return []
   }
   
-  selectByFilter(items: any[], filterFn: (item: any) => boolean): string[] {
+  selectByFilter(items: Array<{id: string}>, filterFn: (item: {id: string}) => boolean): string[] {
     return items.filter(filterFn).map(item => item.id)
   }
   
@@ -566,7 +606,7 @@ export class BatchOperations {
     }
   }
   
-  selectRange(items: any[], startIndex: number, endIndex: number): string[] {
+  selectRange(items: Array<{id: string}>, startIndex: number, endIndex: number): string[] {
     const start = Math.min(startIndex, endIndex)
     const end = Math.max(startIndex, endIndex)
     return items.slice(start, end + 1).map(item => item.id)

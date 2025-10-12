@@ -79,7 +79,7 @@ export function addOrGetTag(name: string, color?: string): Tag {
   return newTag
 }
 
-export function filterTasksByTags(tasks: any[], tagIds: string[], matchAll: boolean = false): any[] {
+export function filterTasksByTags(tasks: Array<{tags?: string[]}>, tagIds: string[], matchAll: boolean = false): Array<{tags?: string[]}> {
   if (tagIds.length === 0) return tasks
   
   return tasks.filter(task => {
@@ -87,10 +87,10 @@ export function filterTasksByTags(tasks: any[], tagIds: string[], matchAll: bool
     
     if (matchAll) {
       // Must have ALL specified tags
-      return tagIds.every(tagId => task.tags.includes(tagId))
+      return tagIds.every(tagId => task.tags!.includes(tagId))
     } else {
       // Must have AT LEAST ONE of the specified tags
-      return tagIds.some(tagId => task.tags.includes(tagId))
+      return tagIds.some(tagId => task.tags!.includes(tagId))
     }
   })
 }
@@ -130,7 +130,7 @@ export interface SearchResult {
   matches: string[]
 }
 
-export function searchAll(query: string, items: any[]): SearchResult[] {
+export function searchAll(query: string, items: Array<{id: string; title?: string; description?: string; notes?: string; tags?: string[]; type?: string}>): SearchResult[] {
   if (!query || query.trim().length === 0) return []
   
   const terms = query.toLowerCase().split(' ').filter(t => t.length > 0)
@@ -191,7 +191,7 @@ export function searchAll(query: string, items: any[]): SearchResult[] {
   return results.sort((a, b) => b.score - a.score)
 }
 
-function generateSnippet(item: any, query: string): string {
+function generateSnippet(item: {description?: string; notes?: string}, query: string): string {
   const text = item.description || item.notes || ''
   if (!text) return ''
   
@@ -284,8 +284,8 @@ export function categorizeTaskInMatrix(isUrgent: boolean, isImportant: boolean):
   }
 }
 
-export function organizeTasksInMatrix(tasks: any[]): Record<MatrixQuadrant, any[]> {
-  const matrix: Record<MatrixQuadrant, any[]> = {
+export function organizeTasksInMatrix<T extends {isUrgent?: boolean; isImportant?: boolean}>(tasks: T[]): Record<MatrixQuadrant, T[]> {
+  const matrix: Record<MatrixQuadrant, T[]> = {
     'urgent-important': [],
     'not-urgent-important': [],
     'urgent-not-important': [],

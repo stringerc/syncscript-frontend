@@ -171,7 +171,7 @@ export function calculateNextOccurrence(rule: RecurrenceRule, fromDate: Date = n
         const sortedDays = [...rule.daysOfWeek].sort((a, b) => a - b)
         
         // Find next day in this week
-        let nextDay = sortedDays.find(day => day > currentDay)
+        const nextDay = sortedDays.find(day => day > currentDay)
         
         if (nextDay !== undefined) {
           next.setDate(next.getDate() + (nextDay - currentDay))
