@@ -30,21 +30,21 @@ export default function LandingPage() {
               </span>
             </div>
             <div className="hidden md:flex items-center gap-8">
-              <Link href="/features" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+              <Link href="/features" className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400">
                 Features
               </Link>
-              <a href="#pricing" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+              <a href="#pricing" className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400">
                 Pricing
               </a>
-              <a href="#testimonials" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+              <a href="#testimonials" className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400">
                 Testimonials
               </a>
-              <Link href="/dashboard" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+              <Link href="/dashboard" className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400">
                 Dashboard
               </Link>
             </div>
             <div className="flex items-center gap-4">
-              <Link href="/login" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+              <Link href="/login" className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400">
                 Login
               </Link>
               <Link 
@@ -64,10 +64,11 @@ export default function LandingPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
             className="text-center"
           >
             <div className="inline-block mb-4 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 rounded-full">
-              <span className="text-blue-600 dark:text-blue-400 font-semibold">
+              <span className="text-blue-700 dark:text-blue-300 font-semibold">
                 ✨ 100 Production Features • Launched Today
               </span>
             </div>
@@ -78,7 +79,7 @@ export default function LandingPage() {
               Actually Works
             </h1>
             
-            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-200 mb-8 max-w-3xl mx-auto">
               The only platform that considers your energy, budget, and context. 
               AI-powered insights that make every decision easier.
             </p>
@@ -101,7 +102,7 @@ export default function LandingPage() {
             </div>
 
             {/* Social Proof */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-sm text-gray-600 dark:text-gray-600">
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-2">
                   {[1,2,3,4].map(i => (
@@ -124,7 +125,7 @@ export default function LandingPage() {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.1, duration: 0.4 }}
             className="mt-16 rounded-2xl overflow-hidden shadow-2xl border-4 border-white dark:border-gray-800"
           >
             <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-8 text-white">
@@ -152,7 +153,7 @@ export default function LandingPage() {
         {/* Scroll Indicator */}
         <div className="flex justify-center mt-12">
           <a href="#features" className="animate-bounce">
-            <ChevronDown className="w-8 h-8 text-gray-400" />
+            <ChevronDown className="w-8 h-8 text-gray-600" />
           </a>
         </div>
       </section>
@@ -164,7 +165,7 @@ export default function LandingPage() {
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
               Everything You Need to Win
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-gray-600 max-w-2xl mx-auto">
               100 production-ready features designed by productivity experts
             </p>
           </div>
@@ -222,7 +223,7 @@ export default function LandingPage() {
                 <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-gray-600 dark:text-gray-600">
                   {feature.description}
                 </p>
               </motion.div>
@@ -273,7 +274,7 @@ export default function LandingPage() {
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
               Simple, Transparent Pricing
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">
+            <p className="text-xl text-gray-600 dark:text-gray-600 max-w-2xl mx-auto mb-8">
               Choose the plan that fits your needs. All plans include 14-day free trial.
             </p>
 
@@ -284,7 +285,7 @@ export default function LandingPage() {
                 className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
                   billingPeriod === 'monthly'
                     ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow'
-                    : 'text-gray-600 dark:text-gray-400'
+                    : 'text-gray-600 dark:text-gray-600'
                 }`}
               >
                 Monthly
@@ -294,7 +295,7 @@ export default function LandingPage() {
                 className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
                   billingPeriod === 'annual'
                     ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow'
-                    : 'text-gray-600 dark:text-gray-400'
+                    : 'text-gray-600 dark:text-gray-600'
                 }`}
               >
                 Annual
@@ -376,14 +377,14 @@ export default function LandingPage() {
                   <h3 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
                     {plan.name}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  <p className="text-gray-600 dark:text-gray-600 mb-4">
                     {plan.description}
                   </p>
                   <div className="flex items-baseline gap-2">
                     <span className="text-5xl font-bold text-gray-900 dark:text-white">
                       ${plan.price}
                     </span>
-                    <span className="text-gray-600 dark:text-gray-400">
+                    <span className="text-gray-600 dark:text-gray-600">
                       /user/{billingPeriod === 'monthly' ? 'month' : 'year'}
                     </span>
                   </div>
@@ -393,7 +394,7 @@ export default function LandingPage() {
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-600 dark:text-gray-400">{feature}</span>
+                      <span className="text-gray-600 dark:text-gray-600">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -412,7 +413,7 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-8">
+          <p className="text-center text-sm text-gray-600 dark:text-gray-600 mt-8">
             All plans include 14-day free trial. No credit card required. Cancel anytime.
           </p>
         </div>
@@ -425,7 +426,7 @@ export default function LandingPage() {
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
               Loved by Thousands
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400">
+            <p className="text-xl text-gray-600 dark:text-gray-600">
               See what our users are saying about SyncScript
             </p>
           </div>
@@ -476,7 +477,7 @@ export default function LandingPage() {
                     <div className="font-bold text-gray-900 dark:text-white">
                       {testimonial.name}
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="text-sm text-gray-600 dark:text-gray-600">
                       {testimonial.role}
                     </div>
                   </div>
@@ -526,7 +527,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-gray-900 text-gray-600 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
