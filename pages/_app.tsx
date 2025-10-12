@@ -15,7 +15,7 @@ import '../src/styles/animation-curves.css'; // Perfect timing curves (L4)
 import '../src/styles/microinteractions.css'; // Delightful microinteractions (L1)
 import '../src/styles/illustration-system.css'; // Illustration style guide (L3)
 import '../src/styles/rtl-support.css'; // RTL language support (M3)
-import '../src/styles/dark-mode-complete.css'; // Complete dark mode (M2)
+// Dark mode handled by Tailwind's built-in dark: prefix (darkMode: 'class')
 import '../src/styles/responsive-audit-fixes.css'; // Responsive & touch target fixes
 import '../src/styles/accessibility.css'; // WCAG 2.1 AA compliance
 import '../src/styles/mobile-responsive.css'; // Mobile optimizations
