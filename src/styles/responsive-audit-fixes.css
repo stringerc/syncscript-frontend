@@ -16,7 +16,7 @@ input[type="radio"],
   min-height: 44px;
   display: inline-flex;
   align-items: center;
-  justify-center;
+  justify-content: center;
 }
 
 /* Small buttons need padding */
