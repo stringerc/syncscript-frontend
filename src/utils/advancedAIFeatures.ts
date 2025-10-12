@@ -89,9 +89,9 @@ export function analyzeBurnoutRisk(
   const avgHours = workHours.reduce((a, b) => a + b, 0) / workHours.length
   const avgBreaks = breaksTaken.reduce((a, b) => a + b, 0) / breaksTaken.length
   
-  let overworkScore = Math.min(100, (avgHours / 10) * 100)
-  let stressLevel = 100 - (avgBreaks * 10)
-  let workLifeBalance = Math.max(0, 100 - overworkScore)
+  const overworkScore = Math.min(100, (avgHours / 10) * 100)
+  const stressLevel = 100 - (avgBreaks * 10)
+  const workLifeBalance = Math.max(0, 100 - overworkScore)
 
   let riskLevel: BurnoutIndicators['riskLevel'] = 'low'
   if (overworkScore > 80 || stressLevel > 80) riskLevel = 'critical'
