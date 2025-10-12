@@ -13,7 +13,7 @@ export function useUrlState<T extends Record<string, string | number | boolean>>
 
   // Parse current state from URL
   const currentState = useMemo(() => {
-    const state = { ...defaultState } as Record<string, any>
+    const state = { ...defaultState } as Record<string, unknown>
     
     Object.keys(defaultState).forEach((key) => {
       const urlValue = router.query[key]
