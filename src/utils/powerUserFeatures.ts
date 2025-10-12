@@ -295,12 +295,12 @@ export class VoiceInput {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
       
       if (SpeechRecognition) {
-        this.recognition = new SpeechRecognition()
-        this.recognition.continuous = true
-        this.recognition.interimResults = true
-        this.recognition.lang = 'en-US'
+        const recognition = new SpeechRecognition()
+        recognition.continuous = true
+        recognition.interimResults = true
+        recognition.lang = 'en-US'
         
-        this.recognition.onresult = (event: SpeechRecognitionEvent) => {
+        recognition.onresult = (event: SpeechRecognitionEvent) => {
           let interimTranscript = ''
           let finalTranscript = ''
           
@@ -323,7 +323,7 @@ export class VoiceInput {
           }
         }
         
-        this.recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+        recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
           console.error('Voice recognition error:', event.error)
           if (this.onError) {
             this.onError(event.error)
@@ -331,9 +331,12 @@ export class VoiceInput {
           this.isListening = false
         }
         
-        this.recognition.onend = () => {
+        recognition.onend = () => {
           this.isListening = false
         }
+        
+        // Assign to instance property
+        this.recognition = recognition
       }
     }
   }
