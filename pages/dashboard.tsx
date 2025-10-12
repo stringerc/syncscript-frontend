@@ -1482,12 +1482,7 @@ export default function Dashboard() {
             transition={{ duration: 0.3 }}
             style={{ marginBottom: 'var(--space-6)' }}
           >
-            <AchievementGallery
-              achievementProgress={achievementProgress}
-              unlockedCount={unlockedCount}
-              totalPoints={achievementPoints}
-              completionPercentage={achievementCompletion}
-            />
+            <AchievementGallery />
           </motion.div>
         )}
 
