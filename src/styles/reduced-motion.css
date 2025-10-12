@@ -1,0 +1,46 @@
+/**
+ * Reduced Motion Support (WCAG 2.2.2 - Pause, Stop, Hide)
+ * Respects user's motion preferences for accessibility
+ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Disable framer-motion animations */
+  [data-framer-motion-animate] {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Respect color scheme preference */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+  }
+}
+
+/* Respect contrast preference */
+@media (prefers-contrast: more) {
+  :root {
+    --contrast-multiplier: 1.2;
+  }
+  
+  *:focus-visible {
+    outline-width: 4px !important;
+  }
+}
+

@@ -6,6 +6,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '../styles/globals.css'
+import '../styles/reduced-motion.css'
+import '../styles/focus-indicators.css'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ToastProvider } from '@/components/Toast'
 import { Analytics } from '@vercel/analytics/react'
