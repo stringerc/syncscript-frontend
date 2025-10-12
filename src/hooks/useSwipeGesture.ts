@@ -3,7 +3,7 @@
  * Enables swipe-to-close for mobile menus and modals
  */
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 
 interface SwipeGestureOptions {
   onSwipeLeft?: () => void
@@ -26,7 +26,7 @@ export function useSwipeGesture(options: SwipeGestureOptions) {
 
   const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null)
 
-  const handleTouchStart = (e: TouchEvent) => {
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     const touch = e.touches[0]
     touchStartRef.current = {
       x: touch.clientX,
@@ -35,7 +35,7 @@ export function useSwipeGesture(options: SwipeGestureOptions) {
     }
   }
 
-  const handleTouchEnd = (e: TouchEvent) => {
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
     if (!touchStartRef.current) return
 
     const touch = e.changedTouches[0]
