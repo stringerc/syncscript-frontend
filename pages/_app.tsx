@@ -3,6 +3,7 @@ import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '../src/contexts/ThemeContext';
+import GlobalNavigation from '../src/components/ui/GlobalNavigation';
 import Head from 'next/head';
 import '../src/design-system/variables.css'; // Design token system
 import '../src/styles/accessibility.css'; // WCAG 2.1 AA compliance
@@ -161,6 +162,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               id="aria-live-region"
             />
             <Component {...pageProps} />
+            <GlobalNavigation />
             <Toaster
             position="top-right"
             toastOptions={{
