@@ -23,7 +23,7 @@ export default function SmartTooltip({
   const [coords, setCoords] = useState({ x: 0, y: 0 })
   const triggerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
-  const timeoutRef = useRef<NodeJS.Timeout>()
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const calculatePosition = () => {
     if (!triggerRef.current || !tooltipRef.current) return
@@ -92,15 +92,16 @@ export default function SmartTooltip({
   }
 
   const handleMouseLeave = () => {
-    if (timeoutRef.current) {
+    if (timeoutRef.current !== null) {
       clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
     }
     setIsVisible(false)
   }
 
   useEffect(() => {
     return () => {
-      if (timeoutRef.current) {
+      if (timeoutRef.current !== null) {
         clearTimeout(timeoutRef.current)
       }
     }
