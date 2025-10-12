@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 const NAVIGATION_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: '📊', color: 'from-blue-500 to-cyan-500' },
   { href: '/features', label: 'Feature Hub', icon: '🌟', color: 'from-purple-500 to-pink-500' },
+  { href: '/ai-breakdown', label: 'AI Task Breakdown', icon: '🤖', color: 'from-blue-600 to-indigo-600' },
+  { href: '/smart-schedule', label: 'Smart Scheduling', icon: '🧠', color: 'from-cyan-500 to-blue-600' },
   { href: '/gamification', label: 'Gamification', icon: '🎮', color: 'from-orange-500 to-red-500' },
   { href: '/productivity', label: 'Productivity', icon: '⚡', color: 'from-green-500 to-emerald-500' },
   { href: '/team', label: 'Team', icon: '👥', color: 'from-indigo-500 to-purple-500' },
