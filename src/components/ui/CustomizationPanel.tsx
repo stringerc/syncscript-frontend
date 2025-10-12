@@ -20,7 +20,7 @@ export default function CustomizationPanel() {
   const [marketplaceItems, setMarketplaceItems] = useState(getMarketplaceItems())
   const [loginStatus, setLoginStatus] = useState(getLoginRewardStatus())
   const [showRewardClaim, setShowRewardClaim] = useState(false)
-  const [claimedReward, setClaimedReward] = useState<any>(null)
+  const [claimedReward, setClaimedReward] = useState<{day: number; emblems: number; bonus?: {type: string; value: string}; icon: string} | null>(null)
 
   const handleLabelChange = (setId: string) => {
     if (setEnergyLabelSet(setId)) {
@@ -348,7 +348,7 @@ function DailyRewardsSection({ status, onClaim }: {
             onClick={onClaim}
             className="w-full mt-6 py-4 bg-white text-purple-600 rounded-xl font-bold text-xl hover:bg-gray-100 transition-all"
           >
-            Claim Today's Reward! 🎁
+            Claim Today&apos;s Reward! 🎁
           </button>
         )}
       </div>
