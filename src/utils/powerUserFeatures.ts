@@ -539,16 +539,24 @@ export class BatchOperations {
             this.deleteItem(id)
             break
           case 'priority':
-            this.setPriority(id, operation.params.priority)
+            if (operation.params && 'priority' in operation.params) {
+              this.setPriority(id, operation.params.priority as number)
+            }
             break
           case 'tag':
-            this.addTag(id, operation.params.tagId)
+            if (operation.params && 'tagId' in operation.params) {
+              this.addTag(id, operation.params.tagId as string)
+            }
             break
           case 'move':
-            this.moveItem(id, operation.params.destinationId)
+            if (operation.params && 'destinationId' in operation.params) {
+              this.moveItem(id, operation.params.destinationId as string)
+            }
             break
           case 'schedule':
-            this.scheduleItem(id, operation.params.date)
+            if (operation.params && 'date' in operation.params) {
+              this.scheduleItem(id, operation.params.date as Date)
+            }
             break
         }
         results.success++
