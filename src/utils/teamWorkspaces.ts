@@ -76,9 +76,13 @@ export function assignTask(
   assignToIds.forEach(userId => {
     sendNotification(userId, {
       type: 'task_assigned',
+      title: 'New Task Assignment',
       message: `You've been assigned a new task`,
-      taskId,
-      from: assignedBy
+      priority: 'medium',
+      data: {
+        taskId,
+        from: assignedBy
+      }
     })
   })
   
