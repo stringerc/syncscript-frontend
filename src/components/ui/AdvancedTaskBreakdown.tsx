@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { breakdownTask, generateSubtasks } from '@/utils/aiTaskBreakdown'
+import { breakdownTask } from '@/utils/aiTaskBreakdown'
 
 interface Task {
   id: string
