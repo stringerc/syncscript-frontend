@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-10-13T21:24:07.342Z",
+  "totalVariables": 32,
+  "requiredVariables": 6,
+  "optionalVariables": 26,
+  "generatedVariables": 3,
+  "missingVariables": 3,
+  "missingVariableNames": [
+    "AUTH0_CLIENT_ID",
+    "AUTH0_CLIENT_SECRET",
+    "NEXT_PUBLIC_POSTHOG_KEY"
+  ],
+  "securityScore": "7/10",
+  "status": "NEEDS_INPUT",
+  "recommendations": [
+    "Complete Auth0 and PostHog setup to get missing credentials",
+    "Follow the setup guides: AUTH0_SETUP_GUIDE.md and POSTHOG_SETUP_GUIDE.md",
+    "Run this script again after obtaining missing credentials",
+    "Use setup-vercel-env.sh script to configure Vercel environment variables",
+    "Test environment variables in Vercel dashboard before deployment",
+    "Deploy using deploy-security.js script after environment setup"
+  ]
+}
