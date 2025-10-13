@@ -177,6 +177,9 @@
   -webkit-text-fill-color: #000000 !important;
   background-clip: initial !important;
   -webkit-background-clip: initial !important;
+  /* Allow text to wrap if needed */
+  flex-wrap: wrap !important;
+  min-width: fit-content !important;
 }
 
 .level-badge .trophy-icon {
@@ -224,13 +227,14 @@
   gap: 0 !important;
 }
 
-.progress-text-under-badge {
-  font-size: 12px !important;
-  color: #6b7280 !important;
-  margin-top: 6px !important;
-  text-align: center !important;
+.progress-text-inside-badge {
+  font-size: 11px !important;
+  color: #000000 !important;
   font-weight: 600 !important;
-  line-height: 1.2 !important;
+  -webkit-text-fill-color: #000000 !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+  opacity: 0.8 !important;
 }
 
 /* ============================================================================
