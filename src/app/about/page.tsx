@@ -63,7 +63,7 @@ export default function AboutPage() {
               <ul className="space-y-2 text-red-800 dark:text-red-200">
                 <li>• Same expectations every day</li>
                 <li>• No consideration for energy</li>
-                <li>• Feel guilty when "not productive"</li>
+                <li>• Feel guilty when &quot;not productive&quot;</li>
                 <li>• Burnout from pushing through</li>
                 <li>• One-size-fits-all prioritization</li>
               </ul>

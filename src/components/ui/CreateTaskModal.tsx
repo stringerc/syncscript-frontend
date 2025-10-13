@@ -80,12 +80,13 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         recurrence,
       };
 
-      const newTask = await onCreateTask(taskData);
+      await onCreateTask(taskData);
       
       // Track task creation
       if (typeof window !== 'undefined') {
         const userId = localStorage.getItem('userId') || 'anonymous';
-        analytics.taskCreated(userId, (newTask as any)?.id || Date.now().toString(), {
+        const taskId = Date.now().toString();
+        analytics.taskCreated(userId, taskId, {
           priority,
           energyLevel: energyRequirement,
           hasBudget: false, // TODO: Add budget tracking
