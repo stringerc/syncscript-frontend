@@ -98,7 +98,7 @@ import { checkQuickWins, saveQuickWinPoints } from '../src/utils/quickWinBadges'
 import { recalibrateEnergy, isEnergyMatched, formatEnergyDelta, getEnergyLabel } from '../src/utils/energyRecalibration';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
-import { checkAntiGaming, recordCompletion } from '../src/utils/antiGaming';
+import { DataPersistence } from '../src/utils/dataPersistence';
 
 interface Task {
   id: string;
@@ -138,14 +138,55 @@ export default function Dashboard() {
   const router = useRouter();
   const authenticatedFetch = useAuthenticatedFetch();
   
-  const [currentEnergy, setCurrentEnergy] = React.useState(3);
-  const [lastEnergyLogTime, setLastEnergyLogTime] = React.useState<number>(Date.now()); // WP-ENG-01: Track for recalibration
-  const [tasks, setTasks] = React.useState<Task[]>([]);
-  const [projects, setProjects] = React.useState<Project[]>([]);
-  const [energyLogs, setEnergyLogs] = React.useState<Array<{ level: number; timestamp: string }>>([]);
-  const [userPoints, setUserPoints] = React.useState(0);
-  const [userLevel, setUserLevel] = React.useState(1);
-  const [loading, setLoading] = React.useState(true);
+  const [currentEnergy, setCurrentEnergy] = React.useState(() => DataPersistence.loadCurrentEnergy());
+  const [lastEnergyLogTime, setLastEnergyLogTime] = React.useState<number>(() => DataPersistence.loadLastEnergyLogTime());
+  const [tasks, setTasks] = React.useState<Task[]>(() => DataPersistence.loadTasks());
+  const [projects, setProjects] = React.useState<Project[]>(() => DataPersistence.loadProjects());
+  const [energyLogs, setEnergyLogs] = React.useState<Array<{ level: number; timestamp: string }>>(() => DataPersistence.loadEnergyLogs());
+  const [userPoints, setUserPoints] = React.useState(() => DataPersistence.loadUserPoints());
+  const [userLevel, setUserLevel] = React.useState(() => DataPersistence.loadUserLevel());
+  // Auto-save data to localStorage whenever state changes
+  React.useEffect(() => {
+    DataPersistence.saveTasks(tasks);
+  }, [tasks]);
+
+  React.useEffect(() => {
+    DataPersistence.saveProjects(projects);
+  }, [projects]);
+
+  React.useEffect(() => {
+    DataPersistence.saveUserPoints(userPoints);
+  }, [userPoints]);
+
+  React.useEffect(() => {
+    DataPersistence.saveUserLevel(userLevel);
+  }, [userLevel]);
+
+  React.useEffect(() => {
+    DataPersistence.saveCurrentEnergy(currentEnergy);
+  }, [currentEnergy]);
+
+  React.useEffect(() => {
+    DataPersistence.saveEnergyLogs(energyLogs);
+  }, [energyLogs]);
+
+  React.useEffect(() => {
+    DataPersistence.saveLastEnergyLogTime(lastEnergyLogTime);
+  }, [lastEnergyLogTime]);
+
+  React.useEffect(() => {
+    DataPersistence.saveFocusSessions(focusSessionsCount);
+  }, [focusSessionsCount]);
+
+  React.useEffect(() => {
+    DataPersistence.saveTotalFocusMinutes(totalFocusMinutes);
+  }, [totalFocusMinutes]);
+
+  React.useEffect(() => {
+    if (streakData) {
+      DataPersistence.saveStreakData(streakData);
+    }
+  }, [streakData]);
   const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
   const [isCreateProjectModalOpen, setIsCreateProjectModalOpen] = React.useState(false);
   const [editingProject, setEditingProject] = React.useState<Project | null>(null);
@@ -156,7 +197,7 @@ export default function Dashboard() {
   const [filterTag, setFilterTag] = React.useState<string | null>(null);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [sortBy, setSortBy] = React.useState<SortOption>('energy_match');
-  const [streakData, setStreakData] = React.useState(getStreakData());
+  const [streakData, setStreakData] = React.useState(() => DataPersistence.loadStreakData() || getStreakData());
   const [showMilestoneConfetti, setShowMilestoneConfetti] = React.useState(false);
   const [isSaveTemplateModalOpen, setIsSaveTemplateModalOpen] = React.useState(false);
   const [templateTaskData, setTemplateTaskData] = React.useState<{
@@ -178,8 +219,8 @@ export default function Dashboard() {
   const [showNotifications, setShowNotifications] = React.useState(false);
   const [showAchievements, setShowAchievements] = React.useState(false);
   const [showCalendar, setShowCalendar] = React.useState(false);
-  const [focusSessionsCount, setFocusSessionsCount] = React.useState(0);
-  const [totalFocusMinutes, setTotalFocusMinutes] = React.useState(0);
+  const [focusSessionsCount, setFocusSessionsCount] = React.useState(() => DataPersistence.loadFocusSessions());
+  const [totalFocusMinutes, setTotalFocusMinutes] = React.useState(() => DataPersistence.loadTotalFocusMinutes());
   const [showTeamDashboard, setShowTeamDashboard] = React.useState(false);
   const [showTeamInvitation, setShowTeamInvitation] = React.useState(false);
   const [showAPIDocs, setShowAPIDocs] = React.useState(false);
