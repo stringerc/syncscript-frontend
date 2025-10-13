@@ -5,6 +5,8 @@ import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '../src/contexts/ThemeContext';
 import GlobalNavigation from '../src/components/ui/GlobalNavigation';
 import Head from 'next/head';
+import { initPostHog } from '../src/lib/posthog';
+import { useEffect } from 'react';
 import '../src/design-system/variables.css'; // Design token system
 import '../src/styles/z-index-system.css'; // Centralized z-index layers
 import '../src/styles/focus-system.css'; // Accessible focus indicators
