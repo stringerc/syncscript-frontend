@@ -145,6 +145,7 @@ export class DataPersistence {
   // Load individual data pieces
   static loadTasks(): any[] {
     try {
+      if (typeof window === 'undefined') return [];
       const data = localStorage.getItem(STORAGE_KEYS.TASKS);
       return data ? JSON.parse(data) : [];
     } catch (error) {
@@ -155,6 +156,7 @@ export class DataPersistence {
 
   static loadProjects(): any[] {
     try {
+      if (typeof window === 'undefined') return [];
       const data = localStorage.getItem(STORAGE_KEYS.PROJECTS);
       return data ? JSON.parse(data) : [];
     } catch (error) {
@@ -165,6 +167,7 @@ export class DataPersistence {
 
   static loadUserPoints(): number {
     try {
+      if (typeof window === 'undefined') return 0;
       const data = localStorage.getItem(STORAGE_KEYS.USER_POINTS);
       return data ? parseInt(data, 10) : 0;
     } catch (error) {
@@ -175,6 +178,7 @@ export class DataPersistence {
 
   static loadUserLevel(): number {
     try {
+      if (typeof window === 'undefined') return 1;
       const data = localStorage.getItem(STORAGE_KEYS.USER_LEVEL);
       return data ? parseInt(data, 10) : 1;
     } catch (error) {
@@ -185,6 +189,7 @@ export class DataPersistence {
 
   static loadCurrentEnergy(): number {
     try {
+      if (typeof window === 'undefined') return 3;
       const data = localStorage.getItem(STORAGE_KEYS.CURRENT_ENERGY);
       return data ? parseInt(data, 10) : 3;
     } catch (error) {
@@ -195,6 +200,7 @@ export class DataPersistence {
 
   static loadEnergyLogs(): Array<{ level: number; timestamp: string }> {
     try {
+      if (typeof window === 'undefined') return [];
       const data = localStorage.getItem(STORAGE_KEYS.ENERGY_LOGS);
       return data ? JSON.parse(data) : [];
     } catch (error) {
@@ -205,6 +211,7 @@ export class DataPersistence {
 
   static loadLastEnergyLogTime(): number {
     try {
+      if (typeof window === 'undefined') return Date.now();
       const data = localStorage.getItem(STORAGE_KEYS.LAST_ENERGY_LOG_TIME);
       return data ? parseInt(data, 10) : Date.now();
     } catch (error) {
@@ -215,6 +222,7 @@ export class DataPersistence {
 
   static loadFocusSessions(): number {
     try {
+      if (typeof window === 'undefined') return 0;
       const data = localStorage.getItem(STORAGE_KEYS.FOCUS_SESSIONS);
       return data ? parseInt(data, 10) : 0;
     } catch (error) {
@@ -225,6 +233,7 @@ export class DataPersistence {
 
   static loadTotalFocusMinutes(): number {
     try {
+      if (typeof window === 'undefined') return 0;
       const data = localStorage.getItem(STORAGE_KEYS.TOTAL_FOCUS_MINUTES);
       return data ? parseInt(data, 10) : 0;
     } catch (error) {
@@ -235,6 +244,7 @@ export class DataPersistence {
 
   static loadStreakData(): any {
     try {
+      if (typeof window === 'undefined') return null;
       const data = localStorage.getItem(STORAGE_KEYS.STREAK_DATA);
       return data ? JSON.parse(data) : null;
     } catch (error) {
