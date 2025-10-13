@@ -1323,7 +1323,8 @@ export default function Dashboard() {
               {/* Level Progress - Prominent */}
               <div className="level-progress-card">
                 <div className="level-info">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {/* Level Badge with Progress Text Underneath */}
+                  <div className="level-badge-container">
                     <span className="level-badge">
                       <span className="trophy-icon">🏆</span>
                       <span className="level-text">Level {userLevel}</span>
@@ -1333,7 +1334,20 @@ export default function Dashboard() {
                         </span>
                       )}
                     </span>
-                    {/* Pulsing Emblem Charge Indicator */}
+                    {/* Progress Text Under Level Badge */}
+                    <div className="progress-text-under-badge" style={{ 
+                      fontSize: '12px', 
+                      color: 'var(--color-neutral-600)', 
+                      marginTop: '6px',
+                      textAlign: 'center',
+                      fontWeight: '600'
+                    }}>
+                      {1000 - (userPoints % 1000)} pts to Level {userLevel + 1}
+                    </div>
+                  </div>
+                  
+                  {/* Emblem Charge Indicator */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <motion.div
                       className="emblem-pulse-indicator"
                       animate={{
@@ -1384,8 +1398,8 @@ export default function Dashboard() {
                         ⚡
                       </div>
                     </motion.div>
+                    <span className="points-text">⚡ {userPoints} pts</span>
                   </div>
-                  <span className="points-text">⚡ {userPoints} pts</span>
                 </div>
                 <div className="progress-bar">
                   <motion.div 
@@ -1396,9 +1410,6 @@ export default function Dashboard() {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                   />
                 </div>
-                <span className="progress-text" style={{ fontSize: '11px', color: 'var(--color-neutral-600)', marginTop: '4px' }}>
-                  {1000 - (userPoints % 1000)} pts to Level {userLevel + 1}
-                </span>
               </div>
               
               {/* Compact Stats */}
