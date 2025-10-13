@@ -32,6 +32,27 @@ export default function GlobalNavigation() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="spaceship-nav-fab"
+        style={{
+          position: 'fixed',
+          bottom: '24px',
+          left: '24px',
+          right: 'auto',
+          top: 'auto',
+          width: '64px',
+          height: '64px',
+          borderRadius: '50%',
+          background: 'linear-gradient(135deg, #8B5CF6, #3B82F6)',
+          border: 'none',
+          boxShadow: '0 8px 24px rgba(139, 92, 246, 0.4)',
+          cursor: 'pointer',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '28px',
+          color: 'white',
+          transition: 'all 0.3s ease'
+        }}
         aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
       >
         {isOpen ? '✕' : '🚀'}
