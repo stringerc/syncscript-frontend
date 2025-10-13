@@ -1415,7 +1415,7 @@ export default function Dashboard() {
                         ⚡
                       </div>
                     </motion.div>
-                    <span className="points-text">{userPoints} pts</span>
+                    <span className="points-text">⚡ {userPoints} pts</span>
                   </div>
                 </div>
                 <div className="progress-bar">
