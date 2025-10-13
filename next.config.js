@@ -10,6 +10,9 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   
+  // Disable static generation to avoid cache issues
+  output: 'standalone',
+  
   // BLOCKER #6: Performance Optimization
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
