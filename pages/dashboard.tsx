@@ -317,6 +317,11 @@ export default function Dashboard() {
         timeout
       ]).catch(err => {
         console.error('API timeout or error:', err);
+        // Show user-friendly message
+        toast.error('Backend API is slow or offline. Loading local demo mode.', {
+          duration: 5000,
+          icon: '⚠️',
+        });
         return [
           new Response(JSON.stringify({ tasks: [] }), { status: 200 }),
           new Response(JSON.stringify({ projects: [] }), { status: 200 }),
