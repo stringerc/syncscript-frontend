@@ -451,7 +451,7 @@
 .global-navigation {
   position: fixed !important;
   bottom: 24px !important;
-  left: 24px !important;
+  left: 80px !important;
   z-index: 9999 !important;
   width: 64px !important;
   height: 64px !important;
@@ -467,6 +467,9 @@
   transition: all 0.3s ease !important;
   border: none !important;
   outline: none !important;
+  /* Ensure it stays sticky */
+  transform: translateZ(0) !important;
+  will-change: transform !important;
 }
 
 .global-navigation:hover {
@@ -483,7 +486,7 @@
 @media (max-width: 768px) {
   .global-navigation {
     bottom: 20px !important;
-    left: 20px !important;
+    left: 60px !important;
     width: 56px !important;
     height: 56px !important;
     font-size: 20px !important;
@@ -493,7 +496,7 @@
 @media (max-width: 480px) {
   .global-navigation {
     bottom: 16px !important;
-    left: 16px !important;
+    left: 40px !important;
     width: 52px !important;
     height: 52px !important;
     font-size: 18px !important;
