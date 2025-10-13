@@ -301,9 +301,9 @@ export default function Dashboard() {
     try {
       setLoading(true);
       
-      // Add timeout to prevent infinite loading
+      // Add timeout to prevent infinite loading (increased to 10s for slow APIs)
       const timeout = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Request timeout')), 5000)
+        setTimeout(() => reject(new Error('Request timeout - API may be slow or unavailable')), 10000)
       );
       
       // Load all data in parallel for maximum speed
