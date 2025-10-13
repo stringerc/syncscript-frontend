@@ -228,6 +228,19 @@
   gap: 0 !important;
 }
 
+.level-badge-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 2px !important;
+}
+
+.level-info-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
 .progress-text-inside-badge {
   font-size: 11px !important;
   color: #000000 !important;
@@ -237,7 +250,7 @@
   -webkit-background-clip: initial !important;
   opacity: 0.9 !important;
   white-space: nowrap !important;
-  display: inline-block !important;
+  display: block !important;
 }
 
 /* ============================================================================

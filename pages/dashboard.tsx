@@ -1326,24 +1326,27 @@ export default function Dashboard() {
                   {/* Level Badge with Progress Text Underneath */}
                   <div className="level-badge-container">
                     <span className="level-badge">
-                      <span className="trophy-icon">★</span>
-                      <span className="level-text">Level {userLevel}</span>
-                      {unlockedCount > 0 && (
-                        <span className="mini-trophy" title={`${unlockedCount} achievements unlocked`}>
-                          +{unlockedCount}
-                        </span>
-                      )}
-                      {/* Progress Text Inside Badge */}
-                      <span className="progress-text-inside-badge" style={{
-                        fontSize: '11px',
-                        color: '#000000',
-                        fontWeight: '600',
-                        marginLeft: '8px',
-                        paddingLeft: '8px',
-                        borderLeft: '1px solid rgba(0,0,0,0.2)'
-                      }}>
-                        {1000 - (userPoints % 1000)} pts to Level {userLevel + 1}
-                      </span>
+                      <div className="level-badge-content">
+                        <div className="level-info-row">
+                          <span className="trophy-icon">★</span>
+                          <span className="level-text">Level {userLevel}</span>
+                          {unlockedCount > 0 && (
+                            <span className="mini-trophy" title={`${unlockedCount} achievements unlocked`}>
+                              +{unlockedCount}
+                            </span>
+                          )}
+                        </div>
+                        {/* Progress Text Underneath Inside Badge */}
+                        <div className="progress-text-inside-badge" style={{
+                          fontSize: '11px',
+                          color: '#000000',
+                          fontWeight: '600',
+                          marginTop: '2px',
+                          textAlign: 'center'
+                        }}>
+                          {1000 - (userPoints % 1000)} pts to Level {userLevel + 1}
+                        </div>
+                      </div>
                     </span>
                   </div>
                   
