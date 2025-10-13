@@ -97,17 +97,17 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
   }
 
   const colors = {
-    success: 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200',
-    error: 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200',
-    info: 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200',
-    warning: 'bg-yellow-50 dark:bg-yellow-900/30 border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200'
+    success: 'bg-green-100 dark:bg-green-900/50 border-green-300 dark:border-green-700 text-green-900 dark:text-green-100',
+    error: 'bg-red-100 dark:bg-red-900/50 border-red-300 dark:border-red-700 text-red-900 dark:text-red-100',
+    info: 'bg-blue-100 dark:bg-blue-900/50 border-blue-300 dark:border-blue-700 text-blue-900 dark:text-blue-100',
+    warning: 'bg-yellow-100 dark:bg-yellow-900/50 border-yellow-300 dark:border-yellow-700 text-yellow-900 dark:text-yellow-100'
   }
 
   const iconColors = {
-    success: 'text-green-600 dark:text-green-400',
-    error: 'text-red-600 dark:text-red-400',
-    info: 'text-blue-600 dark:text-blue-400',
-    warning: 'text-yellow-600 dark:text-yellow-400'
+    success: 'text-green-700 dark:text-green-300',
+    error: 'text-red-700 dark:text-red-300',
+    info: 'text-blue-700 dark:text-blue-300',
+    warning: 'text-yellow-700 dark:text-yellow-300'
   }
 
   const Icon = icons[toast.type]
@@ -125,9 +125,11 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
       </p>
       <button
         onClick={onClose}
-        className="flex-shrink-0 hover:opacity-70 transition-opacity"
+        className="flex-shrink-0 hover:opacity-70 transition-opacity p-1 rounded-full hover:bg-black/10 dark:hover:bg-white/10"
+        title="Dismiss notification"
+        aria-label="Dismiss notification"
       >
-        <X className="w-4 h-4" />
+        <X className="w-4 h-4 text-gray-700 dark:text-gray-300" />
       </button>
     </motion.div>
   )
