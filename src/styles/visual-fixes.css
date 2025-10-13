@@ -445,10 +445,11 @@
 }
 
 /* ============================================================================
-   SPACESHIP NAVIGATION FIX - Move to left and make sticky
+   SPACESHIP NAVIGATION FIX - Override Tailwind classes with !important
    ============================================================================ */
 
-.global-navigation {
+/* Force override all Tailwind positioning classes */
+.global-navigation.fixed.bottom-8.left-8 {
   position: fixed !important;
   bottom: 32px !important;
   left: 32px !important;
@@ -469,19 +470,21 @@
   outline: none !important;
 }
 
-.global-navigation:hover {
+/* Hover effects */
+.global-navigation.fixed.bottom-8.left-8:hover {
   transform: scale(1.1) !important;
   box-shadow: 0 12px 40px rgba(139, 92, 246, 0.6) !important;
 }
 
-.global-navigation:focus {
+/* Focus effects */
+.global-navigation.fixed.bottom-8.left-8:focus {
   outline: 4px solid rgba(139, 92, 246, 0.3) !important;
   outline-offset: 2px !important;
 }
 
-/* Ensure it stays visible on all screen sizes - matching FAB pattern */
+/* Responsive overrides */
 @media (max-width: 768px) {
-  .global-navigation {
+  .global-navigation.fixed.bottom-8.left-8 {
     bottom: 24px !important;
     left: 24px !important;
     width: 56px !important;
@@ -490,12 +493,34 @@
   }
 }
 
-@media (max-width: 480px) {
-  .global-navigation {
-    bottom: 20px !important;
-    left: 20px !important;
-    width: 52px !important;
-    height: 52px !important;
-    font-size: 18px !important;
-  }
+/* Additional override with unique class */
+.spaceship-nav-v2 {
+  position: fixed !important;
+  bottom: 32px !important;
+  left: 32px !important;
+  z-index: 9999 !important;
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #8B5CF6, #3B82F6) !important;
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.4) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 24px !important;
+  color: white !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.spaceship-nav-v2:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 12px 40px rgba(139, 92, 246, 0.6) !important;
+}
+
+.spaceship-nav-v2:focus {
+  outline: 4px solid rgba(139, 92, 246, 0.3) !important;
+  outline-offset: 2px !important;
 }

@@ -31,7 +31,7 @@ export default function GlobalNavigation() {
       {/* Floating Action Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="global-navigation fixed bottom-8 left-8 w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110 flex items-center justify-center text-3xl focus:outline-none focus:ring-4 focus:ring-purple-300 z-50"
+        className="global-navigation fixed bottom-8 left-8 w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110 flex items-center justify-center text-3xl focus:outline-none focus:ring-4 focus:ring-purple-300 z-50 spaceship-nav-v2"
         aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
       >
         {isOpen ? '✕' : '🚀'}
