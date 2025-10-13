@@ -85,10 +85,7 @@ export const EnergySelector: React.FC<EnergySelectorProps> = ({
     // Track energy update
     if (typeof window !== 'undefined') {
       const userId = localStorage.getItem('userId') || 'anonymous';
-      analytics.energyUpdated(userId, energy, {
-        previousLevel: selectedEnergy,
-        wasAutoUpdated: autoUpdated
-      });
+      analytics.energyLevelUpdated(userId, selectedEnergy, energy, 'manual', 1.0);
     }
     
     // Reset animation state after animation completes
