@@ -178,8 +178,9 @@
   background-clip: initial !important;
   -webkit-background-clip: initial !important;
   /* Allow text to wrap if needed */
-  flex-wrap: wrap !important;
+  flex-wrap: nowrap !important;
   min-width: fit-content !important;
+  white-space: nowrap !important;
 }
 
 .level-badge .trophy-icon {
@@ -234,7 +235,9 @@
   -webkit-text-fill-color: #000000 !important;
   background-clip: initial !important;
   -webkit-background-clip: initial !important;
-  opacity: 0.8 !important;
+  opacity: 0.9 !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
 }
 
 /* ============================================================================
