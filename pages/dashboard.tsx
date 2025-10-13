@@ -1325,27 +1325,40 @@ export default function Dashboard() {
                 <div className="level-info">
                   {/* Level Badge with Progress Text Underneath */}
                   <div className="level-badge-container">
-                    <span className="level-badge">
-                      <div className="level-badge-content">
-                        <div className="level-info-row">
-                          <span className="trophy-icon">★</span>
-                          <span className="level-text">Level {userLevel}</span>
-                          {unlockedCount > 0 && (
-                            <span className="mini-trophy" title={`${unlockedCount} achievements unlocked`}>
-                              +{unlockedCount}
-                            </span>
-                          )}
-                        </div>
-                        {/* Progress Text Underneath Inside Badge */}
-                        <div className="progress-text-inside-badge" style={{
-                          fontSize: '11px',
-                          color: '#000000',
-                          fontWeight: '600',
-                          marginTop: '2px',
-                          textAlign: 'center'
-                        }}>
-                          {1000 - (userPoints % 1000)} pts to Level {userLevel + 1}
-                        </div>
+                    <span className="level-badge" style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '8px 16px',
+                      background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
+                      color: '#000000',
+                      borderRadius: '20px',
+                      fontSize: '14px',
+                      fontWeight: '700',
+                      boxShadow: '0 4px 12px rgba(251, 191, 36, 0.4)',
+                      border: '2px solid #f59e0b',
+                      minWidth: 'fit-content'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span className="trophy-icon">★</span>
+                        <span className="level-text">Level {userLevel}</span>
+                        {unlockedCount > 0 && (
+                          <span className="mini-trophy" title={`${unlockedCount} achievements unlocked`}>
+                            +{unlockedCount}
+                          </span>
+                        )}
+                      </div>
+                      {/* Progress Text Underneath Inside Badge */}
+                      <div style={{
+                        fontSize: '10px',
+                        color: '#000000',
+                        fontWeight: '600',
+                        marginTop: '3px',
+                        textAlign: 'center',
+                        opacity: '0.9'
+                      }}>
+                        {1000 - (userPoints % 1000)} pts to Level {userLevel + 1}
                       </div>
                     </span>
                   </div>
