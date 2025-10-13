@@ -1333,17 +1333,18 @@ export default function Dashboard() {
                           +{unlockedCount}
                         </span>
                       )}
+                      {/* Progress Text Inside Badge */}
+                      <span className="progress-text-inside-badge" style={{
+                        fontSize: '11px',
+                        color: '#000000',
+                        fontWeight: '600',
+                        marginLeft: '8px',
+                        paddingLeft: '8px',
+                        borderLeft: '1px solid rgba(0,0,0,0.2)'
+                      }}>
+                        {1000 - (userPoints % 1000)} pts to Level {userLevel + 1}
+                      </span>
                     </span>
-                    {/* Progress Text Under Level Badge */}
-                    <div className="progress-text-under-badge" style={{ 
-                      fontSize: '12px', 
-                      color: 'var(--color-neutral-600)', 
-                      marginTop: '6px',
-                      textAlign: 'center',
-                      fontWeight: '600'
-                    }}>
-                      {1000 - (userPoints % 1000)} pts to Level {userLevel + 1}
-                    </div>
                   </div>
                   
                   {/* Emblem Charge Indicator */}
