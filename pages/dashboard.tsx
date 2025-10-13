@@ -1306,7 +1306,10 @@ export default function Dashboard() {
           {/* Left Side - Title and Welcome */}
           <div className="header-left">
             <h1 className="dashboard-title">
-              <span className="title-gradient">SyncScript</span>
+              <div className="app-logo">
+                <div className="logo-icon">⚡</div>
+                <span className="logo-text">SyncScript</span>
+              </div>
             </h1>
             <p className="dashboard-subtitle">
               Welcome back, {user.name || user.email}!
@@ -1322,10 +1325,11 @@ export default function Dashboard() {
                 <div className="level-info">
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span className="level-badge">
-                      Level {userLevel}
+                      <span className="trophy-icon">🏆</span>
+                      <span className="level-text">Level {userLevel}</span>
                       {unlockedCount > 0 && (
                         <span className="mini-trophy" title={`${unlockedCount} achievements unlocked`}>
-                          🏆
+                          +{unlockedCount}
                         </span>
                       )}
                     </span>

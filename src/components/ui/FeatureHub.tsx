@@ -176,15 +176,13 @@ export default function FeatureHub() {
       {/* Category Pills */}
       <div className="sticky top-0 z-40 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="feature-categories">
             {CATEGORIES.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium whitespace-nowrap transition-all ${
-                  selectedCategory === category.id
-                    ? 'bg-purple-600 text-white shadow-lg scale-105'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                className={`feature-category-button ${
+                  selectedCategory === category.id ? 'active' : ''
                 }`}
               >
                 <span className="text-xl">{category.icon}</span>

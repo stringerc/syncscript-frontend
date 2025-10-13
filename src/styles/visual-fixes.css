@@ -1,0 +1,328 @@
+/**
+ * VISUAL FIXES FOR USER REPORTED ISSUES
+ * Fixes overlapping buttons, visibility issues, and layout problems
+ */
+
+/* ============================================================================
+   FIX 1: FLOATING ACTION BUTTON OVERLAP (Bottom Right)
+   ============================================================================ */
+
+.fab-container {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  flex-direction: column-reverse !important;
+  gap: 12px !important;
+}
+
+.fab-actions {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column-reverse !important;
+  gap: 12px !important;
+  margin-bottom: 12px !important;
+}
+
+.fab-action {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 12px 16px !important;
+  border: none !important;
+  border-radius: 24px !important;
+  color: white !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+  white-space: nowrap !important;
+  min-width: 140px !important;
+  opacity: 1 !important;
+  transform: none !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.fab-main {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 50% !important;
+  border: none !important;
+  background: linear-gradient(135deg, #4A90E2, #8B5CF6) !important;
+  color: white !important;
+  font-size: 24px !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 20px rgba(74, 144, 226, 0.3) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* ============================================================================
+   FIX 2: QUICK ACCESS FEATURE BUTTONS OVERLAP
+   ============================================================================ */
+
+.feature-command-center .feature-categories {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin-bottom: 16px !important;
+}
+
+.feature-category-button {
+  padding: 8px 16px !important;
+  margin: 0 !important;
+  border-radius: 20px !important;
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  color: #374151 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.feature-category-button:hover {
+  background: #f3f4f6 !important;
+  border-color: #d1d5db !important;
+}
+
+.feature-category-button.active {
+  background: #4A90E2 !important;
+  color: white !important;
+  border-color: #4A90E2 !important;
+}
+
+/* ============================================================================
+   FIX 3: DAILY GOALS TEXT OVERLAP (0/5 with description)
+   ============================================================================ */
+
+.achievement-card .progress-text {
+  margin-top: 8px !important;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+  line-height: 1.2 !important;
+}
+
+.achievement-card .progress-indicator {
+  display: block !important;
+  margin-top: 4px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #6b7280 !important;
+}
+
+.achievement-card .description {
+  margin-bottom: 8px !important;
+  line-height: 1.4 !important;
+}
+
+/* ============================================================================
+   FIX 4: SYNCSCRIPT LOGO VISIBILITY (Top Left)
+   ============================================================================ */
+
+.app-header .app-logo {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #1f2937 !important;
+  text-decoration: none !important;
+}
+
+.app-header .app-logo .logo-icon {
+  width: 32px !important;
+  height: 32px !important;
+  background: linear-gradient(135deg, #4A90E2, #8B5CF6) !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  font-size: 16px !important;
+}
+
+.app-header .app-logo .logo-text {
+  background: linear-gradient(135deg, #4A90E2, #8B5CF6) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+/* ============================================================================
+   FIX 5: LEVEL ONE WITH TROPHY VISIBILITY
+   ============================================================================ */
+
+.level-badge {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 12px !important;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+  color: white !important;
+  border-radius: 16px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3) !important;
+}
+
+.level-badge .trophy-icon {
+  font-size: 16px !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2)) !important;
+}
+
+.level-badge .level-text {
+  font-weight: 700 !important;
+}
+
+/* ============================================================================
+   FIX 6: BLURRY THEME SCREEN
+   ============================================================================ */
+
+.theme-modal,
+.theme-overlay {
+  backdrop-filter: blur(8px) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+.theme-modal .modal-content {
+  background: white !important;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.theme-modal .theme-option {
+  border: 2px solid transparent !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.theme-modal .theme-option:hover {
+  border-color: #4A90E2 !important;
+  background: #f8fafc !important;
+}
+
+.theme-modal .theme-option.selected {
+  border-color: #4A90E2 !important;
+  background: #eff6ff !important;
+}
+
+/* ============================================================================
+   MOBILE RESPONSIVE FIXES
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  /* FAB fixes for mobile */
+  .fab-container {
+    bottom: 20px !important;
+    right: 20px !important;
+  }
+  
+  .fab-main {
+    width: 48px !important;
+    height: 48px !important;
+    font-size: 20px !important;
+  }
+  
+  .fab-action {
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+    min-width: 120px !important;
+  }
+  
+  /* Feature buttons mobile */
+  .feature-category-button {
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+  }
+  
+  /* Logo mobile */
+  .app-header .app-logo {
+    font-size: 18px !important;
+  }
+  
+  .app-header .app-logo .logo-icon {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 14px !important;
+  }
+  
+  /* Level badge mobile */
+  .level-badge {
+    padding: 4px 10px !important;
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Very small screens */
+  .fab-container {
+    bottom: 16px !important;
+    right: 16px !important;
+  }
+  
+  .fab-action {
+    min-width: 100px !important;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+  }
+  
+  .feature-category-button {
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* ============================================================================
+   DARK MODE FIXES
+   ============================================================================ */
+
+[data-theme="dark"] .app-header .app-logo {
+  color: #f9fafb !important;
+}
+
+[data-theme="dark"] .theme-modal {
+  background: rgba(17, 24, 39, 0.95) !important;
+}
+
+[data-theme="dark"] .theme-modal .modal-content {
+  background: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+[data-theme="dark"] .theme-modal .theme-option {
+  background: #374151 !important;
+  border-color: #4b5563 !important;
+}
+
+[data-theme="dark"] .theme-modal .theme-option:hover {
+  background: #4b5563 !important;
+  border-color: #4A90E2 !important;
+}
+
+[data-theme="dark"] .feature-category-button {
+  background: #374151 !important;
+  border-color: #4b5563 !important;
+  color: #f9fafb !important;
+}
+
+[data-theme="dark"] .feature-category-button:hover {
+  background: #4b5563 !important;
+  border-color: #6b7280 !important;
+}
+
+[data-theme="dark"] .feature-category-button.active {
+  background: #4A90E2 !important;
+  border-color: #4A90E2 !important;
+}
