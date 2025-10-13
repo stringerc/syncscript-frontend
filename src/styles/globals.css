@@ -175,6 +175,28 @@
 @import './AnalyticsDashboard.css';
 @import './ThemeSettings.css';
 @import './NotificationCenter.css';
+
+/* React Hot Toast Dismiss Button Styling */
+.react-hot-toast-dismissible [data-close-button] {
+  background: rgba(0, 0, 0, 0.1) !important;
+  border-radius: 50% !important;
+  padding: 4px !important;
+  margin-left: 8px !important;
+  opacity: 0.8 !important;
+  transition: all 0.2s ease !important;
+}
+
+.react-hot-toast-dismissible [data-close-button]:hover {
+  background: rgba(0, 0, 0, 0.2) !important;
+  opacity: 1 !important;
+  transform: scale(1.1) !important;
+}
+
+.react-hot-toast-dismissible [data-close-button] svg {
+  width: 14px !important;
+  height: 14px !important;
+  color: var(--syncscript-charcoal-600) !important;
+}
 @import './InstallPWA.css';
 
 /* Global Spin Animation for Loading Screens */

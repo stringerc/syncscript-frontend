@@ -187,6 +187,8 @@ function MyApp({ Component, pageProps }: AppProps) {
                 border: '1px solid var(--syncscript-charcoal-100)',
                 borderRadius: 'var(--radius-lg)',
                 boxShadow: 'var(--shadow-lg)',
+                fontSize: '14px',
+                fontWeight: '500',
               },
               success: {
                 iconTheme: {
@@ -201,6 +203,8 @@ function MyApp({ Component, pageProps }: AppProps) {
                 },
               },
             }}
+            // Enable dismiss button for all toasts
+            closeButton={true}
           />
           </div>
         </ThemeProvider>
