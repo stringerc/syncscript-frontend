@@ -1,6 +1,18 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Tailwind v4 Theme Configuration */
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+  
+  --color-syncscript-blue-50: #EBF5FF;
+  --color-syncscript-blue-500: #3399FF;
+  --color-syncscript-blue-600: #0A7AFF;
+  --color-syncscript-purple-500: #9966FF;
+  --color-syncscript-purple-600: #7A3DFF;
+  --color-syncscript-green-500: #38A169;
+  --color-syncscript-orange-500: #FF8000;
+}
 
 /* 🎨 SYNCSCRIPT THEME IMPORTS */
 @import './tokens.css';
