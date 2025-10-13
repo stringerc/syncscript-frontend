@@ -145,6 +145,8 @@ export default function Dashboard() {
   const [energyLogs, setEnergyLogs] = React.useState<Array<{ level: number; timestamp: string }>>(() => DataPersistence.loadEnergyLogs());
   const [userPoints, setUserPoints] = React.useState(() => DataPersistence.loadUserPoints());
   const [userLevel, setUserLevel] = React.useState(() => DataPersistence.loadUserLevel());
+  const [focusSessionsCount, setFocusSessionsCount] = React.useState(() => DataPersistence.loadFocusSessions());
+  const [totalFocusMinutes, setTotalFocusMinutes] = React.useState(() => DataPersistence.loadTotalFocusMinutes());
   // Auto-save data to localStorage whenever state changes
   React.useEffect(() => {
     DataPersistence.saveTasks(tasks);
@@ -219,8 +221,6 @@ export default function Dashboard() {
   const [showNotifications, setShowNotifications] = React.useState(false);
   const [showAchievements, setShowAchievements] = React.useState(false);
   const [showCalendar, setShowCalendar] = React.useState(false);
-  const [focusSessionsCount, setFocusSessionsCount] = React.useState(() => DataPersistence.loadFocusSessions());
-  const [totalFocusMinutes, setTotalFocusMinutes] = React.useState(() => DataPersistence.loadTotalFocusMinutes());
   const [showTeamDashboard, setShowTeamDashboard] = React.useState(false);
   const [showTeamInvitation, setShowTeamInvitation] = React.useState(false);
   const [showAPIDocs, setShowAPIDocs] = React.useState(false);
