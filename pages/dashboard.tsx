@@ -1361,7 +1361,8 @@ export default function Dashboard() {
                         justifyContent: 'center',
                         cursor: 'pointer',
                         boxShadow: '0 0 12px rgba(51, 153, 255, 0.4)',
-                        transition: 'transform 0.2s ease'
+                        transition: 'transform 0.2s ease',
+                        willChange: 'transform' // VIRE-002 FIX: GPU optimization for smooth 60fps
                       }}
                       whileHover={{ scale: 1.15, boxShadow: '0 0 20px rgba(51, 153, 255, 0.6)' }}
                       title={`Emblem Charge: ${(userPoints % 1000) / 10}% - Click for breakdown`}
