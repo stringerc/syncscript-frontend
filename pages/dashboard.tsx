@@ -147,6 +147,7 @@ export default function Dashboard() {
   const [userLevel, setUserLevel] = React.useState(() => DataPersistence.loadUserLevel());
   const [focusSessionsCount, setFocusSessionsCount] = React.useState(() => DataPersistence.loadFocusSessions());
   const [totalFocusMinutes, setTotalFocusMinutes] = React.useState(() => DataPersistence.loadTotalFocusMinutes());
+  const [streakData, setStreakData] = React.useState(() => DataPersistence.loadStreakData() || getStreakData());
   // Auto-save data to localStorage whenever state changes
   React.useEffect(() => {
     DataPersistence.saveTasks(tasks);
@@ -199,7 +200,6 @@ export default function Dashboard() {
   const [filterTag, setFilterTag] = React.useState<string | null>(null);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [sortBy, setSortBy] = React.useState<SortOption>('energy_match');
-  const [streakData, setStreakData] = React.useState(() => DataPersistence.loadStreakData() || getStreakData());
   const [showMilestoneConfetti, setShowMilestoneConfetti] = React.useState(false);
   const [isSaveTemplateModalOpen, setIsSaveTemplateModalOpen] = React.useState(false);
   const [templateTaskData, setTemplateTaskData] = React.useState<{
