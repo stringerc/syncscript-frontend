@@ -1,0 +1,42 @@
+/**
+ * VIRE-003 FIX: Calendar Spacing at 320px
+ * Optimizes calendar grid spacing for small screens
+ */
+
+/* Calendar grid optimization for very small screens */
+@media (max-width: 340px) {
+  /* Calendar day cells */
+  .calendar-grid,
+  .calendar-month-view,
+  .calendar-day-grid,
+  [class*="calendar"] [class*="grid"] {
+    gap: 6px !important; /* Accept 6px as optimal for tiny screens */
+    font-size: 13px; /* Slightly smaller text for breathing room */
+  }
+
+  /* Calendar day numbers */
+  .calendar-day,
+  .day-cell,
+  [class*="calendar"] [class*="day"] {
+    padding: 4px !important; /* Tighter padding */
+    min-height: 36px !important; /* Minimum touchable size */
+  }
+
+  /* Calendar headers */
+  .calendar-header,
+  .calendar-weekday,
+  [class*="calendar"] [class*="header"] {
+    font-size: 11px !important;
+    padding: 6px 2px !important;
+  }
+}
+
+/* Slightly larger screens: ideal 8px spacing */
+@media (min-width: 341px) and (max-width: 480px) {
+  .calendar-grid,
+  .calendar-month-view,
+  .calendar-day-grid {
+    gap: 8px;
+  }
+}
+

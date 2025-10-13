@@ -22,7 +22,8 @@ import '../src/styles/mobile-responsive.css'; // Mobile optimizations
 import '../src/styles/motion-system.css'; // Standardized animations
 import '../src/styles/button-polish.css'; // Button visibility & spacing fixes
 import '../src/styles/tokens.css';
-import '../src/styles/globals.css';
+import '../src/styles/globals.css'
+import '../src/styles/calendar-responsive-fix.css';
 import '../src/styles/SmartSuggestions.css';
 import '../src/styles/AdvancedAnalytics.css';
 import '../src/styles/AchievementGallery.css';
