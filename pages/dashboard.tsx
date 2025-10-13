@@ -1326,7 +1326,7 @@ export default function Dashboard() {
                   {/* Level Badge with Progress Text Underneath */}
                   <div className="level-badge-container">
                     <span className="level-badge">
-                      <span className="trophy-icon">🏆</span>
+                      <span className="trophy-icon">⭐</span>
                       <span className="level-text">Level {userLevel}</span>
                       {unlockedCount > 0 && (
                         <span className="mini-trophy" title={`${unlockedCount} achievements unlocked`}>
