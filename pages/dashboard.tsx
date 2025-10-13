@@ -1307,7 +1307,6 @@ export default function Dashboard() {
           <div className="header-left">
             <h1 className="dashboard-title">
               <div className="app-logo">
-                <div className="logo-icon">⚡</div>
                 <span className="logo-text">SyncScript</span>
               </div>
             </h1>

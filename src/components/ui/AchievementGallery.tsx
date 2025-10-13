@@ -183,7 +183,7 @@ export default function AchievementGallery() {
 
               {/* Progress Bar (if applicable) */}
               {achievement.target && (
-                <div className="mb-3">
+                <div className="mb-3 mt-3">
                   <div className="h-2 bg-white/20 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
@@ -193,7 +193,7 @@ export default function AchievementGallery() {
                       className="h-full bg-white rounded-full"
                     />
                   </div>
-                  <div className={`text-xs mt-1 ${
+                  <div className={`text-xs mt-2 text-center ${
                     achievement.unlocked ? 'text-white/80' : 'text-gray-500'
                   }`}>
                     {achievement.progress || 0} / {achievement.target}
