@@ -176,11 +176,11 @@
 }
 
 .level-badge .trophy-icon {
-  font-size: 20px !important;
+  font-size: 18px !important;
   filter: none !important;
   text-shadow: none !important;
-  color: #1f2937 !important;
-  font-weight: normal !important;
+  color: #f59e0b !important;
+  font-weight: bold !important;
   background: #ffffff !important;
   border-radius: 50% !important;
   width: 28px !important;
@@ -191,6 +191,7 @@
   padding: 0 !important;
   border: 2px solid #f59e0b !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  font-family: Arial, sans-serif !important;
 }
 
 .level-badge .level-text {
