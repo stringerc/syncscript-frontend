@@ -1315,22 +1315,80 @@ export default function Dashboard() {
               {/* Level Progress - Prominent */}
               <div className="level-progress-card">
                 <div className="level-info">
-                  <span className="level-badge">
-                    Level {userLevel}
-                    {unlockedCount > 0 && (
-                      <span className="mini-trophy" title={`${unlockedCount} achievements unlocked`}>
-                        🏆
-                      </span>
-                    )}
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span className="level-badge">
+                      Level {userLevel}
+                      {unlockedCount > 0 && (
+                        <span className="mini-trophy" title={`${unlockedCount} achievements unlocked`}>
+                          🏆
+                        </span>
+                      )}
+                    </span>
+                    {/* Pulsing Emblem Charge Indicator */}
+                    <motion.div
+                      className="emblem-pulse-indicator"
+                      animate={{
+                        scale: [1, 1.1, 1],
+                        opacity: [0.8, 1, 0.8]
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                      onClick={() => {
+                        if (currentEmblemBreakdown) {
+                          setShowEmblemBreakdown(true);
+                        }
+                      }}
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        background: `conic-gradient(
+                          from 0deg,
+                          var(--color-syncscript-blue-500) 0%,
+                          var(--color-syncscript-purple-500) ${(userPoints % 1000) / 10}%,
+                          var(--color-neutral-200) ${(userPoints % 1000) / 10}%
+                        )`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        boxShadow: '0 0 12px rgba(51, 153, 255, 0.4)',
+                        transition: 'transform 0.2s ease'
+                      }}
+                      whileHover={{ scale: 1.15, boxShadow: '0 0 20px rgba(51, 153, 255, 0.6)' }}
+                      title={`Emblem Charge: ${(userPoints % 1000) / 10}% - Click for breakdown`}
+                    >
+                      <div style={{
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%',
+                        background: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '12px'
+                      }}>
+                        ⚡
+                      </div>
+                    </motion.div>
+                  </div>
                   <span className="points-text">⚡ {userPoints} pts</span>
                 </div>
                 <div className="progress-bar">
-                  <div 
+                  <motion.div 
                     className="progress-fill" 
                     style={{ width: `${(userPoints % 1000) / 10}%` }}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(userPoints % 1000) / 10}%` }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
                   />
                 </div>
+                <span className="progress-text" style={{ fontSize: '11px', color: 'var(--color-neutral-600)', marginTop: '4px' }}>
+                  {1000 - (userPoints % 1000)} pts to Level {userLevel + 1}
+                </span>
               </div>
               
               {/* Compact Stats */}
