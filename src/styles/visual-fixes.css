@@ -167,7 +167,7 @@
   gap: 6px !important;
   padding: 8px 16px !important;
   background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
-  color: #1f2937 !important;
+  color: #000000 !important;
   border-radius: 20px !important;
   font-size: 14px !important;
   font-weight: 700 !important;
@@ -179,7 +179,7 @@
   font-size: 18px !important;
   filter: none !important;
   text-shadow: none !important;
-  color: #f59e0b !important;
+  color: #000000 !important;
   font-weight: bold !important;
   background: #ffffff !important;
   border-radius: 50% !important;
@@ -189,19 +189,21 @@
   align-items: center !important;
   justify-content: center !important;
   padding: 0 !important;
-  border: 2px solid #f59e0b !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
   font-family: Arial, sans-serif !important;
 }
 
 .level-badge .level-text {
   font-weight: 700 !important;
-  color: #1f2937 !important;
+  color: #000000 !important;
+  font-size: 14px !important;
 }
 
 .level-badge .mini-trophy {
   font-weight: 700 !important;
-  color: #1f2937 !important;
+  color: #000000 !important;
+  font-size: 14px !important;
 }
 
 /* Level Badge Container Layout */
