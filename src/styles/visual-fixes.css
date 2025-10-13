@@ -164,7 +164,7 @@
 .level-badge {
   display: flex !important;
   align-items: center !important;
-  gap: 6px !important;
+  justify-content: center !important;
   padding: 8px 16px !important;
   background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
   color: #000000 !important;
@@ -177,10 +177,8 @@
   -webkit-text-fill-color: #000000 !important;
   background-clip: initial !important;
   -webkit-background-clip: initial !important;
-  /* Allow text to wrap if needed */
-  flex-wrap: nowrap !important;
+  /* Support vertical stacking */
   min-width: fit-content !important;
-  white-space: nowrap !important;
 }
 
 .level-badge .trophy-icon {
