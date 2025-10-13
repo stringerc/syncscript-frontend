@@ -6,7 +6,12 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:contract": "jest --config=jest.pact.config.js",
+    "test:visual": "playwright test tests/visual",
+    "test:chaos": "playwright test tests/chaos",
+    "test:load": "k6 run tests/load/baseline.k6.js",
+    "test:all": "npm run lint && npm run test:contract && npm run test:visual"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.6.0",
