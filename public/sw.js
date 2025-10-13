@@ -53,6 +53,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // CRITICAL: Never intercept Auth0 routes
+  // Auth0 callbacks use state/nonces that MUST NOT be cached
+  if (url.pathname.startsWith('/api/auth/')) {
+    return; // Let Auth0 handle these directly
+  }
+
   // Skip non-GET requests
   if (request.method !== 'GET') {
     return;
