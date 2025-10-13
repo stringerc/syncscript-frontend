@@ -547,6 +547,9 @@
   font-size: 28px !important;
   color: white !important;
   transition: all 0.3s ease !important;
+  /* Override any conflicting styles */
+  right: auto !important;
+  top: auto !important;
 }
 
 .spaceship-nav-fab:hover {
@@ -567,6 +570,9 @@
     width: 56px !important;
     height: 56px !important;
     font-size: 24px !important;
+    /* Override responsive-audit-fixes.css */
+    bottom: 20px !important;
+    right: auto !important;
   }
 }
 
@@ -577,5 +583,45 @@
     width: 52px !important;
     height: 52px !important;
     font-size: 20px !important;
+    /* Override responsive-audit-fixes.css */
+    bottom: 16px !important;
+    right: auto !important;
   }
+}
+
+/* Force override any conflicting CSS files */
+.global-navigation.spaceship-nav-fab,
+button.spaceship-nav-fab {
+  position: fixed !important;
+  bottom: 24px !important;
+  left: 24px !important;
+  right: auto !important;
+  top: auto !important;
+  z-index: 9999 !important;
+}
+
+/* Nuclear option - override everything */
+button[class*="spaceship"],
+button[class*="global-navigation"],
+.global-navigation,
+button.global-navigation {
+  position: fixed !important;
+  bottom: 24px !important;
+  left: 24px !important;
+  right: auto !important;
+  top: auto !important;
+  z-index: 9999 !important;
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #8B5CF6, #3B82F6) !important;
+  border: none !important;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 28px !important;
+  color: white !important;
+  transition: all 0.3s ease !important;
 }
