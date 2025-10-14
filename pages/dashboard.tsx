@@ -143,6 +143,12 @@ import LivePresenceSystem from '../src/components/realtime/LivePresenceSystem';
 import RealTimeUpdatesSystem from '../src/components/realtime/RealTimeUpdatesSystem';
 import InstantNotificationsSystem from '../src/components/realtime/InstantNotificationsSystem';
 
+// Import Mobile Optimization components
+import PWAFoundation from '../src/components/mobile/PWAFoundation';
+import OfflineFirstArchitecture from '../src/components/mobile/OfflineFirstArchitecture';
+import TouchGesturesSystem from '../src/components/mobile/TouchGesturesSystem';
+import MobilePushNotifications from '../src/components/mobile/MobilePushNotifications';
+
 interface Task {
   id: string;
   title: string;
@@ -258,6 +264,12 @@ export default function Dashboard() {
   const [showLivePresence, setShowLivePresence] = React.useState(false);
   const [showRealTimeUpdates, setShowRealTimeUpdates] = React.useState(false);
   const [showInstantNotifications, setShowInstantNotifications] = React.useState(false);
+
+  // Mobile Optimization Features State
+  const [showPWAFoundation, setShowPWAFoundation] = React.useState(false);
+  const [showOfflineArchitecture, setShowOfflineArchitecture] = React.useState(false);
+  const [showTouchGestures, setShowTouchGestures] = React.useState(false);
+  const [showMobilePush, setShowMobilePush] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -2222,6 +2234,83 @@ export default function Dashboard() {
                 🔔 Notifications
               </button>
 
+              {/* Mobile Optimization Features */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowPWAFoundation(true)}
+                title="PWA Foundation"
+                aria-label="PWA Foundation"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📱 PWA
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowOfflineArchitecture(true)}
+                title="Offline Architecture"
+                aria-label="Offline Architecture"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                💾 Offline
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowTouchGestures(true)}
+                title="Touch Gestures"
+                aria-label="Touch Gestures"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                👆 Touch
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowMobilePush(true)}
+                title="Mobile Push Notifications"
+                aria-label="Mobile Push Notifications"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ea580c, #dc2626)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📲 Push
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -3331,6 +3420,31 @@ export default function Dashboard() {
           teamId="team-1"
           userId={user?.sub || 'anonymous'}
           onClose={() => setShowInstantNotifications(false)}
+        />
+      )}
+
+      {/* Mobile Optimization Features */}
+      {showPWAFoundation && (
+        <PWAFoundation
+          onClose={() => setShowPWAFoundation(false)}
+        />
+      )}
+
+      {showOfflineArchitecture && (
+        <OfflineFirstArchitecture
+          onClose={() => setShowOfflineArchitecture(false)}
+        />
+      )}
+
+      {showTouchGestures && (
+        <TouchGesturesSystem
+          onClose={() => setShowTouchGestures(false)}
+        />
+      )}
+
+      {showMobilePush && (
+        <MobilePushNotifications
+          onClose={() => setShowMobilePush(false)}
         />
       )}
     </div>
