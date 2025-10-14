@@ -95,9 +95,9 @@ import { Subtask } from '../src/utils/subtaskUtils';
 import { TaskNote } from '../src/utils/noteUtils';
 import { RecurrenceConfig, calculateNextDueDate, shouldEndRecurrence } from '../src/utils/recurrenceUtils';
 import { checkQuickWins, saveQuickWinPoints } from '../src/utils/quickWinBadges';
-// Import Advanced AI Features
-import AdvancedAIFeatures from '../src/components/ai/AdvancedAIFeatures';
-import AdvancedAnalyticsDashboard from '../src/components/analytics/AdvancedAnalyticsDashboard';
+// Import Advanced Collaboration & Automation
+import AdvancedCollaborationTools from '../src/components/collaboration/AdvancedCollaborationTools';
+import AdvancedAutomation from '../src/components/automation/AdvancedAutomation';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import { DataPersistence } from '../src/utils/dataPersistence';
@@ -458,6 +458,8 @@ export default function Dashboard() {
   // Advanced Features State
   const [showAdvancedAIFeatures, setShowAdvancedAIFeatures] = React.useState(false);
   const [showAdvancedAnalyticsDashboard, setShowAdvancedAnalyticsDashboard] = React.useState(false);
+  const [showAdvancedCollaborationTools, setShowAdvancedCollaborationTools] = React.useState(false);
+  const [showAdvancedAutomation, setShowAdvancedAutomation] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -3788,6 +3790,44 @@ export default function Dashboard() {
                 📊 Analytics
               </button>
 
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAdvancedCollaborationTools(true)}
+                title="Advanced Collaboration Tools"
+                aria-label="Advanced Collaboration Tools"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🤝 Collaboration
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAdvancedAutomation(true)}
+                title="Advanced Automation"
+                aria-label="Advanced Automation"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ea580c, #dc2626)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🤖 Automation
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -5327,6 +5367,18 @@ export default function Dashboard() {
       {showAdvancedAnalyticsDashboard && (
         <AdvancedAnalyticsDashboard
           onClose={() => setShowAdvancedAnalyticsDashboard(false)}
+        />
+      )}
+
+      {showAdvancedCollaborationTools && (
+        <AdvancedCollaborationTools
+          onClose={() => setShowAdvancedCollaborationTools(false)}
+        />
+      )}
+
+      {showAdvancedAutomation && (
+        <AdvancedAutomation
+          onClose={() => setShowAdvancedAutomation(false)}
         />
       )}
       </div>
