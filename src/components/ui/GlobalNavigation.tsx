@@ -105,62 +105,60 @@ export default function GlobalNavigation() {
               aria-label="Navigation menu"
               {...swipeHandlers}
             >
-              <div className="p-0" style={{ padding: '0', margin: '0' }}>
-                <div className="mb-0" style={{ marginBottom: '0', padding: '0' }}>
-                  <h2 className="text-xs font-bold text-gray-900 dark:text-white mb-0" style={{ marginBottom: '0', padding: '0', lineHeight: '1' }}>
+              <div style={{ padding: '8px', height: '100vh', overflow: 'hidden' }}>
+                <div style={{ marginBottom: '8px' }}>
+                  <h2 style={{ fontSize: '14px', fontWeight: 'bold', margin: '0 0 4px 0', color: '#374151' }}>
                     Navigation
                   </h2>
-                  <p className="text-xs text-gray-600 dark:text-gray-400" style={{ margin: '0', padding: '0', lineHeight: '1' }}>
+                  <p style={{ fontSize: '12px', margin: '0', color: '#6B7280' }}>
                     Features
                   </p>
                 </div>
 
-                <div className="space-y-0" style={{ margin: '0', padding: '0' }}>
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: '1fr 1fr', 
+                  gap: '4px',
+                  height: 'calc(100vh - 80px)',
+                  overflow: 'hidden'
+                }}>
                   {NAVIGATION_ITEMS.map((item, index) => (
-                    <motion.div
+                    <Link
                       key={item.href}
-                      initial={{ x: 50, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.01 }}
-                      style={{ margin: '0', padding: '0' }}
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        padding: '6px 8px',
+                        borderRadius: '6px',
+                        background: `linear-gradient(135deg, ${item.color.includes('blue') ? '#3B82F6' : item.color.includes('purple') ? '#8B5CF6' : item.color.includes('green') ? '#10B981' : item.color.includes('pink') ? '#EC4899' : item.color.includes('orange') ? '#F59E0B' : '#6B7280'}, ${item.color.includes('blue') ? '#1D4ED8' : item.color.includes('purple') ? '#7C3AED' : item.color.includes('green') ? '#059669' : item.color.includes('pink') ? '#DB2777' : item.color.includes('orange') ? '#D97706' : '#4B5563'})`,
+                        color: 'white',
+                        textDecoration: 'none',
+                        fontSize: '12px',
+                        fontWeight: '500',
+                        height: '32px',
+                        boxSizing: 'border-box'
+                      }}
                     >
-                      <Link
-                        href={item.href}
-                        onClick={() => setIsOpen(false)}
-                        className="group block"
-                        style={{ margin: '0', padding: '0' }}
-                      >
-                        <div 
-                          className={`flex items-center gap-1 py-0 px-1 rounded bg-gradient-to-r ${item.color} hover:shadow-lg transition-all transform hover:scale-101 h-6`}
-                          style={{ 
-                            margin: '0', 
-                            padding: '0 0.25rem', 
-                            height: '24px', 
-                            lineHeight: '1',
-                            marginBottom: '0'
-                          }}
-                        >
-                          <div className="text-xs" style={{ margin: '0', padding: '0' }}>{item.icon}</div>
-                          <div className="flex-1" style={{ margin: '0', padding: '0' }}>
-                            <div className="font-medium text-white text-xs leading-none" style={{ margin: '0', padding: '0', lineHeight: '1' }}>
-                              {item.label}
-                            </div>
-                          </div>
-                          <div className="text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity" style={{ margin: '0', padding: '0' }}>
-                            →
-                          </div>
-                        </div>
-                      </Link>
-                    </motion.div>
+                      <span style={{ fontSize: '14px' }}>{item.icon}</span>
+                      <span style={{ flex: 1, fontSize: '11px', lineHeight: '1.2' }}>{item.label}</span>
+                    </Link>
                   ))}
                 </div>
 
-                <div className="mt-0 p-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded text-white">
-                  <div className="text-center">
-                    <div className="text-xs mb-0">🎉</div>
-                    <div className="font-bold text-xs mb-0">100 Features</div>
-                    <div className="text-xs text-white/80">Ready!</div>
-                  </div>
+                <div style={{ 
+                  marginTop: '8px', 
+                  padding: '8px', 
+                  background: 'linear-gradient(135deg, #8B5CF6, #3B82F6)', 
+                  borderRadius: '6px', 
+                  color: 'white',
+                  textAlign: 'center'
+                }}>
+                  <div style={{ fontSize: '12px', margin: '0' }}>🎉</div>
+                  <div style={{ fontSize: '11px', fontWeight: 'bold', margin: '0' }}>100 Features</div>
+                  <div style={{ fontSize: '10px', margin: '0', opacity: '0.8' }}>Ready!</div>
                 </div>
               </div>
             </motion.div>
