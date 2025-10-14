@@ -449,7 +449,6 @@ export default function Dashboard() {
   const [showEnterpriseIntegrationHub, setShowEnterpriseIntegrationHub] = React.useState(false);
   const [showAdvancedDataManagement, setShowAdvancedDataManagement] = React.useState(false);
   const [showAIPoweredBusinessIntelligence, setShowAIPoweredBusinessIntelligence] = React.useState(false);
-  const [showAdvancedCollaborationTools, setShowAdvancedCollaborationTools] = React.useState(false);
 
   // Final Polish & Optimization State
   const [showPerformanceOptimization, setShowPerformanceOptimization] = React.useState(false);
