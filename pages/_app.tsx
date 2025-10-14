@@ -46,6 +46,7 @@ import '../src/styles/FloatingActionButton.css';
 import '../src/styles/GlobalNavigation.css';
 import '../src/styles/awe-inspiring-ui.css';
 import '../src/styles/stunning-feature-menu.css';
+import '../src/styles/briefing-system.css';
 import '../src/styles/QuickSwitcher.css';
 import '../src/styles/CompactHeader.css';
 import '../src/styles/ViewSwitcher.css';

@@ -99,6 +99,10 @@ import { recalibrateEnergy, isEnergyMatched, formatEnergyDelta, getEnergyLabel }
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import { DataPersistence } from '../src/utils/dataPersistence';
+import { useBriefingManager } from '../src/hooks/useBriefingManager';
+import MorningBrief from '../src/components/briefings/MorningBrief';
+import EveningBrief from '../src/components/briefings/EveningBrief';
+import BriefingSettings from '../src/components/briefings/BriefingSettings';
 
 interface Task {
   id: string;
@@ -149,6 +153,32 @@ export default function Dashboard() {
   const [totalFocusMinutes, setTotalFocusMinutes] = React.useState(() => DataPersistence.loadTotalFocusMinutes());
   const [streakData, setStreakData] = React.useState(() => DataPersistence.loadStreakData() || getStreakData());
   const [loading, setLoading] = React.useState(false);
+
+  // Briefing System Integration
+  const {
+    settings: briefingSettings,
+    updateSettings: updateBriefingSettings,
+    morningBrief,
+    eveningBrief,
+    generateMorningBrief,
+    generateEveningBrief,
+    showMorningBrief,
+    showEveningBrief,
+    showBriefingSettings,
+    setShowMorningBrief,
+    setShowEveningBrief,
+    setShowBriefingSettings,
+    markBriefViewed,
+    carryOverTasks,
+    rescheduleTasks,
+    addReflection,
+    isLoading: briefingLoading,
+    error: briefingError
+  } = useBriefingManager({ 
+    userId: user?.sub || 'anonymous',
+    onError: (error) => console.error('Briefing error:', error)
+  });
+
   // Auto-save data to localStorage whenever state changes
   React.useEffect(() => {
     DataPersistence.saveTasks(tasks);
@@ -1533,6 +1563,18 @@ export default function Dashboard() {
               </button>
 
               {/* User Menu */}
+              {/* Briefing Settings */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowBriefingSettings(true)}
+                title="Briefing Settings"
+                aria-label="Briefing Settings"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '16px', height: '16px' }}>
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -2406,6 +2448,49 @@ export default function Dashboard() {
         isOpen={showEmblemBreakdown}
         onClose={() => setShowEmblemBreakdown(false)}
       />
+
+      {/* Briefing System Components */}
+      {morningBrief && (
+        <MorningBrief
+          isOpen={showMorningBrief}
+          onClose={() => {
+            setShowMorningBrief(false);
+            markBriefViewed('morning');
+          }}
+          data={morningBrief}
+          onViewTask={(taskId) => {
+            // TODO: Navigate to task or highlight in task list
+            console.log('View task:', taskId);
+          }}
+          onViewEvent={(eventId) => {
+            // TODO: Navigate to calendar event
+            console.log('View event:', eventId);
+          }}
+        />
+      )}
+
+      {eveningBrief && (
+        <EveningBrief
+          isOpen={showEveningBrief}
+          onClose={() => {
+            setShowEveningBrief(false);
+            markBriefViewed('evening');
+          }}
+          data={eveningBrief}
+          onCarryOverTasks={carryOverTasks}
+          onRescheduleTasks={rescheduleTasks}
+          onAddReflection={addReflection}
+        />
+      )}
+
+      {briefingSettings && (
+        <BriefingSettings
+          isOpen={showBriefingSettings}
+          onClose={() => setShowBriefingSettings(false)}
+          settings={briefingSettings}
+          onSave={updateBriefingSettings}
+        />
+      )}
     </div>
   );
 }
