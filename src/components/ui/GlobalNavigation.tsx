@@ -28,26 +28,6 @@ export default function GlobalNavigation() {
 
   return (
     <>
-      {/* TEST: Simple red div to see if component renders */}
-      <div
-        style={{
-          position: 'fixed',
-          top: '20px',
-          left: '20px',
-          width: '100px',
-          height: '100px',
-          backgroundColor: 'red',
-          zIndex: 99999,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'white',
-          fontSize: '20px',
-          fontWeight: 'bold'
-        }}
-      >
-        TEST
-      </div>
 
       {/* Floating Action Button */}
       <button
