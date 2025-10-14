@@ -213,6 +213,13 @@ import RealTimePerformanceAnalytics from '../src/components/performance/RealTime
 import AdvancedErrorHandling from '../src/components/performance/AdvancedErrorHandling';
 import ProgressiveLoading from '../src/components/performance/ProgressiveLoading';
 
+// Import Security Enhancement components
+import AdvancedThreatDetection from '../src/components/security/AdvancedThreatDetection';
+import ComplianceManagement from '../src/components/security/ComplianceManagement';
+import SecurityAuditDashboard from '../src/components/security/SecurityAuditDashboard';
+import DataPrivacyControls from '../src/components/security/DataPrivacyControls';
+import AdvancedAuthenticationSecurity from '../src/components/security/AdvancedAuthenticationSecurity';
+
 interface Task {
   id: string;
   title: string;
@@ -397,6 +404,13 @@ export default function Dashboard() {
   const [showRealTimePerformanceAnalytics, setShowRealTimePerformanceAnalytics] = React.useState(false);
   const [showAdvancedErrorHandling, setShowAdvancedErrorHandling] = React.useState(false);
   const [showProgressiveLoading, setShowProgressiveLoading] = React.useState(false);
+
+  // Security Enhancement State
+  const [showAdvancedThreatDetection, setShowAdvancedThreatDetection] = React.useState(false);
+  const [showComplianceManagement, setShowComplianceManagement] = React.useState(false);
+  const [showSecurityAuditDashboard, setShowSecurityAuditDashboard] = React.useState(false);
+  const [showDataPrivacyControls, setShowDataPrivacyControls] = React.useState(false);
+  const [showAdvancedAuthenticationSecurity, setShowAdvancedAuthenticationSecurity] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -1659,15 +1673,15 @@ export default function Dashboard() {
                 <div className="level-info">
                   {/* Level Badge with Progress Text Underneath */}
     <div className="level-badge-container">
-      <span className="level-badge">
+                  <span className="level-badge">
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <span className="trophy-icon">⭐</span>
           <span className="level-text">Level {userLevel}</span>
-          {unlockedCount > 0 && (
-            <span className="mini-trophy" title={`${unlockedCount} achievements unlocked`}>
+                    {unlockedCount > 0 && (
+                      <span className="mini-trophy" title={`${unlockedCount} achievements unlocked`}>
               +{unlockedCount}
-            </span>
-          )}
+                      </span>
+                    )}
         </div>
         {/* Progress Text Underneath Inside Badge */}
         <div style={{
@@ -1680,7 +1694,7 @@ export default function Dashboard() {
         }}>
           {1000 - (userPoints % 1000)} pts to Level {userLevel + 1}
         </div>
-      </span>
+                  </span>
     </div>
                   
                   {/* Emblem Charge Indicator */}
@@ -1735,7 +1749,7 @@ export default function Dashboard() {
                         ⚡
                       </div>
                     </motion.div>
-                    <span className="points-text">⚡ {userPoints} pts</span>
+                  <span className="points-text">⚡ {userPoints} pts</span>
                   </div>
                 </div>
                 <div className="progress-bar">
@@ -3303,6 +3317,102 @@ export default function Dashboard() {
                 ⚡ Loading
               </button>
 
+              {/* Security Enhancements */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAdvancedThreatDetection(true)}
+                title="Advanced Threat Detection"
+                aria-label="Advanced Threat Detection"
+                style={{ 
+                  background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🛡️ Threat Detection
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowComplianceManagement(true)}
+                title="Compliance Management"
+                aria-label="Compliance Management"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📋 Compliance
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowSecurityAuditDashboard(true)}
+                title="Security Audit Dashboard"
+                aria-label="Security Audit Dashboard"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c3aed, #5b21b6)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔍 Security Audit
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowDataPrivacyControls(true)}
+                title="Data Privacy Controls"
+                aria-label="Data Privacy Controls"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔒 Privacy Controls
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAdvancedAuthenticationSecurity(true)}
+                title="Advanced Authentication Security"
+                aria-label="Advanced Authentication Security"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ea580c, #dc2626)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔐 Auth Security
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -4705,6 +4815,37 @@ export default function Dashboard() {
       {showProgressiveLoading && (
         <ProgressiveLoading
           onClose={() => setShowProgressiveLoading(false)}
+        />
+      )}
+
+      {/* Security Enhancements */}
+      {showAdvancedThreatDetection && (
+        <AdvancedThreatDetection
+          onClose={() => setShowAdvancedThreatDetection(false)}
+        />
+      )}
+
+      {showComplianceManagement && (
+        <ComplianceManagement
+          onClose={() => setShowComplianceManagement(false)}
+        />
+      )}
+
+      {showSecurityAuditDashboard && (
+        <SecurityAuditDashboard
+          onClose={() => setShowSecurityAuditDashboard(false)}
+        />
+      )}
+
+      {showDataPrivacyControls && (
+        <DataPrivacyControls
+          onClose={() => setShowDataPrivacyControls(false)}
+        />
+      )}
+
+      {showAdvancedAuthenticationSecurity && (
+        <AdvancedAuthenticationSecurity
+          onClose={() => setShowAdvancedAuthenticationSecurity(false)}
         />
       )}
     </div>
