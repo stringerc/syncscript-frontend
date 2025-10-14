@@ -395,7 +395,6 @@ export default function Dashboard() {
   const [showBusinessIntelligence, setShowBusinessIntelligence] = React.useState(false);
   const [showCustomReportCreation, setShowCustomReportCreation] = React.useState(false);
   const [showMultiFormatDataExport, setShowMultiFormatDataExport] = React.useState(false);
-  const [showPredictiveAnalytics, setShowPredictiveAnalytics] = React.useState(false);
   const [showAIPoweredInsightsAnalytics, setShowAIPoweredInsightsAnalytics] = React.useState(false);
 
   // Marketplace & Ecosystem State
