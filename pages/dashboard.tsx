@@ -99,6 +99,7 @@ import { checkQuickWins, saveQuickWinPoints } from '../src/utils/quickWinBadges'
 import AdvancedCollaborationTools from '../src/components/collaboration/AdvancedCollaborationTools';
 import AdvancedAutomation from '../src/components/automation/AdvancedAutomation';
 import AdvancedSecurityFeatures from '../src/components/security/AdvancedSecurityFeatures';
+import SystemIntegrationTesting from '../src/components/testing/SystemIntegrationTesting';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -462,6 +463,7 @@ export default function Dashboard() {
   const [showAdvancedAnalyticsDashboard, setShowAdvancedAnalyticsDashboard] = React.useState(false);
   const [showAdvancedAutomation, setShowAdvancedAutomation] = React.useState(false);
   const [showAdvancedSecurityFeatures, setShowAdvancedSecurityFeatures] = React.useState(false);
+  const [showSystemIntegrationTesting, setShowSystemIntegrationTesting] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -3849,6 +3851,25 @@ export default function Dashboard() {
                 🛡️ Security
               </button>
 
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowSystemIntegrationTesting(true)}
+                title="System Integration & Testing"
+                aria-label="System Integration & Testing"
+                style={{ 
+                  background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🧪 Testing
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -5406,6 +5427,12 @@ export default function Dashboard() {
       {showAdvancedSecurityFeatures && (
         <AdvancedSecurityFeatures
           onClose={() => setShowAdvancedSecurityFeatures(false)}
+        />
+      )}
+
+      {showSystemIntegrationTesting && (
+        <SystemIntegrationTesting
+          onClose={() => setShowSystemIntegrationTesting(false)}
         />
       )}
       </div>
