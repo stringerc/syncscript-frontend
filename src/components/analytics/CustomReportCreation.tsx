@@ -661,10 +661,12 @@ const CustomReportCreation: React.FC<CustomReportCreationProps> = ({ onClose }) 
                       <div className="text-sm text-gray-600">{report.widgets.length} widgets</div>
                       
                       {report.isScheduled && (
-                        <div className="text-sm font-medium text-gray-700">Schedule:</div>
-                        <div className="text-sm text-gray-600">
-                          {report.schedule.frequency} at {report.schedule.time} to {report.schedule.recipients.length} recipients
-                        </div>
+                        <>
+                          <div className="text-sm font-medium text-gray-700">Schedule:</div>
+                          <div className="text-sm text-gray-600">
+                            {report.schedule.frequency} at {report.schedule.time} to {report.schedule.recipients.length} recipients
+                          </div>
+                        </>
                       )}
                     </div>
                     

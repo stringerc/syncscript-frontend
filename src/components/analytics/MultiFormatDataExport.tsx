@@ -707,10 +707,12 @@ const MultiFormatDataExport: React.FC<MultiFormatDataExportProps> = ({ onClose }
                       </div>
                       
                       {template.isScheduled && (
-                        <div className="text-sm font-medium text-gray-700">Schedule:</div>
-                        <div className="text-sm text-gray-600">
-                          {template.schedule.frequency} at {template.schedule.time} to {template.schedule.recipients.length} recipients
-                        </div>
+                        <>
+                          <div className="text-sm font-medium text-gray-700">Schedule:</div>
+                          <div className="text-sm text-gray-600">
+                            {template.schedule.frequency} at {template.schedule.time} to {template.schedule.recipients.length} recipients
+                          </div>
+                        </>
                       )}
                     </div>
                     

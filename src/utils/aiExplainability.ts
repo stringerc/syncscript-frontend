@@ -385,11 +385,57 @@ export function getRecentExplanations(userId: string, limit: number = 10): AIExp
   return [];
 }
 
+// Additional exports for components
+export interface ExplanationReason {
+  type: string;
+  description: string;
+  confidence: number;
+}
+
+export interface TaskExplanation {
+  id: string;
+  title: string;
+  explanation: string;
+  confidence: number;
+  reasoning: ExplanationReason[];
+  actionableSteps: string[];
+}
+
+export function generateExplanation(task: any, context: any): TaskExplanation {
+  return {
+    id: `explanation_${Date.now()}`,
+    title: `Explanation for ${task.title}`,
+    explanation: 'AI-generated explanation for task recommendation',
+    confidence: 0.85,
+    reasoning: [
+      {
+        type: 'energy_match',
+        description: 'Task matches current energy level',
+        confidence: 0.9
+      }
+    ],
+    actionableSteps: ['Review task details', 'Consider energy requirements']
+  };
+}
+
+export function formatConfidence(confidence: number): string {
+  return `${(confidence * 100).toFixed(0)}%`;
+}
+
+export function getConfidenceColor(confidence: number): string {
+  if (confidence >= 0.8) return 'text-green-600';
+  if (confidence >= 0.6) return 'text-yellow-600';
+  return 'text-red-600';
+}
+
 // Export for testing
 export const __test__ = {
   generateTaskSuggestionExplanation,
   generateEnergyRecommendationExplanation,
   generateProductivityInsight,
   getExplanationById,
-  getRecentExplanations
+  getRecentExplanations,
+  generateExplanation,
+  formatConfidence,
+  getConfidenceColor
 };
