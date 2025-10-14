@@ -82,7 +82,18 @@ export default function GlobalNavigation() {
               initial={{ x: 400, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 400, opacity: 0 }}
-              className="global-navigation fixed top-0 right-0 bottom-0 w-80 bg-white dark:bg-gray-900 shadow-2xl overflow-y-auto"
+              className="global-navigation"
+              style={{
+                position: 'fixed',
+                top: 0,
+                right: 0,
+                bottom: 0,
+                width: '320px',
+                backgroundColor: 'white',
+                zIndex: 9999,
+                boxShadow: '-4px 0 24px rgba(0, 0, 0, 0.15)',
+                overflowY: 'auto'
+              }}
               role="dialog"
               aria-label="Navigation menu"
               {...swipeHandlers}
