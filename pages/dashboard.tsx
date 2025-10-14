@@ -100,6 +100,7 @@ import AdvancedCollaborationTools from '../src/components/collaboration/Advanced
 import AdvancedAutomation from '../src/components/automation/AdvancedAutomation';
 import AdvancedSecurityFeatures from '../src/components/security/AdvancedSecurityFeatures';
 import SystemIntegrationTesting from '../src/components/testing/SystemIntegrationTesting';
+import PlatformOptimizationDocumentation from '../src/components/documentation/PlatformOptimizationDocumentation';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -463,6 +464,7 @@ export default function Dashboard() {
   const [showAdvancedAutomation, setShowAdvancedAutomation] = React.useState(false);
   const [showAdvancedSecurityFeatures, setShowAdvancedSecurityFeatures] = React.useState(false);
   const [showSystemIntegrationTesting, setShowSystemIntegrationTesting] = React.useState(false);
+  const [showPlatformOptimizationDocumentation, setShowPlatformOptimizationDocumentation] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -3869,6 +3871,25 @@ export default function Dashboard() {
                 🧪 Testing
               </button>
 
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowPlatformOptimizationDocumentation(true)}
+                title="Platform Optimization & Documentation"
+                aria-label="Platform Optimization & Documentation"
+                style={{ 
+                  background: 'linear-gradient(135deg, #475569, #64748b)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📚 Docs & Opt
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -5432,6 +5453,12 @@ export default function Dashboard() {
       {showSystemIntegrationTesting && (
         <SystemIntegrationTesting
           onClose={() => setShowSystemIntegrationTesting(false)}
+        />
+      )}
+
+      {showPlatformOptimizationDocumentation && (
+        <PlatformOptimizationDocumentation
+          onClose={() => setShowPlatformOptimizationDocumentation(false)}
         />
       )}
       </div>
