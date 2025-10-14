@@ -164,10 +164,6 @@ function MyApp({ Component, pageProps }: AppProps) {
             <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
           </Head>
           <div className="min-h-screen bg-syncscript-cream-50">
-            {/* Skip link for accessibility */}
-            <a href="#main-content" className="skip-link">
-              Skip to main content
-            </a>
             {/* ARIA live region for screen reader announcements */}
             <div
               role="status"

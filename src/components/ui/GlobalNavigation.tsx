@@ -27,9 +27,10 @@ export default function GlobalNavigation() {
   const swipeHandlers = useSwipeToClose(() => setIsOpen(false), 'right')
 
   const handleToggle = () => {
-    console.log('Toggle clicked, current state:', isOpen)
+    console.log('🚀 Toggle clicked, current state:', isOpen)
+    console.log('🚀 About to set new state to:', !isOpen)
     setIsOpen(!isOpen)
-    console.log('New state should be:', !isOpen)
+    console.log('🚀 State change triggered')
   }
 
   return (
@@ -68,6 +69,8 @@ export default function GlobalNavigation() {
       {/* Navigation Menu */}
       <AnimatePresence>
         {isOpen && (
+          console.log('🚀 Rendering menu, isOpen:', isOpen) || true
+        ) && (
           <>
             {/* Backdrop */}
             <motion.div

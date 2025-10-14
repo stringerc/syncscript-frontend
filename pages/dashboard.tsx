@@ -1308,32 +1308,6 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard">
-      {/* Skip Link for Accessibility - BLOCKER #4 */}
-      <a 
-        href="#main-content" 
-        className="skip-link"
-        style={{
-          position: 'absolute',
-          left: '-9999px',
-          zIndex: 'var(--z-max)',
-          padding: 'var(--space-4)',
-          background: 'var(--color-primary-500)',
-          color: 'white',
-          textDecoration: 'none',
-          borderRadius: 'var(--radius-md)',
-          fontWeight: 'var(--font-weight-semibold)'
-        }}
-        onFocus={(e) => {
-          e.currentTarget.style.left = 'var(--space-4)';
-          e.currentTarget.style.top = 'var(--space-4)';
-        }}
-        onBlur={(e) => {
-          e.currentTarget.style.left = '-9999px';
-          e.currentTarget.style.top = '0';
-        }}
-      >
-        Skip to main content
-      </a>
 
       {/* Header */}
       <motion.header 
