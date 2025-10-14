@@ -178,6 +178,12 @@ import TimeZoneManagement from '../src/components/global/TimeZoneManagement';
 import CurrencySupport from '../src/components/global/CurrencySupport';
 import RegionalCompliance from '../src/components/global/RegionalCompliance';
 
+// Import Gamification Features components
+import AchievementSystem from '../src/components/gamification/AchievementSystem';
+import LeaderboardsSystem from '../src/components/gamification/LeaderboardsSystem';
+import VirtualRewardsSystem from '../src/components/gamification/VirtualRewardsSystem';
+import SocialFeatures from '../src/components/gamification/SocialFeatures';
+
 interface Task {
   id: string;
   title: string;
@@ -327,6 +333,12 @@ export default function Dashboard() {
   const [showTimeZoneManagement, setShowTimeZoneManagement] = React.useState(false);
   const [showCurrencySupport, setShowCurrencySupport] = React.useState(false);
   const [showRegionalCompliance, setShowRegionalCompliance] = React.useState(false);
+
+  // Gamification Features State
+  const [showAchievementSystem, setShowAchievementSystem] = React.useState(false);
+  const [showLeaderboardsSystem, setShowLeaderboardsSystem] = React.useState(false);
+  const [showVirtualRewardsSystem, setShowVirtualRewardsSystem] = React.useState(false);
+  const [showSocialFeatures, setShowSocialFeatures] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -2753,6 +2765,83 @@ export default function Dashboard() {
                 📋 Compliance
               </button>
 
+              {/* Gamification Features */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAchievementSystem(true)}
+                title="Achievement System 2.0"
+                aria-label="Achievement System 2.0"
+                style={{ 
+                  background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🏆 Achievements
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowLeaderboardsSystem(true)}
+                title="Leaderboards System"
+                aria-label="Leaderboards System"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🥇 Leaderboards
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowVirtualRewardsSystem(true)}
+                title="Virtual Rewards System"
+                aria-label="Virtual Rewards System"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ea580c, #dc2626)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🎁 Rewards
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowSocialFeatures(true)}
+                title="Social Features"
+                aria-label="Social Features"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                👥 Social
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -4000,6 +4089,31 @@ export default function Dashboard() {
       {showRegionalCompliance && (
         <RegionalCompliance
           onClose={() => setShowRegionalCompliance(false)}
+        />
+      )}
+
+      {/* Gamification Features */}
+      {showAchievementSystem && (
+        <AchievementSystem
+          onClose={() => setShowAchievementSystem(false)}
+        />
+      )}
+
+      {showLeaderboardsSystem && (
+        <LeaderboardsSystem
+          onClose={() => setShowLeaderboardsSystem(false)}
+        />
+      )}
+
+      {showVirtualRewardsSystem && (
+        <VirtualRewardsSystem
+          onClose={() => setShowVirtualRewardsSystem(false)}
+        />
+      )}
+
+      {showSocialFeatures && (
+        <SocialFeatures
+          onClose={() => setShowSocialFeatures(false)}
         />
       )}
     </div>
