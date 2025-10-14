@@ -179,6 +179,20 @@ export default function Dashboard() {
     onError: (error) => console.error('Briefing error:', error)
   });
 
+  // Debug briefing system
+  React.useEffect(() => {
+    console.log('🔍 Briefing System Debug:', {
+      briefingSettings,
+      morningBrief,
+      eveningBrief,
+      showMorningBrief,
+      showEveningBrief,
+      showBriefingSettings,
+      briefingLoading,
+      briefingError
+    });
+  }, [briefingSettings, morningBrief, eveningBrief, showMorningBrief, showEveningBrief, showBriefingSettings, briefingLoading, briefingError]);
+
   // Auto-save data to localStorage whenever state changes
   React.useEffect(() => {
     DataPersistence.saveTasks(tasks);
@@ -1569,10 +1583,49 @@ export default function Dashboard() {
                 onClick={() => setShowBriefingSettings(true)}
                 title="Briefing Settings"
                 aria-label="Briefing Settings"
+                style={{ 
+                  background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600'
+                }}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '16px', height: '16px' }}>
                   <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                 </svg>
+                Briefings
+              </button>
+
+              {/* Test Morning Brief Button */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => generateMorningBrief()}
+                title="Test Morning Brief"
+                aria-label="Test Morning Brief"
+                style={{ 
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600'
+                }}
+              >
+                🌅 Morning
+              </button>
+
+              {/* Test Evening Brief Button */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => generateEveningBrief()}
+                title="Test Evening Brief"
+                aria-label="Test Evening Brief"
+                style={{ 
+                  background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600'
+                }}
+              >
+                🌙 Evening
               </button>
 
               <Link 
