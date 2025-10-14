@@ -117,6 +117,7 @@ import PartnershipActivation from '../src/components/partnerships/PartnershipAct
 import RevenueScaling from '../src/components/revenue/RevenueScaling';
 import MarketValidation from '../src/components/validation/MarketValidation';
 import AdvancedBusinessIntelligence from '../src/components/analytics/AdvancedBusinessIntelligence';
+import CustomerSuccessRetentionProgram from '../src/components/customersuccess/CustomerSuccessRetentionProgram';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -500,6 +501,7 @@ export default function Dashboard() {
   const [showRevenueScaling, setShowRevenueScaling] = React.useState(false);
   const [showMarketValidation, setShowMarketValidation] = React.useState(false);
   const [showAdvancedBusinessIntelligence, setShowAdvancedBusinessIntelligence] = React.useState(false);
+  const [showCustomerSuccessRetentionProgram, setShowCustomerSuccessRetentionProgram] = React.useState(false);
   const [showBackendStatus, setShowBackendStatus] = React.useState(false);
 
   // Initialize Analytics
@@ -4251,6 +4253,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowCustomerSuccessRetentionProgram(true)}
+                title="Customer Success & Retention Program"
+                aria-label="Customer Success & Retention Program"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                👥 Customer Success
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowBackendStatus(true)}
                 title="Backend Status"
                 aria-label="Backend Status"
@@ -5939,6 +5960,12 @@ export default function Dashboard() {
       {showAdvancedBusinessIntelligence && (
         <AdvancedBusinessIntelligence
           onClose={() => setShowAdvancedBusinessIntelligence(false)}
+        />
+      )}
+
+      {showCustomerSuccessRetentionProgram && (
+        <CustomerSuccessRetentionProgram
+          onClose={() => setShowCustomerSuccessRetentionProgram(false)}
         />
       )}
 
