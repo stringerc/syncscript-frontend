@@ -27,10 +27,7 @@ export default function GlobalNavigation() {
   const swipeHandlers = useSwipeToClose(() => setIsOpen(false), 'right')
 
   const handleToggle = () => {
-    console.log('🚀 Toggle clicked, current state:', isOpen)
-    console.log('🚀 About to set new state to:', !isOpen)
     setIsOpen(!isOpen)
-    console.log('🚀 State change triggered')
   }
 
   return (
@@ -69,8 +66,6 @@ export default function GlobalNavigation() {
       {/* Navigation Menu */}
       <AnimatePresence>
         {isOpen && (
-          console.log('🚀 Rendering menu, isOpen:', isOpen) || true
-        ) && (
           <>
             {/* Backdrop */}
             <motion.div
@@ -79,7 +74,6 @@ export default function GlobalNavigation() {
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
               className="modal-backdrop fixed inset-0 bg-black/50 backdrop-blur-sm"
-              style={{ zIndex: 9998 }}
               aria-hidden="true"
             />
 
@@ -89,7 +83,6 @@ export default function GlobalNavigation() {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 400, opacity: 0 }}
               className="global-navigation fixed top-0 right-0 bottom-0 w-80 bg-white dark:bg-gray-900 shadow-2xl overflow-y-auto"
-              style={{ zIndex: 9999 }}
               role="dialog"
               aria-label="Navigation menu"
               {...swipeHandlers}
