@@ -1,0 +1,48 @@
+{
+  "validationId": "VALIDATE-1760399353116-bh444wr39",
+  "timestamp": "2025-10-13T23:49:13.116Z",
+  "targetUrl": "https://syncscript.vercel.app",
+  "status": "FAILED",
+  "summary": {
+    "totalTests": 27,
+    "passedTests": 3,
+    "failedTests": 6,
+    "warnings": 18,
+    "successRate": "33.3%"
+  },
+  "errors": [
+    "Missing security header: x-content-type-options",
+    "Missing security header: x-frame-options",
+    "Missing security header: x-xss-protection",
+    "Missing security header: content-security-policy",
+    "Missing security header: permissions-policy",
+    "Content-Security-Policy header is missing"
+  ],
+  "warnings": [
+    "/dashboard returned status 404",
+    "/api/health returned status 404",
+    "/api/auth/me returned status 404",
+    "X-Content-Type-Options should be \"nosniff\"",
+    "X-Frame-Options should include \"SAMEORIGIN\"",
+    "X-XSS-Protection should be \"1; mode=block\"",
+    "Protected endpoint should return 401 without authentication",
+    "Invalid token should return 401",
+    "Rate limiting may not be active",
+    "Malicious input not blocked: <script>alert(\"xss\")</script>",
+    "Malicious input not blocked: javascript:alert(\"xss\")",
+    "Malicious input not blocked: \"><script>alert(\"xss\")</script",
+    "Malicious input not blocked: ${7*7}",
+    "Malicious input not blocked: {{7*7}}",
+    "Malicious input not blocked: ../../etc/passwd",
+    "Monitoring endpoint /api/monitoring/health returned 404",
+    "Monitoring endpoint /api/monitoring/metrics returned 404",
+    "Monitoring endpoint /api/monitoring/security returned 404"
+  ],
+  "securityScore": "0/100",
+  "recommendations": [
+    "Fix all failed validations before considering deployment secure",
+    "Review security configurations",
+    "Re-run validation after fixes",
+    "Address warnings to improve security posture"
+  ]
+}
