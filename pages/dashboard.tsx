@@ -1700,7 +1700,7 @@ export default function Dashboard() {
 
   return (
     <ErrorBoundary>
-      <div className="dashboard">
+    <div className="dashboard">
 
       {/* Header */}
       <motion.header 
@@ -3916,6 +3916,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowAdvancedSecurityFeatures(true)}
+                title="Advanced Security Features"
+                aria-label="Advanced Security Features"
+                style={{ 
+                  background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🛡️ Security
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowBackendStatus(true)}
                 title="Backend Status"
                 aria-label="Backend Status"
@@ -5508,6 +5527,12 @@ export default function Dashboard() {
       {showAdvancedPerformanceOptimization && (
         <AdvancedPerformanceOptimization
           onClose={() => setShowAdvancedPerformanceOptimization(false)}
+        />
+      )}
+
+      {showAdvancedSecurityFeatures && (
+        <AdvancedSecurityFeatures
+          onClose={() => setShowAdvancedSecurityFeatures(false)}
         />
       )}
 
