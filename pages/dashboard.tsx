@@ -172,6 +172,12 @@ import OfflineSynchronizationSystem from '../src/components/mobile/OfflineSynchr
 import MobileSpecificFeatures from '../src/components/mobile/MobileSpecificFeatures';
 import CrossPlatformSync from '../src/components/mobile/CrossPlatformSync';
 
+// Import Global Features components
+import MultiLanguageSupport from '../src/components/global/MultiLanguageSupport';
+import TimeZoneManagement from '../src/components/global/TimeZoneManagement';
+import CurrencySupport from '../src/components/global/CurrencySupport';
+import RegionalCompliance from '../src/components/global/RegionalCompliance';
+
 interface Task {
   id: string;
   title: string;
@@ -315,6 +321,12 @@ export default function Dashboard() {
   const [showOfflineSync, setShowOfflineSync] = React.useState(false);
   const [showMobileSpecificFeatures, setShowMobileSpecificFeatures] = React.useState(false);
   const [showCrossPlatformSync, setShowCrossPlatformSync] = React.useState(false);
+
+  // Global Features State
+  const [showMultiLanguageSupport, setShowMultiLanguageSupport] = React.useState(false);
+  const [showTimeZoneManagement, setShowTimeZoneManagement] = React.useState(false);
+  const [showCurrencySupport, setShowCurrencySupport] = React.useState(false);
+  const [showRegionalCompliance, setShowRegionalCompliance] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -2664,6 +2676,83 @@ export default function Dashboard() {
                 🔄 Cross-Platform
               </button>
 
+              {/* Global Features */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowMultiLanguageSupport(true)}
+                title="Multi-Language Support"
+                aria-label="Multi-Language Support"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🌍 Languages
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowTimeZoneManagement(true)}
+                title="Time Zone Management"
+                aria-label="Time Zone Management"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🕐 Time Zones
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowCurrencySupport(true)}
+                title="Currency Support"
+                aria-label="Currency Support"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ea580c, #dc2626)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                💱 Currency
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowRegionalCompliance(true)}
+                title="Regional Compliance"
+                aria-label="Regional Compliance"
+                style={{ 
+                  background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📋 Compliance
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -3886,6 +3975,31 @@ export default function Dashboard() {
       {showCrossPlatformSync && (
         <CrossPlatformSync
           onClose={() => setShowCrossPlatformSync(false)}
+        />
+      )}
+
+      {/* Global Features */}
+      {showMultiLanguageSupport && (
+        <MultiLanguageSupport
+          onClose={() => setShowMultiLanguageSupport(false)}
+        />
+      )}
+
+      {showTimeZoneManagement && (
+        <TimeZoneManagement
+          onClose={() => setShowTimeZoneManagement(false)}
+        />
+      )}
+
+      {showCurrencySupport && (
+        <CurrencySupport
+          onClose={() => setShowCurrencySupport(false)}
+        />
+      )}
+
+      {showRegionalCompliance && (
+        <RegionalCompliance
+          onClose={() => setShowRegionalCompliance(false)}
         />
       )}
     </div>
