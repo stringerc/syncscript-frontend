@@ -116,6 +116,7 @@ import EnterpriseSalesAcceleration from '../src/components/sales/EnterpriseSales
 import PartnershipActivation from '../src/components/partnerships/PartnershipActivation';
 import RevenueScaling from '../src/components/revenue/RevenueScaling';
 import MarketValidation from '../src/components/validation/MarketValidation';
+import AdvancedBusinessIntelligence from '../src/components/analytics/AdvancedBusinessIntelligence';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -497,6 +498,7 @@ export default function Dashboard() {
   const [showPartnershipActivation, setShowPartnershipActivation] = React.useState(false);
   const [showRevenueScaling, setShowRevenueScaling] = React.useState(false);
   const [showMarketValidation, setShowMarketValidation] = React.useState(false);
+  const [showAdvancedBusinessIntelligence, setShowAdvancedBusinessIntelligence] = React.useState(false);
   const [showBackendStatus, setShowBackendStatus] = React.useState(false);
 
   // Initialize Analytics
@@ -4229,6 +4231,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowAdvancedBusinessIntelligence(true)}
+                title="Advanced Business Intelligence"
+                aria-label="Advanced Business Intelligence"
+                style={{ 
+                  background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📊 BI Analytics
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowBackendStatus(true)}
                 title="Backend Status"
                 aria-label="Backend Status"
@@ -5911,6 +5932,12 @@ export default function Dashboard() {
       {showMarketValidation && (
         <MarketValidation
           onClose={() => setShowMarketValidation(false)}
+        />
+      )}
+
+      {showAdvancedBusinessIntelligence && (
+        <AdvancedBusinessIntelligence
+          onClose={() => setShowAdvancedBusinessIntelligence(false)}
         />
       )}
 
