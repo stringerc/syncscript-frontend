@@ -35,18 +35,32 @@
   backdrop-filter: blur(4px) !important;
 }
 
-/* Navigation Menu Panel */
+/* Navigation Menu Panel - ULTRA AGGRESSIVE OVERRIDES */
 .global-navigation {
   position: fixed !important;
   top: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
+  left: auto !important;
   width: 320px !important;
+  height: 100vh !important;
   background: white !important;
-  z-index: 9999 !important;
+  z-index: 99999 !important;
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15) !important;
   overflow-y: auto !important;
+  overflow-x: hidden !important;
   border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
+  transform: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Override any conflicting styles */
+.global-navigation * {
+  box-sizing: border-box !important;
 }
 
 /* Dark mode support */
