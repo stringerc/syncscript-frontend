@@ -95,7 +95,7 @@ import { Subtask } from '../src/utils/subtaskUtils';
 import { TaskNote } from '../src/utils/noteUtils';
 import { RecurrenceConfig, calculateNextDueDate, shouldEndRecurrence } from '../src/utils/recurrenceUtils';
 import { checkQuickWins, saveQuickWinPoints } from '../src/utils/quickWinBadges';
-import { recalibrateEnergy, isEnergyMatched, formatEnergyDelta, getEnergyLabel } from '../src/utils/energyRecalibration';
+import ErrorBoundary from '../src/components/ui/ErrorBoundary';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import { DataPersistence } from '../src/utils/dataPersistence';
@@ -1681,7 +1681,8 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="dashboard">
+    <ErrorBoundary>
+      <div className="dashboard">
 
       {/* Header */}
       <motion.header 
@@ -5270,6 +5271,7 @@ export default function Dashboard() {
           onClose={() => setShowDocumentationDeployment(false)}
         />
       )}
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 }
