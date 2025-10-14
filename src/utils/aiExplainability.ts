@@ -1,226 +1,395 @@
 /**
- * AI Explainability Utility
- * WP-PERS-01: AI Explainability Implementation
+ * AI Explainability System
+ * WP-PERS-01: Enhanced AI Explainability
  * 
- * Generates human-readable explanations for AI suggestions
- * Target: Increase acceptance from 40% to 60% (+20pp)
+ * Provides intelligent explanations for AI decisions and recommendations
+ * Target: <200ms explanation generation time
  */
 
-interface Task {
+interface AIExplanation {
   id: string;
+  type: 'task_suggestion' | 'energy_recommendation' | 'schedule_optimization' | 'productivity_insight';
   title: string;
-  priority: 1 | 2 | 3 | 4 | 5;
-  energy_requirement: 1 | 2 | 3 | 4 | 5;
-  due_date?: string;
-  estimated_duration?: number;
-  project_id?: string;
+  explanation: string;
+  confidence: number; // 0-1
+  reasoning: string[];
+  alternatives?: string[];
+  actionableSteps: string[];
+  timestamp: string;
 }
 
-interface UserContext {
-  currentEnergy: number;
-  currentTime: Date;
-  habits?: {
-    [key: string]: {
-      bestTime?: string;
-      frequency?: number;
-    };
+interface TaskSuggestionContext {
+  userEnergy: number;
+  availableTime: number;
+  taskHistory: Array<{
+    taskId: string;
+    energyRequired: number;
+    completed: boolean;
+    completionTime?: number;
+  }>;
+  currentTasks: Array<{
+    id: string;
+    title: string;
+    priority: number;
+    energy_requirement: number;
+    estimated_duration: number;
+  }>;
+  userPreferences: {
+    preferredWorkTimes: string[];
+    energyPatterns: number[];
+    productivityPeaks: string[];
   };
-  location?: string;
-  availableTime?: number; // minutes
 }
 
-export interface ExplanationReason {
-  type: 'urgency' | 'energy_match' | 'pattern' | 'priority' | 'time' | 'project' | 'streak';
-  icon: string;
-  title: string;
-  description: string;
-  score: number; // 0-1 (how much this contributed to recommendation)
-}
-
-export interface TaskExplanation {
-  taskId: string;
-  taskTitle: string;
-  overallScore: number;
-  reasons: ExplanationReason[];
-  confidence: number; // 0-100%
+interface EnergyRecommendationContext {
+  currentEnergy: number;
+  timeOfDay: string;
+  upcomingTasks: Array<{
+    id: string;
+    energy_requirement: number;
+    priority: number;
+    dueDate?: string;
+  }>;
+  recentActivity: Array<{
+    type: 'task_completion' | 'break' | 'energy_log';
+    timestamp: string;
+    impact: number;
+  }>;
+  userGoals: {
+    targetEnergy: number;
+    dailyTarget: number;
+    weeklyTarget: number;
+  };
 }
 
 /**
- * Generate explanation for why a task was suggested
- * 
- * @param task - The suggested task
- * @param context - Current user context (energy, time, etc.)
- * @returns Complete explanation with reasons
+ * Generate AI explanation for task suggestions
  */
-export function generateExplanation(
-  task: Task,
-  context: UserContext
-): TaskExplanation {
-  const reasons: ExplanationReason[] = [];
-  let totalScore = 0;
+export function generateTaskSuggestionExplanation(
+  suggestedTask: any,
+  context: TaskSuggestionContext
+): AIExplanation {
+  const startTime = performance.now();
   
-  // 1. URGENCY ANALYSIS
-  if (task.due_date) {
-    const dueDate = new Date(task.due_date);
-    const now = context.currentTime;
-    const hoursUntilDue = (dueDate.getTime() - now.getTime()) / (1000 * 60 * 60);
-    const daysUntilDue = Math.ceil(hoursUntilDue / 24);
-    
-    let urgencyScore = 0;
-    let urgencyText = '';
-    
-    if (daysUntilDue < 0) {
-      urgencyScore = 1.0;
-      urgencyText = `Overdue by ${Math.abs(daysUntilDue)} day${Math.abs(daysUntilDue) !== 1 ? 's' : ''}`;
-    } else if (daysUntilDue === 0) {
-      urgencyScore = 0.9;
-      urgencyText = 'Due today';
-    } else if (daysUntilDue === 1) {
-      urgencyScore = 0.8;
-      urgencyText = 'Due tomorrow';
-    } else if (daysUntilDue <= 3) {
-      urgencyScore = 0.6;
-      urgencyText = `Due in ${daysUntilDue} days`;
-    } else if (daysUntilDue <= 7) {
-      urgencyScore = 0.4;
-      urgencyText = `Due this week`;
-    }
-    
-    if (urgencyScore > 0.5) {
-      reasons.push({
-        type: 'urgency',
-        icon: '⏰',
-        title: 'Time Sensitive',
-        description: urgencyText,
-        score: urgencyScore
-      });
-      totalScore += urgencyScore * 0.25; // 25% weight
-    }
+  const explanations: string[] = [];
+  const reasoning: string[] = [];
+  const actionableSteps: string[] = [];
+  
+  // Energy matching explanation
+  const energyDiff = Math.abs(suggestedTask.energy_requirement - context.userEnergy);
+  if (energyDiff <= 1) {
+    explanations.push(`This task matches your current energy level (${context.userEnergy}/5)`);
+    reasoning.push(`Energy match score: ${(1 - energyDiff).toFixed(2)}`);
+  } else if (suggestedTask.energy_requirement > context.userEnergy) {
+    explanations.push(`This task requires higher energy (${suggestedTask.energy_requirement}/5) than you currently have`);
+    reasoning.push(`Energy gap: ${energyDiff} levels`);
+    actionableSteps.push('Consider taking a short break or doing a warm-up task first');
+  } else {
+    explanations.push(`This task is easier than your current energy level - good for building momentum`);
+    reasoning.push(`Energy efficiency: ${(context.userEnergy - suggestedTask.energy_requirement).toFixed(1)} levels above requirement`);
   }
   
-  // 2. ENERGY MATCH ANALYSIS
-  const energyDiff = Math.abs(task.energy_requirement - context.currentEnergy);
-  const energyMatchScore = Math.max(0, 1 - (energyDiff / 4)); // Perfect match = 1.0, 4 levels off = 0
-  
-  if (energyMatchScore > 0.7) {
-    const matchQuality = energyDiff === 0 ? 'Perfect match' : 
-                        energyDiff === 1 ? 'Good match' : 
-                        'Decent match';
-    
-    reasons.push({
-      type: 'energy_match',
-      icon: '⚡',
-      title: 'Energy Match',
-      description: `${matchQuality} for your current energy (${context.currentEnergy.toFixed(1)})`,
-      score: energyMatchScore
-    });
-    totalScore += energyMatchScore * 0.30; // 30% weight (highest!)
+  // Time-based reasoning
+  if (context.availableTime >= suggestedTask.estimated_duration) {
+    explanations.push(`You have enough time (${context.availableTime}min available vs ${suggestedTask.estimated_duration}min needed)`);
+    reasoning.push(`Time buffer: ${context.availableTime - suggestedTask.estimated_duration} minutes`);
+  } else {
+    explanations.push(`This task might be too long for your available time`);
+    reasoning.push(`Time constraint: ${suggestedTask.estimated_duration - context.availableTime} minutes over`);
+    actionableSteps.push('Consider breaking this task into smaller chunks');
   }
   
-  // 3. HABIT/PATTERN ANALYSIS
-  const currentHour = context.currentTime.getHours();
-  const currentDay = context.currentTime.toLocaleDateString('en-US', { weekday: 'long' });
+  // Priority-based reasoning
+  if (suggestedTask.priority >= 4) {
+    explanations.push(`This is a high-priority task that should be tackled soon`);
+    reasoning.push(`Priority score: ${suggestedTask.priority}/5`);
+  } else {
+    explanations.push(`This task has moderate priority - good for current energy level`);
+    reasoning.push(`Priority balance: ${suggestedTask.priority}/5`);
+  }
   
-  // Check if user has patterns for this type of task
-  if (context.habits) {
-    const taskType = task.title.toLowerCase().includes('review') ? 'review' :
-                    task.title.toLowerCase().includes('email') ? 'email' :
-                    task.title.toLowerCase().includes('meeting') ? 'meeting' :
-                    'general';
-    
-    const habit = context.habits[taskType];
-    if (habit && habit.bestTime) {
-      reasons.push({
-        type: 'pattern',
-        icon: '🔄',
-        title: 'Matches Your Habits',
-        description: `You usually do ${taskType} tasks ${habit.bestTime}`,
-        score: 0.7
-      });
-      totalScore += 0.7 * 0.20; // 20% weight
+  // Historical pattern analysis
+  const similarTasks = context.taskHistory.filter(t => 
+    Math.abs(t.energyRequired - suggestedTask.energy_requirement) <= 1
+  );
+  
+  if (similarTasks.length > 0) {
+    const completionRate = similarTasks.filter(t => t.completed).length / similarTasks.length;
+    if (completionRate > 0.7) {
+      explanations.push(`You've successfully completed similar energy-level tasks ${(completionRate * 100).toFixed(0)}% of the time`);
+      reasoning.push(`Historical success rate: ${(completionRate * 100).toFixed(0)}%`);
+    } else {
+      explanations.push(`Similar tasks have been challenging - consider your energy carefully`);
+      reasoning.push(`Historical completion rate: ${(completionRate * 100).toFixed(0)}%`);
+      actionableSteps.push('Try a different approach or break the task into smaller steps');
     }
   }
   
-  // 4. PRIORITY ANALYSIS
-  const priorityScore = task.priority / 5; // 1-5 → 0.2-1.0
+  // Calculate confidence score
+  let confidence = 0.5; // Base confidence
   
-  if (task.priority >= 4) {
-    const priorityLabel = task.priority === 5 ? 'Critical' : 'High';
-    reasons.push({
-      type: 'priority',
-      icon: '🎯',
-      title: `${priorityLabel} Priority`,
-      description: `Priority ${task.priority}/5 (important for your goals)`,
-      score: priorityScore
-    });
-    totalScore += priorityScore * 0.15; // 15% weight
+  // Energy match bonus
+  if (energyDiff <= 1) confidence += 0.2;
+  if (energyDiff === 0) confidence += 0.1;
+  
+  // Time availability bonus
+  if (context.availableTime >= suggestedTask.estimated_duration) confidence += 0.15;
+  
+  // Priority bonus
+  if (suggestedTask.priority >= 4) confidence += 0.1;
+  
+  // Historical success bonus
+  if (similarTasks.length > 0) {
+    const completionRate = similarTasks.filter(t => t.completed).length / similarTasks.length;
+    confidence += completionRate * 0.05;
   }
   
-  // 5. TIME AVAILABILITY ANALYSIS
-  if (task.estimated_duration && context.availableTime) {
-    const canFinish = task.estimated_duration <= context.availableTime;
-    
-    if (canFinish) {
-      reasons.push({
-        type: 'time',
-        icon: '⏱️',
-        title: 'You Have Time',
-        description: `Estimated ${task.estimated_duration}min (you have ${context.availableTime}min available)`,
-        score: 0.8
-      });
-      totalScore += 0.8 * 0.10; // 10% weight
-    }
-  }
+  confidence = Math.min(1, confidence);
   
-  // 6. PROJECT MOMENTUM (if part of active project)
-  if (task.project_id) {
-    reasons.push({
-      type: 'project',
-      icon: '📁',
-      title: 'Project Momentum',
-      description: 'Part of your active project - keep the momentum!',
-      score: 0.6
-    });
-    // Don't add to total score (bonus reason only)
-  }
+  const endTime = performance.now();
+  const latency = endTime - startTime;
   
-  // Calculate confidence (based on number of strong reasons)
-  const strongReasons = reasons.filter(r => r.score > 0.7).length;
-  const confidence = Math.min(95, 50 + (strongReasons * 15)); // 50-95%
+  if (latency > 100) {
+    console.warn(`AI explanation generation took ${latency.toFixed(2)}ms (target: <100ms)`);
+  }
   
   return {
-    taskId: task.id,
-    taskTitle: task.title,
-    overallScore: Math.min(1, totalScore), // Cap at 1.0
-    reasons: reasons.sort((a, b) => b.score - a.score), // Sort by importance
-    confidence
+    id: `explanation_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    type: 'task_suggestion',
+    title: `Why I suggest "${suggestedTask.title}"`,
+    explanation: explanations.join(' '),
+    confidence,
+    reasoning,
+    actionableSteps,
+    timestamp: new Date().toISOString()
   };
 }
 
 /**
- * Format confidence level for display
+ * Generate AI explanation for energy recommendations
  */
-export function formatConfidence(confidence: number): string {
-  if (confidence >= 85) return 'Very High';
-  if (confidence >= 70) return 'High';
-  if (confidence >= 50) return 'Moderate';
-  return 'Low';
+export function generateEnergyRecommendationExplanation(
+  recommendation: {
+    action: 'increase' | 'maintain' | 'decrease';
+    method: string;
+    duration: number;
+  },
+  context: EnergyRecommendationContext
+): AIExplanation {
+  const startTime = performance.now();
+  
+  const explanations: string[] = [];
+  const reasoning: string[] = [];
+  const actionableSteps: string[] = [];
+  
+  // Current energy analysis
+  if (context.currentEnergy >= 4) {
+    explanations.push(`Your energy is at peak level (${context.currentEnergy}/5) - perfect for high-impact tasks`);
+    reasoning.push(`Current energy: ${context.currentEnergy}/5 (Peak range)`);
+  } else if (context.currentEnergy >= 3) {
+    explanations.push(`Your energy is high (${context.currentEnergy}/5) - good for most tasks`);
+    reasoning.push(`Current energy: ${context.currentEnergy}/5 (High range)`);
+  } else if (context.currentEnergy >= 2) {
+    explanations.push(`Your energy is moderate (${context.currentEnergy}/5) - consider energy-boosting activities`);
+    reasoning.push(`Current energy: ${context.currentEnergy}/5 (Medium range)`);
+  } else {
+    explanations.push(`Your energy is low (${context.currentEnergy}/5) - focus on recovery and easy tasks`);
+    reasoning.push(`Current energy: ${context.currentEnergy}/5 (Low range)`);
+  }
+  
+  // Time-based reasoning
+  const hour = parseInt(context.timeOfDay.split(':')[0]);
+  if (hour >= 9 && hour <= 11) {
+    explanations.push(`It's morning peak time - ideal for high-energy tasks`);
+    reasoning.push(`Time of day: ${context.timeOfDay} (Morning peak)`);
+  } else if (hour >= 14 && hour <= 16) {
+    explanations.push(`It's afternoon - good for moderate energy tasks`);
+    reasoning.push(`Time of day: ${context.timeOfDay} (Afternoon)`);
+  } else if (hour >= 19) {
+    explanations.push(`It's evening - focus on low-energy tasks and preparation`);
+    reasoning.push(`Time of day: ${context.timeOfDay} (Evening)`);
+  }
+  
+  // Upcoming tasks analysis
+  const highEnergyTasks = context.upcomingTasks.filter(t => t.energy_requirement >= 4);
+  const urgentTasks = context.upcomingTasks.filter(t => t.priority >= 4);
+  
+  if (highEnergyTasks.length > 0) {
+    explanations.push(`You have ${highEnergyTasks.length} high-energy tasks coming up`);
+    reasoning.push(`High-energy tasks: ${highEnergyTasks.length}`);
+    if (recommendation.action === 'increase') {
+      actionableSteps.push('Prepare for high-energy tasks with a short break or energizing activity');
+    }
+  }
+  
+  if (urgentTasks.length > 0) {
+    explanations.push(`${urgentTasks.length} urgent tasks require your attention`);
+    reasoning.push(`Urgent tasks: ${urgentTasks.length}`);
+    actionableSteps.push('Prioritize urgent tasks and manage energy accordingly');
+  }
+  
+  // Recent activity analysis
+  const recentCompletions = context.recentActivity.filter(a => a.type === 'task_completion');
+  if (recentCompletions.length >= 3) {
+    explanations.push(`You've completed ${recentCompletions.length} tasks recently - consider a break`);
+    reasoning.push(`Recent completions: ${recentCompletions.length}`);
+    actionableSteps.push('Take a 5-10 minute break to recharge');
+  }
+  
+  // Goal alignment
+  if (context.currentEnergy < context.userGoals.targetEnergy) {
+    explanations.push(`Your energy is below your target goal (${context.userGoals.targetEnergy}/5)`);
+    reasoning.push(`Goal gap: ${context.userGoals.targetEnergy - context.currentEnergy} levels`);
+    actionableSteps.push('Try energy-boosting activities to reach your target');
+  }
+  
+  // Calculate confidence
+  let confidence = 0.6; // Base confidence for energy recommendations
+  
+  // Time-based confidence
+  if (hour >= 9 && hour <= 11) confidence += 0.15; // Morning peak
+  if (hour >= 14 && hour <= 16) confidence += 0.1; // Afternoon
+  
+  // Task-based confidence
+  if (highEnergyTasks.length > 0 && recommendation.action === 'increase') confidence += 0.1;
+  if (urgentTasks.length > 0) confidence += 0.1;
+  
+  confidence = Math.min(1, confidence);
+  
+  const endTime = performance.now();
+  const latency = endTime - startTime;
+  
+  if (latency > 100) {
+    console.warn(`AI energy explanation took ${latency.toFixed(2)}ms (target: <100ms)`);
+  }
+  
+  return {
+    id: `energy_explanation_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    type: 'energy_recommendation',
+    title: `Energy Recommendation: ${recommendation.action.charAt(0).toUpperCase() + recommendation.action.slice(1)}`,
+    explanation: explanations.join(' '),
+    confidence,
+    reasoning,
+    actionableSteps,
+    timestamp: new Date().toISOString()
+  };
 }
 
 /**
- * Get confidence color
+ * Generate productivity insights based on user patterns
  */
-export function getConfidenceColor(confidence: number): string {
-  if (confidence >= 85) return '#7ED321'; // Green
-  if (confidence >= 70) return '#4A90E2'; // Blue
-  if (confidence >= 50) return '#F5A623'; // Orange
-  return '#D0021B'; // Red
+export function generateProductivityInsight(
+  userData: {
+    tasksCompleted: number;
+    averageEnergy: number;
+    productivityTrend: 'up' | 'down' | 'stable';
+    timeOfDay: string;
+    weeklyGoal: number;
+  }
+): AIExplanation {
+  const startTime = performance.now();
+  
+  const explanations: string[] = [];
+  const reasoning: string[] = [];
+  const actionableSteps: string[] = [];
+  
+  // Task completion analysis
+  if (userData.tasksCompleted >= userData.weeklyGoal * 0.8) {
+    explanations.push(`You're on track to meet your weekly goal (${userData.tasksCompleted}/${userData.weeklyGoal} tasks)`);
+    reasoning.push(`Goal progress: ${((userData.tasksCompleted / userData.weeklyGoal) * 100).toFixed(0)}%`);
+  } else {
+    explanations.push(`You're behind on your weekly goal - consider adjusting your approach`);
+    reasoning.push(`Goal progress: ${((userData.tasksCompleted / userData.weeklyGoal) * 100).toFixed(0)}%`);
+    actionableSteps.push('Break down large tasks into smaller, manageable pieces');
+  }
+  
+  // Energy pattern analysis
+  if (userData.averageEnergy >= 4) {
+    explanations.push(`Your average energy is high (${userData.averageEnergy.toFixed(1)}/5) - you're in a productive zone`);
+    reasoning.push(`Average energy: ${userData.averageEnergy.toFixed(1)}/5 (High)`);
+  } else if (userData.averageEnergy >= 3) {
+    explanations.push(`Your average energy is good (${userData.averageEnergy.toFixed(1)}/5) - maintain this level`);
+    reasoning.push(`Average energy: ${userData.averageEnergy.toFixed(1)}/5 (Good)`);
+  } else {
+    explanations.push(`Your average energy is low (${userData.averageEnergy.toFixed(1)}/5) - focus on energy management`);
+    reasoning.push(`Average energy: ${userData.averageEnergy.toFixed(1)}/5 (Low)`);
+    actionableSteps.push('Try energy-boosting activities like short walks or healthy snacks');
+  }
+  
+  // Trend analysis
+  if (userData.productivityTrend === 'up') {
+    explanations.push(`Your productivity is trending upward - keep up the great work!`);
+    reasoning.push(`Trend: Upward (Positive)`);
+  } else if (userData.productivityTrend === 'down') {
+    explanations.push(`Your productivity is declining - consider what might be causing this`);
+    reasoning.push(`Trend: Downward (Needs attention)`);
+    actionableSteps.push('Review your recent tasks and energy patterns');
+  } else {
+    explanations.push(`Your productivity is stable - look for opportunities to optimize`);
+    reasoning.push(`Trend: Stable (Consistent)`);
+  }
+  
+  // Time-based insights
+  const hour = parseInt(userData.timeOfDay.split(':')[0]);
+  if (hour >= 9 && hour <= 11) {
+    explanations.push(`You're in your morning peak - perfect for high-impact work`);
+    actionableSteps.push('Schedule your most important tasks for this time');
+  } else if (hour >= 14 && hour <= 16) {
+    explanations.push(`It's afternoon - good for moderate tasks and follow-ups`);
+    actionableSteps.push('Use this time for meetings and collaborative work');
+  }
+  
+  // Calculate confidence
+  let confidence = 0.7; // Base confidence for insights
+  
+  // Data quality confidence
+  if (userData.tasksCompleted >= 5) confidence += 0.1; // Sufficient data
+  if (userData.averageEnergy > 0) confidence += 0.1; // Energy data available
+  
+  confidence = Math.min(1, confidence);
+  
+  const endTime = performance.now();
+  const latency = endTime - startTime;
+  
+  if (latency > 100) {
+    console.warn(`AI insight generation took ${latency.toFixed(2)}ms (target: <100ms)`);
+  }
+  
+  return {
+    id: `insight_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    type: 'productivity_insight',
+    title: 'Productivity Insight',
+    explanation: explanations.join(' '),
+    confidence,
+    reasoning,
+    actionableSteps,
+    timestamp: new Date().toISOString()
+  };
+}
+
+/**
+ * Get explanation by ID (for caching and retrieval)
+ */
+export function getExplanationById(id: string): AIExplanation | null {
+  // In a real implementation, this would query a database or cache
+  // For now, return null to indicate not found
+  return null;
+}
+
+/**
+ * Get recent explanations for a user
+ */
+export function getRecentExplanations(userId: string, limit: number = 10): AIExplanation[] {
+  // In a real implementation, this would query user's explanation history
+  // For now, return empty array
+  return [];
 }
 
 // Export for testing
 export const __test__ = {
-  generateExplanation,
-  formatConfidence,
-  getConfidenceColor
+  generateTaskSuggestionExplanation,
+  generateEnergyRecommendationExplanation,
+  generateProductivityInsight,
+  getExplanationById,
+  getRecentExplanations
 };
-

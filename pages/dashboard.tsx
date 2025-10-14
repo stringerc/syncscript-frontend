@@ -103,6 +103,9 @@ import { useBriefingManager } from '../src/hooks/useBriefingManager';
 import MorningBrief from '../src/components/briefings/MorningBrief';
 import EveningBrief from '../src/components/briefings/EveningBrief';
 import BriefingSettings from '../src/components/briefings/BriefingSettings';
+import { analytics } from '../src/utils/analytics';
+import { generateTaskSuggestionExplanation, generateEnergyRecommendationExplanation } from '../src/utils/aiExplainability';
+import { calculateEmblemBreakdown, getEmblemAnimation } from '../src/utils/enhancedEmblemSystem';
 
 interface Task {
   id: string;
@@ -178,6 +181,45 @@ export default function Dashboard() {
     userId: user?.sub || 'anonymous',
     onError: (error) => console.error('Briefing error:', error)
   });
+
+  // Initialize Analytics
+  React.useEffect(() => {
+    const initializeAnalytics = async () => {
+      try {
+        // Initialize PostHog analytics
+        await analytics.initialize(
+          process.env.NEXT_PUBLIC_POSTHOG_KEY || 'phc-demo-key',
+          user?.sub
+        );
+        
+        // Identify user
+        if (user?.sub) {
+          analytics.identifyUser(user.sub, {
+            userId: user.sub,
+            email: user.email,
+            name: user.name,
+            signupDate: new Date().toISOString(),
+            lastActive: new Date().toISOString(),
+            energyLevel: currentEnergy,
+            taskCount: tasks.length,
+            productivityScore: 0 // Will be calculated
+          });
+        }
+        
+        // Track page view
+        analytics.trackPageView('Dashboard');
+        
+        // Track session start
+        analytics.trackSessionStart();
+        
+        console.log('✅ Analytics initialized successfully');
+      } catch (error) {
+        console.error('Failed to initialize analytics:', error);
+      }
+    };
+    
+    initializeAnalytics();
+  }, [user, currentEnergy, tasks.length]);
 
   // Debug briefing system
   React.useEffect(() => {
@@ -871,6 +913,15 @@ export default function Dashboard() {
         
         // Add new task to the list
         setTasks(prev => [data.task, ...prev]);
+        
+        // Track task creation
+        analytics.trackTaskEvent('task_created', {
+          taskId: data.task.id,
+          priority: data.task.priority,
+          energyRequirement: data.task.energy_requirement,
+          estimatedDuration: data.task.estimated_duration,
+          category: data.task.category
+        });
         
         toast.success('Task created successfully! 🎉', {
           duration: 3000,
@@ -1582,6 +1633,7 @@ export default function Dashboard() {
                 className="btn btn-secondary"
                 onClick={() => {
                   console.log('🔍 Briefing Settings clicked!', { showBriefingSettings, briefingSettings });
+                  analytics.trackBriefingEvent('briefing_settings_updated');
                   setShowBriefingSettings(true);
                 }}
                 title="Briefing Settings"
@@ -1606,7 +1658,10 @@ export default function Dashboard() {
               {/* Test Morning Brief Button */}
               <button
                 className="btn btn-secondary"
-                onClick={() => generateMorningBrief()}
+                onClick={() => {
+                  analytics.trackBriefingEvent('morning_brief_viewed');
+                  generateMorningBrief();
+                }}
                 title="Test Morning Brief"
                 aria-label="Test Morning Brief"
                 style={{ 
@@ -1624,6 +1679,7 @@ export default function Dashboard() {
                 className="btn btn-secondary"
                 onClick={() => {
                   console.log('🌙 Evening Brief clicked!');
+                  analytics.trackBriefingEvent('evening_brief_viewed');
                   generateEveningBrief();
                 }}
                 title="Test Evening Brief"
