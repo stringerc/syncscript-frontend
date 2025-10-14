@@ -148,6 +148,7 @@ export default function Dashboard() {
   const [focusSessionsCount, setFocusSessionsCount] = React.useState(() => DataPersistence.loadFocusSessions());
   const [totalFocusMinutes, setTotalFocusMinutes] = React.useState(() => DataPersistence.loadTotalFocusMinutes());
   const [streakData, setStreakData] = React.useState(() => DataPersistence.loadStreakData() || getStreakData());
+  const [loading, setLoading] = React.useState(false);
   // Auto-save data to localStorage whenever state changes
   React.useEffect(() => {
     DataPersistence.saveTasks(tasks);

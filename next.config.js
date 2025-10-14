@@ -123,11 +123,11 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: `
               default-src 'self';
-              script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.auth0.com https://www.googletagmanager.com https://www.google-analytics.com https://app.posthog.com;
+              script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.auth0.com https://www.googletagmanager.com https://www.google-analytics.com https://app.posthog.com https://vercel.live;
               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
               img-src 'self' blob: data: https:;
               font-src 'self' https://fonts.gstatic.com;
-              connect-src 'self' https://*.auth0.com https://api.syncscript.app https://app.posthog.com https://www.google-analytics.com;
+              connect-src 'self' https://*.auth0.com https://api.syncscript.app https://app.posthog.com https://www.google-analytics.com https://vercel.live;
               frame-src 'self' https://*.auth0.com;
               object-src 'none';
               base-uri 'self';
