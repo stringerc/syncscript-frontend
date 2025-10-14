@@ -120,6 +120,7 @@ import AdvancedBusinessIntelligence from '../src/components/analytics/AdvancedBu
 import CustomerSuccessRetentionProgram from '../src/components/customersuccess/CustomerSuccessRetentionProgram';
 import AdvancedAIMachineLearning from '../src/components/ai/AdvancedAIMachineLearning';
 import AdvancedAIFeatures from '../src/components/ai/AdvancedAIFeatures';
+import InternationalExpansion from '../src/components/international/InternationalExpansion';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -505,6 +506,7 @@ export default function Dashboard() {
   const [showAdvancedBusinessIntelligence, setShowAdvancedBusinessIntelligence] = React.useState(false);
   const [showCustomerSuccessRetentionProgram, setShowCustomerSuccessRetentionProgram] = React.useState(false);
   const [showAdvancedAIMachineLearning, setShowAdvancedAIMachineLearning] = React.useState(false);
+  const [showInternationalExpansion, setShowInternationalExpansion] = React.useState(false);
   const [showBackendStatus, setShowBackendStatus] = React.useState(false);
 
   // Initialize Analytics
@@ -4294,6 +4296,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowInternationalExpansion(true)}
+                title="International Expansion"
+                aria-label="International Expansion"
+                style={{ 
+                  background: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🌍 Global
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowBackendStatus(true)}
                 title="Backend Status"
                 aria-label="Backend Status"
@@ -5994,6 +6015,12 @@ export default function Dashboard() {
       {showAdvancedAIMachineLearning && (
         <AdvancedAIMachineLearning
           onClose={() => setShowAdvancedAIMachineLearning(false)}
+        />
+      )}
+
+      {showInternationalExpansion && (
+        <InternationalExpansion
+          onClose={() => setShowInternationalExpansion(false)}
         />
       )}
 
