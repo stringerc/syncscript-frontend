@@ -20,12 +20,17 @@
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15) !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
+  border: none !important;
+  border-left: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 0 !important;
   transform: none !important;
   margin: 0 !important;
   padding: 0 !important;
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
+  outline: none !important;
+  box-sizing: border-box !important;
 }
 
 /* ============================================================================

@@ -84,19 +84,23 @@ export default function GlobalNavigation() {
               exit={{ x: 400, opacity: 0 }}
               className="global-navigation"
               style={{
-                position: 'fixed !important',
-                top: '0 !important',
-                right: '0 !important',
-                bottom: '0 !important',
-                width: '320px !important',
-                height: '100vh !important',
-                backgroundColor: 'white !important',
-                zIndex: '9999 !important',
-                boxShadow: '-4px 0 24px rgba(0, 0, 0, 0.15) !important',
-                overflowY: 'auto !important',
-                transform: 'none !important',
-                margin: '0 !important',
-                padding: '0 !important'
+                position: 'fixed',
+                top: '0',
+                right: '0',
+                bottom: '0',
+                width: '320px',
+                height: '100vh',
+                backgroundColor: 'white',
+                zIndex: '9999',
+                boxShadow: '-4px 0 24px rgba(0, 0, 0, 0.15)',
+                overflowY: 'auto',
+                overflowX: 'hidden',
+                transform: 'none',
+                margin: '0',
+                padding: '0',
+                borderRadius: '0',
+                border: 'none',
+                outline: 'none'
               }}
               role="dialog"
               aria-label="Navigation menu"
