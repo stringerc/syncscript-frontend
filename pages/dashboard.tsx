@@ -95,7 +95,9 @@ import { Subtask } from '../src/utils/subtaskUtils';
 import { TaskNote } from '../src/utils/noteUtils';
 import { RecurrenceConfig, calculateNextDueDate, shouldEndRecurrence } from '../src/utils/recurrenceUtils';
 import { checkQuickWins, saveQuickWinPoints } from '../src/utils/quickWinBadges';
-import ErrorBoundary from '../src/components/ui/ErrorBoundary';
+// Import Advanced AI Features
+import AdvancedAIFeatures from '../src/components/ai/AdvancedAIFeatures';
+import AdvancedAnalyticsDashboard from '../src/components/analytics/AdvancedAnalyticsDashboard';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import { DataPersistence } from '../src/utils/dataPersistence';
@@ -452,6 +454,10 @@ export default function Dashboard() {
   const [showErrorHandlingResilience, setShowErrorHandlingResilience] = React.useState(false);
   const [showTestingValidation, setShowTestingValidation] = React.useState(false);
   const [showDocumentationDeployment, setShowDocumentationDeployment] = React.useState(false);
+
+  // Advanced Features State
+  const [showAdvancedAIFeatures, setShowAdvancedAIFeatures] = React.useState(false);
+  const [showAdvancedAnalyticsDashboard, setShowAdvancedAnalyticsDashboard] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -3743,6 +3749,45 @@ export default function Dashboard() {
                 📚 Documentation
               </button>
 
+              {/* Advanced Features */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAdvancedAIFeatures(true)}
+                title="Advanced AI Features"
+                aria-label="Advanced AI Features"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ec4899, #be185d)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🤖 AI Features
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAdvancedAnalyticsDashboard(true)}
+                title="Advanced Analytics Dashboard"
+                aria-label="Advanced Analytics Dashboard"
+                style={{ 
+                  background: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📊 Analytics
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -5269,6 +5314,19 @@ export default function Dashboard() {
       {showDocumentationDeployment && (
         <DocumentationDeploymentSystem
           onClose={() => setShowDocumentationDeployment(false)}
+        />
+      )}
+
+      {/* Advanced Features */}
+      {showAdvancedAIFeatures && (
+        <AdvancedAIFeatures
+          onClose={() => setShowAdvancedAIFeatures(false)}
+        />
+      )}
+
+      {showAdvancedAnalyticsDashboard && (
+        <AdvancedAnalyticsDashboard
+          onClose={() => setShowAdvancedAnalyticsDashboard(false)}
         />
       )}
       </div>
