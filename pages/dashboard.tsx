@@ -102,6 +102,7 @@ import AdvancedSecurityFeatures from '../src/components/security/AdvancedSecurit
 import SystemIntegrationTesting from '../src/components/testing/SystemIntegrationTesting';
 import PlatformOptimizationDocumentation from '../src/components/documentation/PlatformOptimizationDocumentation';
 import AdvancedPerformanceOptimization from '../src/components/performance/AdvancedPerformanceOptimization';
+import AIPoweredEnhancements from '../src/components/ai/AIPoweredEnhancements';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -469,6 +470,7 @@ export default function Dashboard() {
   const [showSystemIntegrationTesting, setShowSystemIntegrationTesting] = React.useState(false);
   const [showPlatformOptimizationDocumentation, setShowPlatformOptimizationDocumentation] = React.useState(false);
   const [showAdvancedPerformanceOptimization, setShowAdvancedPerformanceOptimization] = React.useState(false);
+  const [showAIPoweredEnhancements, setShowAIPoweredEnhancements] = React.useState(false);
   const [showBackendStatus, setShowBackendStatus] = React.useState(false);
 
   // Initialize Analytics
@@ -3935,6 +3937,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowAIPoweredEnhancements(true)}
+                title="AI-Powered Enhancements"
+                aria-label="AI-Powered Enhancements"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c3aed, #5b21b6)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🤖 AI Features
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowBackendStatus(true)}
                 title="Backend Status"
                 aria-label="Backend Status"
@@ -5533,6 +5554,12 @@ export default function Dashboard() {
       {showAdvancedSecurityFeatures && (
         <AdvancedSecurityFeatures
           onClose={() => setShowAdvancedSecurityFeatures(false)}
+        />
+      )}
+
+      {showAIPoweredEnhancements && (
+        <AIPoweredEnhancements
+          onClose={() => setShowAIPoweredEnhancements(false)}
         />
       )}
 
