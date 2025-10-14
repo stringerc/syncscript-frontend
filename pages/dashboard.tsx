@@ -110,6 +110,7 @@ import UltimatePlatformCompletion from '../src/components/ultimate/UltimatePlatf
 import ProductionDeploymentLaunch from '../src/components/launch/ProductionDeploymentLaunch';
 import BetaUserRecruitment from '../src/components/beta/BetaUserRecruitment';
 import MarketingLaunchPreparation from '../src/components/marketing/MarketingLaunchPreparation';
+import BusinessDevelopment from '../src/components/business/BusinessDevelopment';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -485,6 +486,7 @@ export default function Dashboard() {
   const [showProductionDeploymentLaunch, setShowProductionDeploymentLaunch] = React.useState(false);
   const [showBetaUserRecruitment, setShowBetaUserRecruitment] = React.useState(false);
   const [showMarketingLaunchPreparation, setShowMarketingLaunchPreparation] = React.useState(false);
+  const [showBusinessDevelopment, setShowBusinessDevelopment] = React.useState(false);
   const [showBackendStatus, setShowBackendStatus] = React.useState(false);
 
   // Initialize Analytics
@@ -4103,6 +4105,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowBusinessDevelopment(true)}
+                title="Business Development"
+                aria-label="Business Development"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                💼 Business
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowBackendStatus(true)}
                 title="Backend Status"
                 aria-label="Backend Status"
@@ -5749,6 +5770,12 @@ export default function Dashboard() {
       {showMarketingLaunchPreparation && (
         <MarketingLaunchPreparation
           onClose={() => setShowMarketingLaunchPreparation(false)}
+        />
+      )}
+
+      {showBusinessDevelopment && (
+        <BusinessDevelopment
+          onClose={() => setShowBusinessDevelopment(false)}
         />
       )}
 
