@@ -1580,14 +1580,21 @@ export default function Dashboard() {
               {/* Briefing Settings */}
               <button
                 className="btn btn-secondary"
-                onClick={() => setShowBriefingSettings(true)}
+                onClick={() => {
+                  console.log('🔍 Briefing Settings clicked!', { showBriefingSettings, briefingSettings });
+                  setShowBriefingSettings(true);
+                }}
                 title="Briefing Settings"
                 aria-label="Briefing Settings"
                 style={{ 
                   background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
                   color: 'white',
                   border: 'none',
-                  fontWeight: '600'
+                  fontWeight: '600',
+                  minWidth: '120px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
                 }}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '16px', height: '16px' }}>
@@ -1615,17 +1622,45 @@ export default function Dashboard() {
               {/* Test Evening Brief Button */}
               <button
                 className="btn btn-secondary"
-                onClick={() => generateEveningBrief()}
+                onClick={() => {
+                  console.log('🌙 Evening Brief clicked!');
+                  generateEveningBrief();
+                }}
                 title="Test Evening Brief"
                 aria-label="Test Evening Brief"
                 style={{ 
                   background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
                   color: 'white',
                   border: 'none',
-                  fontWeight: '600'
+                  fontWeight: '600',
+                  minWidth: '100px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
                 }}
               >
                 🌙 Evening
+              </button>
+
+              {/* Simple Test Button */}
+              <button
+                onClick={() => {
+                  console.log('🚀 Simple test button clicked!');
+                  alert('Briefing system is working! Check console for debug info.');
+                }}
+                style={{ 
+                  background: 'red',
+                  color: 'white',
+                  border: 'none',
+                  padding: '10px 20px',
+                  borderRadius: '5px',
+                  fontWeight: 'bold',
+                  fontSize: '14px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🚀 TEST BRIEFING
               </button>
 
               <Link 
