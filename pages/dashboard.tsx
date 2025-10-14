@@ -137,6 +137,12 @@ import StripePaymentIntegration from '../src/components/payments/StripePaymentIn
 import SubscriptionManagement from '../src/components/payments/SubscriptionManagement';
 import RevenueAnalytics from '../src/components/payments/RevenueAnalytics';
 
+// Import Real-Time Collaboration components
+import WebSocketIntegration from '../src/components/realtime/WebSocketIntegration';
+import LivePresenceSystem from '../src/components/realtime/LivePresenceSystem';
+import RealTimeUpdatesSystem from '../src/components/realtime/RealTimeUpdatesSystem';
+import InstantNotificationsSystem from '../src/components/realtime/InstantNotificationsSystem';
+
 interface Task {
   id: string;
   title: string;
@@ -246,6 +252,12 @@ export default function Dashboard() {
   const [showStripePayment, setShowStripePayment] = React.useState(false);
   const [showSubscriptionManagement, setShowSubscriptionManagement] = React.useState(false);
   const [showRevenueAnalytics, setShowRevenueAnalytics] = React.useState(false);
+
+  // Real-Time Collaboration Features State
+  const [showWebSocketIntegration, setShowWebSocketIntegration] = React.useState(false);
+  const [showLivePresence, setShowLivePresence] = React.useState(false);
+  const [showRealTimeUpdates, setShowRealTimeUpdates] = React.useState(false);
+  const [showInstantNotifications, setShowInstantNotifications] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -2133,6 +2145,83 @@ export default function Dashboard() {
                 📊 Revenue
               </button>
 
+              {/* Real-Time Collaboration Features */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowWebSocketIntegration(true)}
+                title="WebSocket Integration"
+                aria-label="WebSocket Integration"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                ⚡ WebSocket
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowLivePresence(true)}
+                title="Live Presence System"
+                aria-label="Live Presence System"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                👥 Live Presence
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowRealTimeUpdates(true)}
+                title="Real-Time Updates"
+                aria-label="Real-Time Updates"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔄 Real-Time
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowInstantNotifications(true)}
+                title="Instant Notifications"
+                aria-label="Instant Notifications"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ea580c, #dc2626)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔔 Notifications
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -3211,6 +3300,37 @@ export default function Dashboard() {
         <RevenueAnalytics
           teamId="team-1"
           onClose={() => setShowRevenueAnalytics(false)}
+        />
+      )}
+
+      {/* Real-Time Collaboration Features */}
+      {showWebSocketIntegration && (
+        <WebSocketIntegration
+          teamId="team-1"
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowWebSocketIntegration(false)}
+        />
+      )}
+
+      {showLivePresence && (
+        <LivePresenceSystem
+          teamId="team-1"
+          onClose={() => setShowLivePresence(false)}
+        />
+      )}
+
+      {showRealTimeUpdates && (
+        <RealTimeUpdatesSystem
+          teamId="team-1"
+          onClose={() => setShowRealTimeUpdates(false)}
+        />
+      )}
+
+      {showInstantNotifications && (
+        <InstantNotificationsSystem
+          teamId="team-1"
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowInstantNotifications(false)}
         />
       )}
     </div>
