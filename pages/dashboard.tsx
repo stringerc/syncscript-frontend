@@ -160,6 +160,12 @@ import AdvancedEnterpriseSecurity from '../src/components/enterprise/AdvancedEnt
 import AdvancedAnalyticsReporting from '../src/components/enterprise/AdvancedAnalyticsReporting';
 import WhiteLabelSolutions from '../src/components/enterprise/WhiteLabelSolutions';
 
+// Import AI Features components
+import AIProductivityAssistant from '../src/components/ai/AIProductivityAssistant';
+import IntelligentAutomationEngine from '../src/components/ai/IntelligentAutomationEngine';
+import PredictiveAnalyticsInsights from '../src/components/ai/PredictiveAnalyticsInsights';
+import AIContentGeneration from '../src/components/ai/AIContentGeneration';
+
 interface Task {
   id: string;
   title: string;
@@ -292,6 +298,12 @@ export default function Dashboard() {
   const [showEnterpriseAdmin, setShowEnterpriseAdmin] = React.useState(false);
   const [showEnterpriseAnalytics, setShowEnterpriseAnalytics] = React.useState(false);
   const [showWhiteLabelSolutions, setShowWhiteLabelSolutions] = React.useState(false);
+
+  // AI Features State
+  const [showAIProductivityAssistant, setShowAIProductivityAssistant] = React.useState(false);
+  const [showIntelligentAutomation, setShowIntelligentAutomation] = React.useState(false);
+  const [showPredictiveAnalytics, setShowPredictiveAnalytics] = React.useState(false);
+  const [showAIContentGeneration, setShowAIContentGeneration] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -2487,6 +2499,83 @@ export default function Dashboard() {
                 🎨 White-Label
               </button>
 
+              {/* AI Features */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAIProductivityAssistant(true)}
+                title="AI-Powered Productivity Assistant"
+                aria-label="AI-Powered Productivity Assistant"
+                style={{ 
+                  background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🤖 AI Assistant
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowIntelligentAutomation(true)}
+                title="Intelligent Automation Engine"
+                aria-label="Intelligent Automation Engine"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                ⚙️ Automation
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowPredictiveAnalytics(true)}
+                title="Predictive Analytics & Insights"
+                aria-label="Predictive Analytics & Insights"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔮 Predictive
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAIContentGeneration(true)}
+                title="AI Content Generation"
+                aria-label="AI Content Generation"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ea580c, #dc2626)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                ✍️ AI Content
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -3659,6 +3748,31 @@ export default function Dashboard() {
       {showWhiteLabelSolutions && (
         <WhiteLabelSolutions
           onClose={() => setShowWhiteLabelSolutions(false)}
+        />
+      )}
+
+      {/* AI Features */}
+      {showAIProductivityAssistant && (
+        <AIProductivityAssistant
+          onClose={() => setShowAIProductivityAssistant(false)}
+        />
+      )}
+
+      {showIntelligentAutomation && (
+        <IntelligentAutomationEngine
+          onClose={() => setShowIntelligentAutomation(false)}
+        />
+      )}
+
+      {showPredictiveAnalytics && (
+        <PredictiveAnalyticsInsights
+          onClose={() => setShowPredictiveAnalytics(false)}
+        />
+      )}
+
+      {showAIContentGeneration && (
+        <AIContentGeneration
+          onClose={() => setShowAIContentGeneration(false)}
         />
       )}
     </div>
