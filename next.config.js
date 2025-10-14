@@ -128,7 +128,7 @@ const nextConfig = {
               img-src 'self' blob: data: https:;
               font-src 'self' https://fonts.gstatic.com;
               connect-src 'self' https://*.auth0.com https://api.syncscript.app https://app.posthog.com https://www.google-analytics.com https://vercel.live https://syncscript-backend-1.onrender.com;
-              frame-src 'self' https://*.auth0.com;
+                  frame-src 'self' https://*.auth0.com https://vercel.live;
               object-src 'none';
               base-uri 'self';
               form-action 'self';
