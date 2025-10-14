@@ -100,6 +100,7 @@ import AdvancedCollaborationTools from '../src/components/collaboration/Advanced
 import AdvancedAutomation from '../src/components/automation/AdvancedAutomation';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
+import ErrorBoundary from '../src/components/ui/ErrorBoundary';
 import { DataPersistence } from '../src/utils/dataPersistence';
 import { useBriefingManager } from '../src/hooks/useBriefingManager';
 import MorningBrief from '../src/components/briefings/MorningBrief';
@@ -234,7 +235,6 @@ import AdvancedWorkflowAutomation from '../src/components/advanced/AdvancedWorkf
 import EnterpriseIntegrationHub from '../src/components/advanced/EnterpriseIntegrationHub';
 import AdvancedDataManagement from '../src/components/advanced/AdvancedDataManagement';
 import AIPoweredBusinessIntelligence from '../src/components/advanced/AIPoweredBusinessIntelligence';
-import AdvancedCollaborationTools from '../src/components/advanced/AdvancedCollaborationTools';
 
 // Import Final Polish & Optimization components
 import PerformanceOptimizationSystem from '../src/components/optimization/PerformanceOptimizationSystem';
