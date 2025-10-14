@@ -7,7 +7,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { userTestingProgram } from '../utils/userTestingProgram';
+import { userTestingProgram } from '../../utils/userTestingProgram';
 
 interface BetaRegistrationProps {
   onClose: () => void;
