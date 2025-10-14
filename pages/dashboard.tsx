@@ -185,6 +185,13 @@ import VirtualRewardsSystem from '../src/components/gamification/VirtualRewardsS
 import SocialFeatures from '../src/components/gamification/SocialFeatures';
 import GamingElements from '../src/components/gamification/GamingElements';
 
+// Import Future Technologies components
+import ARVRIntegration from '../src/components/future/ARVRIntegration';
+import BlockchainFeatures from '../src/components/future/BlockchainFeatures';
+import IoTIntegration from '../src/components/future/IoTIntegration';
+import QuantumComputing from '../src/components/future/QuantumComputing';
+import AIPoweredInsights from '../src/components/future/AIPoweredInsights';
+
 interface Task {
   id: string;
   title: string;
@@ -341,6 +348,13 @@ export default function Dashboard() {
   const [showVirtualRewardsSystem, setShowVirtualRewardsSystem] = React.useState(false);
   const [showSocialFeatures, setShowSocialFeatures] = React.useState(false);
   const [showGamingElements, setShowGamingElements] = React.useState(false);
+
+  // Future Technologies State
+  const [showARVRIntegration, setShowARVRIntegration] = React.useState(false);
+  const [showBlockchainFeatures, setShowBlockchainFeatures] = React.useState(false);
+  const [showIoTIntegration, setShowIoTIntegration] = React.useState(false);
+  const [showQuantumComputing, setShowQuantumComputing] = React.useState(false);
+  const [showAIPoweredInsights, setShowAIPoweredInsights] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -2863,6 +2877,102 @@ export default function Dashboard() {
                 🎮 Gaming
               </button>
 
+              {/* Future Technologies */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowARVRIntegration(true)}
+                title="AR/VR Integration"
+                aria-label="AR/VR Integration"
+                style={{ 
+                  background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔮 AR/VR
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowBlockchainFeatures(true)}
+                title="Blockchain Features"
+                aria-label="Blockchain Features"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                ⛓️ Blockchain
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowIoTIntegration(true)}
+                title="IoT Integration"
+                aria-label="IoT Integration"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔌 IoT
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowQuantumComputing(true)}
+                title="Quantum Computing"
+                aria-label="Quantum Computing"
+                style={{ 
+                  background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                ⚛️ Quantum
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAIPoweredInsights(true)}
+                title="AI-Powered Insights"
+                aria-label="AI-Powered Insights"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ea580c, #dc2626)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🤖 AI Insights
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -4141,6 +4251,37 @@ export default function Dashboard() {
       {showGamingElements && (
         <GamingElements
           onClose={() => setShowGamingElements(false)}
+        />
+      )}
+
+      {/* Future Technologies */}
+      {showARVRIntegration && (
+        <ARVRIntegration
+          onClose={() => setShowARVRIntegration(false)}
+        />
+      )}
+
+      {showBlockchainFeatures && (
+        <BlockchainFeatures
+          onClose={() => setShowBlockchainFeatures(false)}
+        />
+      )}
+
+      {showIoTIntegration && (
+        <IoTIntegration
+          onClose={() => setShowIoTIntegration(false)}
+        />
+      )}
+
+      {showQuantumComputing && (
+        <QuantumComputing
+          onClose={() => setShowQuantumComputing(false)}
+        />
+      )}
+
+      {showAIPoweredInsights && (
+        <AIPoweredInsights
+          onClose={() => setShowAIPoweredInsights(false)}
         />
       )}
     </div>
