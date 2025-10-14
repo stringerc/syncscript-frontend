@@ -132,6 +132,11 @@ import TeamMemberManagement from '../src/components/teams/TeamMemberManagement';
 import CollaborativeProjectManagement from '../src/components/teams/CollaborativeProjectManagement';
 import TeamAnalyticsDashboard from '../src/components/teams/TeamAnalyticsDashboard';
 
+// Import Payment & Monetization components
+import StripePaymentIntegration from '../src/components/payments/StripePaymentIntegration';
+import SubscriptionManagement from '../src/components/payments/SubscriptionManagement';
+import RevenueAnalytics from '../src/components/payments/RevenueAnalytics';
+
 interface Task {
   id: string;
   title: string;
@@ -236,6 +241,11 @@ export default function Dashboard() {
   const [showTeamMemberManagement, setShowTeamMemberManagement] = React.useState(false);
   const [showCollaborativeProjects, setShowCollaborativeProjects] = React.useState(false);
   const [showTeamAnalytics, setShowTeamAnalytics] = React.useState(false);
+
+  // Payment & Monetization Features State
+  const [showStripePayment, setShowStripePayment] = React.useState(false);
+  const [showSubscriptionManagement, setShowSubscriptionManagement] = React.useState(false);
+  const [showRevenueAnalytics, setShowRevenueAnalytics] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -2065,12 +2075,12 @@ export default function Dashboard() {
                 🔍 Security Audit
               </button>
 
-              {/* Team Collaboration Features */}
+              {/* Payment & Monetization Features */}
               <button
                 className="btn btn-secondary"
-                onClick={() => setShowTeamCreation(true)}
-                title="Team Creation & Management"
-                aria-label="Team Creation & Management"
+                onClick={() => setShowStripePayment(true)}
+                title="Stripe Payment Integration"
+                aria-label="Stripe Payment Integration"
                 style={{ 
                   background: 'linear-gradient(135deg, #059669, #047857)',
                   color: 'white',
@@ -2082,52 +2092,14 @@ export default function Dashboard() {
                   position: 'relative'
                 }}
               >
-                🏗️ Teams
+                💳 Payments
               </button>
 
               <button
                 className="btn btn-secondary"
-                onClick={() => setShowWorkspaceIsolation(true)}
-                title="Workspace Isolation"
-                aria-label="Workspace Isolation"
-                style={{ 
-                  background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-                  color: 'white',
-                  border: 'none',
-                  fontWeight: '600',
-                  minWidth: '140px',
-                  height: '40px',
-                  zIndex: 9999,
-                  position: 'relative'
-                }}
-              >
-                🔒 Isolation
-              </button>
-
-              <button
-                className="btn btn-secondary"
-                onClick={() => setShowTeamMemberManagement(true)}
-                title="Team Member Management"
-                aria-label="Team Member Management"
-                style={{ 
-                  background: 'linear-gradient(135deg, #0d9488, #0f766e)',
-                  color: 'white',
-                  border: 'none',
-                  fontWeight: '600',
-                  minWidth: '140px',
-                  height: '40px',
-                  zIndex: 9999,
-                  position: 'relative'
-                }}
-              >
-                👥 Members
-              </button>
-
-              <button
-                className="btn btn-secondary"
-                onClick={() => setShowCollaborativeProjects(true)}
-                title="Collaborative Project Management"
-                aria-label="Collaborative Project Management"
+                onClick={() => setShowSubscriptionManagement(true)}
+                title="Subscription Management"
+                aria-label="Subscription Management"
                 style={{ 
                   background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
                   color: 'white',
@@ -2139,16 +2111,16 @@ export default function Dashboard() {
                   position: 'relative'
                 }}
               >
-                📋 Projects
+                📋 Subscriptions
               </button>
 
               <button
                 className="btn btn-secondary"
-                onClick={() => setShowTeamAnalytics(true)}
-                title="Team Analytics Dashboard"
-                aria-label="Team Analytics Dashboard"
+                onClick={() => setShowRevenueAnalytics(true)}
+                title="Revenue Analytics"
+                aria-label="Revenue Analytics"
                 style={{ 
-                  background: 'linear-gradient(135deg, #7c2d12, #991b1b)',
+                  background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
                   color: 'white',
                   border: 'none',
                   fontWeight: '600',
@@ -2158,7 +2130,7 @@ export default function Dashboard() {
                   position: 'relative'
                 }}
               >
-                📊 Analytics
+                📊 Revenue
               </button>
 
               <Link 
@@ -3217,6 +3189,28 @@ export default function Dashboard() {
         <TeamAnalyticsDashboard
           teamId="team-1"
           onClose={() => setShowTeamAnalytics(false)}
+        />
+      )}
+
+      {/* Payment & Monetization Features */}
+      {showStripePayment && (
+        <StripePaymentIntegration
+          teamId="team-1"
+          onClose={() => setShowStripePayment(false)}
+        />
+      )}
+
+      {showSubscriptionManagement && (
+        <SubscriptionManagement
+          teamId="team-1"
+          onClose={() => setShowSubscriptionManagement(false)}
+        />
+      )}
+
+      {showRevenueAnalytics && (
+        <RevenueAnalytics
+          teamId="team-1"
+          onClose={() => setShowRevenueAnalytics(false)}
         />
       )}
     </div>
