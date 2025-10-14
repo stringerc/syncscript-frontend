@@ -134,6 +134,7 @@ import { userTestingProgram } from '../src/utils/userTestingProgram';
 import BetaRegistration from '../src/components/beta/BetaRegistration';
 import FeedbackCollector from '../src/components/beta/FeedbackCollector';
 import AnalyticsDashboard from '../src/components/analytics/AnalyticsDashboard';
+import AdvancedAnalyticsDashboard from '../src/components/analytics/AdvancedAnalyticsDashboard';
 import BudgetIntelligence from '../src/components/budget/BudgetIntelligence';
 
 // Import new Phase 3 components

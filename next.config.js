@@ -131,7 +131,7 @@ const nextConfig = {
               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
               img-src 'self' blob: data: https:;
               font-src 'self' https://fonts.gstatic.com;
-              connect-src 'self' https://*.auth0.com https://api.syncscript.app https://app.posthog.com https://www.google-analytics.com https://vercel.live https://syncscript-backend-1.onrender.com;
+              connect-src 'self' https://*.auth0.com https://api.syncscript.app https://app.posthog.com https://www.google-analytics.com https://vercel.live https://syncscript-backend-1.onrender.com ws: wss:;
                   frame-src 'self' https://*.auth0.com https://vercel.live;
               object-src 'none';
               base-uri 'self';
@@ -177,6 +177,10 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Enctype',
+            value: 'application/x-www-form-urlencoded',
           },
         ],
       },

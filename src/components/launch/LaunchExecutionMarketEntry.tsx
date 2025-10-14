@@ -714,7 +714,7 @@ const LaunchExecutionMarketEntry: React.FC<{ onClose: () => void }> = ({ onClose
   }, []);
 
   const executeLaunch = async () => {
-    setIsExecivatingLaunch(true);
+    setIsExecutingLaunch(true);
     
     // Simulate launch execution
     await new Promise(resolve => setTimeout(resolve, 12000));
@@ -736,7 +736,7 @@ const LaunchExecutionMarketEntry: React.FC<{ onClose: () => void }> = ({ onClose
         : campaign
     ));
     
-    setIsExecivatingLaunch(false);
+    setIsExecutingLaunch(false);
   };
 
   const activateCampaign = async () => {
