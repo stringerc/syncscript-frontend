@@ -1339,44 +1339,30 @@ export default function Dashboard() {
               <div className="level-progress-card">
                 <div className="level-info">
                   {/* Level Badge with Progress Text Underneath */}
-                  <div className="level-badge-container">
-                    <span className="level-badge" style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      padding: '8px 16px',
-                      background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
-                      color: '#000000',
-                      borderRadius: '20px',
-                      fontSize: '14px',
-                      fontWeight: '700',
-                      boxShadow: '0 4px 12px rgba(251, 191, 36, 0.4)',
-                      border: '2px solid #f59e0b',
-                      minWidth: 'fit-content'
-                    }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span className="trophy-icon">★</span>
-                        <span className="level-text">Level {userLevel}</span>
-                        {unlockedCount > 0 && (
-                          <span className="mini-trophy" title={`${unlockedCount} achievements unlocked`}>
-                            +{unlockedCount}
-                          </span>
-                        )}
-                      </div>
-                      {/* Progress Text Underneath Inside Badge */}
-                      <div style={{
-                        fontSize: '10px',
-                        color: '#000000',
-                        fontWeight: '600',
-                        marginTop: '3px',
-                        textAlign: 'center',
-                        opacity: '0.9'
-                      }}>
-                        {1000 - (userPoints % 1000)} pts to Level {userLevel + 1}
-                      </div>
-                    </span>
-                  </div>
+    <div className="level-badge-container">
+      <span className="level-badge">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span className="trophy-icon">⭐</span>
+          <span className="level-text">Level {userLevel}</span>
+          {unlockedCount > 0 && (
+            <span className="mini-trophy" title={`${unlockedCount} achievements unlocked`}>
+              +{unlockedCount}
+            </span>
+          )}
+        </div>
+        {/* Progress Text Underneath Inside Badge */}
+        <div style={{
+          fontSize: '10px',
+          color: 'white',
+          fontWeight: '600',
+          marginTop: '3px',
+          textAlign: 'center',
+          opacity: '0.9'
+        }}>
+          {1000 - (userPoints % 1000)} pts to Level {userLevel + 1}
+        </div>
+      </span>
+    </div>
                   
                   {/* Emblem Charge Indicator */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -1702,11 +1688,11 @@ export default function Dashboard() {
                 <span>📁 Projects ({projects.length})</span>
               </div>
               <button
-                className="btn btn-primary"
+                className="new-project-btn"
                 onClick={(e) => { e.preventDefault(); handleCreateProject(); }}
                 style={{ pointerEvents: 'all' }}
               >
-                <svg className="neural-icon" viewBox="0 0 24 24">
+                <svg style={{ width: '16px', height: '16px' }} viewBox="0 0 24 24">
                   <path d="M12 5v14m-7-7h14" stroke="currentColor" strokeWidth="2" fill="none" />
                 </svg>
                 New Project
@@ -1769,10 +1755,10 @@ export default function Dashboard() {
             </p>
             </div>
             <button
-              className="btn btn-primary"
+              className="new-task-btn"
               onClick={() => setIsCreateModalOpen(true)}
             >
-              <svg className="neural-icon" viewBox="0 0 24 24">
+              <svg style={{ width: '16px', height: '16px' }} viewBox="0 0 24 24">
                 <path d="M12 5v14m-7-7h14" stroke="currentColor" strokeWidth="2" fill="none" />
               </svg>
               New Task

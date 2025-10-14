@@ -1,0 +1,421 @@
+/* 🎨 AWE-INSPIRING UI STYLES - MODERN DESIGN SYSTEM */
+
+/* ============================================================================
+   GLASSMORPHISM & NEUMORPHISM BASE STYLES
+   ============================================================================ */
+
+/* Glassmorphism Effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Neumorphic Effect */
+.neu-effect {
+  background: #f0f0f0;
+  box-shadow: 
+    20px 20px 60px #bebebe,
+    -20px -20px 60px #ffffff;
+  border-radius: 20px;
+}
+
+/* Dark Neumorphic Effect */
+.neu-dark {
+  background: #2a2a2a;
+  box-shadow: 
+    20px 20px 60px #1a1a1a,
+    -20px -20px 60px #3a3a3a;
+}
+
+/* ============================================================================
+   AWE-INSPIRING SPACESHIP NAVIGATION BUTTON
+   ============================================================================ */
+
+.spaceship-nav-fab {
+  position: fixed !important;
+  bottom: 24px !important;
+  left: 24px !important;
+  width: 72px !important;
+  height: 72px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border: none !important;
+  cursor: pointer !important;
+  z-index: 99999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 32px !important;
+  color: white !important;
+  
+  /* Glassmorphism Effect */
+  backdrop-filter: blur(20px) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  
+  /* Multiple Shadow Layers for Depth */
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 8px 32px rgba(102, 126, 234, 0.4),
+    0 16px 64px rgba(102, 126, 234, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  
+  /* Floating Animation */
+  animation: float 3s ease-in-out infinite !important;
+  
+  /* Pulsing Glow */
+  animation: float 3s ease-in-out infinite, pulse-glow 2s ease-in-out infinite !important;
+  
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.spaceship-nav-fab:hover {
+  transform: scale(1.1) translateY(-2px) !important;
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.2),
+    0 12px 48px rgba(102, 126, 234, 0.6),
+    0 24px 96px rgba(102, 126, 234, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+.spaceship-nav-fab:active {
+  transform: scale(0.95) !important;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Pulsing Glow Animation */
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 
+      0 0 0 1px rgba(255, 255, 255, 0.1),
+      0 8px 32px rgba(102, 126, 234, 0.4),
+      0 16px 64px rgba(102, 126, 234, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  50% { 
+    box-shadow: 
+      0 0 0 1px rgba(255, 255, 255, 0.2),
+      0 8px 32px rgba(102, 126, 234, 0.6),
+      0 16px 64px rgba(102, 126, 234, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* ============================================================================
+   AWE-INSPIRING GAMIFICATION LEVEL BADGE
+   ============================================================================ */
+
+.level-badge-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.level-badge {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  min-width: fit-content;
+  
+  /* Glassmorphism Effect */
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  
+  /* Multiple Shadow Layers */
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 8px 32px rgba(102, 126, 234, 0.3),
+    0 16px 64px rgba(102, 126, 234, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  
+  /* Subtle Animation */
+  animation: subtle-pulse 3s ease-in-out infinite;
+}
+
+.level-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.2),
+    0 12px 48px rgba(102, 126, 234, 0.4),
+    0 24px 96px rgba(102, 126, 234, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.trophy-icon {
+  font-size: 18px;
+  margin-right: 6px;
+  animation: trophy-glow 2s ease-in-out infinite;
+}
+
+@keyframes subtle-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes trophy-glow {
+  0%, 100% { 
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  }
+  50% { 
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* ============================================================================
+   AWE-INSPIRING NAVIGATION MENU BACKGROUND
+   ============================================================================ */
+
+.global-navigation {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  right: auto !important;
+  width: 320px !important;
+  height: 100vh !important;
+  z-index: 99999 !important;
+  overflow: auto !important;
+  border-radius: 0 !important;
+  transform: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+  
+  /* Glassmorphism Background */
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  
+  /* Gradient Overlay */
+  background-image: 
+    linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%),
+    rgba(255, 255, 255, 0.1) !important;
+  
+  /* Multiple Shadow Layers */
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    4px 0 32px rgba(0, 0, 0, 0.1),
+    8px 0 64px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+/* ============================================================================
+   AWE-INSPIRING DAILY GOALS CARDS
+   ============================================================================ */
+
+.daily-goals-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.daily-goal-card {
+  position: relative;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.daily-goal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.goal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.goal-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.goal-progress {
+  font-size: 16px;
+  font-weight: 700;
+  color: #667eea;
+  margin: 0;
+}
+
+.goal-description {
+  font-size: 12px;
+  color: #6B7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.goal-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.goal-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ============================================================================
+   AWE-INSPIRING NEW PROJECT/TASK BUTTONS
+   ============================================================================ */
+
+.new-project-btn,
+.new-task-btn {
+  position: relative;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Neumorphic Effect */
+  background: #f0f0f0;
+  box-shadow: 
+    8px 8px 16px #bebebe,
+    -8px -8px 16px #ffffff;
+  
+  color: #374151;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.new-project-btn:hover,
+.new-task-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    12px 12px 24px #bebebe,
+    -12px -12px 24px #ffffff;
+}
+
+.new-project-btn:active,
+.new-task-btn:active {
+  transform: translateY(0);
+  box-shadow: 
+    4px 4px 8px #bebebe,
+    -4px -4px 8px #ffffff;
+}
+
+.new-project-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 
+    8px 8px 16px rgba(102, 126, 234, 0.3),
+    -8px -8px 16px rgba(255, 255, 255, 0.8);
+}
+
+.new-task-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 
+    8px 8px 16px rgba(16, 185, 129, 0.3),
+    -8px -8px 16px rgba(255, 255, 255, 0.8);
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .spaceship-nav-fab {
+    width: 64px !important;
+    height: 64px !important;
+    font-size: 28px !important;
+  }
+  
+  .level-badge {
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+  
+  .global-navigation {
+    width: 280px !important;
+  }
+  
+  .daily-goal-card {
+    padding: 12px;
+  }
+  
+  .new-project-btn,
+  .new-task-btn {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}
+
+/* ============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .spaceship-nav-fab,
+  .level-badge,
+  .daily-goal-card,
+  .new-project-btn,
+  .new-task-btn {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .glass-effect,
+  .global-navigation {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 2px solid #000 !important;
+  }
+  
+  .neu-effect,
+  .new-project-btn,
+  .new-task-btn {
+    background: #fff !important;
+    border: 2px solid #000 !important;
+    color: #000 !important;
+  }
+}
