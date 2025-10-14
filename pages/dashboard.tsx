@@ -149,6 +149,12 @@ import OfflineFirstArchitecture from '../src/components/mobile/OfflineFirstArchi
 import TouchGesturesSystem from '../src/components/mobile/TouchGesturesSystem';
 import MobilePushNotifications from '../src/components/mobile/MobilePushNotifications';
 
+// Import Advanced Integrations components
+import ThirdPartyIntegrationsHub from '../src/components/integrations/ThirdPartyIntegrationsHub';
+import APIMarketplace from '../src/components/integrations/APIMarketplace';
+import WebhookSystem from '../src/components/integrations/WebhookSystem';
+import SyncScriptSDK from '../src/components/integrations/SyncScriptSDK';
+
 interface Task {
   id: string;
   title: string;
@@ -270,6 +276,12 @@ export default function Dashboard() {
   const [showOfflineArchitecture, setShowOfflineArchitecture] = React.useState(false);
   const [showTouchGestures, setShowTouchGestures] = React.useState(false);
   const [showMobilePush, setShowMobilePush] = React.useState(false);
+
+  // Advanced Integrations Features State
+  const [showIntegrationsHub, setShowIntegrationsHub] = React.useState(false);
+  const [showAPIMarketplace, setShowAPIMarketplace] = React.useState(false);
+  const [showWebhookSystem, setShowWebhookSystem] = React.useState(false);
+  const [showSyncScriptSDK, setShowSyncScriptSDK] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -2311,6 +2323,83 @@ export default function Dashboard() {
                 📲 Push
               </button>
 
+              {/* Advanced Integrations Features */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowIntegrationsHub(true)}
+                title="Third-Party Integrations Hub"
+                aria-label="Third-Party Integrations Hub"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔗 Integrations
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAPIMarketplace(true)}
+                title="API Marketplace"
+                aria-label="API Marketplace"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🛒 Marketplace
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowWebhookSystem(true)}
+                title="Webhook System"
+                aria-label="Webhook System"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔗 Webhooks
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowSyncScriptSDK(true)}
+                title="SyncScript SDK"
+                aria-label="SyncScript SDK"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ea580c, #dc2626)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🛠️ SDK
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -3445,6 +3534,31 @@ export default function Dashboard() {
       {showMobilePush && (
         <MobilePushNotifications
           onClose={() => setShowMobilePush(false)}
+        />
+      )}
+
+      {/* Advanced Integrations Features */}
+      {showIntegrationsHub && (
+        <ThirdPartyIntegrationsHub
+          onClose={() => setShowIntegrationsHub(false)}
+        />
+      )}
+
+      {showAPIMarketplace && (
+        <APIMarketplace
+          onClose={() => setShowAPIMarketplace(false)}
+        />
+      )}
+
+      {showWebhookSystem && (
+        <WebhookSystem
+          onClose={() => setShowWebhookSystem(false)}
+        />
+      )}
+
+      {showSyncScriptSDK && (
+        <SyncScriptSDK
+          onClose={() => setShowSyncScriptSDK(false)}
         />
       )}
     </div>
