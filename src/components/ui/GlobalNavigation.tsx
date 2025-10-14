@@ -105,37 +105,48 @@ export default function GlobalNavigation() {
               aria-label="Navigation menu"
               {...swipeHandlers}
             >
-              <div className="p-0">
-                <div className="mb-0">
-                  <h2 className="text-xs font-bold text-gray-900 dark:text-white mb-0">
+              <div className="p-0" style={{ padding: '0', margin: '0' }}>
+                <div className="mb-0" style={{ marginBottom: '0', padding: '0' }}>
+                  <h2 className="text-xs font-bold text-gray-900 dark:text-white mb-0" style={{ marginBottom: '0', padding: '0', lineHeight: '1' }}>
                     Navigation
                   </h2>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                  <p className="text-xs text-gray-600 dark:text-gray-400" style={{ margin: '0', padding: '0', lineHeight: '1' }}>
                     Features
                   </p>
                 </div>
 
-                <div className="space-y-0">
+                <div className="space-y-0" style={{ margin: '0', padding: '0' }}>
                   {NAVIGATION_ITEMS.map((item, index) => (
                     <motion.div
                       key={item.href}
                       initial={{ x: 50, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: index * 0.01 }}
+                      style={{ margin: '0', padding: '0' }}
                     >
                       <Link
                         href={item.href}
                         onClick={() => setIsOpen(false)}
                         className="group block"
+                        style={{ margin: '0', padding: '0' }}
                       >
-                        <div className={`flex items-center gap-1 py-0 px-1 rounded bg-gradient-to-r ${item.color} hover:shadow-lg transition-all transform hover:scale-101 h-6`}>
-                          <div className="text-xs">{item.icon}</div>
-                          <div className="flex-1">
-                            <div className="font-medium text-white text-xs leading-none">
+                        <div 
+                          className={`flex items-center gap-1 py-0 px-1 rounded bg-gradient-to-r ${item.color} hover:shadow-lg transition-all transform hover:scale-101 h-6`}
+                          style={{ 
+                            margin: '0', 
+                            padding: '0 0.25rem', 
+                            height: '24px', 
+                            lineHeight: '1',
+                            marginBottom: '0'
+                          }}
+                        >
+                          <div className="text-xs" style={{ margin: '0', padding: '0' }}>{item.icon}</div>
+                          <div className="flex-1" style={{ margin: '0', padding: '0' }}>
+                            <div className="font-medium text-white text-xs leading-none" style={{ margin: '0', padding: '0', lineHeight: '1' }}>
                               {item.label}
                             </div>
                           </div>
-                          <div className="text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity" style={{ margin: '0', padding: '0' }}>
                             →
                           </div>
                         </div>

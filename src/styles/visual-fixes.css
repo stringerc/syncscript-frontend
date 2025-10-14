@@ -7,6 +7,10 @@
    NUCLEAR OVERRIDE: GLOBAL NAVIGATION MENU
    ============================================================================ */
 
+/* ============================================================================
+   NUCLEAR OVERRIDE: GLOBAL NAVIGATION MENU - FORCE COMPACT
+   ============================================================================ */
+
 .global-navigation {
   position: fixed !important;
   top: 0 !important;
@@ -30,6 +34,48 @@
   opacity: 1 !important;
   outline: none !important;
   box-sizing: border-box !important;
+}
+
+/* Force compact spacing for all elements inside */
+.global-navigation * {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+.global-navigation > div {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.global-navigation .space-y-0 > * + * {
+  margin-top: 0 !important;
+}
+
+.global-navigation .mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.global-navigation .mt-0 {
+  margin-top: 0 !important;
+}
+
+.global-navigation .py-0 {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.global-navigation .px-1 {
+  padding-left: 0.25rem !important;
+  padding-right: 0.25rem !important;
+}
+
+.global-navigation .h-6 {
+  height: 1.5rem !important;
+}
+
+.global-navigation .leading-none {
+  line-height: 1 !important;
 }
 
 /* ============================================================================
