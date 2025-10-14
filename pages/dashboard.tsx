@@ -357,6 +357,7 @@ export default function Dashboard() {
   const [showLivePresence, setShowLivePresence] = React.useState(false);
   const [showRealTimeUpdates, setShowRealTimeUpdates] = React.useState(false);
   const [showInstantNotifications, setShowInstantNotifications] = React.useState(false);
+  const [showAdvancedCollaborationTools, setShowAdvancedCollaborationTools] = React.useState(false);
 
   // Mobile Optimization Features State
   const [showPWAFoundation, setShowPWAFoundation] = React.useState(false);
@@ -459,7 +460,6 @@ export default function Dashboard() {
   // Advanced Features State
   const [showAdvancedAIFeatures, setShowAdvancedAIFeatures] = React.useState(false);
   const [showAdvancedAnalyticsDashboard, setShowAdvancedAnalyticsDashboard] = React.useState(false);
-  const [showAdvancedCollaborationTools, setShowAdvancedCollaborationTools] = React.useState(false);
   const [showAdvancedAutomation, setShowAdvancedAutomation] = React.useState(false);
   const [showAdvancedSecurityFeatures, setShowAdvancedSecurityFeatures] = React.useState(false);
 
