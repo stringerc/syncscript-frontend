@@ -260,7 +260,6 @@ export default function Dashboard() {
   // Enterprise Security Features State
   const [showEnterpriseSSO, setShowEnterpriseSSO] = React.useState(false);
   const [showRBAC, setShowRBAC] = React.useState(false);
-  const [showEnterpriseAdmin, setShowEnterpriseAdmin] = React.useState(false);
   const [showSecurityAudit, setShowSecurityAudit] = React.useState(false);
 
   // Team Collaboration Features State
