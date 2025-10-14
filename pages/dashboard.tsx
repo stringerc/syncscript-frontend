@@ -119,6 +119,12 @@ import MobileAppFoundation from '../src/components/mobile/MobileAppFoundation';
 import ApiV2Release from '../src/components/api/ApiV2Release';
 import WhiteLabelSystem from '../src/components/whitelabel/WhiteLabelSystem';
 
+// Import Enterprise Security components
+import EnterpriseSSOSystem from '../src/components/enterprise/EnterpriseSSOSystem';
+import RoleBasedAccessControl from '../src/components/enterprise/RoleBasedAccessControl';
+import EnterpriseAdminDashboard from '../src/components/enterprise/EnterpriseAdminDashboard';
+import SecurityAuditLogging from '../src/components/enterprise/SecurityAuditLogging';
+
 interface Task {
   id: string;
   title: string;
@@ -210,6 +216,12 @@ export default function Dashboard() {
   const [showMobileFoundation, setShowMobileFoundation] = React.useState(false);
   const [showApiV2Release, setShowApiV2Release] = React.useState(false);
   const [showWhiteLabelSystem, setShowWhiteLabelSystem] = React.useState(false);
+
+  // Enterprise Security Features State
+  const [showEnterpriseSSO, setShowEnterpriseSSO] = React.useState(false);
+  const [showRBAC, setShowRBAC] = React.useState(false);
+  const [showEnterpriseAdmin, setShowEnterpriseAdmin] = React.useState(false);
+  const [showSecurityAudit, setShowSecurityAudit] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -1962,6 +1974,83 @@ export default function Dashboard() {
                 🏷️ White-Label
               </button>
 
+              {/* Enterprise Security Features */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowEnterpriseSSO(true)}
+                title="Enterprise SSO"
+                aria-label="Enterprise SSO"
+                style={{ 
+                  background: 'linear-gradient(135deg, #1e40af, #1e3a8a)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔐 Enterprise SSO
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowRBAC(true)}
+                title="Role-Based Access Control"
+                aria-label="Role-Based Access Control"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c2d12, #991b1b)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                👥 RBAC
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowEnterpriseAdmin(true)}
+                title="Enterprise Admin Dashboard"
+                aria-label="Enterprise Admin Dashboard"
+                style={{ 
+                  background: 'linear-gradient(135deg, #6b21a8, #581c87)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🏢 Admin
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowSecurityAudit(true)}
+                title="Security Audit Logging"
+                aria-label="Security Audit Logging"
+                style={{ 
+                  background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔍 Security Audit
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -2953,6 +3042,35 @@ export default function Dashboard() {
         <WhiteLabelSystem
           userId={user?.sub || 'anonymous'}
           onClose={() => setShowWhiteLabelSystem(false)}
+        />
+      )}
+
+      {/* Enterprise Security Features */}
+      {showEnterpriseSSO && (
+        <EnterpriseSSOSystem
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowEnterpriseSSO(false)}
+        />
+      )}
+
+      {showRBAC && (
+        <RoleBasedAccessControl
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowRBAC(false)}
+        />
+      )}
+
+      {showEnterpriseAdmin && (
+        <EnterpriseAdminDashboard
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowEnterpriseAdmin(false)}
+        />
+      )}
+
+      {showSecurityAudit && (
+        <SecurityAuditLogging
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowSecurityAudit(false)}
         />
       )}
     </div>
