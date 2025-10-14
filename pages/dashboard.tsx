@@ -157,7 +157,6 @@ import SyncScriptSDK from '../src/components/integrations/SyncScriptSDK';
 
 // Import Enterprise Features components
 import AdvancedEnterpriseSecurity from '../src/components/enterprise/AdvancedEnterpriseSecurity';
-import EnterpriseAdminDashboard from '../src/components/enterprise/EnterpriseAdminDashboard';
 import AdvancedAnalyticsReporting from '../src/components/enterprise/AdvancedAnalyticsReporting';
 import WhiteLabelSolutions from '../src/components/enterprise/WhiteLabelSolutions';
 
@@ -3498,12 +3497,6 @@ export default function Dashboard() {
         />
       )}
 
-      {showEnterpriseAdmin && (
-        <EnterpriseAdminDashboard
-          userId={user?.sub || 'anonymous'}
-          onClose={() => setShowEnterpriseAdmin(false)}
-        />
-      )}
 
       {showSecurityAudit && (
         <SecurityAuditLogging
