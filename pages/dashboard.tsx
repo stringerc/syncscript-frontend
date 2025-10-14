@@ -247,7 +247,6 @@ export default function Dashboard() {
 
   // Phase 3 Advanced Features State
   const [showCustomWorkspace, setShowCustomWorkspace] = React.useState(false);
-  const [showIntegrationsHub, setShowIntegrationsHub] = React.useState(false);
   const [showMobileFoundation, setShowMobileFoundation] = React.useState(false);
   const [showApiV2Release, setShowApiV2Release] = React.useState(false);
   const [showWhiteLabelSystem, setShowWhiteLabelSystem] = React.useState(false);
@@ -3454,12 +3453,6 @@ export default function Dashboard() {
         />
       )}
 
-      {showIntegrationsHub && (
-        <AdvancedIntegrationsHub
-          userId={user?.sub || 'anonymous'}
-          onClose={() => setShowIntegrationsHub(false)}
-        />
-      )}
 
       {showMobileFoundation && (
         <MobileAppFoundation
