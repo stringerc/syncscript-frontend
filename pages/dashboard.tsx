@@ -98,6 +98,7 @@ import { checkQuickWins, saveQuickWinPoints } from '../src/utils/quickWinBadges'
 // Import Advanced Collaboration & Automation
 import AdvancedCollaborationTools from '../src/components/collaboration/AdvancedCollaborationTools';
 import AdvancedAutomation from '../src/components/automation/AdvancedAutomation';
+import AdvancedSecurityFeatures from '../src/components/security/AdvancedSecurityFeatures';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -460,6 +461,7 @@ export default function Dashboard() {
   const [showAdvancedAnalyticsDashboard, setShowAdvancedAnalyticsDashboard] = React.useState(false);
   const [showAdvancedCollaborationTools, setShowAdvancedCollaborationTools] = React.useState(false);
   const [showAdvancedAutomation, setShowAdvancedAutomation] = React.useState(false);
+  const [showAdvancedSecurityFeatures, setShowAdvancedSecurityFeatures] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -3828,6 +3830,25 @@ export default function Dashboard() {
                 🤖 Automation
               </button>
 
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAdvancedSecurityFeatures(true)}
+                title="Advanced Security Features"
+                aria-label="Advanced Security Features"
+                style={{ 
+                  background: 'linear-gradient(135deg, #dc2626, #ec4899)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🛡️ Security
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -5379,6 +5400,12 @@ export default function Dashboard() {
       {showAdvancedAutomation && (
         <AdvancedAutomation
           onClose={() => setShowAdvancedAutomation(false)}
+        />
+      )}
+
+      {showAdvancedSecurityFeatures && (
+        <AdvancedSecurityFeatures
+          onClose={() => setShowAdvancedSecurityFeatures(false)}
         />
       )}
       </div>
