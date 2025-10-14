@@ -93,7 +93,7 @@ export default function GlobalNavigation() {
                 backgroundColor: 'transparent',
                 zIndex: '9999',
                 boxShadow: '4px 0 24px rgba(0, 0, 0, 0.15)',
-                overflow: 'visible',
+                overflow: 'auto',
                 transform: 'none',
                 margin: '0',
                 padding: '0',
@@ -105,37 +105,37 @@ export default function GlobalNavigation() {
               aria-label="Navigation menu"
               {...swipeHandlers}
             >
-              <div className="p-6">
-                <div className="mb-8">
-                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              <div className="p-2">
+                <div className="mb-3">
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
                     Navigation
                   </h2>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Explore all features
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    All features
                   </p>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-1">
                   {NAVIGATION_ITEMS.map((item, index) => (
                     <motion.div
                       key={item.href}
                       initial={{ x: 50, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.05 }}
+                      transition={{ delay: index * 0.02 }}
                     >
                       <Link
                         href={item.href}
                         onClick={() => setIsOpen(false)}
                         className="group block"
                       >
-                        <div className={`flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r ${item.color} hover:shadow-xl transition-all transform hover:scale-105`}>
-                          <div className="text-4xl">{item.icon}</div>
+                        <div className={`flex items-center gap-2 p-2 rounded-lg bg-gradient-to-r ${item.color} hover:shadow-lg transition-all transform hover:scale-102`}>
+                          <div className="text-2xl">{item.icon}</div>
                           <div className="flex-1">
-                            <div className="font-bold text-white text-lg">
+                            <div className="font-semibold text-white text-sm">
                               {item.label}
                             </div>
                           </div>
-                          <div className="text-white text-2xl opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="text-white text-lg opacity-0 group-hover:opacity-100 transition-opacity">
                             →
                           </div>
                         </div>
@@ -144,11 +144,11 @@ export default function GlobalNavigation() {
                   ))}
                 </div>
 
-                <div className="mt-8 p-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl text-white">
+                <div className="mt-3 p-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg text-white">
                   <div className="text-center">
-                    <div className="text-4xl mb-2">🎉</div>
-                    <div className="font-bold text-lg mb-1">100 Features</div>
-                    <div className="text-sm text-white/80">All production-ready!</div>
+                    <div className="text-2xl mb-1">🎉</div>
+                    <div className="font-bold text-sm mb-1">100 Features</div>
+                    <div className="text-xs text-white/80">Production-ready!</div>
                   </div>
                 </div>
               </div>
