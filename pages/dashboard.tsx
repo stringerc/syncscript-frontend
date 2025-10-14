@@ -113,6 +113,7 @@ import MarketingLaunchPreparation from '../src/components/marketing/MarketingLau
 import BusinessDevelopment from '../src/components/business/BusinessDevelopment';
 import LaunchExecutionMarketEntry from '../src/components/launch/LaunchExecutionMarketEntry';
 import EnterpriseSalesAcceleration from '../src/components/sales/EnterpriseSalesAcceleration';
+import PartnershipActivation from '../src/components/partnerships/PartnershipActivation';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -491,6 +492,7 @@ export default function Dashboard() {
   const [showBusinessDevelopment, setShowBusinessDevelopment] = React.useState(false);
   const [showLaunchExecutionMarketEntry, setShowLaunchExecutionMarketEntry] = React.useState(false);
   const [showEnterpriseSalesAcceleration, setShowEnterpriseSalesAcceleration] = React.useState(false);
+  const [showPartnershipActivation, setShowPartnershipActivation] = React.useState(false);
   const [showBackendStatus, setShowBackendStatus] = React.useState(false);
 
   // Initialize Analytics
@@ -4166,6 +4168,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowPartnershipActivation(true)}
+                title="Partnership Activation"
+                aria-label="Partnership Activation"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c3aed, #5b21b6)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🤝 Partnerships
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowBackendStatus(true)}
                 title="Backend Status"
                 aria-label="Backend Status"
@@ -5830,6 +5851,12 @@ export default function Dashboard() {
       {showEnterpriseSalesAcceleration && (
         <EnterpriseSalesAcceleration
           onClose={() => setShowEnterpriseSalesAcceleration(false)}
+        />
+      )}
+
+      {showPartnershipActivation && (
+        <PartnershipActivation
+          onClose={() => setShowPartnershipActivation(false)}
         />
       )}
 
