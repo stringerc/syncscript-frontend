@@ -115,6 +115,7 @@ import LaunchExecutionMarketEntry from '../src/components/launch/LaunchExecution
 import EnterpriseSalesAcceleration from '../src/components/sales/EnterpriseSalesAcceleration';
 import PartnershipActivation from '../src/components/partnerships/PartnershipActivation';
 import RevenueScaling from '../src/components/revenue/RevenueScaling';
+import MarketValidation from '../src/components/validation/MarketValidation';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -495,6 +496,7 @@ export default function Dashboard() {
   const [showEnterpriseSalesAcceleration, setShowEnterpriseSalesAcceleration] = React.useState(false);
   const [showPartnershipActivation, setShowPartnershipActivation] = React.useState(false);
   const [showRevenueScaling, setShowRevenueScaling] = React.useState(false);
+  const [showMarketValidation, setShowMarketValidation] = React.useState(false);
   const [showBackendStatus, setShowBackendStatus] = React.useState(false);
 
   // Initialize Analytics
@@ -4208,6 +4210,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowMarketValidation(true)}
+                title="Market Validation"
+                aria-label="Market Validation"
+                style={{ 
+                  background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🎯 Validation
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowBackendStatus(true)}
                 title="Backend Status"
                 aria-label="Backend Status"
@@ -5884,6 +5905,12 @@ export default function Dashboard() {
       {showRevenueScaling && (
         <RevenueScaling
           onClose={() => setShowRevenueScaling(false)}
+        />
+      )}
+
+      {showMarketValidation && (
+        <MarketValidation
+          onClose={() => setShowMarketValidation(false)}
         />
       )}
 
