@@ -199,6 +199,13 @@ import MultiFormatDataExport from '../src/components/analytics/MultiFormatDataEx
 import PredictiveAnalytics from '../src/components/analytics/PredictiveAnalytics';
 import AIPoweredInsightsAnalytics from '../src/components/analytics/AIPoweredInsights';
 
+// Import Marketplace & Ecosystem components
+import AppMarketplace from '../src/components/marketplace/AppMarketplace';
+import DeveloperPortal from '../src/components/marketplace/DeveloperPortal';
+import PluginSystem from '../src/components/marketplace/PluginSystem';
+import CommunityHub from '../src/components/marketplace/CommunityHub';
+import RevenueSharing from '../src/components/marketplace/RevenueSharing';
+
 interface Task {
   id: string;
   title: string;
@@ -369,6 +376,13 @@ export default function Dashboard() {
   const [showMultiFormatDataExport, setShowMultiFormatDataExport] = React.useState(false);
   const [showPredictiveAnalytics, setShowPredictiveAnalytics] = React.useState(false);
   const [showAIPoweredInsightsAnalytics, setShowAIPoweredInsightsAnalytics] = React.useState(false);
+
+  // Marketplace & Ecosystem State
+  const [showAppMarketplace, setShowAppMarketplace] = React.useState(false);
+  const [showDeveloperPortal, setShowDeveloperPortal] = React.useState(false);
+  const [showPluginSystem, setShowPluginSystem] = React.useState(false);
+  const [showCommunityHub, setShowCommunityHub] = React.useState(false);
+  const [showRevenueSharing, setShowRevenueSharing] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -3083,6 +3097,102 @@ export default function Dashboard() {
                 🧠 AI Analytics
               </button>
 
+              {/* Marketplace & Ecosystem */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAppMarketplace(true)}
+                title="App Marketplace"
+                aria-label="App Marketplace"
+                style={{ 
+                  background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🛒 Marketplace
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowDeveloperPortal(true)}
+                title="Developer Portal"
+                aria-label="Developer Portal"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🧑‍💻 Dev Portal
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowPluginSystem(true)}
+                title="Plugin System"
+                aria-label="Plugin System"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔌 Plugins
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowCommunityHub(true)}
+                title="Community Hub"
+                aria-label="Community Hub"
+                style={{ 
+                  background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🗣️ Community
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowRevenueSharing(true)}
+                title="Revenue Sharing"
+                aria-label="Revenue Sharing"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ea580c, #dc2626)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                💰 Revenue Share
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -4423,6 +4533,37 @@ export default function Dashboard() {
       {showAIPoweredInsightsAnalytics && (
         <AIPoweredInsightsAnalytics
           onClose={() => setShowAIPoweredInsightsAnalytics(false)}
+        />
+      )}
+
+      {/* Marketplace & Ecosystem */}
+      {showAppMarketplace && (
+        <AppMarketplace
+          onClose={() => setShowAppMarketplace(false)}
+        />
+      )}
+
+      {showDeveloperPortal && (
+        <DeveloperPortal
+          onClose={() => setShowDeveloperPortal(false)}
+        />
+      )}
+
+      {showPluginSystem && (
+        <PluginSystem
+          onClose={() => setShowPluginSystem(false)}
+        />
+      )}
+
+      {showCommunityHub && (
+        <CommunityHub
+          onClose={() => setShowCommunityHub(false)}
+        />
+      )}
+
+      {showRevenueSharing && (
+        <RevenueSharing
+          onClose={() => setShowRevenueSharing(false)}
         />
       )}
     </div>
