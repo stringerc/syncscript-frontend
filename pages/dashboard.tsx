@@ -112,6 +112,13 @@ import FeedbackCollector from '../src/components/beta/FeedbackCollector';
 import AnalyticsDashboard from '../src/components/analytics/AnalyticsDashboard';
 import BudgetIntelligence from '../src/components/budget/BudgetIntelligence';
 
+// Import new Phase 3 components
+import CustomWorkspaceLayout from '../src/components/workspace/CustomWorkspaceLayout';
+import AdvancedIntegrationsHub from '../src/components/integrations/AdvancedIntegrationsHub';
+import MobileAppFoundation from '../src/components/mobile/MobileAppFoundation';
+import ApiV2Release from '../src/components/api/ApiV2Release';
+import WhiteLabelSystem from '../src/components/whitelabel/WhiteLabelSystem';
+
 interface Task {
   id: string;
   title: string;
@@ -196,6 +203,13 @@ export default function Dashboard() {
   // Phase 2 Enhanced Features State
   const [showAnalyticsDashboard, setShowAnalyticsDashboard] = React.useState(false);
   const [showBudgetIntelligence, setShowBudgetIntelligence] = React.useState(false);
+
+  // Phase 3 Advanced Features State
+  const [showCustomWorkspace, setShowCustomWorkspace] = React.useState(false);
+  const [showIntegrationsHub, setShowIntegrationsHub] = React.useState(false);
+  const [showMobileFoundation, setShowMobileFoundation] = React.useState(false);
+  const [showApiV2Release, setShowApiV2Release] = React.useState(false);
+  const [showWhiteLabelSystem, setShowWhiteLabelSystem] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -1852,6 +1866,102 @@ export default function Dashboard() {
                 </button>
               )}
 
+              {/* Phase 3 Advanced Features */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowCustomWorkspace(true)}
+                title="Custom Workspace Layout"
+                aria-label="Custom Workspace Layout"
+                style={{ 
+                  background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🎨 Workspace
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowIntegrationsHub(true)}
+                title="Advanced Integrations"
+                aria-label="Advanced Integrations"
+                style={{ 
+                  background: 'linear-gradient(135deg, #06b6d4, #0891b2)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔗 Integrations
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowMobileFoundation(true)}
+                title="Mobile App Foundation"
+                aria-label="Mobile App Foundation"
+                style={{ 
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📱 Mobile
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowApiV2Release(true)}
+                title="API v2 Release"
+                aria-label="API v2 Release"
+                style={{ 
+                  background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔌 API v2
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowWhiteLabelSystem(true)}
+                title="White-Label System"
+                aria-label="White-Label System"
+                style={{ 
+                  background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🏷️ White-Label
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -2807,6 +2917,42 @@ export default function Dashboard() {
         <BudgetIntelligence
           userId={user?.sub || 'anonymous'}
           onClose={() => setShowBudgetIntelligence(false)}
+        />
+      )}
+
+      {/* Phase 3 Advanced Features */}
+      {showCustomWorkspace && (
+        <CustomWorkspaceLayout
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowCustomWorkspace(false)}
+        />
+      )}
+
+      {showIntegrationsHub && (
+        <AdvancedIntegrationsHub
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowIntegrationsHub(false)}
+        />
+      )}
+
+      {showMobileFoundation && (
+        <MobileAppFoundation
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowMobileFoundation(false)}
+        />
+      )}
+
+      {showApiV2Release && (
+        <ApiV2Release
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowApiV2Release(false)}
+        />
+      )}
+
+      {showWhiteLabelSystem && (
+        <WhiteLabelSystem
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowWhiteLabelSystem(false)}
         />
       )}
     </div>
