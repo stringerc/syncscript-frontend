@@ -103,6 +103,7 @@ import SystemIntegrationTesting from '../src/components/testing/SystemIntegratio
 import PlatformOptimizationDocumentation from '../src/components/documentation/PlatformOptimizationDocumentation';
 import AdvancedPerformanceOptimization from '../src/components/performance/AdvancedPerformanceOptimization';
 import AIPoweredEnhancements from '../src/components/ai/AIPoweredEnhancements';
+import EnterpriseIntegration from '../src/components/enterprise/EnterpriseIntegration';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -471,6 +472,7 @@ export default function Dashboard() {
   const [showPlatformOptimizationDocumentation, setShowPlatformOptimizationDocumentation] = React.useState(false);
   const [showAdvancedPerformanceOptimization, setShowAdvancedPerformanceOptimization] = React.useState(false);
   const [showAIPoweredEnhancements, setShowAIPoweredEnhancements] = React.useState(false);
+  const [showEnterpriseIntegration, setShowEnterpriseIntegration] = React.useState(false);
   const [showBackendStatus, setShowBackendStatus] = React.useState(false);
 
   // Initialize Analytics
@@ -3956,6 +3958,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowEnterpriseIntegration(true)}
+                title="Enterprise Integration"
+                aria-label="Enterprise Integration"
+                style={{ 
+                  background: 'linear-gradient(135deg, #1e40af, #1e3a8a)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🏢 Enterprise
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowBackendStatus(true)}
                 title="Backend Status"
                 aria-label="Backend Status"
@@ -5560,6 +5581,12 @@ export default function Dashboard() {
       {showAIPoweredEnhancements && (
         <AIPoweredEnhancements
           onClose={() => setShowAIPoweredEnhancements(false)}
+        />
+      )}
+
+      {showEnterpriseIntegration && (
+        <EnterpriseIntegration
+          onClose={() => setShowEnterpriseIntegration(false)}
         />
       )}
 
