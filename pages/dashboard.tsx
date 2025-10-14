@@ -105,6 +105,7 @@ import AdvancedPerformanceOptimization from '../src/components/performance/Advan
 import AIPoweredEnhancements from '../src/components/ai/AIPoweredEnhancements';
 import EnterpriseIntegration from '../src/components/enterprise/EnterpriseIntegration';
 import PlatformDocumentationDeployment from '../src/components/deployment/PlatformDocumentationDeployment';
+import FinalPlatformOptimization from '../src/components/optimization/FinalPlatformOptimization';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -475,6 +476,7 @@ export default function Dashboard() {
   const [showAIPoweredEnhancements, setShowAIPoweredEnhancements] = React.useState(false);
   const [showEnterpriseIntegration, setShowEnterpriseIntegration] = React.useState(false);
   const [showPlatformDocumentationDeployment, setShowPlatformDocumentationDeployment] = React.useState(false);
+  const [showFinalPlatformOptimization, setShowFinalPlatformOptimization] = React.useState(false);
   const [showBackendStatus, setShowBackendStatus] = React.useState(false);
 
   // Initialize Analytics
@@ -3998,6 +4000,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowFinalPlatformOptimization(true)}
+                title="Final Platform Optimization & Production Deployment"
+                aria-label="Final Platform Optimization & Production Deployment"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c3aed, #ec4899)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🚀 Final Opt
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowBackendStatus(true)}
                 title="Backend Status"
                 aria-label="Backend Status"
@@ -5614,6 +5635,12 @@ export default function Dashboard() {
       {showPlatformDocumentationDeployment && (
         <PlatformDocumentationDeployment
           onClose={() => setShowPlatformDocumentationDeployment(false)}
+        />
+      )}
+
+      {showFinalPlatformOptimization && (
+        <FinalPlatformOptimization
+          onClose={() => setShowFinalPlatformOptimization(false)}
         />
       )}
 
