@@ -105,13 +105,13 @@ export default function GlobalNavigation() {
               aria-label="Navigation menu"
               {...swipeHandlers}
             >
-              <div className="p-1">
-                <div className="mb-1">
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-0">
+              <div className="p-0.5">
+                <div className="mb-0.5">
+                  <h2 className="text-sm font-bold text-gray-900 dark:text-white mb-0">
                     Navigation
                   </h2>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    All features
+                    Features
                   </p>
                 </div>
 
@@ -128,14 +128,14 @@ export default function GlobalNavigation() {
                         onClick={() => setIsOpen(false)}
                         className="group block"
                       >
-                        <div className={`flex items-center gap-1 p-1 rounded bg-gradient-to-r ${item.color} hover:shadow-lg transition-all transform hover:scale-101`}>
-                          <div className="text-lg">{item.icon}</div>
+                        <div className={`flex items-center gap-1 py-0.5 px-1 rounded bg-gradient-to-r ${item.color} hover:shadow-lg transition-all transform hover:scale-101`}>
+                          <div className="text-sm">{item.icon}</div>
                           <div className="flex-1">
-                            <div className="font-semibold text-white text-xs">
+                            <div className="font-medium text-white text-xs leading-tight">
                               {item.label}
                             </div>
                           </div>
-                          <div className="text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity">
                             →
                           </div>
                         </div>
@@ -144,9 +144,9 @@ export default function GlobalNavigation() {
                   ))}
                 </div>
 
-                <div className="mt-1 p-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded text-white">
+                <div className="mt-0.5 p-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded text-white">
                   <div className="text-center">
-                    <div className="text-lg mb-0">🎉</div>
+                    <div className="text-sm mb-0">🎉</div>
                     <div className="font-bold text-xs mb-0">100 Features</div>
                     <div className="text-xs text-white/80">Ready!</div>
                   </div>
