@@ -166,6 +166,12 @@ import IntelligentAutomationEngine from '../src/components/ai/IntelligentAutomat
 import PredictiveAnalyticsInsights from '../src/components/ai/PredictiveAnalyticsInsights';
 import AIContentGeneration from '../src/components/ai/AIContentGeneration';
 
+// Import Mobile Features components
+import ReactNativeMobileAppFoundation from '../src/components/mobile/ReactNativeMobileAppFoundation';
+import OfflineSynchronizationSystem from '../src/components/mobile/OfflineSynchronizationSystem';
+import MobileSpecificFeatures from '../src/components/mobile/MobileSpecificFeatures';
+import CrossPlatformSync from '../src/components/mobile/CrossPlatformSync';
+
 interface Task {
   id: string;
   title: string;
@@ -303,6 +309,12 @@ export default function Dashboard() {
   const [showIntelligentAutomation, setShowIntelligentAutomation] = React.useState(false);
   const [showPredictiveAnalytics, setShowPredictiveAnalytics] = React.useState(false);
   const [showAIContentGeneration, setShowAIContentGeneration] = React.useState(false);
+
+  // Mobile Features State
+  const [showMobileAppFoundation, setShowMobileAppFoundation] = React.useState(false);
+  const [showOfflineSync, setShowOfflineSync] = React.useState(false);
+  const [showMobileSpecificFeatures, setShowMobileSpecificFeatures] = React.useState(false);
+  const [showCrossPlatformSync, setShowCrossPlatformSync] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -2575,6 +2587,83 @@ export default function Dashboard() {
                 ✍️ AI Content
               </button>
 
+              {/* Mobile Features */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowMobileAppFoundation(true)}
+                title="React Native Mobile App Foundation"
+                aria-label="React Native Mobile App Foundation"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📱 Mobile App
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowOfflineSync(true)}
+                title="Offline Synchronization System"
+                aria-label="Offline Synchronization System"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📱 Offline Sync
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowMobileSpecificFeatures(true)}
+                title="Mobile-Specific Features"
+                aria-label="Mobile-Specific Features"
+                style={{ 
+                  background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📱 Features
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowCrossPlatformSync(true)}
+                title="Cross-Platform Synchronization"
+                aria-label="Cross-Platform Synchronization"
+                style={{ 
+                  background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔄 Cross-Platform
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -3772,6 +3861,31 @@ export default function Dashboard() {
       {showAIContentGeneration && (
         <AIContentGeneration
           onClose={() => setShowAIContentGeneration(false)}
+        />
+      )}
+
+      {/* Mobile Features */}
+      {showMobileAppFoundation && (
+        <ReactNativeMobileAppFoundation
+          onClose={() => setShowMobileAppFoundation(false)}
+        />
+      )}
+
+      {showOfflineSync && (
+        <OfflineSynchronizationSystem
+          onClose={() => setShowOfflineSync(false)}
+        />
+      )}
+
+      {showMobileSpecificFeatures && (
+        <MobileSpecificFeatures
+          onClose={() => setShowMobileSpecificFeatures(false)}
+        />
+      )}
+
+      {showCrossPlatformSync && (
+        <CrossPlatformSync
+          onClose={() => setShowCrossPlatformSync(false)}
         />
       )}
     </div>
