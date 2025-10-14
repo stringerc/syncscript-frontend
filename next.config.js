@@ -77,8 +77,6 @@ const nextConfig = {
   // Experimental features for better performance
   experimental: {
     optimizePackageImports: ['framer-motion', 'lucide-react', '@auth0/nextjs-auth0'],
-    // Enable passive event listeners for better performance
-    optimizeCss: true,
     // Enable modern JavaScript features
     esmExternals: true,
   },
