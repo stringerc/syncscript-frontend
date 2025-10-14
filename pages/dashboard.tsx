@@ -1803,27 +1803,28 @@ export default function Dashboard() {
 
               {/* Beta Program Button */}
               {!betaUserStatus?.isBetaUser && (
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => {
-                    analytics.trackPageView('Beta Registration');
-                    setShowBetaRegistration(true);
-                  }}
-                  title="Join Beta Program"
-                  aria-label="Join Beta Program"
-                  style={{ 
-                    background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                    color: 'white',
-                    border: 'none',
-                    fontWeight: '600',
-                    minWidth: '120px',
-                    height: '40px',
-                    zIndex: 9999,
-                    position: 'relative'
-                  }}
-                >
-                  🚀 Join Beta
-                </button>
+                <Link href="/beta">
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      analytics.trackPageView('Beta Registration');
+                    }}
+                    title="Join Beta Program"
+                    aria-label="Join Beta Program"
+                    style={{ 
+                      background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                      color: 'white',
+                      border: 'none',
+                      fontWeight: '600',
+                      minWidth: '120px',
+                      height: '40px',
+                      zIndex: 9999,
+                      position: 'relative'
+                    }}
+                  >
+                    🚀 Join Beta
+                  </button>
+                </Link>
               )}
 
               {/* Feedback Button for Beta Users */}
