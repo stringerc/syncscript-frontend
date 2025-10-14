@@ -108,6 +108,7 @@ import PlatformDocumentationDeployment from '../src/components/deployment/Platfo
 import FinalPlatformOptimization from '../src/components/optimization/FinalPlatformOptimization';
 import UltimatePlatformCompletion from '../src/components/ultimate/UltimatePlatformCompletion';
 import ProductionDeploymentLaunch from '../src/components/launch/ProductionDeploymentLaunch';
+import BetaUserRecruitment from '../src/components/beta/BetaUserRecruitment';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -481,6 +482,7 @@ export default function Dashboard() {
   const [showFinalPlatformOptimization, setShowFinalPlatformOptimization] = React.useState(false);
   const [showUltimatePlatformCompletion, setShowUltimatePlatformCompletion] = React.useState(false);
   const [showProductionDeploymentLaunch, setShowProductionDeploymentLaunch] = React.useState(false);
+  const [showBetaUserRecruitment, setShowBetaUserRecruitment] = React.useState(false);
   const [showBackendStatus, setShowBackendStatus] = React.useState(false);
 
   // Initialize Analytics
@@ -4061,6 +4063,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowBetaUserRecruitment(true)}
+                title="Beta User Recruitment & Testing"
+                aria-label="Beta User Recruitment & Testing"
+                style={{ 
+                  background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                👥 Beta
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowBackendStatus(true)}
                 title="Backend Status"
                 aria-label="Backend Status"
@@ -5698,12 +5719,18 @@ export default function Dashboard() {
         />
       )}
 
+      {showBetaUserRecruitment && (
+        <BetaUserRecruitment
+          onClose={() => setShowBetaUserRecruitment(false)}
+        />
+      )}
+
       {showBackendStatus && (
         <BackendStatusIndicator
           onClose={() => setShowBackendStatus(false)}
         />
       )}
-      </div>
+    </div>
     </ErrorBoundary>
   );
 }
