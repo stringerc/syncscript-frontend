@@ -917,10 +917,10 @@ const LaunchExecutionMarketEntry: React.FC<{ onClose: () => void }> = ({ onClose
               <div className="flex items-center space-x-2">
                 <button
                   onClick={executeLaunch}
-                  disabled={isExecivatingLaunch}
+                  disabled={isExecutingLaunch}
                   className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:opacity-50 transition-colors"
                 >
-                  {isExecivatingLaunch ? '⏳ Executing...' : '🚀 Execute Launch'}
+                  {isExecutingLaunch ? '⏳ Executing...' : '🚀 Execute Launch'}
                 </button>
                 <button
                   onClick={activateCampaign}

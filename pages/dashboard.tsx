@@ -119,6 +119,7 @@ import MarketValidation from '../src/components/validation/MarketValidation';
 import AdvancedBusinessIntelligence from '../src/components/analytics/AdvancedBusinessIntelligence';
 import CustomerSuccessRetentionProgram from '../src/components/customersuccess/CustomerSuccessRetentionProgram';
 import AdvancedAIMachineLearning from '../src/components/ai/AdvancedAIMachineLearning';
+import AdvancedAIFeatures from '../src/components/ai/AdvancedAIFeatures';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';

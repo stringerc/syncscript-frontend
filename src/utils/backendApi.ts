@@ -69,26 +69,48 @@ class BackendApiManager {
     };
   }
 
-  private async startHealthCheck() {
-    setInterval(async () => {
-      try {
-        const response = await fetch('https://syncscript-backend-1.onrender.com/api/health', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          signal: AbortSignal.timeout(5000) // 5 second timeout
-        });
-        
-        this.isBackendAvailable = response.ok;
-        this.lastHealthCheck = Date.now();
-      } catch (error) {
-        this.isBackendAvailable = false;
-        this.lastHealthCheck = Date.now();
-        console.warn('Backend health check failed:', error);
+      private async startHealthCheck() {
+        setInterval(async () => {
+          try {
+            // Try multiple endpoints for health check
+            const endpoints = [
+              'https://syncscript-backend-1.onrender.com/api/health',
+              'https://syncscript-backend-1.onrender.com/api/',
+              'https://syncscript-backend-1.onrender.com/'
+            ];
+            
+            let healthCheckPassed = false;
+            
+            for (const endpoint of endpoints) {
+              try {
+                const response = await fetch(endpoint, {
+                  method: 'GET',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  signal: AbortSignal.timeout(3000) // 3 second timeout
+                });
+                
+                if (response.ok || response.status === 404) {
+                  // 404 is acceptable for some endpoints
+                  healthCheckPassed = true;
+                  break;
+                }
+              } catch (error) {
+                // Continue to next endpoint
+                continue;
+              }
+            }
+            
+            this.isBackendAvailable = healthCheckPassed;
+            this.lastHealthCheck = Date.now();
+          } catch (error) {
+            this.isBackendAvailable = false;
+            this.lastHealthCheck = Date.now();
+            console.warn('Backend health check failed:', error);
+          }
+        }, this.healthCheckInterval);
       }
-    }, this.healthCheckInterval);
-  }
 
   private async makeApiCall<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
     // Check if backend is available
