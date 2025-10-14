@@ -227,6 +227,13 @@ import PersonalizationEngine from '../src/components/ux/PersonalizationEngine';
 import OnboardingTutorialSystem from '../src/components/ux/OnboardingTutorialSystem';
 import AdvancedUIUXComponents from '../src/components/ux/AdvancedUIUXComponents';
 
+// Import Advanced Features components
+import AdvancedWorkflowAutomation from '../src/components/advanced/AdvancedWorkflowAutomation';
+import EnterpriseIntegrationHub from '../src/components/advanced/EnterpriseIntegrationHub';
+import AdvancedDataManagement from '../src/components/advanced/AdvancedDataManagement';
+import AIPoweredBusinessIntelligence from '../src/components/advanced/AIPoweredBusinessIntelligence';
+import AdvancedCollaborationTools from '../src/components/advanced/AdvancedCollaborationTools';
+
 interface Task {
   id: string;
   title: string;
@@ -424,6 +431,13 @@ export default function Dashboard() {
   const [showPersonalizationEngine, setShowPersonalizationEngine] = React.useState(false);
   const [showOnboardingTutorialSystem, setShowOnboardingTutorialSystem] = React.useState(false);
   const [showAdvancedUIUXComponents, setShowAdvancedUIUXComponents] = React.useState(false);
+
+  // Advanced Features State
+  const [showAdvancedWorkflowAutomation, setShowAdvancedWorkflowAutomation] = React.useState(false);
+  const [showEnterpriseIntegrationHub, setShowEnterpriseIntegrationHub] = React.useState(false);
+  const [showAdvancedDataManagement, setShowAdvancedDataManagement] = React.useState(false);
+  const [showAIPoweredBusinessIntelligence, setShowAIPoweredBusinessIntelligence] = React.useState(false);
+  const [showAdvancedCollaborationTools, setShowAdvancedCollaborationTools] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -3522,6 +3536,102 @@ export default function Dashboard() {
                 🎨 UI/UX
               </button>
 
+              {/* Advanced Features */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAdvancedWorkflowAutomation(true)}
+                title="Advanced Workflow Automation"
+                aria-label="Advanced Workflow Automation"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c3aed, #5b21b6)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                ⚙️ Workflows
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowEnterpriseIntegrationHub(true)}
+                title="Enterprise Integration Hub"
+                aria-label="Enterprise Integration Hub"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔗 Integrations
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAdvancedDataManagement(true)}
+                title="Advanced Data Management"
+                aria-label="Advanced Data Management"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🗄️ Data Mgmt
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAIPoweredBusinessIntelligence(true)}
+                title="AI-Powered Business Intelligence"
+                aria-label="AI-Powered Business Intelligence"
+                style={{ 
+                  background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🤖 AI BI
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAdvancedCollaborationTools(true)}
+                title="Advanced Collaboration Tools"
+                aria-label="Advanced Collaboration Tools"
+                style={{ 
+                  background: 'linear-gradient(135deg, #0891b2, #0e7490)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🤝 Collaboration
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -4986,6 +5096,37 @@ export default function Dashboard() {
       {showAdvancedUIUXComponents && (
         <AdvancedUIUXComponents
           onClose={() => setShowAdvancedUIUXComponents(false)}
+        />
+      )}
+
+      {/* Advanced Features */}
+      {showAdvancedWorkflowAutomation && (
+        <AdvancedWorkflowAutomation
+          onClose={() => setShowAdvancedWorkflowAutomation(false)}
+        />
+      )}
+
+      {showEnterpriseIntegrationHub && (
+        <EnterpriseIntegrationHub
+          onClose={() => setShowEnterpriseIntegrationHub(false)}
+        />
+      )}
+
+      {showAdvancedDataManagement && (
+        <AdvancedDataManagement
+          onClose={() => setShowAdvancedDataManagement(false)}
+        />
+      )}
+
+      {showAIPoweredBusinessIntelligence && (
+        <AIPoweredBusinessIntelligence
+          onClose={() => setShowAIPoweredBusinessIntelligence(false)}
+        />
+      )}
+
+      {showAdvancedCollaborationTools && (
+        <AdvancedCollaborationTools
+          onClose={() => setShowAdvancedCollaborationTools(false)}
         />
       )}
     </div>
