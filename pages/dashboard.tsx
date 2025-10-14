@@ -104,7 +104,9 @@ import PlatformOptimizationDocumentation from '../src/components/documentation/P
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
+import BackendStatusIndicator from '../src/components/ui/BackendStatusIndicator';
 import { DataPersistence } from '../src/utils/dataPersistence';
+import { backendApi } from '../src/utils/backendApi';
 import { useBriefingManager } from '../src/hooks/useBriefingManager';
 import MorningBrief from '../src/components/briefings/MorningBrief';
 import EveningBrief from '../src/components/briefings/EveningBrief';
@@ -465,6 +467,7 @@ export default function Dashboard() {
   const [showAdvancedSecurityFeatures, setShowAdvancedSecurityFeatures] = React.useState(false);
   const [showSystemIntegrationTesting, setShowSystemIntegrationTesting] = React.useState(false);
   const [showPlatformOptimizationDocumentation, setShowPlatformOptimizationDocumentation] = React.useState(false);
+  const [showBackendStatus, setShowBackendStatus] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -3890,6 +3893,25 @@ export default function Dashboard() {
                 📚 Docs & Opt
               </button>
 
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowBackendStatus(true)}
+                title="Backend Status"
+                aria-label="Backend Status"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔧 Backend
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -5459,6 +5481,12 @@ export default function Dashboard() {
       {showPlatformOptimizationDocumentation && (
         <PlatformOptimizationDocumentation
           onClose={() => setShowPlatformOptimizationDocumentation(false)}
+        />
+      )}
+
+      {showBackendStatus && (
+        <BackendStatusIndicator
+          onClose={() => setShowBackendStatus(false)}
         />
       )}
       </div>

@@ -79,6 +79,8 @@ const nextConfig = {
     optimizePackageImports: ['framer-motion', 'lucide-react', '@auth0/nextjs-auth0'],
     // Enable modern JavaScript features
     esmExternals: true,
+    // Fix passive event listener warnings
+    scrollRestoration: true,
   },
   
   // Production optimizations

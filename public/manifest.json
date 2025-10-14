@@ -46,14 +46,6 @@
       "icons": [{ "src": "/favicon.svg", "sizes": "96x96" }]
     }
   ],
-  "share_target": {
-    "action": "/dashboard",
-    "method": "GET",
-    "params": {
-      "title": "title",
-      "text": "text"
-    }
-  },
   "prefer_related_applications": false
 }
 
