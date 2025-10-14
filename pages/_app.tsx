@@ -3,7 +3,7 @@ import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '../src/contexts/ThemeContext';
-import TestButton from '../src/components/ui/TestButton';
+import GlobalNavigation from '../src/components/ui/GlobalNavigation';
 import Head from 'next/head';
 import { initPostHog } from '../src/lib/posthog';
 import { useEffect } from 'react';
@@ -176,7 +176,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               id="aria-live-region"
             />
             <Component {...pageProps} />
-            <TestButton />
+            <GlobalNavigation />
             <Toaster
             position="top-right"
             toastOptions={{
