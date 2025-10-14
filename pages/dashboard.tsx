@@ -192,6 +192,13 @@ import IoTIntegration from '../src/components/future/IoTIntegration';
 import QuantumComputing from '../src/components/future/QuantumComputing';
 import AIPoweredInsights from '../src/components/future/AIPoweredInsights';
 
+// Import Advanced Analytics components
+import BusinessIntelligence from '../src/components/analytics/BusinessIntelligence';
+import CustomReportCreation from '../src/components/analytics/CustomReportCreation';
+import MultiFormatDataExport from '../src/components/analytics/MultiFormatDataExport';
+import PredictiveAnalytics from '../src/components/analytics/PredictiveAnalytics';
+import AIPoweredInsightsAnalytics from '../src/components/analytics/AIPoweredInsights';
+
 interface Task {
   id: string;
   title: string;
@@ -355,6 +362,13 @@ export default function Dashboard() {
   const [showIoTIntegration, setShowIoTIntegration] = React.useState(false);
   const [showQuantumComputing, setShowQuantumComputing] = React.useState(false);
   const [showAIPoweredInsights, setShowAIPoweredInsights] = React.useState(false);
+
+  // Advanced Analytics State
+  const [showBusinessIntelligence, setShowBusinessIntelligence] = React.useState(false);
+  const [showCustomReportCreation, setShowCustomReportCreation] = React.useState(false);
+  const [showMultiFormatDataExport, setShowMultiFormatDataExport] = React.useState(false);
+  const [showPredictiveAnalytics, setShowPredictiveAnalytics] = React.useState(false);
+  const [showAIPoweredInsightsAnalytics, setShowAIPoweredInsightsAnalytics] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -2973,6 +2987,102 @@ export default function Dashboard() {
                 🤖 AI Insights
               </button>
 
+              {/* Advanced Analytics */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowBusinessIntelligence(true)}
+                title="Business Intelligence"
+                aria-label="Business Intelligence"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📊 BI Dashboard
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowCustomReportCreation(true)}
+                title="Custom Report Creation"
+                aria-label="Custom Report Creation"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📋 Custom Reports
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowMultiFormatDataExport(true)}
+                title="Multi-Format Data Export"
+                aria-label="Multi-Format Data Export"
+                style={{ 
+                  background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📤 Data Export
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowPredictiveAnalytics(true)}
+                title="Predictive Analytics"
+                aria-label="Predictive Analytics"
+                style={{ 
+                  background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔮 Predictive
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAIPoweredInsightsAnalytics(true)}
+                title="AI-Powered Insights Analytics"
+                aria-label="AI-Powered Insights Analytics"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ea580c, #dc2626)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🧠 AI Analytics
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -4282,6 +4392,37 @@ export default function Dashboard() {
       {showAIPoweredInsights && (
         <AIPoweredInsights
           onClose={() => setShowAIPoweredInsights(false)}
+        />
+      )}
+
+      {/* Advanced Analytics */}
+      {showBusinessIntelligence && (
+        <BusinessIntelligence
+          onClose={() => setShowBusinessIntelligence(false)}
+        />
+      )}
+
+      {showCustomReportCreation && (
+        <CustomReportCreation
+          onClose={() => setShowCustomReportCreation(false)}
+        />
+      )}
+
+      {showMultiFormatDataExport && (
+        <MultiFormatDataExport
+          onClose={() => setShowMultiFormatDataExport(false)}
+        />
+      )}
+
+      {showPredictiveAnalytics && (
+        <PredictiveAnalytics
+          onClose={() => setShowPredictiveAnalytics(false)}
+        />
+      )}
+
+      {showAIPoweredInsightsAnalytics && (
+        <AIPoweredInsightsAnalytics
+          onClose={() => setShowAIPoweredInsightsAnalytics(false)}
         />
       )}
     </div>
