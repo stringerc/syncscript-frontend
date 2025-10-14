@@ -220,6 +220,13 @@ import SecurityAuditDashboard from '../src/components/security/SecurityAuditDash
 import DataPrivacyControls from '../src/components/security/DataPrivacyControls';
 import AdvancedAuthenticationSecurity from '../src/components/security/AdvancedAuthenticationSecurity';
 
+// Import User Experience Enhancement components
+import AdvancedAccessibilityFeatures from '../src/components/ux/AdvancedAccessibilityFeatures';
+import UserExperienceAnalytics from '../src/components/ux/UserExperienceAnalytics';
+import PersonalizationEngine from '../src/components/ux/PersonalizationEngine';
+import OnboardingTutorialSystem from '../src/components/ux/OnboardingTutorialSystem';
+import AdvancedUIUXComponents from '../src/components/ux/AdvancedUIUXComponents';
+
 interface Task {
   id: string;
   title: string;
@@ -411,6 +418,13 @@ export default function Dashboard() {
   const [showSecurityAuditDashboard, setShowSecurityAuditDashboard] = React.useState(false);
   const [showDataPrivacyControls, setShowDataPrivacyControls] = React.useState(false);
   const [showAdvancedAuthenticationSecurity, setShowAdvancedAuthenticationSecurity] = React.useState(false);
+
+  // User Experience Enhancement State
+  const [showAdvancedAccessibilityFeatures, setShowAdvancedAccessibilityFeatures] = React.useState(false);
+  const [showUserExperienceAnalytics, setShowUserExperienceAnalytics] = React.useState(false);
+  const [showPersonalizationEngine, setShowPersonalizationEngine] = React.useState(false);
+  const [showOnboardingTutorialSystem, setShowOnboardingTutorialSystem] = React.useState(false);
+  const [showAdvancedUIUXComponents, setShowAdvancedUIUXComponents] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -3413,6 +3427,102 @@ export default function Dashboard() {
                 🔐 Auth Security
               </button>
 
+              {/* User Experience Enhancements */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAdvancedAccessibilityFeatures(true)}
+                title="Advanced Accessibility Features"
+                aria-label="Advanced Accessibility Features"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                ♿ Accessibility
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowUserExperienceAnalytics(true)}
+                title="User Experience Analytics"
+                aria-label="User Experience Analytics"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c3aed, #5b21b6)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📊 UX Analytics
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowPersonalizationEngine(true)}
+                title="Personalization Engine"
+                aria-label="Personalization Engine"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🎨 Personalization
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowOnboardingTutorialSystem(true)}
+                title="Onboarding & Tutorial System"
+                aria-label="Onboarding & Tutorial System"
+                style={{ 
+                  background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🎓 Tutorials
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowAdvancedUIUXComponents(true)}
+                title="Advanced UI/UX Components"
+                aria-label="Advanced UI/UX Components"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ea580c, #dc2626)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🎨 UI/UX
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -4846,6 +4956,37 @@ export default function Dashboard() {
       {showAdvancedAuthenticationSecurity && (
         <AdvancedAuthenticationSecurity
           onClose={() => setShowAdvancedAuthenticationSecurity(false)}
+        />
+      )}
+
+      {/* User Experience Enhancements */}
+      {showAdvancedAccessibilityFeatures && (
+        <AdvancedAccessibilityFeatures
+          onClose={() => setShowAdvancedAccessibilityFeatures(false)}
+        />
+      )}
+
+      {showUserExperienceAnalytics && (
+        <UserExperienceAnalytics
+          onClose={() => setShowUserExperienceAnalytics(false)}
+        />
+      )}
+
+      {showPersonalizationEngine && (
+        <PersonalizationEngine
+          onClose={() => setShowPersonalizationEngine(false)}
+        />
+      )}
+
+      {showOnboardingTutorialSystem && (
+        <OnboardingTutorialSystem
+          onClose={() => setShowOnboardingTutorialSystem(false)}
+        />
+      )}
+
+      {showAdvancedUIUXComponents && (
+        <AdvancedUIUXComponents
+          onClose={() => setShowAdvancedUIUXComponents(false)}
         />
       )}
     </div>
