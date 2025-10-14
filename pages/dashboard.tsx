@@ -183,6 +183,7 @@ import AchievementSystem from '../src/components/gamification/AchievementSystem'
 import LeaderboardsSystem from '../src/components/gamification/LeaderboardsSystem';
 import VirtualRewardsSystem from '../src/components/gamification/VirtualRewardsSystem';
 import SocialFeatures from '../src/components/gamification/SocialFeatures';
+import GamingElements from '../src/components/gamification/GamingElements';
 
 interface Task {
   id: string;
@@ -339,6 +340,7 @@ export default function Dashboard() {
   const [showLeaderboardsSystem, setShowLeaderboardsSystem] = React.useState(false);
   const [showVirtualRewardsSystem, setShowVirtualRewardsSystem] = React.useState(false);
   const [showSocialFeatures, setShowSocialFeatures] = React.useState(false);
+  const [showGamingElements, setShowGamingElements] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -2842,6 +2844,25 @@ export default function Dashboard() {
                 👥 Social
               </button>
 
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowGamingElements(true)}
+                title="Gaming Elements"
+                aria-label="Gaming Elements"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🎮 Gaming
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -4114,6 +4135,12 @@ export default function Dashboard() {
       {showSocialFeatures && (
         <SocialFeatures
           onClose={() => setShowSocialFeatures(false)}
+        />
+      )}
+
+      {showGamingElements && (
+        <GamingElements
+          onClose={() => setShowGamingElements(false)}
         />
       )}
     </div>
