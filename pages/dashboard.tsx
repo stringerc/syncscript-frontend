@@ -155,6 +155,12 @@ import APIMarketplace from '../src/components/integrations/APIMarketplace';
 import WebhookSystem from '../src/components/integrations/WebhookSystem';
 import SyncScriptSDK from '../src/components/integrations/SyncScriptSDK';
 
+// Import Enterprise Features components
+import AdvancedEnterpriseSecurity from '../src/components/enterprise/AdvancedEnterpriseSecurity';
+import EnterpriseAdminDashboard from '../src/components/enterprise/EnterpriseAdminDashboard';
+import AdvancedAnalyticsReporting from '../src/components/enterprise/AdvancedAnalyticsReporting';
+import WhiteLabelSolutions from '../src/components/enterprise/WhiteLabelSolutions';
+
 interface Task {
   id: string;
   title: string;
@@ -282,6 +288,12 @@ export default function Dashboard() {
   const [showAPIMarketplace, setShowAPIMarketplace] = React.useState(false);
   const [showWebhookSystem, setShowWebhookSystem] = React.useState(false);
   const [showSyncScriptSDK, setShowSyncScriptSDK] = React.useState(false);
+
+  // Enterprise Features State
+  const [showEnterpriseSecurity, setShowEnterpriseSecurity] = React.useState(false);
+  const [showEnterpriseAdmin, setShowEnterpriseAdmin] = React.useState(false);
+  const [showEnterpriseAnalytics, setShowEnterpriseAnalytics] = React.useState(false);
+  const [showWhiteLabelSolutions, setShowWhiteLabelSolutions] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -2400,6 +2412,83 @@ export default function Dashboard() {
                 🛠️ SDK
               </button>
 
+              {/* Enterprise Features */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowEnterpriseSecurity(true)}
+                title="Advanced Enterprise Security"
+                aria-label="Advanced Enterprise Security"
+                style={{ 
+                  background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔐 Security
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowEnterpriseAdmin(true)}
+                title="Enterprise Admin Dashboard"
+                aria-label="Enterprise Admin Dashboard"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                👥 Admin
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowEnterpriseAnalytics(true)}
+                title="Advanced Analytics & Reporting"
+                aria-label="Advanced Analytics & Reporting"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📊 Analytics
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowWhiteLabelSolutions(true)}
+                title="White-Label Solutions"
+                aria-label="White-Label Solutions"
+                style={{ 
+                  background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🎨 White-Label
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -3559,6 +3648,31 @@ export default function Dashboard() {
       {showSyncScriptSDK && (
         <SyncScriptSDK
           onClose={() => setShowSyncScriptSDK(false)}
+        />
+      )}
+
+      {/* Enterprise Features */}
+      {showEnterpriseSecurity && (
+        <AdvancedEnterpriseSecurity
+          onClose={() => setShowEnterpriseSecurity(false)}
+        />
+      )}
+
+      {showEnterpriseAdmin && (
+        <EnterpriseAdminDashboard
+          onClose={() => setShowEnterpriseAdmin(false)}
+        />
+      )}
+
+      {showEnterpriseAnalytics && (
+        <AdvancedAnalyticsReporting
+          onClose={() => setShowEnterpriseAnalytics(false)}
+        />
+      )}
+
+      {showWhiteLabelSolutions && (
+        <WhiteLabelSolutions
+          onClose={() => setShowWhiteLabelSolutions(false)}
         />
       )}
     </div>
