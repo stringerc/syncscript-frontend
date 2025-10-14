@@ -106,6 +106,11 @@ import BriefingSettings from '../src/components/briefings/BriefingSettings';
 import { analytics } from '../src/utils/analytics';
 import { generateTaskSuggestionExplanation, generateEnergyRecommendationExplanation } from '../src/utils/aiExplainability';
 import { calculateEmblemBreakdown, getEmblemAnimation } from '../src/utils/enhancedEmblemSystem';
+import { userTestingProgram } from '../src/utils/userTestingProgram';
+import BetaRegistration from '../src/components/beta/BetaRegistration';
+import FeedbackCollector from '../src/components/beta/FeedbackCollector';
+import AnalyticsDashboard from '../src/components/analytics/AnalyticsDashboard';
+import BudgetIntelligence from '../src/components/budget/BudgetIntelligence';
 
 interface Task {
   id: string;
@@ -182,6 +187,16 @@ export default function Dashboard() {
     onError: (error) => console.error('Briefing error:', error)
   });
 
+  // User Testing Program State
+  const [showBetaRegistration, setShowBetaRegistration] = React.useState(false);
+  const [showFeedbackCollector, setShowFeedbackCollector] = React.useState(false);
+  const [currentFeedbackFeature, setCurrentFeedbackFeature] = React.useState<string>('');
+  const [betaUserStatus, setBetaUserStatus] = React.useState<any>(null);
+
+  // Phase 2 Enhanced Features State
+  const [showAnalyticsDashboard, setShowAnalyticsDashboard] = React.useState(false);
+  const [showBudgetIntelligence, setShowBudgetIntelligence] = React.useState(false);
+
   // Initialize Analytics
   React.useEffect(() => {
     const initializeAnalytics = async () => {
@@ -220,6 +235,14 @@ export default function Dashboard() {
     
     initializeAnalytics();
   }, [user, currentEnergy, tasks.length]);
+
+  // Check Beta User Status
+  React.useEffect(() => {
+    if (user?.sub) {
+      const status = userTestingProgram.getBetaUserStatus(user.sub);
+      setBetaUserStatus(status);
+    }
+  }, [user]);
 
   // Debug briefing system
   React.useEffect(() => {
@@ -1661,6 +1684,13 @@ export default function Dashboard() {
                 onClick={() => {
                   analytics.trackBriefingEvent('morning_brief_viewed');
                   generateMorningBrief();
+                  // Trigger feedback collection for beta users
+                  if (betaUserStatus?.isBetaUser) {
+                    setTimeout(() => {
+                      setCurrentFeedbackFeature('morning-brief');
+                      setShowFeedbackCollector(true);
+                    }, 2000);
+                  }
                 }}
                 title="Test Morning Brief"
                 aria-label="Test Morning Brief"
@@ -1681,6 +1711,13 @@ export default function Dashboard() {
                   console.log('🌙 Evening Brief clicked!');
                   analytics.trackBriefingEvent('evening_brief_viewed');
                   generateEveningBrief();
+                  // Trigger feedback collection for beta users
+                  if (betaUserStatus?.isBetaUser) {
+                    setTimeout(() => {
+                      setCurrentFeedbackFeature('evening-brief');
+                      setShowFeedbackCollector(true);
+                    }, 2000);
+                  }
                 }}
                 title="Test Evening Brief"
                 aria-label="Test Evening Brief"
@@ -1718,6 +1755,101 @@ export default function Dashboard() {
               >
                 🚀 TEST BRIEFING
               </button>
+
+              {/* Phase 2 Enhanced Features */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  analytics.trackPageView('Analytics Dashboard');
+                  setShowAnalyticsDashboard(true);
+                }}
+                title="Analytics Dashboard"
+                aria-label="Analytics Dashboard"
+                style={{ 
+                  background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📊 Analytics
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  analytics.trackPageView('Budget Intelligence');
+                  setShowBudgetIntelligence(true);
+                }}
+                title="Budget Intelligence"
+                aria-label="Budget Intelligence"
+                style={{ 
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                💰 Budget
+              </button>
+
+              {/* Beta Program Button */}
+              {!betaUserStatus?.isBetaUser && (
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => {
+                    analytics.trackPageView('Beta Registration');
+                    setShowBetaRegistration(true);
+                  }}
+                  title="Join Beta Program"
+                  aria-label="Join Beta Program"
+                  style={{ 
+                    background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                    color: 'white',
+                    border: 'none',
+                    fontWeight: '600',
+                    minWidth: '120px',
+                    height: '40px',
+                    zIndex: 9999,
+                    position: 'relative'
+                  }}
+                >
+                  🚀 Join Beta
+                </button>
+              )}
+
+              {/* Feedback Button for Beta Users */}
+              {betaUserStatus?.isBetaUser && (
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => {
+                    setCurrentFeedbackFeature('general');
+                    setShowFeedbackCollector(true);
+                  }}
+                  title="Submit Feedback"
+                  aria-label="Submit Feedback"
+                  style={{ 
+                    background: 'linear-gradient(135deg, #06b6d4, #0891b2)',
+                    color: 'white',
+                    border: 'none',
+                    fontWeight: '600',
+                    minWidth: '120px',
+                    height: '40px',
+                    zIndex: 9999,
+                    position: 'relative'
+                  }}
+                >
+                  💬 Feedback
+                </button>
+              )}
 
               <Link 
                 href="/api/auth/logout" 
@@ -2633,6 +2765,47 @@ export default function Dashboard() {
           onClose={() => setShowBriefingSettings(false)}
           settings={briefingSettings}
           onSave={updateBriefingSettings}
+        />
+      )}
+
+      {/* User Testing Program Components */}
+      {showBetaRegistration && (
+        <BetaRegistration
+          onClose={() => setShowBetaRegistration(false)}
+          onSuccess={(userId) => {
+            console.log('✅ Beta user registered:', userId);
+            toast.success('🎉 Welcome to the SyncScript Beta Program!');
+            setBetaUserStatus(userTestingProgram.getBetaUserStatus(userId));
+            setShowBetaRegistration(false);
+          }}
+        />
+      )}
+
+      {showFeedbackCollector && (
+        <FeedbackCollector
+          feature={currentFeedbackFeature}
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowFeedbackCollector(false)}
+          onSuccess={(feedbackId) => {
+            console.log('✅ Feedback submitted:', feedbackId);
+            toast.success('🎉 Thank you for your feedback!');
+            setShowFeedbackCollector(false);
+          }}
+        />
+      )}
+
+      {/* Phase 2 Enhanced Features */}
+      {showAnalyticsDashboard && (
+        <AnalyticsDashboard
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowAnalyticsDashboard(false)}
+        />
+      )}
+
+      {showBudgetIntelligence && (
+        <BudgetIntelligence
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowBudgetIntelligence(false)}
         />
       )}
     </div>
