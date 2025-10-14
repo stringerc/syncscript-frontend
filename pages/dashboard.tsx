@@ -104,6 +104,7 @@ import PlatformOptimizationDocumentation from '../src/components/documentation/P
 import AdvancedPerformanceOptimization from '../src/components/performance/AdvancedPerformanceOptimization';
 import AIPoweredEnhancements from '../src/components/ai/AIPoweredEnhancements';
 import EnterpriseIntegration from '../src/components/enterprise/EnterpriseIntegration';
+import PlatformDocumentationDeployment from '../src/components/deployment/PlatformDocumentationDeployment';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -473,6 +474,7 @@ export default function Dashboard() {
   const [showAdvancedPerformanceOptimization, setShowAdvancedPerformanceOptimization] = React.useState(false);
   const [showAIPoweredEnhancements, setShowAIPoweredEnhancements] = React.useState(false);
   const [showEnterpriseIntegration, setShowEnterpriseIntegration] = React.useState(false);
+  const [showPlatformDocumentationDeployment, setShowPlatformDocumentationDeployment] = React.useState(false);
   const [showBackendStatus, setShowBackendStatus] = React.useState(false);
 
   // Initialize Analytics
@@ -3977,6 +3979,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowPlatformDocumentationDeployment(true)}
+                title="Platform Documentation & Deployment"
+                aria-label="Platform Documentation & Deployment"
+                style={{ 
+                  background: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📚 Docs & Deploy
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowBackendStatus(true)}
                 title="Backend Status"
                 aria-label="Backend Status"
@@ -5587,6 +5608,12 @@ export default function Dashboard() {
       {showEnterpriseIntegration && (
         <EnterpriseIntegration
           onClose={() => setShowEnterpriseIntegration(false)}
+        />
+      )}
+
+      {showPlatformDocumentationDeployment && (
+        <PlatformDocumentationDeployment
+          onClose={() => setShowPlatformDocumentationDeployment(false)}
         />
       )}
 
