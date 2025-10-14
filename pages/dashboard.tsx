@@ -125,6 +125,13 @@ import RoleBasedAccessControl from '../src/components/enterprise/RoleBasedAccess
 import EnterpriseAdminDashboard from '../src/components/enterprise/EnterpriseAdminDashboard';
 import SecurityAuditLogging from '../src/components/enterprise/SecurityAuditLogging';
 
+// Import Team Collaboration components
+import TeamCreationSystem from '../src/components/teams/TeamCreationSystem';
+import WorkspaceIsolationSystem from '../src/components/teams/WorkspaceIsolationSystem';
+import TeamMemberManagement from '../src/components/teams/TeamMemberManagement';
+import CollaborativeProjectManagement from '../src/components/teams/CollaborativeProjectManagement';
+import TeamAnalyticsDashboard from '../src/components/teams/TeamAnalyticsDashboard';
+
 interface Task {
   id: string;
   title: string;
@@ -222,6 +229,13 @@ export default function Dashboard() {
   const [showRBAC, setShowRBAC] = React.useState(false);
   const [showEnterpriseAdmin, setShowEnterpriseAdmin] = React.useState(false);
   const [showSecurityAudit, setShowSecurityAudit] = React.useState(false);
+
+  // Team Collaboration Features State
+  const [showTeamCreation, setShowTeamCreation] = React.useState(false);
+  const [showWorkspaceIsolation, setShowWorkspaceIsolation] = React.useState(false);
+  const [showTeamMemberManagement, setShowTeamMemberManagement] = React.useState(false);
+  const [showCollaborativeProjects, setShowCollaborativeProjects] = React.useState(false);
+  const [showTeamAnalytics, setShowTeamAnalytics] = React.useState(false);
 
   // Initialize Analytics
   React.useEffect(() => {
@@ -2051,6 +2065,102 @@ export default function Dashboard() {
                 🔍 Security Audit
               </button>
 
+              {/* Team Collaboration Features */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowTeamCreation(true)}
+                title="Team Creation & Management"
+                aria-label="Team Creation & Management"
+                style={{ 
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🏗️ Teams
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowWorkspaceIsolation(true)}
+                title="Workspace Isolation"
+                aria-label="Workspace Isolation"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🔒 Isolation
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowTeamMemberManagement(true)}
+                title="Team Member Management"
+                aria-label="Team Member Management"
+                style={{ 
+                  background: 'linear-gradient(135deg, #0d9488, #0f766e)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                👥 Members
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowCollaborativeProjects(true)}
+                title="Collaborative Project Management"
+                aria-label="Collaborative Project Management"
+                style={{ 
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📋 Projects
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowTeamAnalytics(true)}
+                title="Team Analytics Dashboard"
+                aria-label="Team Analytics Dashboard"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c2d12, #991b1b)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📊 Analytics
+              </button>
+
               <Link 
                 href="/api/auth/logout" 
                 className="btn btn-ghost"
@@ -3071,6 +3181,42 @@ export default function Dashboard() {
         <SecurityAuditLogging
           userId={user?.sub || 'anonymous'}
           onClose={() => setShowSecurityAudit(false)}
+        />
+      )}
+
+      {/* Team Collaboration Features */}
+      {showTeamCreation && (
+        <TeamCreationSystem
+          userId={user?.sub || 'anonymous'}
+          onClose={() => setShowTeamCreation(false)}
+        />
+      )}
+
+      {showWorkspaceIsolation && (
+        <WorkspaceIsolationSystem
+          teamId="team-1"
+          onClose={() => setShowWorkspaceIsolation(false)}
+        />
+      )}
+
+      {showTeamMemberManagement && (
+        <TeamMemberManagement
+          teamId="team-1"
+          onClose={() => setShowTeamMemberManagement(false)}
+        />
+      )}
+
+      {showCollaborativeProjects && (
+        <CollaborativeProjectManagement
+          teamId="team-1"
+          onClose={() => setShowCollaborativeProjects(false)}
+        />
+      )}
+
+      {showTeamAnalytics && (
+        <TeamAnalyticsDashboard
+          teamId="team-1"
+          onClose={() => setShowTeamAnalytics(false)}
         />
       )}
     </div>
