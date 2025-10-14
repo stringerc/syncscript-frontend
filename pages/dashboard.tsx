@@ -112,6 +112,7 @@ import BetaUserRecruitment from '../src/components/beta/BetaUserRecruitment';
 import MarketingLaunchPreparation from '../src/components/marketing/MarketingLaunchPreparation';
 import BusinessDevelopment from '../src/components/business/BusinessDevelopment';
 import LaunchExecutionMarketEntry from '../src/components/launch/LaunchExecutionMarketEntry';
+import EnterpriseSalesAcceleration from '../src/components/sales/EnterpriseSalesAcceleration';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -489,6 +490,7 @@ export default function Dashboard() {
   const [showMarketingLaunchPreparation, setShowMarketingLaunchPreparation] = React.useState(false);
   const [showBusinessDevelopment, setShowBusinessDevelopment] = React.useState(false);
   const [showLaunchExecutionMarketEntry, setShowLaunchExecutionMarketEntry] = React.useState(false);
+  const [showEnterpriseSalesAcceleration, setShowEnterpriseSalesAcceleration] = React.useState(false);
   const [showBackendStatus, setShowBackendStatus] = React.useState(false);
 
   // Initialize Analytics
@@ -4145,6 +4147,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowEnterpriseSalesAcceleration(true)}
+                title="Enterprise Sales Acceleration"
+                aria-label="Enterprise Sales Acceleration"
+                style={{ 
+                  background: 'linear-gradient(135deg, #1e40af, #3730a3)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                💼 Sales
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowBackendStatus(true)}
                 title="Backend Status"
                 aria-label="Backend Status"
@@ -5803,6 +5824,12 @@ export default function Dashboard() {
       {showLaunchExecutionMarketEntry && (
         <LaunchExecutionMarketEntry
           onClose={() => setShowLaunchExecutionMarketEntry(false)}
+        />
+      )}
+
+      {showEnterpriseSalesAcceleration && (
+        <EnterpriseSalesAcceleration
+          onClose={() => setShowEnterpriseSalesAcceleration(false)}
         />
       )}
 
