@@ -79,22 +79,21 @@ export default function GlobalNavigation() {
 
             {/* Menu Panel */}
             <motion.div
-              initial={{ x: 400, opacity: 0 }}
+              initial={{ x: -400, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 400, opacity: 0 }}
+              exit={{ x: -400, opacity: 0 }}
               className="global-navigation"
               style={{
                 position: 'fixed',
                 top: '0',
-                right: '0',
+                left: '0',
                 bottom: '0',
                 width: '320px',
                 height: '100vh',
-                backgroundColor: 'white',
+                backgroundColor: 'transparent',
                 zIndex: '9999',
-                boxShadow: '-4px 0 24px rgba(0, 0, 0, 0.15)',
-                overflowY: 'auto',
-                overflowX: 'hidden',
+                boxShadow: '4px 0 24px rgba(0, 0, 0, 0.15)',
+                overflow: 'visible',
                 transform: 'none',
                 margin: '0',
                 padding: '0',
