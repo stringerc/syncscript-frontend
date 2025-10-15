@@ -496,7 +496,6 @@ export default function Dashboard() {
   const [showAIPoweredEnhancements, setShowAIPoweredEnhancements] = React.useState(false);
   const [showEnterpriseIntegration, setShowEnterpriseIntegration] = React.useState(false);
   const [showPlatformDocumentationDeployment, setShowPlatformDocumentationDeployment] = React.useState(false);
-  const [showFinalPlatformOptimization, setShowFinalPlatformOptimization] = React.useState(false);
   const [showUltimatePlatformCompletion, setShowUltimatePlatformCompletion] = React.useState(false);
   const [showProductionDeploymentLaunch, setShowProductionDeploymentLaunch] = React.useState(false);
   const [showBetaUserRecruitment, setShowBetaUserRecruitment] = React.useState(false);
@@ -6024,12 +6023,6 @@ export default function Dashboard() {
       {showPlatformDocumentationDeployment && (
         <PlatformDocumentationDeployment
           onClose={() => setShowPlatformDocumentationDeployment(false)}
-        />
-      )}
-
-      {showFinalPlatformOptimization && (
-        <FinalPlatformOptimization
-          onClose={() => setShowFinalPlatformOptimization(false)}
         />
       )}
 
