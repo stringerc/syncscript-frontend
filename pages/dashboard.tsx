@@ -121,7 +121,7 @@ import CustomerSuccessRetentionProgram from '../src/components/customersuccess/C
 import AdvancedAIMachineLearning from '../src/components/ai/AdvancedAIMachineLearning';
 import AdvancedAIFeatures from '../src/components/ai/AdvancedAIFeatures';
 import InternationalExpansion from '../src/components/international/InternationalExpansion';
-import EnterpriseAdvancedFeatures from '../src/components/enterprise/EnterpriseAdvancedFeatures';
+import AdvancedAIIntegration from '../src/components/ai/AdvancedAIIntegration';
 import { calculateEmblemCharge, EmblemBreakdown } from '../src/utils/emblemCalculation';
 import EmblemBreakdownModal from '../src/components/ui/EmblemBreakdownModal';
 import ErrorBoundary from '../src/components/ui/ErrorBoundary';
@@ -508,7 +508,7 @@ export default function Dashboard() {
   const [showCustomerSuccessRetentionProgram, setShowCustomerSuccessRetentionProgram] = React.useState(false);
   const [showAdvancedAIMachineLearning, setShowAdvancedAIMachineLearning] = React.useState(false);
   const [showInternationalExpansion, setShowInternationalExpansion] = React.useState(false);
-  const [showEnterpriseAdvancedFeatures, setShowEnterpriseAdvancedFeatures] = React.useState(false);
+  const [showAdvancedAIIntegration, setShowAdvancedAIIntegration] = React.useState(false);
   const [showBackendStatus, setShowBackendStatus] = React.useState(false);
 
   // Initialize Analytics
@@ -4298,6 +4298,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowAdvancedAIIntegration(true)}
+                title="Advanced AI Integration"
+                aria-label="Advanced AI Integration"
+                style={{ 
+                  background: 'linear-gradient(135deg, #06b6d4, #0891b2)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🤖 AI Integration
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowInternationalExpansion(true)}
                 title="International Expansion"
                 aria-label="International Expansion"
@@ -6036,6 +6055,12 @@ export default function Dashboard() {
       {showAdvancedAIMachineLearning && (
         <AdvancedAIMachineLearning
           onClose={() => setShowAdvancedAIMachineLearning(false)}
+        />
+      )}
+
+      {showAdvancedAIIntegration && (
+        <AdvancedAIIntegration
+          onClose={() => setShowAdvancedAIIntegration(false)}
         />
       )}
 
