@@ -10,7 +10,7 @@ interface OnlineStatus {
 
 class OnlineStatusManager {
   private status: OnlineStatus = {
-    isOnline: navigator.onLine,
+    isOnline: typeof window !== 'undefined' ? navigator.onLine : true,
     lastCheck: new Date(),
     connectionType: 'unknown',
     reliability: 1.0
@@ -20,10 +20,16 @@ class OnlineStatusManager {
   private checkInterval: NodeJS.Timeout | null = null;
 
   constructor() {
-    this.initialize();
+    // SSR protection - only initialize on client side
+    if (typeof window !== 'undefined') {
+      this.initialize();
+    }
   }
 
   private initialize() {
+    // SSR protection - only run on client side
+    if (typeof window === 'undefined') return;
+    
     // Listen for online/offline events
     window.addEventListener('online', this.handleOnline);
     window.addEventListener('offline', this.handleOffline);
@@ -134,6 +140,9 @@ class OnlineStatusManager {
   }
 
   public destroy() {
+    // SSR protection - only run on client side
+    if (typeof window === 'undefined') return;
+    
     window.removeEventListener('online', this.handleOnline);
     window.removeEventListener('offline', this.handleOffline);
     this.stopPeriodicCheck();

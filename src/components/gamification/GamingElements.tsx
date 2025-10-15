@@ -280,7 +280,7 @@ const GamingElements: React.FC<GamingElementsProps> = ({ onClose }) => {
           unlockCondition: 'Reach level 20',
           unlocked: true,
           unlockedAt: new Date(Date.now() - 172800000).toISOString(),
-          preview: 'https://via.placeholder.com/200x200/FFD700/000000?text=Golden+Theme'
+          preview: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjRkZEOTAwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzAwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkdvbGRlbiBUaGVtZTwvdGV4dD48L3N2Zz4='
         },
         {
           id: 'unlock-2',
@@ -291,7 +291,7 @@ const GamingElements: React.FC<GamingElementsProps> = ({ onClose }) => {
           unlockCondition: 'Complete 1000 tasks',
           unlocked: true,
           unlockedAt: new Date(Date.now() - 86400000).toISOString(),
-          preview: 'https://via.placeholder.com/200x200/00BFFF/FFFFFF?text=Lightning+Avatar'
+          preview: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMDBCRkYiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjRkZGRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+TGlnaHRuaW5nIEF2YXRhcjwvdGV4dD48L3N2Zz4='
         },
         {
           id: 'unlock-3',
@@ -301,7 +301,7 @@ const GamingElements: React.FC<GamingElementsProps> = ({ onClose }) => {
           rarity: 'uncommon',
           unlockCondition: 'Earn 10 achievements',
           unlocked: false,
-          preview: 'https://via.placeholder.com/200x200/FF69B4/FFFFFF?text=Confetti+Animation'
+          preview: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjRkY2OUI0Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iI0ZGRkZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkNvbmZldHRpIEFuaW1hdGlvbjwvdGV4dD48L3N2Zz4='
         },
         {
           id: 'unlock-4',
@@ -311,7 +311,7 @@ const GamingElements: React.FC<GamingElementsProps> = ({ onClose }) => {
           rarity: 'rare',
           unlockCondition: 'Maintain 30-day streak',
           unlocked: false,
-          preview: 'https://via.placeholder.com/200x200/8A2BE2/FFFFFF?text=Epic+Sound+Pack'
+          preview: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjOEEyQkUyIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iI0ZGRkZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkVwaWMgU291bmQgUGFjazwvdGV4dD48L3N2Zz4='
         },
         {
           id: 'unlock-5',
@@ -321,7 +321,7 @@ const GamingElements: React.FC<GamingElementsProps> = ({ onClose }) => {
           rarity: 'legendary',
           unlockCondition: 'Reach level 50',
           unlocked: false,
-          preview: 'https://via.placeholder.com/200x200/4B0082/FFFFFF?text=Cosmic+Effect'
+          preview: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNEIwMDgyIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iI0ZGRkZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkNvc21pYyBFZmZlY3Q8L3RleHQ+PC9zdmc+'
         }
       ];
 

@@ -150,7 +150,7 @@ export default function TeamWorkspaceUI() {
                         {member.role}
                       </div>
                       <div className="text-xs text-gray-500 dark:text-gray-400">
-                        {member.tasksCompleted} tasks
+                        {member.tasksCompleted || 0} tasks
                       </div>
                     </div>
                   </div>
@@ -205,7 +205,7 @@ export default function TeamWorkspaceUI() {
                     <div>
                       <div className="font-bold text-xl text-gray-900 dark:text-white">{entry.userName}</div>
                       <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {entry.tasksCompleted} tasks • {entry.emblemsEarned} emblems
+                        {entry.tasksCompleted || 0} tasks • {entry.emblemsEarned || 0} emblems
                       </div>
                     </div>
                   </div>

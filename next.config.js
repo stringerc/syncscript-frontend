@@ -128,6 +128,7 @@ const nextConfig = {
             value: `
               default-src 'self';
               script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.auth0.com https://www.googletagmanager.com https://www.google-analytics.com https://app.posthog.com https://vercel.live;
+              worker-src 'self' blob:;
               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
               img-src 'self' blob: data: https:;
               font-src 'self' https://fonts.gstatic.com;

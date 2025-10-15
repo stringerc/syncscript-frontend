@@ -131,7 +131,7 @@ function EnergyReportView({ report }: { report: EnergyReport }) {
           <div className="text-sm text-green-100">High Energy Days</div>
         </div>
         <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white">
-          <div className="text-4xl font-bold mb-1">{report.tasksCompleted}</div>
+          <div className="text-4xl font-bold mb-1">{report.tasksCompleted || 0}</div>
           <div className="text-sm text-purple-100">Tasks Completed</div>
         </div>
         <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-6 text-white">
