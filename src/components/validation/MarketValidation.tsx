@@ -1,1003 +1,997 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Target, Users, MessageSquare, Star, TrendingUp, BarChart3, PieChart, LineChart, Zap, ArrowUpRight, ArrowDownRight, Eye, MousePointer, CheckCircle, AlertTriangle, Clock, Settings, Code, Award, FileText, Presentation, Link, Calculator, Percent, ArrowRight, Filter, Search, Plus, Edit, Save, Send, Play, Pause, Stop, Maximize, Minimize, ThumbsUp, ThumbsDown, Heart, Flag, Share2, Download, Upload, Globe, Megaphone, Briefcase, Activity, UserCheck } from 'lucide-react';
+import { X, Users, Target, BarChart3, Calendar, MessageCircle, FileText, Award, Clock, CheckCircle, AlertTriangle, Plus, Edit, Trash2, Save, Copy, ExternalLink, ArrowUp, ArrowDown, ArrowRight, ArrowLeft, Star, Zap, Shield, Activity, MapPin, Share2, Video, Briefcase, PieChart, LineChart, Heart, ThumbsUp, ThumbsDown, Smile, Frown, Meh, TrendingUp, TrendingDown, UserCheck, UserX, UserPlus, UserMinus, Phone, Mail, MessageSquare, Mic, Camera, Headphones, Monitor, Smartphone, Tablet, Laptop, Globe, Map, Flag, Building, Home, Work, School, Coffee, Gamepad2, Music, Book, Code, Paintbrush, Calculator, Search, Filter, Download, Upload, RefreshCw, Settings, Bell, Eye, EyeOff, Lock, Unlock, Key, Database, Server, Cloud, Wifi, Signal, Battery, WifiOff } from 'lucide-react';
+import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, AreaChart, Area, ScatterChart, Scatter, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+import { toast } from 'react-hot-toast';
 
+// Market Validation interfaces
 interface BetaUser {
   id: string;
   name: string;
   email: string;
-  role: string;
   company: string;
+  role: string;
   industry: string;
-  signupDate: Date;
-  lastActive: Date;
-  usage: {
-    sessions: number;
-    tasksCreated: number;
-    projectsCompleted: number;
-    featuresUsed: string[];
-  };
-  feedback: {
-    rating: number;
-    comments: string[];
-    suggestions: string[];
-    painPoints: string[];
-    satisfaction: number;
-  };
-  cohort: string;
-  segment: 'early-adopter' | 'power-user' | 'casual-user' | 'at-risk';
+  companySize: string;
+  joinDate: string;
+  status: 'active' | 'inactive' | 'churned' | 'onboarding';
+  tier: 'free' | 'premium' | 'enterprise';
+  usage: UserUsage;
+  feedback: UserFeedback[];
+  interviews: UserInterview[];
+  createdAt: string;
 }
 
-interface FeedbackItem {
+interface UserUsage {
+  totalSessions: number;
+  averageSessionDuration: number;
+  featuresUsed: string[];
+  lastActiveDate: string;
+  weeklyActiveDays: number;
+  monthlyActiveDays: number;
+  coreFeaturesUsed: number;
+  advancedFeaturesUsed: number;
+}
+
+interface UserFeedback {
   id: string;
-  userId: string;
-  type: 'feature-request' | 'bug-report' | 'improvement' | 'complaint' | 'praise';
-  category: 'ui-ux' | 'performance' | 'functionality' | 'integration' | 'mobile' | 'support';
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  status: 'new' | 'in-review' | 'in-progress' | 'completed' | 'rejected';
+  type: 'bug_report' | 'feature_request' | 'improvement' | 'complaint' | 'praise';
+  category: string;
   title: string;
   description: string;
-  submittedDate: Date;
-  assignedTo: string;
-  votes: number;
-  comments: {
-    id: string;
-    userId: string;
-    comment: string;
-    date: Date;
-  }[];
-  impact: {
-    users: number;
-    severity: 'low' | 'medium' | 'high';
-    effort: 'low' | 'medium' | 'high';
-  };
-}
-
-interface PMFMetric {
-  id: string;
-  name: string;
-  value: number;
-  target: number;
-  trend: 'up' | 'down' | 'stable';
-  category: 'retention' | 'engagement' | 'satisfaction' | 'growth' | 'referral';
-  description: string;
-  lastUpdated: Date;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  status: 'open' | 'in_progress' | 'resolved' | 'closed';
+  rating: number;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface UserInterview {
   id: string;
-  userId: string;
-  interviewer: string;
-  date: Date;
+  type: 'discovery' | 'usability' | 'feedback' | 'exit';
+  date: string;
   duration: number;
-  type: 'discovery' | 'validation' | 'usability' | 'feedback';
-  questions: {
-    question: string;
-    answer: string;
-    sentiment: 'positive' | 'neutral' | 'negative';
-  }[];
+  interviewer: string;
+  participants: string[];
+  questions: InterviewQuestion[];
   insights: string[];
-  recommendations: string[];
-  followUp: {
-    required: boolean;
-    date: Date;
-    actions: string[];
-  };
+  painPoints: string[];
+  suggestions: string[];
+  satisfaction: number;
+  createdAt: string;
+}
+
+interface InterviewQuestion {
+  id: string;
+  question: string;
+  answer: string;
+  category: string;
+}
+
+interface ProductMarketFitMetrics {
+  id: string;
+  period: string;
+  npsScore: number;
+  retentionRate: number;
+  weeklyActiveUsers: number;
+  monthlyActiveUsers: number;
+  userSatisfactionScore: number;
+  organicGrowthRate: number;
+  referralRate: number;
+  churnRate: number;
+  engagementScore: number;
+  featureAdoptionRate: number;
+  createdAt: string;
 }
 
 interface FeatureValidation {
   id: string;
-  feature: string;
+  featureName: string;
   description: string;
-  status: 'concept' | 'prototype' | 'testing' | 'launched' | 'deprecated';
-  validation: {
-    hypothesis: string;
-    successCriteria: string[];
-    metrics: {
-      adoption: number;
-      usage: number;
-      satisfaction: number;
-      retention: number;
-    };
-    results: {
-      hypothesisValidated: boolean;
-      confidence: number;
-      keyInsights: string[];
-    };
-  };
-  feedback: {
-    positive: number;
-    negative: number;
-    suggestions: string[];
-  };
+  status: 'planned' | 'in_development' | 'testing' | 'released' | 'deprecated';
+  validationMethod: 'user_interview' | 'survey' | 'a_b_test' | 'usage_analytics' | 'feedback_analysis';
+  targetUsers: string[];
+  successCriteria: string[];
+  metrics: ValidationMetrics;
+  results: ValidationResults;
+  createdAt: string;
 }
 
-interface MarketValidation {
+interface ValidationMetrics {
+  adoptionRate: number;
+  usageFrequency: number;
+  userSatisfaction: number;
+  completionRate: number;
+  errorRate: number;
+  supportTickets: number;
+}
+
+interface ValidationResults {
+  validated: boolean;
+  confidence: number;
+  keyInsights: string[];
+  recommendations: string[];
+  nextSteps: string[];
+  completionDate?: string;
+}
+
+interface UserSegment {
   id: string;
-  period: string;
-  metrics: {
-    totalBetaUsers: number;
-    activeBetaUsers: number;
-    feedbackItems: number;
-    userInterviews: number;
-    pmfScore: number;
-    npsScore: number;
-    satisfactionScore: number;
-  };
-  trends: {
-    userGrowth: number[];
-    feedbackTrend: number[];
-    satisfactionTrend: number[];
-    pmfTrend: number[];
-  };
-  insights: {
-    topFeatures: string[];
-    painPoints: string[];
-    opportunities: string[];
-    risks: string[];
-  };
+  name: string;
+  criteria: SegmentCriteria;
+  userCount: number;
+  characteristics: string[];
+  painPoints: string[];
+  needs: string[];
+  satisfactionScore: number;
+  retentionRate: number;
+  createdAt: string;
+}
+
+interface SegmentCriteria {
+  industry: string[];
+  companySize: string[];
+  role: string[];
+  usageLevel: string[];
+  tenure: string[];
+  geography: string[];
+}
+
+interface MarketInsight {
+  id: string;
+  title: string;
+  category: 'user_behavior' | 'market_trend' | 'competitor_analysis' | 'feature_demand' | 'pain_point';
+  description: string;
+  source: string;
+  confidence: number;
+  impact: 'low' | 'medium' | 'high';
+  priority: 'low' | 'medium' | 'high';
+  status: 'new' | 'validating' | 'validated' | 'implemented' | 'rejected';
+  tags: string[];
+  createdAt: string;
+}
+
+interface ValidationCampaign {
+  id: string;
+  name: string;
+  objective: string;
+  targetSegment: string;
+  method: 'survey' | 'interview' | 'focus_group' | 'beta_test' | 'a_b_test';
+  participants: number;
+  duration: number;
+  status: 'planned' | 'active' | 'completed' | 'cancelled';
+  results: CampaignResults;
+  createdAt: string;
+}
+
+interface CampaignResults {
+  responseRate: number;
+  completionRate: number;
+  keyFindings: string[];
+  recommendations: string[];
+  satisfactionScore: number;
+  completionDate?: string;
 }
 
 const MarketValidation: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const [activeTab, setActiveTab] = useState('overview');
+  const [isLoading, setIsLoading] = useState(false);
   const [betaUsers, setBetaUsers] = useState<BetaUser[]>([]);
-  const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>([]);
-  const [pmfMetrics, setPmfMetrics] = useState<PMFMetric[]>([]);
-  const [userInterviews, setUserInterviews] = useState<UserInterview[]>([]);
+  const [pmfMetrics, setPmfMetrics] = useState<ProductMarketFitMetrics[]>([]);
   const [featureValidations, setFeatureValidations] = useState<FeatureValidation[]>([]);
-  const [marketValidation, setMarketValidation] = useState<MarketValidation[]>([]);
-  const [isCollectingFeedback, setIsCollectingFeedback] = useState(false);
-  const [isAnalyzingPMF, setIsAnalyzingPMF] = useState(false);
-  const [isConductingInterviews, setIsConductingInterviews] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<BetaUser | null>(null);
-  const [selectedFeedback, setSelectedFeedback] = useState<FeedbackItem | null>(null);
+  const [userSegments, setUserSegments] = useState<UserSegment[]>([]);
+  const [marketInsights, setMarketInsights] = useState<MarketInsight[]>([]);
+  const [validationCampaigns, setValidationCampaigns] = useState<ValidationCampaign[]>([]);
 
-  // Generate market validation data
+  // SSR-safe data loading
   useEffect(() => {
-    const generateBetaUsers = (): BetaUser[] => {
-      return [
-        {
-          id: 'user-1',
-          name: 'Sarah Chen',
-          email: 'sarah.chen@techcorp.com',
-          role: 'Product Manager',
-          company: 'TechCorp',
-          industry: 'Technology',
-          signupDate: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000),
-          lastActive: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-          usage: {
-            sessions: 45,
-            tasksCreated: 128,
-            projectsCompleted: 8,
-            featuresUsed: ['task-management', 'analytics', 'team-collaboration', 'integrations']
-          },
-          feedback: {
-            rating: 4.8,
-            comments: ['Love the energy-based task management', 'Great team collaboration features', 'Would love more integrations'],
-            suggestions: ['Add more calendar integrations', 'Improve mobile experience'],
-            painPoints: ['Mobile app is slow', 'Limited customization options'],
-            satisfaction: 9.2
-          },
-          cohort: 'early-adopters',
-          segment: 'power-user'
-        },
-        {
-          id: 'user-2',
-          name: 'Mike Rodriguez',
-          email: 'mike.r@startup.io',
-          role: 'Founder',
-          company: 'StartupIO',
-          industry: 'Startup',
-          signupDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-          lastActive: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-          usage: {
-            sessions: 32,
-            tasksCreated: 89,
-            projectsCompleted: 5,
-            featuresUsed: ['task-management', 'analytics', 'automation']
-          },
-          feedback: {
-            rating: 4.5,
-            comments: ['Really helpful for startup productivity', 'Love the AI suggestions'],
-            suggestions: ['More automation features', 'Better reporting'],
-            painPoints: ['Learning curve was steep', 'Price is a bit high for startups'],
-            satisfaction: 8.7
-          },
-          cohort: 'early-adopters',
-          segment: 'early-adopter'
-        },
-        {
-          id: 'user-3',
-          name: 'Emily Johnson',
-          email: 'emily.j@enterprise.com',
-          role: 'Operations Director',
-          company: 'Enterprise Corp',
-          industry: 'Enterprise',
-          signupDate: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
-          lastActive: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-          usage: {
-            sessions: 28,
-            tasksCreated: 67,
-            projectsCompleted: 3,
-            featuresUsed: ['task-management', 'team-collaboration', 'reporting']
-          },
-          feedback: {
-            rating: 4.2,
-            comments: ['Good for team coordination', 'Needs better enterprise features'],
-            suggestions: ['Add SSO integration', 'Better admin controls'],
-            painPoints: ['Limited admin features', 'No single sign-on'],
-            satisfaction: 7.8
-          },
-          cohort: 'enterprise-trial',
-          segment: 'casual-user'
-        }
-      ];
-    };
+    const loadMarketValidationData = async () => {
+      setIsLoading(true);
+      
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
-    const generateFeedbackItems = (): FeedbackItem[] => {
-      return [
-        {
-          id: 'feedback-1',
-          userId: 'user-1',
-          type: 'feature-request',
-          category: 'integration',
-          priority: 'high',
-          status: 'in-progress',
-          title: 'Slack integration improvements',
-          description: 'The Slack integration is great but needs better notification customization and thread support.',
-          submittedDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-          assignedTo: 'Integration Team',
-          votes: 12,
-          comments: [
-            {
-              id: 'comment-1',
-              userId: 'user-2',
-              comment: 'I agree, this would be very helpful for our team',
-              date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
-            }
-          ],
-          impact: {
-            users: 45,
-            severity: 'medium',
-            effort: 'medium'
-          }
-        },
-        {
-          id: 'feedback-2',
-          userId: 'user-2',
-          type: 'improvement',
-          category: 'ui-ux',
-          priority: 'medium',
-          status: 'completed',
-          title: 'Mobile app performance',
-          description: 'The mobile app is slow and crashes occasionally. Please optimize performance.',
-          submittedDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-          assignedTo: 'Mobile Team',
-          votes: 8,
-          comments: [],
-          impact: {
-            users: 23,
-            severity: 'high',
-            effort: 'high'
-          }
-        },
-        {
-          id: 'feedback-3',
-          userId: 'user-3',
-          type: 'feature-request',
-          category: 'functionality',
-          priority: 'critical',
-          status: 'new',
-          title: 'SSO integration for enterprise',
-          description: 'We need single sign-on integration to use this in our enterprise environment.',
-          submittedDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-          assignedTo: 'Security Team',
-          votes: 15,
-          comments: [],
-          impact: {
-            users: 12,
-            severity: 'critical',
-            effort: 'high'
-          }
-        }
-      ];
-    };
-
-    const generatePMFMetrics = (): PMFMetric[] => {
-      return [
-        {
-          id: 'retention',
-          name: '30-Day Retention Rate',
-          value: 78,
-          target: 80,
-          trend: 'up',
-          category: 'retention',
-          description: 'Percentage of users who return after 30 days',
-          lastUpdated: new Date()
-        },
-        {
-          id: 'engagement',
-          name: 'Weekly Active Users',
-          value: 65,
-          target: 70,
-          trend: 'up',
-          category: 'engagement',
-          description: 'Percentage of users active in the last 7 days',
-          lastUpdated: new Date()
-        },
-        {
-          id: 'satisfaction',
-          name: 'User Satisfaction Score',
-          value: 8.5,
-          target: 9.0,
-          trend: 'up',
-          category: 'satisfaction',
-          description: 'Average user satisfaction rating (1-10)',
-          lastUpdated: new Date()
-        },
-        {
-          id: 'growth',
-          name: 'Organic Growth Rate',
-          value: 35,
-          target: 40,
-          trend: 'up',
-          category: 'growth',
-          description: 'Monthly organic user growth rate',
-          lastUpdated: new Date()
-        },
-        {
-          id: 'referral',
-          name: 'Referral Rate',
-          value: 28,
-          target: 30,
-          trend: 'stable',
-          category: 'referral',
-          description: 'Percentage of users who refer others',
-          lastUpdated: new Date()
-        }
-      ];
-    };
-
-    const generateUserInterviews = (): UserInterview[] => {
-      return [
-        {
-          id: 'interview-1',
-          userId: 'user-1',
-          interviewer: 'Product Team',
-          date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          duration: 45,
-          type: 'validation',
-          questions: [
-            {
-              question: 'How has SyncScript improved your productivity?',
-              answer: 'Significantly improved my task prioritization and team coordination.',
-              sentiment: 'positive'
+        // Mock beta users
+        const mockBetaUsers: BetaUser[] = [
+          {
+            id: 'user-1',
+            name: 'Sarah Johnson',
+            email: 'sarah.johnson@techcorp.com',
+            company: 'TechCorp Inc.',
+            role: 'Product Manager',
+            industry: 'Technology',
+            companySize: '100-500',
+            joinDate: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
+            status: 'active',
+            tier: 'premium',
+            usage: {
+              totalSessions: 85,
+              averageSessionDuration: 45,
+              featuresUsed: ['Task Management', 'Team Collaboration', 'Analytics', 'Integrations'],
+              lastActiveDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+              weeklyActiveDays: 5,
+              monthlyActiveDays: 18,
+              coreFeaturesUsed: 8,
+              advancedFeaturesUsed: 4
             },
-            {
-              question: 'What features do you use most?',
-              answer: 'Task management, energy tracking, and team collaboration features.',
-              sentiment: 'positive'
+            feedback: [
+              {
+                id: 'feedback-1',
+                type: 'feature_request',
+                category: 'UI/UX',
+                title: 'Dark Mode Support',
+                description: 'Would love to have a dark mode option for better visibility during night work',
+                priority: 'medium',
+                status: 'open',
+                rating: 4,
+                tags: ['ui', 'accessibility', 'preference'],
+                createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+                updatedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
+              }
+            ],
+            interviews: [],
+            createdAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString()
+          },
+          {
+            id: 'user-2',
+            name: 'Michael Chen',
+            email: 'michael.chen@startup.com',
+            company: 'StartupXYZ',
+            role: 'CTO',
+            industry: 'Software',
+            companySize: '10-50',
+            joinDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+            status: 'active',
+            tier: 'free',
+            usage: {
+              totalSessions: 120,
+              averageSessionDuration: 35,
+              featuresUsed: ['Task Management', 'Team Collaboration', 'Basic Analytics'],
+              lastActiveDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+              weeklyActiveDays: 6,
+              monthlyActiveDays: 22,
+              coreFeaturesUsed: 6,
+              advancedFeaturesUsed: 1
             },
-            {
-              question: 'What would make you stop using SyncScript?',
-              answer: 'If it became too expensive or lost key features.',
-              sentiment: 'neutral'
-            }
-          ],
-          insights: [
-            'User highly values energy-based task management',
-            'Team collaboration is a key differentiator',
-            'Price sensitivity exists but value is recognized'
-          ],
-          recommendations: [
-            'Continue developing team features',
-            'Consider pricing optimization',
-            'Maintain focus on energy-based approach'
-          ],
-          followUp: {
-            required: true,
-            date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-            actions: ['Test new team features', 'Gather pricing feedback']
+            feedback: [],
+            interviews: [],
+            createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
           }
-        }
-      ];
-    };
+        ];
 
-    const generateFeatureValidations = (): FeatureValidation[] => {
-      return [
-        {
-          id: 'feature-1',
-          feature: 'Energy-Based Task Management',
-          description: 'Core feature that matches tasks to user energy levels',
-          status: 'launched',
-          validation: {
-            hypothesis: 'Users will be more productive when tasks match their energy levels',
-            successCriteria: ['Increased task completion', 'Higher satisfaction', 'Better time management'],
+        // Mock PMF metrics
+        const mockPmfMetrics: ProductMarketFitMetrics[] = [
+          {
+            id: 'pmf-1',
+            period: 'Q3 2024',
+            npsScore: 72,
+            retentionRate: 85.5,
+            weeklyActiveUsers: 1250,
+            monthlyActiveUsers: 2100,
+            userSatisfactionScore: 8.7,
+            organicGrowthRate: 23.5,
+            referralRate: 18.2,
+            churnRate: 4.2,
+            engagementScore: 7.8,
+            featureAdoptionRate: 68.5,
+            createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+
+        // Mock feature validations
+        const mockFeatureValidations: FeatureValidation[] = [
+          {
+            id: 'validation-1',
+            featureName: 'AI-Powered Task Suggestions',
+            description: 'AI system that suggests tasks based on user behavior and patterns',
+            status: 'testing',
+            validationMethod: 'user_interview',
+            targetUsers: ['Product Managers', 'Team Leads'],
+            successCriteria: ['Adoption rate > 60%', 'User satisfaction > 7.5', 'Usage frequency > 3x/week'],
             metrics: {
-              adoption: 92,
-              usage: 87,
-              satisfaction: 9.1,
-              retention: 85
+              adoptionRate: 45,
+              usageFrequency: 2.8,
+              userSatisfaction: 7.2,
+              completionRate: 78,
+              errorRate: 3.2,
+              supportTickets: 12
             },
             results: {
-              hypothesisValidated: true,
-              confidence: 95,
-              keyInsights: ['Users love the personalized approach', 'Significantly improves task completion', 'Reduces decision fatigue']
-            }
-          },
-          feedback: {
-            positive: 89,
-            negative: 11,
-            suggestions: ['Add energy prediction', 'Improve energy tracking accuracy']
-          }
-        },
-        {
-          id: 'feature-2',
-          feature: 'AI-Powered Suggestions',
-          description: 'AI recommendations for task prioritization and scheduling',
-          status: 'testing',
-          validation: {
-            hypothesis: 'AI suggestions will improve task prioritization and user satisfaction',
-            successCriteria: ['Higher acceptance rate', 'Improved productivity', 'User engagement'],
-            metrics: {
-              adoption: 65,
-              usage: 58,
-              satisfaction: 7.8,
-              retention: 72
+              validated: false,
+              confidence: 65,
+              keyInsights: ['Users find suggestions helpful but want more customization', 'Integration with existing workflows needs improvement'],
+              recommendations: ['Add customization options', 'Improve workflow integration', 'Reduce false positive suggestions'],
+              nextSteps: ['Implement customization features', 'Conduct follow-up interviews', 'A/B test improved version']
             },
+            createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+
+        // Mock user segments
+        const mockUserSegments: UserSegment[] = [
+          {
+            id: 'segment-1',
+            name: 'Tech-Savvy Product Managers',
+            criteria: {
+              industry: ['Technology', 'Software'],
+              companySize: ['50-500'],
+              role: ['Product Manager', 'Product Owner'],
+              usageLevel: ['high', 'medium'],
+              tenure: ['1-6 months', '6-12 months'],
+              geography: ['North America', 'Europe']
+            },
+            userCount: 180,
+            characteristics: ['Feature-heavy users', 'Early adopters', 'High engagement'],
+            painPoints: ['Complex workflows', 'Integration limitations', 'Learning curve'],
+            needs: ['Advanced features', 'Customization', 'Integration options'],
+            satisfactionScore: 8.5,
+            retentionRate: 88,
+            createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+
+        // Mock market insights
+        const mockMarketInsights: MarketInsight[] = [
+          {
+            id: 'insight-1',
+            title: 'Remote Work Tools Demand Surge',
+            category: 'market_trend',
+            description: 'Increased demand for remote collaboration tools due to hybrid work models',
+            source: 'User interviews and market research',
+            confidence: 85,
+            impact: 'high',
+            priority: 'high',
+            status: 'validated',
+            tags: ['remote work', 'collaboration', 'trend'],
+            createdAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+
+        // Mock validation campaigns
+        const mockValidationCampaigns: ValidationCampaign[] = [
+          {
+            id: 'campaign-1',
+            name: 'Q3 Feature Validation',
+            objective: 'Validate new AI features with target users',
+            targetSegment: 'Tech-Savvy Product Managers',
+            method: 'interview',
+            participants: 25,
+            duration: 14,
+            status: 'completed',
             results: {
-              hypothesisValidated: true,
-              confidence: 78,
-              keyInsights: ['AI suggestions are helpful but need refinement', 'Users want more control over suggestions', 'Integration with existing workflow is key']
-            }
-          },
-          feedback: {
-            positive: 72,
-            negative: 28,
-            suggestions: ['Allow suggestion customization', 'Improve suggestion accuracy', 'Add explanation for suggestions']
+              responseRate: 92,
+              completionRate: 88,
+              keyFindings: ['High interest in AI features', 'Need for better customization', 'Integration concerns'],
+              recommendations: ['Improve customization options', 'Enhance integration capabilities', 'Provide better onboarding'],
+              satisfactionScore: 8.2,
+              completionDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+            },
+            createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
           }
-        }
-      ];
+        ];
+
+        setBetaUsers(mockBetaUsers);
+        setPmfMetrics(mockPmfMetrics);
+        setFeatureValidations(mockFeatureValidations);
+        setUserSegments(mockUserSegments);
+        setMarketInsights(mockMarketInsights);
+        setValidationCampaigns(mockValidationCampaigns);
+
+        toast.success('Market validation data loaded successfully!');
+      } catch (error) {
+        console.error('Failed to load market validation data:', error);
+        toast.error('Failed to load market validation data');
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    const generateMarketValidation = (): MarketValidation[] => {
-      return [
-        {
-          id: 'validation-1',
-          period: 'Last 30 Days',
-          metrics: {
-            totalBetaUsers: 156,
-            activeBetaUsers: 128,
-            feedbackItems: 47,
-            userInterviews: 8,
-            pmfScore: 8.5,
-            npsScore: 42,
-            satisfactionScore: 8.5
-          },
-          trends: {
-            userGrowth: [120, 130, 140, 145, 150, 152, 156],
-            feedbackTrend: [35, 38, 42, 45, 47, 47, 47],
-            satisfactionTrend: [8.1, 8.2, 8.3, 8.4, 8.4, 8.5, 8.5],
-            pmfTrend: [8.0, 8.1, 8.2, 8.3, 8.4, 8.4, 8.5]
-          },
-          insights: {
-            topFeatures: ['Energy-based task management', 'Team collaboration', 'Analytics dashboard'],
-            painPoints: ['Mobile performance', 'Limited integrations', 'Learning curve'],
-            opportunities: ['Enterprise features', 'Advanced integrations', 'Mobile optimization'],
-            risks: ['Competition', 'Feature complexity', 'Pricing sensitivity']
-          }
-        }
-      ];
-    };
-
-    setBetaUsers(generateBetaUsers());
-    setFeedbackItems(generateFeedbackItems());
-    setPmfMetrics(generatePMFMetrics());
-    setUserInterviews(generateUserInterviews());
-    setFeatureValidations(generateFeatureValidations());
-    setMarketValidation(generateMarketValidation());
+    loadMarketValidationData();
   }, []);
 
-  const collectFeedback = async () => {
-    setIsCollectingFeedback(true);
-    
-    // Simulate feedback collection
-    await new Promise(resolve => setTimeout(resolve, 5000));
-    
-    // Add new feedback items
-    const newFeedback: FeedbackItem = {
-      id: `feedback-${Date.now()}`,
-      userId: 'user-1',
-      type: 'feature-request',
-      category: 'functionality',
-      priority: 'medium',
-      status: 'new',
-      title: 'New feature request',
-      description: 'User requested new feature through feedback collection',
-      submittedDate: new Date(),
-      assignedTo: 'Product Team',
-      votes: 0,
-      comments: [],
-      impact: {
-        users: 5,
-        severity: 'medium',
-        effort: 'medium'
-      }
-    };
-    
-    setFeedbackItems(prev => [newFeedback, ...prev]);
-    setIsCollectingFeedback(false);
-  };
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: BarChart3 },
+    { id: 'beta_users', label: 'Beta Users', icon: Users },
+    { id: 'pmf_metrics', label: 'PMF Metrics', icon: Target },
+    { id: 'feedback', label: 'Feedback', icon: MessageCircle },
+    { id: 'interviews', label: 'Interviews', icon: Mic },
+    { id: 'features', label: 'Features', icon: Zap },
+    { id: 'segments', label: 'Segments', icon: Users },
+    { id: 'insights', label: 'Insights', icon: Lightbulb },
+    { id: 'campaigns', label: 'Campaigns', icon: Target },
+    { id: 'analytics', label: 'Analytics', icon: PieChart }
+  ];
 
-  const analyzePMF = async () => {
-    setIsAnalyzingPMF(true);
-    
-    // Simulate PMF analysis
-    await new Promise(resolve => setTimeout(resolve, 7000));
-    
-    // Update PMF metrics with improved scores
-    setPmfMetrics(prev => prev.map(metric => ({
-      ...metric,
-      value: metric.value + (metric.target - metric.value) * 0.1, // 10% improvement
-      lastUpdated: new Date()
-    })));
-    
-    setIsAnalyzingPMF(false);
-  };
-
-  const conductInterviews = async () => {
-    setIsConductingInterviews(true);
-    
-    // Simulate interview conduction
-    await new Promise(resolve => setTimeout(resolve, 6000));
-    
-    // Add new interview
-    const newInterview: UserInterview = {
-      id: `interview-${Date.now()}`,
-      userId: 'user-2',
-      interviewer: 'Product Team',
-      date: new Date(),
-      duration: 30,
-      type: 'feedback',
-      questions: [
-        {
-          question: 'How satisfied are you with SyncScript?',
-          answer: 'Very satisfied, it has improved my productivity significantly.',
-          sentiment: 'positive'
-        }
-      ],
-      insights: ['User is highly satisfied with current features'],
-      recommendations: ['Continue current development direction'],
-      followUp: {
-        required: false,
-        date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-        actions: []
-      }
-    };
-    
-    setUserInterviews(prev => [newInterview, ...prev]);
-    setIsConductingInterviews(false);
-  };
-
-  const formatDate = (date: Date): string => {
-    return date.toLocaleDateString();
-  };
-
-  const getStatusColor = (status: string): string => {
+  const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': case 'launched': case 'power-user': case 'early-adopter': return 'bg-green-100 text-green-800';
-      case 'in-progress': case 'testing': case 'casual-user': return 'bg-yellow-100 text-yellow-800';
-      case 'new': case 'concept': case 'at-risk': return 'bg-blue-100 text-blue-800';
-      case 'rejected': case 'deprecated': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'active': return 'text-green-600 bg-green-100';
+      case 'inactive': return 'text-gray-600 bg-gray-100';
+      case 'churned': return 'text-red-600 bg-red-100';
+      case 'onboarding': return 'text-blue-600 bg-blue-100';
+      case 'open': return 'text-yellow-600 bg-yellow-100';
+      case 'in_progress': return 'text-blue-600 bg-blue-100';
+      case 'resolved': return 'text-green-600 bg-green-100';
+      case 'closed': return 'text-gray-600 bg-gray-100';
+      case 'planned': return 'text-purple-600 bg-purple-100';
+      case 'testing': return 'text-orange-600 bg-orange-100';
+      case 'released': return 'text-green-600 bg-green-100';
+      case 'deprecated': return 'text-red-600 bg-red-100';
+      case 'new': return 'text-blue-600 bg-blue-100';
+      case 'validating': return 'text-yellow-600 bg-yellow-100';
+      case 'validated': return 'text-green-600 bg-green-100';
+      case 'implemented': return 'text-green-600 bg-green-100';
+      case 'rejected': return 'text-red-600 bg-red-100';
+      case 'completed': return 'text-green-600 bg-green-100';
+      case 'cancelled': return 'text-gray-600 bg-gray-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
 
-  const getPriorityColor = (priority: string): string => {
+  const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'bg-red-100 text-red-800';
-      case 'high': return 'bg-orange-100 text-orange-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'critical': return 'text-red-600 bg-red-100';
+      case 'high': return 'text-orange-600 bg-orange-100';
+      case 'medium': return 'text-yellow-600 bg-yellow-100';
+      case 'low': return 'text-green-600 bg-green-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
 
-  const getTypeColor = (type: string): string => {
+  const getTypeColor = (type: string) => {
     switch (type) {
-      case 'feature-request': case 'validation': return 'bg-blue-100 text-blue-800';
-      case 'improvement': case 'usability': return 'bg-green-100 text-green-800';
-      case 'bug-report': case 'feedback': return 'bg-yellow-100 text-yellow-800';
-      case 'complaint': case 'discovery': return 'bg-red-100 text-red-800';
-      case 'praise': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'bug_report': return 'text-red-600 bg-red-100';
+      case 'feature_request': return 'text-blue-600 bg-blue-100';
+      case 'improvement': return 'text-green-600 bg-green-100';
+      case 'complaint': return 'text-orange-600 bg-orange-100';
+      case 'praise': return 'text-purple-600 bg-purple-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
-
-  const getTrendIcon = (trend: string) => {
-    switch (trend) {
-      case 'up': return <ArrowUpRight className="text-green-600" size={16} />;
-      case 'down': return <ArrowDownRight className="text-red-600" size={16} />;
-      default: return <ArrowRight className="text-gray-600" size={16} />;
-    }
-  };
-
-  const getTrendColor = (trend: string) => {
-    switch (trend) {
-      case 'up': return 'text-green-600';
-      case 'down': return 'text-red-600';
-      default: return 'text-gray-600';
-    }
-  };
-
-  const currentPMFScore = marketValidation[0]?.metrics.pmfScore || 0;
-  const targetPMFScore = 9.0;
-  const pmfProgress = (currentPMFScore / targetPMFScore) * 100;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
+        exit={{ opacity: 0, scale: 0.95 }}
         className="bg-white rounded-2xl shadow-2xl w-full max-w-7xl h-[90vh] overflow-hidden"
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-2xl font-bold">🎯 Market Validation</h2>
-              <p className="text-blue-100 mt-1">Collect beta feedback, analyze product-market fit, and validate features</p>
+        <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white bg-opacity-20 rounded-lg">
+                <Target className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">Market Validation</h2>
+                <p className="text-purple-100">Beta users management and product-market fit</p>
+              </div>
             </div>
-            <button
-              onClick={onClose}
-              className="text-white hover:text-blue-200 transition-colors"
-            >
-              <X size={24} />
-            </button>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                <span className="text-sm">Active</span>
+              </div>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex space-x-1 mt-6 overflow-x-auto">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? 'bg-white bg-opacity-20 text-white'
+                      : 'text-purple-100 hover:bg-white hover:bg-opacity-10'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
+        {/* Content */}
         <div className="p-6 h-full overflow-y-auto">
-          {/* Market Validation Overview Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-blue-600 font-medium">Beta Users</p>
-                  <p className="text-2xl font-bold text-blue-800">{marketValidation[0]?.metrics.totalBetaUsers || 0}</p>
-                  <p className="text-xs text-blue-600">{marketValidation[0]?.metrics.activeBetaUsers || 0} active</p>
-                </div>
-                <Users className="text-3xl text-blue-600" />
-              </div>
+          {isLoading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
             </div>
-
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-green-600 font-medium">PMF Score</p>
-                  <p className="text-2xl font-bold text-green-800">{currentPMFScore}/10</p>
-                  <p className="text-xs text-green-600">Target: {targetPMFScore}/10</p>
-                </div>
-                <Target className="text-3xl text-green-600" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-purple-600 font-medium">Feedback Items</p>
-                  <p className="text-2xl font-bold text-purple-800">{marketValidation[0]?.metrics.feedbackItems || 0}</p>
-                  <p className="text-xs text-purple-600">User feedback collected</p>
-                </div>
-                <MessageSquare className="text-3xl text-purple-600" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-orange-600 font-medium">NPS Score</p>
-                  <p className="text-2xl font-bold text-orange-800">{marketValidation[0]?.metrics.npsScore || 0}</p>
-                  <p className="text-xs text-orange-600">Net Promoter Score</p>
-                </div>
-                <Star className="text-3xl text-orange-600" />
-              </div>
-            </div>
-          </div>
-
-          {/* PMF Progress */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-6 border-2 border-blue-200">
-            <div className="flex justify-between items-center mb-3">
-              <div className="text-sm text-blue-700 font-medium">
-                🎯 Product-Market Fit Progress: {pmfProgress.toFixed(1)}% Complete
-              </div>
-              <div className="text-sm text-blue-700 font-medium">
-                {currentPMFScore}/10 → {targetPMFScore}/10
-              </div>
-            </div>
-            <div className="w-full bg-blue-200 rounded-full h-3">
-              <div 
-                className="bg-gradient-to-r from-blue-500 to-indigo-500 h-3 rounded-full transition-all duration-500"
-                style={{ width: `${Math.min(pmfProgress, 100)}%` }}
-              ></div>
-            </div>
-          </div>
-
-          {/* Market Validation Actions */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-6 border-2 border-blue-200">
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-blue-700 font-medium">
-                🎯 Market Validation Active - Collecting feedback, analyzing PMF, and conducting user interviews!
-              </div>
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={collectFeedback}
-                  disabled={isCollectingFeedback}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
+          ) : (
+            <AnimatePresence mode="wait">
+              {activeTab === 'overview' && (
+                <motion.div
+                  key="overview"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  {isCollectingFeedback ? '⏳ Collecting...' : '💬 Collect Feedback'}
-                </button>
-                <button
-                  onClick={analyzePMF}
-                  disabled={isAnalyzingPMF}
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50 transition-colors"
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-purple-100">NPS Score</p>
+                          <p className="text-3xl font-bold">{pmfMetrics[0]?.npsScore}</p>
+                        </div>
+                        <Heart className="w-8 h-8 text-purple-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-blue-100">Retention Rate</p>
+                          <p className="text-3xl font-bold">{pmfMetrics[0]?.retentionRate}%</p>
+                        </div>
+                        <TrendingUp className="w-8 h-8 text-blue-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-green-100">Weekly Active Users</p>
+                          <p className="text-3xl font-bold">{pmfMetrics[0]?.weeklyActiveUsers.toLocaleString()}</p>
+                        </div>
+                        <Users className="w-8 h-8 text-green-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-orange-100">Satisfaction Score</p>
+                          <p className="text-3xl font-bold">{pmfMetrics[0]?.userSatisfactionScore}</p>
+                        </div>
+                        <Star className="w-8 h-8 text-orange-200" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold mb-4">User Status Distribution</h3>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <RechartsPieChart>
+                          <Pie
+                            data={[
+                              { name: 'Active', value: betaUsers.filter(u => u.status === 'active').length },
+                              { name: 'Inactive', value: betaUsers.filter(u => u.status === 'inactive').length },
+                              { name: 'Churned', value: betaUsers.filter(u => u.status === 'churned').length },
+                              { name: 'Onboarding', value: betaUsers.filter(u => u.status === 'onboarding').length }
+                            ]}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            label={({ name, percent }) => `${name} ${((percent as number) * 100).toFixed(0)}%`}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                          >
+                            <Cell fill="#10b981" />
+                            <Cell fill="#6b7280" />
+                            <Cell fill="#ef4444" />
+                            <Cell fill="#3b82f6" />
+                          </Pie>
+                          <Tooltip />
+                        </RechartsPieChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold mb-4">Feature Adoption Rate</h3>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <BarChart data={[
+                          { name: 'Core Features', rate: 85 },
+                          { name: 'Advanced Features', rate: 45 },
+                          { name: 'Integrations', rate: 32 },
+                          { name: 'Analytics', rate: 28 }
+                        ]}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="name" />
+                          <YAxis />
+                          <Tooltip />
+                          <Bar dataKey="rate" fill="#8b5cf6" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeTab === 'beta_users' && (
+                <motion.div
+                  key="beta_users"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  {isAnalyzingPMF ? '⏳ Analyzing...' : '📊 Analyze PMF'}
-                </button>
-                <button
-                  onClick={conductInterviews}
-                  disabled={isConductingInterviews}
-                  className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 disabled:opacity-50 transition-colors"
+                  {betaUsers.map((user) => (
+                    <div key={user.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-purple-100 rounded-lg">
+                            <Users className="w-5 h-5 text-purple-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{user.name}</h3>
+                            <p className="text-sm text-gray-600">{user.role} at {user.company}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(user.status)}`}>
+                            {user.status}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            {user.tier}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Total Sessions</span>
+                          <p className="font-semibold">{user.usage.totalSessions}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Avg Session Duration</span>
+                          <p className="font-semibold">{user.usage.averageSessionDuration}m</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Weekly Active Days</span>
+                          <p className="font-semibold">{user.usage.weeklyActiveDays}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Features Used</span>
+                          <p className="font-semibold">{user.usage.featuresUsed.length}</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Features Used:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {user.usage.featuresUsed.map((feature, index) => (
+                            <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
+                              {feature}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Industry</span>
+                          <p className="font-semibold">{user.industry}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Company Size</span>
+                          <p className="font-semibold">{user.companySize}</p>
+                        </div>
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                          Contact
+                        </button>
+                        <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                          Interview
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+
+              {activeTab === 'pmf_metrics' && (
+                <motion.div
+                  key="pmf_metrics"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  {isConductingInterviews ? '⏳ Conducting...' : '🎤 Conduct Interviews'}
-                </button>
-              </div>
-            </div>
-          </div>
+                  {pmfMetrics.map((metrics) => (
+                    <div key={metrics.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-green-100 rounded-lg">
+                            <Target className="w-5 h-5 text-green-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{metrics.period}</h3>
+                            <p className="text-sm text-gray-600">Product-Market Fit Metrics</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="px-2 py-1 bg-green-100 text-green-800 text-sm rounded">
+                            Strong PMF
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">NPS Score</span>
+                          <p className="font-semibold">{metrics.npsScore}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Retention Rate</span>
+                          <p className="font-semibold">{metrics.retentionRate}%</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Weekly Active Users</span>
+                          <p className="font-semibold">{metrics.weeklyActiveUsers.toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Monthly Active Users</span>
+                          <p className="font-semibold">{metrics.monthlyActiveUsers.toLocaleString()}</p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Satisfaction Score</span>
+                          <p className="font-semibold">{metrics.userSatisfactionScore}/10</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Organic Growth Rate</span>
+                          <p className="font-semibold">{metrics.organicGrowthRate}%</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Referral Rate</span>
+                          <p className="font-semibold">{metrics.referralRate}%</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Churn Rate</span>
+                          <p className="font-semibold">{metrics.churnRate}%</p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Engagement Score</span>
+                          <p className="font-semibold">{metrics.engagementScore}/10</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Feature Adoption Rate</span>
+                          <p className="font-semibold">{metrics.featureAdoptionRate}%</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
 
-          {/* PMF Metrics */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <BarChart3 className="mr-2 text-blue-600" />
-              Product-Market Fit Metrics ({pmfMetrics.length})
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {pmfMetrics.map((metric) => (
-                <div key={metric.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{metric.name}</h4>
-                      <p className="text-sm text-gray-600">{metric.description}</p>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      {getTrendIcon(metric.trend)}
-                      <span className={`text-sm font-medium ${getTrendColor(metric.trend)}`}>
-                        {metric.trend === 'up' ? '↗' : metric.trend === 'down' ? '↘' : '→'}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Current:</span>
-                      <span className="font-medium text-gray-900">
-                        {metric.name.includes('Score') ? `${metric.value}/10` : `${metric.value}%`}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Target:</span>
-                      <span className="font-medium text-gray-900">
-                        {metric.name.includes('Score') ? `${metric.target}/10` : `${metric.target}%`}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Progress:</span>
-                      <span className="font-medium text-gray-900">
-                        {((metric.value / metric.target) * 100).toFixed(1)}%
-                      </span>
-                    </div>
-                  </div>
+              {activeTab === 'feedback' && (
+                <motion.div
+                  key="feedback"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {betaUsers.map((user) => 
+                    user.feedback.map((feedback) => (
+                      <div key={feedback.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center space-x-3">
+                            <div className="p-2 bg-blue-100 rounded-lg">
+                              <MessageCircle className="w-5 h-5 text-blue-600" />
+                            </div>
+                            <div>
+                              <h3 className="font-semibold">{feedback.title}</h3>
+                              <p className="text-sm text-gray-600">From {user.name}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <span className={`px-2 py-1 rounded-full text-sm font-medium ${getTypeColor(feedback.type)}`}>
+                              {feedback.type.replace('_', ' ')}
+                            </span>
+                            <span className={`px-2 py-1 rounded-full text-sm font-medium ${getPriorityColor(feedback.priority)}`}>
+                              {feedback.priority}
+                            </span>
+                            <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(feedback.status)}`}>
+                              {feedback.status.replace('_', ' ')}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="mb-4">
+                          <span className="text-sm text-gray-500">Description:</span>
+                          <p className="text-gray-700">{feedback.description}</p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                          <div>
+                            <span className="text-sm text-gray-500">Category</span>
+                            <p className="font-semibold">{feedback.category}</p>
+                          </div>
+                          <div>
+                            <span className="text-sm text-gray-500">Rating</span>
+                            <p className="font-semibold">{feedback.rating}/5</p>
+                          </div>
+                          <div>
+                            <span className="text-sm text-gray-500">Created</span>
+                            <p className="font-semibold text-sm">
+                              {new Date(feedback.createdAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <h4 className="font-medium">Tags:</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {feedback.tags.map((tag, index) => (
+                              <span key={index} className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-sm">
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </motion.div>
+              )}
 
-                  <div className="mt-3">
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${Math.min((metric.value / metric.target) * 100, 100)}%` }}
-                      ></div>
+              {activeTab === 'features' && (
+                <motion.div
+                  key="features"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {featureValidations.map((validation) => (
+                    <div key={validation.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-orange-100 rounded-lg">
+                            <Zap className="w-5 h-5 text-orange-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{validation.featureName}</h3>
+                            <p className="text-sm text-gray-600">{validation.description}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(validation.status)}`}>
+                            {validation.status.replace('_', ' ')}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            {validation.validationMethod.replace('_', ' ')}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <span className="text-sm text-gray-500">Validation Method:</span>
+                        <p className="text-gray-700">{validation.validationMethod.replace('_', ' ')}</p>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Target Users:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {validation.targetUsers.map((user, index) => (
+                            <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
+                              {user}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Success Criteria:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {validation.successCriteria.map((criteria, index) => (
+                            <span key={index} className="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">
+                              {criteria}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Adoption Rate</span>
+                          <p className="font-semibold">{validation.metrics.adoptionRate}%</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">User Satisfaction</span>
+                          <p className="font-semibold">{validation.metrics.userSatisfaction}/10</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Completion Rate</span>
+                          <p className="font-semibold">{validation.metrics.completionRate}%</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Key Insights:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {validation.results.keyInsights.map((insight, index) => (
+                            <span key={index} className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-sm">
+                              {insight}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Recommendations:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {validation.results.recommendations.map((recommendation, index) => (
+                            <span key={index} className="px-2 py-1 bg-purple-100 text-purple-800 rounded text-sm">
+                              {recommendation}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="text-sm text-gray-500">Confidence:</span>
+                          <p className="font-semibold">{validation.results.confidence}%</p>
+                        </div>
+                        <div className="flex space-x-2">
+                          <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                            Update
+                          </button>
+                          <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                            Validate
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                  ))}
+                </motion.div>
+              )}
 
-          {/* Beta Users */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Users className="mr-2 text-green-600" />
-              Beta Users ({betaUsers.length})
-            </h3>
-            <div className="space-y-4">
-              {betaUsers.map((user) => (
-                <div key={user.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{user.name}</h4>
-                      <p className="text-sm text-gray-600">{user.role} at {user.company} • {user.industry}</p>
+              {activeTab === 'analytics' && (
+                <motion.div
+                  key="analytics"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-purple-100">Organic Growth</p>
+                          <p className="text-3xl font-bold">{pmfMetrics[0]?.organicGrowthRate}%</p>
+                        </div>
+                        <TrendingUp className="w-8 h-8 text-purple-200" />
+                      </div>
                     </div>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(user.segment)}`}>
-                        {user.segment}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(user.cohort)}`}>
-                        {user.cohort}
-                      </span>
+                    <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-blue-100">Referral Rate</p>
+                          <p className="text-3xl font-bold">{pmfMetrics[0]?.referralRate}%</p>
+                        </div>
+                        <Share2 className="w-8 h-8 text-blue-200" />
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                    <div className="text-sm">
-                      <span className="text-gray-600">Sessions:</span>
-                      <span className="font-medium text-gray-900 ml-1">{user.usage.sessions}</span>
+                    <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-green-100">Engagement Score</p>
+                          <p className="text-3xl font-bold">{pmfMetrics[0]?.engagementScore}</p>
+                        </div>
+                        <Activity className="w-8 h-8 text-green-200" />
+                      </div>
                     </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Tasks:</span>
-                      <span className="font-medium text-gray-900 ml-1">{user.usage.tasksCreated}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Projects:</span>
-                      <span className="font-medium text-gray-900 ml-1">{user.usage.projectsCompleted}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Satisfaction:</span>
-                      <span className="font-medium text-gray-900 ml-1">{user.feedback.satisfaction}/10</span>
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600">Usage Progress</span>
-                      <span className="font-medium text-gray-900">{user.usage.sessions}/50 sessions</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-green-500 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${Math.min((user.usage.sessions / 50) * 100, 100)}%` }}
-                      ></div>
+                    <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-orange-100">Feature Adoption</p>
+                          <p className="text-3xl font-bold">{pmfMetrics[0]?.featureAdoptionRate}%</p>
+                        </div>
+                        <Zap className="w-8 h-8 text-orange-200" />
+                      </div>
                     </div>
                   </div>
-
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Features Used:</span> {user.usage.featuresUsed.join(', ')} | 
-                    <span className="font-medium ml-2">Rating:</span> {user.feedback.rating}/5
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Feedback Items */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <MessageSquare className="mr-2 text-purple-600" />
-              Feedback Items ({feedbackItems.length})
-            </h3>
-            <div className="space-y-4">
-              {feedbackItems.map((feedback) => (
-                <div key={feedback.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{feedback.title}</h4>
-                      <p className="text-sm text-gray-600">{feedback.description}</p>
-                    </div>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getTypeColor(feedback.type)}`}>
-                        {feedback.type}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getPriorityColor(feedback.priority)}`}>
-                        {feedback.priority}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(feedback.status)}`}>
-                        {feedback.status}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                    <div className="text-sm">
-                      <span className="text-gray-600">Category:</span>
-                      <span className="font-medium text-gray-900 ml-1 capitalize">{feedback.category}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Votes:</span>
-                      <span className="font-medium text-gray-900 ml-1">{feedback.votes}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Impact:</span>
-                      <span className="font-medium text-gray-900 ml-1">{feedback.impact.users} users</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Assigned:</span>
-                      <span className="font-medium text-gray-900 ml-1">{feedback.assignedTo}</span>
-                    </div>
-                  </div>
-
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Submitted:</span> {formatDate(feedback.submittedDate)} | 
-                    <span className="font-medium ml-2">Comments:</span> {feedback.comments.length}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Feature Validations */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <CheckCircle className="mr-2 text-orange-600" />
-              Feature Validations ({featureValidations.length})
-            </h3>
-            <div className="space-y-4">
-              {featureValidations.map((feature) => (
-                <div key={feature.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{feature.feature}</h4>
-                      <p className="text-sm text-gray-600">{feature.description}</p>
-                    </div>
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(feature.status)}`}>
-                      {feature.status}
-                    </span>
-                  </div>
-                  
-                  <div className="mb-3">
-                    <div className="text-sm text-gray-600 mb-2">
-                      <span className="font-medium">Hypothesis:</span> {feature.validation.hypothesis}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                    <div className="text-sm">
-                      <span className="text-gray-600">Adoption:</span>
-                      <span className="font-medium text-gray-900 ml-1">{feature.validation.metrics.adoption}%</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Usage:</span>
-                      <span className="font-medium text-gray-900 ml-1">{feature.validation.metrics.usage}%</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Satisfaction:</span>
-                      <span className="font-medium text-gray-900 ml-1">{feature.validation.metrics.satisfaction}/10</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Confidence:</span>
-                      <span className="font-medium text-gray-900 ml-1">{feature.validation.results.confidence}%</span>
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600">Validation Progress</span>
-                      <span className="font-medium text-gray-900">
-                        {feature.validation.results.hypothesisValidated ? '✅ Validated' : '⏳ Testing'}
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-orange-500 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${feature.validation.results.confidence}%` }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Feedback:</span> {feature.feedback.positive} positive, {feature.feedback.negative} negative | 
-                    <span className="font-medium ml-2">Status:</span> {feature.validation.results.hypothesisValidated ? 'Validated' : 'Testing'}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
         </div>
       </motion.div>
     </div>
