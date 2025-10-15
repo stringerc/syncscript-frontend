@@ -1,1208 +1,894 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Rocket, Target, Users, DollarSign, TrendingUp, BarChart3, CheckCircle, AlertTriangle, Clock, Settings, Code, Award, Star, Zap, Mail, Phone, Calendar, MapPin, Building, Share2, Download, Upload, Eye, Edit, Save, Send, Globe, Megaphone, Handshake, Briefcase, PieChart, LineChart, Activity } from 'lucide-react';
+import { X, Rocket, Target, Calendar, BarChart3, Users, AlertTriangle, CheckCircle, Clock, Globe, TrendingUp, Award, Flag, Zap, Star, Shield, Activity, MapPin, DollarSign, MessageCircle, Mail, Phone, Video, Share2, ExternalLink, Plus, Edit, Trash2, Save, Copy, ArrowUp, ArrowDown, ArrowRight, ArrowLeft } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import { toast } from 'react-hot-toast';
 
+// Launch Execution & Market Entry interfaces
 interface LaunchCampaign {
   id: string;
   name: string;
-  type: 'product-hunt' | 'social-media' | 'email' | 'pr' | 'influencer' | 'partnership';
-  status: 'planned' | 'active' | 'completed' | 'paused';
-  startDate: Date;
-  endDate: Date;
-  targetAudience: string;
-  goals: {
-    awareness: number;
-    signups: number;
-    conversions: number;
-    revenue: number;
-  };
-  metrics: {
-    reach: number;
-    engagement: number;
-    clicks: number;
-    signups: number;
-    conversions: number;
-    revenue: number;
-  };
-  channels: {
-    name: string;
-    type: 'website' | 'social' | 'email' | 'paid' | 'pr';
-    budget: number;
-    performance: {
-      impressions: number;
-      clicks: number;
-      conversions: number;
-      cost: number;
-    };
-  }[];
-  content: {
-    headlines: string[];
-    descriptions: string[];
-    ctas: string[];
-    visuals: string[];
-  };
-  team: {
-    role: string;
-    person: string;
-    responsibilities: string[];
-  }[];
+  type: 'product_launch' | 'market_entry' | 'feature_launch' | 'partnership_launch' | 'event_launch';
+  status: 'planned' | 'active' | 'paused' | 'completed' | 'cancelled';
+  startDate: string;
+  endDate?: string;
+  budget: number;
+  currency: string;
+  targetAudience: string[];
+  channels: string[];
+  metrics: LaunchMetrics;
+  content: LaunchContent[];
+  createdAt: string;
+}
+
+interface LaunchMetrics {
+  reach: number;
+  impressions: number;
+  clicks: number;
+  conversions: number;
+  signups: number;
+  revenue: number;
+  cost: number;
+  roi: number;
+  engagementRate: number;
+  conversionRate: number;
+}
+
+interface LaunchContent {
+  id: string;
+  type: 'announcement' | 'demo' | 'tutorial' | 'case_study' | 'press_release' | 'social_post';
+  title: string;
+  content: string;
+  platform: string;
+  status: 'draft' | 'review' | 'approved' | 'published';
+  publishDate?: string;
+  performance: ContentPerformance;
+}
+
+interface ContentPerformance {
+  views: number;
+  likes: number;
+  shares: number;
+  comments: number;
+  clicks: number;
 }
 
 interface LaunchMilestone {
   id: string;
   name: string;
   description: string;
-  type: 'pre-launch' | 'launch' | 'post-launch';
-  status: 'pending' | 'in-progress' | 'completed' | 'blocked';
-  priority: 'critical' | 'high' | 'medium' | 'low';
-  dueDate: Date;
-  assignedTo: string;
+  type: 'pre_launch' | 'launch_day' | 'post_launch' | 'follow_up';
+  status: 'pending' | 'in_progress' | 'completed' | 'delayed';
+  dueDate: string;
+  completedDate?: string;
   dependencies: string[];
-  deliverables: string[];
-  successCriteria: string[];
-  progress: number;
-  notes: string;
+  assignee: string;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  createdAt: string;
 }
 
 interface MarketEntryStrategy {
   id: string;
-  market: string;
-  segment: string;
-  approach: 'direct' | 'partnership' | 'channel' | 'freemium';
-  status: 'research' | 'planning' | 'executing' | 'scaling';
-  targetCustomers: {
-    size: string;
-    industry: string;
-    useCase: string;
-    budget: string;
-  };
-  competition: {
-    name: string;
-    strength: 'weak' | 'moderate' | 'strong';
-    marketShare: number;
-    pricing: number;
-    differentiation: string;
-  }[];
-  pricing: {
-    strategy: string;
-    entryPrice: number;
-    premiumPrice: number;
-    discountStrategy: string;
-  };
-  channels: {
-    name: string;
-    type: 'direct' | 'partner' | 'reseller' | 'online';
-    priority: number;
-    investment: number;
-    expectedROI: number;
-  }[];
-  metrics: {
-    targetCustomers: number;
-    marketShare: number;
-    revenue: number;
-    timeline: string;
-  };
-}
-
-interface LaunchMetrics {
-  id: string;
-  period: string;
-  metrics: {
-    websiteTraffic: number;
-    signups: number;
-    conversions: number;
-    revenue: number;
-    socialMediaReach: number;
-    pressMentions: number;
-    demoRequests: number;
-    enterpriseInquiries: number;
-  };
-  trends: {
-    trafficTrend: number[];
-    signupTrend: number[];
-    conversionTrend: number[];
-    revenueTrend: number[];
-  };
-  channels: {
-    organic: number;
-    paid: number;
-    social: number;
-    email: number;
-    referral: number;
-    direct: number;
-  };
-  goals: {
-    targetTraffic: number;
-    targetSignups: number;
-    targetConversions: number;
-    targetRevenue: number;
-  };
+  name: string;
+  targetMarket: string;
+  region: string;
+  strategy: 'direct_sales' | 'partnership' | 'channel' | 'online' | 'hybrid';
+  status: 'research' | 'planning' | 'executing' | 'evaluating' | 'completed';
+  budget: number;
+  currency: string;
+  timeline: string;
+  successMetrics: string[];
+  risks: string[];
+  mitigation: string[];
+  createdAt: string;
 }
 
 interface LaunchTeam {
   id: string;
-  role: string;
-  person: string;
+  name: string;
+  role: 'project_manager' | 'marketing_manager' | 'product_manager' | 'developer' | 'designer' | 'analyst';
+  email: string;
+  phone: string;
   responsibilities: string[];
-  availability: 'full-time' | 'part-time' | 'contract';
-  expertise: string[];
-  currentTasks: {
-    task: string;
-    priority: string;
-    dueDate: Date;
-    status: string;
-  }[];
+  availability: 'full_time' | 'part_time' | 'consultant';
+  status: 'active' | 'inactive' | 'on_leave';
+  joinDate: string;
 }
 
 interface LaunchRisk {
   id: string;
-  category: 'technical' | 'market' | 'competitive' | 'financial' | 'operational';
-  description: string;
-  impact: 'low' | 'medium' | 'high' | 'critical';
+  name: string;
+  category: 'technical' | 'market' | 'competitive' | 'regulatory' | 'operational';
   probability: 'low' | 'medium' | 'high';
-  mitigation: string[];
+  impact: 'low' | 'medium' | 'high' | 'critical';
+  description: string;
+  mitigation: string;
   owner: string;
-  status: 'identified' | 'mitigating' | 'resolved';
+  status: 'identified' | 'monitoring' | 'mitigating' | 'resolved';
+  createdAt: string;
 }
 
 const LaunchExecutionMarketEntry: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const [activeTab, setActiveTab] = useState('overview');
+  const [isLoading, setIsLoading] = useState(false);
   const [launchCampaigns, setLaunchCampaigns] = useState<LaunchCampaign[]>([]);
   const [launchMilestones, setLaunchMilestones] = useState<LaunchMilestone[]>([]);
   const [marketEntryStrategies, setMarketEntryStrategies] = useState<MarketEntryStrategy[]>([]);
-  const [launchMetrics, setLaunchMetrics] = useState<LaunchMetrics[]>([]);
   const [launchTeam, setLaunchTeam] = useState<LaunchTeam[]>([]);
   const [launchRisks, setLaunchRisks] = useState<LaunchRisk[]>([]);
-  const [isExecutingLaunch, setIsExecutingLaunch] = useState(false);
-  const [isActivatingCampaign, setIsActivatingCampaign] = useState(false);
-  const [isMonitoringMetrics, setIsMonitoringMetrics] = useState(false);
-  const [selectedCampaign, setSelectedCampaign] = useState<LaunchCampaign | null>(null);
-  const [selectedMilestone, setSelectedMilestone] = useState<LaunchMilestone | null>(null);
+  const [overallMetrics, setOverallMetrics] = useState<LaunchMetrics | null>(null);
 
-  // Generate launch data
+  // SSR-safe data loading
   useEffect(() => {
-    const generateLaunchCampaigns = (): LaunchCampaign[] => {
-      return [
-        {
-          id: 'campaign-1',
-          name: 'Product Hunt Launch',
-          type: 'product-hunt',
-          status: 'active',
-          startDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-          endDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-          targetAudience: 'Early adopters and productivity enthusiasts',
-          goals: {
-            awareness: 100000,
-            signups: 5000,
-            conversions: 500,
-            revenue: 25000
-          },
-          metrics: {
-            reach: 75000,
-            engagement: 3500,
-            clicks: 2800,
-            signups: 420,
-            conversions: 89,
-            revenue: 4450
-          },
-          channels: [
-            {
-              name: 'Product Hunt',
-              type: 'website',
-              budget: 0,
-              performance: {
-                impressions: 50000,
-                clicks: 2000,
-                conversions: 300,
-                cost: 0
-              }
-            },
-            {
-              name: 'Social Media Blitz',
-              type: 'social',
-              budget: 2000,
-              performance: {
-                impressions: 25000,
-                clicks: 800,
-                conversions: 89,
-                cost: 2000
-              }
-            }
-          ],
-          content: {
-            headlines: [
-              'SyncScript: The Ultimate Productivity Platform',
-              'Revolutionize Your Team\'s Productivity Today',
-              'Join 10,000+ Teams Using SyncScript'
-            ],
-            descriptions: [
-              'AI-powered productivity platform that adapts to your energy and team needs',
-              'The most comprehensive productivity solution ever built',
-              'Transform your team\'s productivity with intelligent task management'
-            ],
-            ctas: [
-              'Try SyncScript Free',
-              'Start Your Productivity Journey',
-              'Join the Revolution'
-            ],
-            visuals: [
-              'product-hunt-banner.jpg',
-              'social-media-graphics.png',
-              'email-header.jpg'
-            ]
-          },
-          team: [
-            {
-              role: 'Campaign Manager',
-              person: 'Sarah Johnson',
-              responsibilities: ['Campaign coordination', 'Content approval', 'Performance monitoring']
-            },
-            {
-              role: 'Social Media Manager',
-              person: 'Mike Chen',
-              responsibilities: ['Social media posts', 'Community engagement', 'Influencer outreach']
-            }
-          ]
-        },
-        {
-          id: 'campaign-2',
-          name: 'LinkedIn Enterprise Campaign',
-          type: 'social-media',
-          status: 'active',
-          startDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-          endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          targetAudience: 'Enterprise decision makers and IT leaders',
-          goals: {
-            awareness: 50000,
-            signups: 1000,
-            conversions: 100,
-            revenue: 100000
-          },
-          metrics: {
-            reach: 35000,
-            engagement: 1200,
-            clicks: 450,
-            signups: 89,
-            conversions: 12,
-            revenue: 12000
-          },
-          channels: [
-            {
-              name: 'LinkedIn Ads',
-              type: 'paid',
-              budget: 5000,
-              performance: {
-                impressions: 30000,
-                clicks: 400,
-                conversions: 10,
-                cost: 5000
-              }
-            },
-            {
-              name: 'LinkedIn Organic',
-              type: 'social',
-              budget: 0,
-              performance: {
-                impressions: 5000,
-                clicks: 50,
-                conversions: 2,
-                cost: 0
-              }
-            }
-          ],
-          content: {
-            headlines: [
-              'Enterprise-Grade Productivity Platform',
-              'Scale Your Team\'s Productivity with SyncScript',
-              'Trusted by Leading Organizations'
-            ],
-            descriptions: [
-              'Enterprise-grade security, compliance, and scalability',
-              'Advanced analytics and reporting for large teams',
-              'Custom integrations and white-label solutions'
-            ],
-            ctas: [
-              'Schedule Enterprise Demo',
-              'Request Custom Quote',
-              'Speak with Sales'
-            ],
-            visuals: [
-              'enterprise-dashboard.jpg',
-              'security-compliance.png',
-              'integration-diagram.jpg'
-            ]
-          },
-          team: [
-            {
-              role: 'Enterprise Sales Manager',
-              person: 'Emma Davis',
-              responsibilities: ['Lead qualification', 'Demo scheduling', 'Proposal creation']
-            },
-            {
-              role: 'Marketing Manager',
-              person: 'David Wilson',
-              responsibilities: ['Campaign optimization', 'Content creation', 'Performance analysis']
-            }
-          ]
-        }
-      ];
-    };
+    const loadLaunchData = async () => {
+      setIsLoading(true);
+      
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
-    const generateLaunchMilestones = (): LaunchMilestone[] => {
-      return [
-        {
-          id: 'milestone-1',
-          name: 'Product Hunt Submission',
-          description: 'Submit SyncScript to Product Hunt for launch day',
-          type: 'pre-launch',
-          status: 'completed',
-          priority: 'critical',
-          dueDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-          assignedTo: 'Sarah Johnson',
-          dependencies: ['Product finalization', 'Marketing materials'],
-          deliverables: ['Product Hunt listing', 'Launch assets', 'Hunter coordination'],
-          successCriteria: ['Successful submission', 'Hunter confirmation', 'Launch assets ready'],
-          progress: 100,
-          notes: 'Successfully submitted with Hunter confirmation'
-        },
-        {
-          id: 'milestone-2',
-          name: 'Social Media Campaign Launch',
-          description: 'Launch coordinated social media campaign across all platforms',
-          type: 'launch',
-          status: 'in-progress',
-          priority: 'high',
-          dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-          assignedTo: 'Mike Chen',
-          dependencies: ['Content creation', 'Platform setup'],
-          deliverables: ['Social media posts', 'Graphics', 'Scheduling'],
-          successCriteria: ['Posts live on all platforms', 'Engagement targets met'],
-          progress: 75,
-          notes: 'Twitter and LinkedIn live, Instagram pending'
-        },
-        {
-          id: 'milestone-3',
-          name: 'Email Campaign Execution',
-          description: 'Send launch announcement to email subscribers',
-          type: 'launch',
-          status: 'pending',
-          priority: 'high',
-          dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-          assignedTo: 'Lisa Anderson',
-          dependencies: ['Email template', 'Subscriber list'],
-          deliverables: ['Email template', 'Send schedule', 'Performance tracking'],
-          successCriteria: ['Email sent to all subscribers', 'Open rate > 25%'],
-          progress: 50,
-          notes: 'Template ready, testing in progress'
-        },
-        {
-          id: 'milestone-4',
-          name: 'Press Release Distribution',
-          description: 'Distribute press release to industry publications',
-          type: 'post-launch',
-          status: 'pending',
-          priority: 'medium',
-          dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-          assignedTo: 'Robert Taylor',
-          dependencies: ['Press release writing', 'Media list'],
-          deliverables: ['Press release', 'Media outreach', 'Coverage tracking'],
-          successCriteria: ['5+ media mentions', 'Industry coverage'],
-          progress: 25,
-          notes: 'Press release drafted, media list compiled'
-        },
-        {
-          id: 'milestone-5',
-          name: 'Analytics and Reporting',
-          description: 'Set up comprehensive analytics and reporting system',
-          type: 'post-launch',
-          status: 'in-progress',
-          priority: 'medium',
-          dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
-          assignedTo: 'Technical Team',
-          dependencies: ['Analytics setup', 'Dashboard creation'],
-          deliverables: ['Analytics dashboard', 'Reporting system', 'KPI tracking'],
-          successCriteria: ['Real-time metrics', 'Automated reports'],
-          progress: 60,
-          notes: 'Dashboard in development, basic metrics live'
-        }
-      ];
-    };
-
-    const generateMarketEntryStrategies = (): MarketEntryStrategy[] => {
-      return [
-        {
-          id: 'strategy-1',
-          market: 'North America',
-          segment: 'SMB Productivity Tools',
-          approach: 'freemium',
-          status: 'executing',
-          targetCustomers: {
-            size: '10-500 employees',
-            industry: 'Technology, Consulting, Professional Services',
-            useCase: 'Team productivity and project management',
-            budget: '$100-5000/month'
-          },
-          competition: [
-            {
-              name: 'Asana',
-              strength: 'strong',
-              marketShare: 25,
-              pricing: 15,
-              differentiation: 'Better AI and energy management'
+        // Mock launch campaigns
+        const mockCampaigns: LaunchCampaign[] = [
+          {
+            id: 'campaign-1',
+            name: 'SyncScript Product Hunt Launch',
+            type: 'product_launch',
+            status: 'active',
+            startDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+            endDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+            budget: 10000,
+            currency: 'USD',
+            targetAudience: ['tech_enthusiasts', 'product_managers', 'early_adopters'],
+            channels: ['product_hunt', 'social_media', 'email', 'blog'],
+            metrics: {
+              reach: 50000,
+              impressions: 300000,
+              clicks: 5000,
+              conversions: 250,
+              signups: 500,
+              revenue: 15000,
+              cost: 7500,
+              roi: 200,
+              engagementRate: 8.5,
+              conversionRate: 5.0
             },
-            {
-              name: 'Monday.com',
-              strength: 'strong',
-              marketShare: 20,
-              pricing: 25,
-              differentiation: 'More intuitive interface'
-            },
-            {
-              name: 'Notion',
-              strength: 'moderate',
-              marketShare: 15,
-              pricing: 8,
-              differentiation: 'Integrated workspace solution'
-            }
-          ],
-          pricing: {
-            strategy: 'Freemium with premium tiers',
-            entryPrice: 0,
-            premiumPrice: 29,
-            discountStrategy: 'Annual discounts, volume pricing'
-          },
-          channels: [
-            {
-              name: 'Direct Sales',
-              type: 'direct',
-              priority: 1,
-              investment: 10000,
-              expectedROI: 300
-            },
-            {
-              name: 'Content Marketing',
-              type: 'online',
-              priority: 2,
-              investment: 5000,
-              expectedROI: 200
-            },
-            {
-              name: 'Partner Channel',
-              type: 'partner',
-              priority: 3,
-              investment: 3000,
-              expectedROI: 150
-            }
-          ],
-          metrics: {
-            targetCustomers: 5000,
-            marketShare: 5,
-            revenue: 500000,
-            timeline: '12 months'
+            content: [
+              {
+                id: 'content-1',
+                type: 'announcement',
+                title: 'SyncScript is Live on Product Hunt!',
+                content: '🚀 We\'re excited to announce SyncScript on Product Hunt!',
+                platform: 'product_hunt',
+                status: 'published',
+                publishDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+                performance: {
+                  views: 25000,
+                  likes: 1200,
+                  shares: 300,
+                  comments: 150,
+                  clicks: 2500
+                }
+              }
+            ],
+            createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
           }
-        },
-        {
-          id: 'strategy-2',
-          market: 'Europe',
-          segment: 'Enterprise Productivity',
-          approach: 'partnership',
-          status: 'planning',
-          targetCustomers: {
-            size: '500+ employees',
-            industry: 'Financial Services, Healthcare, Manufacturing',
-            useCase: 'Enterprise productivity and compliance',
-            budget: '$5000-50000/month'
+        ];
+
+        // Mock launch milestones
+        const mockMilestones: LaunchMilestone[] = [
+          {
+            id: 'milestone-1',
+            name: 'Product Hunt Submission',
+            description: 'Submit SyncScript to Product Hunt for launch day',
+            type: 'pre_launch',
+            status: 'completed',
+            dueDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+            completedDate: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
+            dependencies: [],
+            assignee: 'Sarah Johnson',
+            priority: 'critical',
+            createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
           },
-          competition: [
-            {
-              name: 'Microsoft 365',
-              strength: 'strong',
-              marketShare: 40,
-              pricing: 22,
-              differentiation: 'Better integration and customization'
-            },
-            {
-              name: 'Google Workspace',
-              strength: 'strong',
-              marketShare: 30,
-              pricing: 18,
-              differentiation: 'Superior AI and analytics'
-            }
-          ],
-          pricing: {
-            strategy: 'Enterprise licensing with volume discounts',
-            entryPrice: 99,
-            premiumPrice: 299,
-            discountStrategy: 'Volume discounts, multi-year contracts'
+          {
+            id: 'milestone-2',
+            name: 'Launch Day Execution',
+            description: 'Execute launch day activities and monitor performance',
+            type: 'launch_day',
+            status: 'in_progress',
+            dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString(),
+            dependencies: ['milestone-1'],
+            assignee: 'Michael Chen',
+            priority: 'critical',
+            createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
           },
-          channels: [
-            {
-              name: 'System Integrators',
-              type: 'partner',
-              priority: 1,
-              investment: 15000,
-              expectedROI: 250
-            },
-            {
-              name: 'Direct Enterprise Sales',
-              type: 'direct',
-              priority: 2,
-              investment: 20000,
-              expectedROI: 400
-            }
-          ],
-          metrics: {
-            targetCustomers: 100,
-            marketShare: 2,
-            revenue: 2000000,
-            timeline: '18 months'
+          {
+            id: 'milestone-3',
+            name: 'Post-Launch Analysis',
+            description: 'Analyze launch performance and gather feedback',
+            type: 'post_launch',
+            status: 'pending',
+            dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+            dependencies: ['milestone-2'],
+            assignee: 'Emily Rodriguez',
+            priority: 'high',
+            createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
           }
-        }
-      ];
-    };
+        ];
 
-    const generateLaunchMetrics = (): LaunchMetrics[] => {
-      return [
-        {
-          id: 'metrics-1',
-          period: 'Launch Week',
-          metrics: {
-            websiteTraffic: 45000,
-            signups: 1250,
-            conversions: 89,
-            revenue: 15420,
-            socialMediaReach: 125000,
-            pressMentions: 15,
-            demoRequests: 45,
-            enterpriseInquiries: 12
-          },
-          trends: {
-            trafficTrend: [5000, 8000, 12000, 15000, 18000, 22000, 25000, 28000, 32000, 35000, 38000, 40000, 42000, 45000],
-            signupTrend: [150, 250, 350, 450, 550, 650, 750, 850, 950, 1050, 1150, 1250],
-            conversionTrend: [8, 12, 18, 25, 32, 40, 48, 56, 64, 72, 80, 89],
-            revenueTrend: [1200, 2400, 3600, 4800, 6000, 7200, 8400, 9600, 10800, 12000, 13200, 14400, 15420]
-          },
-          channels: {
-            organic: 35,
-            paid: 25,
-            social: 20,
-            email: 15,
-            referral: 3,
-            direct: 2
-          },
-          goals: {
-            targetTraffic: 50000,
-            targetSignups: 1500,
-            targetConversions: 100,
-            targetRevenue: 20000
+        // Mock market entry strategies
+        const mockStrategies: MarketEntryStrategy[] = [
+          {
+            id: 'strategy-1',
+            name: 'North American Market Entry',
+            targetMarket: 'SMBs and Mid-Market Companies',
+            region: 'North America',
+            strategy: 'hybrid',
+            status: 'executing',
+            budget: 50000,
+            currency: 'USD',
+            timeline: '6 months',
+            successMetrics: ['User acquisition', 'Revenue growth', 'Market share'],
+            risks: ['Competition', 'Regulatory compliance', 'Market saturation'],
+            mitigation: ['Competitive differentiation', 'Legal review', 'Market research'],
+            createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
           }
-        }
-      ];
+        ];
+
+        // Mock launch team
+        const mockTeam: LaunchTeam[] = [
+          {
+            id: 'team-1',
+            name: 'Sarah Johnson',
+            role: 'project_manager',
+            email: 'sarah.johnson@syncscript.com',
+            phone: '+1-555-0123',
+            responsibilities: ['Project coordination', 'Timeline management', 'Team communication'],
+            availability: 'full_time',
+            status: 'active',
+            joinDate: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString()
+          },
+          {
+            id: 'team-2',
+            name: 'Michael Chen',
+            role: 'marketing_manager',
+            email: 'michael.chen@syncscript.com',
+            phone: '+1-555-0456',
+            responsibilities: ['Campaign execution', 'Content creation', 'Analytics'],
+            availability: 'full_time',
+            status: 'active',
+            joinDate: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString()
+          },
+          {
+            id: 'team-3',
+            name: 'Emily Rodriguez',
+            role: 'product_manager',
+            email: 'emily.rodriguez@syncscript.com',
+            phone: '+1-555-0789',
+            responsibilities: ['Product strategy', 'Feature prioritization', 'User feedback'],
+            availability: 'full_time',
+            status: 'active',
+            joinDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+
+        // Mock launch risks
+        const mockRisks: LaunchRisk[] = [
+          {
+            id: 'risk-1',
+            name: 'Server Overload',
+            category: 'technical',
+            probability: 'medium',
+            impact: 'high',
+            description: 'High traffic during launch could overwhelm servers',
+            mitigation: 'Scale infrastructure and implement load balancing',
+            owner: 'Technical Team',
+            status: 'mitigating',
+            createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
+          },
+          {
+            id: 'risk-2',
+            name: 'Competitive Response',
+            category: 'competitive',
+            probability: 'high',
+            impact: 'medium',
+            description: 'Competitors may launch similar features',
+            mitigation: 'Focus on unique value proposition and rapid iteration',
+            owner: 'Product Team',
+            status: 'monitoring',
+            createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+
+        // Mock overall metrics
+        const mockOverallMetrics: LaunchMetrics = {
+          reach: 75000,
+          impressions: 450000,
+          clicks: 7500,
+          conversions: 375,
+          signups: 750,
+          revenue: 22500,
+          cost: 11250,
+          roi: 200,
+          engagementRate: 8.5,
+          conversionRate: 5.0
+        };
+
+        setLaunchCampaigns(mockCampaigns);
+        setLaunchMilestones(mockMilestones);
+        setMarketEntryStrategies(mockStrategies);
+        setLaunchTeam(mockTeam);
+        setLaunchRisks(mockRisks);
+        setOverallMetrics(mockOverallMetrics);
+
+        toast.success('Launch execution data loaded successfully!');
+      } catch (error) {
+        console.error('Failed to load launch data:', error);
+        toast.error('Failed to load launch execution data');
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    const generateLaunchTeam = (): LaunchTeam[] => {
-      return [
-        {
-          id: 'team-1',
-          role: 'Launch Manager',
-          person: 'Sarah Johnson',
-          responsibilities: ['Campaign coordination', 'Milestone tracking', 'Team management'],
-          availability: 'full-time',
-          expertise: ['Project management', 'Marketing', 'Team leadership'],
-          currentTasks: [
-            {
-              task: 'Product Hunt coordination',
-              priority: 'critical',
-              dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-              status: 'in-progress'
-            },
-            {
-              task: 'Team status updates',
-              priority: 'high',
-              dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-              status: 'pending'
-            }
-          ]
-        },
-        {
-          id: 'team-2',
-          role: 'Social Media Manager',
-          person: 'Mike Chen',
-          responsibilities: ['Social media strategy', 'Content creation', 'Community engagement'],
-          availability: 'full-time',
-          expertise: ['Social media', 'Content creation', 'Community management'],
-          currentTasks: [
-            {
-              task: 'Launch day social posts',
-              priority: 'critical',
-              dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-              status: 'in-progress'
-            },
-            {
-              task: 'Influencer outreach',
-              priority: 'high',
-              dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-              status: 'pending'
-            }
-          ]
-        },
-        {
-          id: 'team-3',
-          role: 'Enterprise Sales Manager',
-          person: 'Emma Davis',
-          responsibilities: ['Enterprise sales', 'Demo coordination', 'Proposal creation'],
-          availability: 'full-time',
-          expertise: ['Enterprise sales', 'Product demos', 'Proposal writing'],
-          currentTasks: [
-            {
-              task: 'Enterprise demo scheduling',
-              priority: 'high',
-              dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-              status: 'pending'
-            },
-            {
-              task: 'Sales pipeline review',
-              priority: 'medium',
-              dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-              status: 'pending'
-            }
-          ]
-        }
-      ];
-    };
-
-    const generateLaunchRisks = (): LaunchRisk[] => {
-      return [
-        {
-          id: 'risk-1',
-          category: 'technical',
-          description: 'Server overload during launch traffic spike',
-          impact: 'high',
-          probability: 'medium',
-          mitigation: ['Load testing', 'Auto-scaling setup', 'CDN implementation'],
-          owner: 'Technical Team',
-          status: 'mitigating'
-        },
-        {
-          id: 'risk-2',
-          category: 'competitive',
-          description: 'Competitor launches similar product during our launch',
-          impact: 'medium',
-          probability: 'low',
-          mitigation: ['Unique positioning', 'Patent protection', 'Speed to market'],
-          owner: 'Marketing Team',
-          status: 'identified'
-        },
-        {
-          id: 'risk-3',
-          category: 'market',
-          description: 'Lower than expected market interest in productivity tools',
-          impact: 'medium',
-          probability: 'low',
-          mitigation: ['Market research validation', 'Pivot strategy', 'Niche targeting'],
-          owner: 'Product Team',
-          status: 'identified'
-        }
-      ];
-    };
-
-    setLaunchCampaigns(generateLaunchCampaigns());
-    setLaunchMilestones(generateLaunchMilestones());
-    setMarketEntryStrategies(generateMarketEntryStrategies());
-    setLaunchMetrics(generateLaunchMetrics());
-    setLaunchTeam(generateLaunchTeam());
-    setLaunchRisks(generateLaunchRisks());
+    loadLaunchData();
   }, []);
 
-  const executeLaunch = async () => {
-    setIsExecutingLaunch(true);
-    
-    // Simulate launch execution
-    await new Promise(resolve => setTimeout(resolve, 12000));
-    
-    // Update campaign metrics
-    setLaunchCampaigns(prev => prev.map(campaign => 
-      campaign.status === 'active' 
-        ? { 
-            ...campaign, 
-            metrics: {
-              ...campaign.metrics,
-              reach: campaign.metrics.reach + 10000,
-              engagement: campaign.metrics.engagement + 500,
-              signups: campaign.metrics.signups + 50,
-              conversions: campaign.metrics.conversions + 10,
-              revenue: campaign.metrics.revenue + 2000
-            }
-          }
-        : campaign
-    ));
-    
-    setIsExecutingLaunch(false);
-  };
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: BarChart3 },
+    { id: 'campaigns', label: 'Campaigns', icon: Rocket },
+    { id: 'milestones', label: 'Milestones', icon: Target },
+    { id: 'market', label: 'Market Entry', icon: Globe },
+    { id: 'team', label: 'Team', icon: Users },
+    { id: 'risks', label: 'Risks', icon: AlertTriangle }
+  ];
 
-  const activateCampaign = async () => {
-    setIsActivatingCampaign(true);
-    
-    // Simulate campaign activation
-    await new Promise(resolve => setTimeout(resolve, 8000));
-    
-    // Update campaign status
-    setLaunchCampaigns(prev => prev.map(campaign => 
-      campaign.status === 'planned' 
-        ? { 
-            ...campaign, 
-            status: 'active' as const,
-            startDate: new Date()
-          }
-        : campaign
-    ));
-    
-    setIsActivatingCampaign(false);
-  };
-
-  const monitorMetrics = async () => {
-    setIsMonitoringMetrics(true);
-    
-    // Simulate metrics monitoring
-    await new Promise(resolve => setTimeout(resolve, 10000));
-    
-    // Update metrics
-    setLaunchMetrics(prev => prev.map(metrics => 
-      ({ 
-        ...metrics, 
-        metrics: {
-          ...metrics.metrics,
-          websiteTraffic: metrics.metrics.websiteTraffic + 1000,
-          signups: metrics.metrics.signups + 25,
-          conversions: metrics.metrics.conversions + 5,
-          revenue: metrics.metrics.revenue + 500
-        }
-      })
-    ));
-    
-    setIsMonitoringMetrics(false);
-  };
-
-  const formatDate = (date: Date): string => {
-    return date.toLocaleString();
-  };
-
-  const getStatusColor = (status: string): string => {
+  const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': case 'completed': case 'resolved': return 'bg-green-100 text-green-800';
-      case 'in-progress': case 'mitigating': return 'bg-yellow-100 text-yellow-800';
-      case 'pending': case 'identified': case 'planned': return 'bg-blue-100 text-blue-800';
-      case 'paused': case 'blocked': return 'bg-orange-100 text-orange-800';
-      case 'critical': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'planned': return 'text-gray-600 bg-gray-100';
+      case 'active': return 'text-green-600 bg-green-100';
+      case 'paused': return 'text-yellow-600 bg-yellow-100';
+      case 'completed': return 'text-blue-600 bg-blue-100';
+      case 'cancelled': return 'text-red-600 bg-red-100';
+      case 'pending': return 'text-gray-600 bg-gray-100';
+      case 'in_progress': return 'text-blue-600 bg-blue-100';
+      case 'delayed': return 'text-orange-600 bg-orange-100';
+      case 'research': return 'text-purple-600 bg-purple-100';
+      case 'planning': return 'text-blue-600 bg-blue-100';
+      case 'executing': return 'text-green-600 bg-green-100';
+      case 'evaluating': return 'text-yellow-600 bg-yellow-100';
+      case 'identified': return 'text-red-600 bg-red-100';
+      case 'monitoring': return 'text-yellow-600 bg-yellow-100';
+      case 'mitigating': return 'text-orange-600 bg-orange-100';
+      case 'resolved': return 'text-green-600 bg-green-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
 
-  const getPriorityColor = (priority: string): string => {
+  const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'bg-red-100 text-red-800';
-      case 'high': return 'bg-orange-100 text-orange-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'low': return 'text-blue-600 bg-blue-100';
+      case 'medium': return 'text-yellow-600 bg-yellow-100';
+      case 'high': return 'text-orange-600 bg-orange-100';
+      case 'critical': return 'text-red-600 bg-red-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
 
-  const getTypeColor = (type: string): string => {
-    switch (type) {
-      case 'product-hunt': return 'bg-orange-100 text-orange-800';
-      case 'social-media': return 'bg-blue-100 text-blue-800';
-      case 'email': return 'bg-green-100 text-green-800';
-      case 'pr': return 'bg-purple-100 text-purple-800';
-      case 'influencer': return 'bg-pink-100 text-pink-800';
-      case 'partnership': return 'bg-indigo-100 text-indigo-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const getImpactColor = (impact: string): string => {
+  const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'critical': return 'bg-red-100 text-red-800';
-      case 'high': return 'bg-orange-100 text-orange-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'low': return 'text-green-600 bg-green-100';
+      case 'medium': return 'text-yellow-600 bg-yellow-100';
+      case 'high': return 'text-orange-600 bg-orange-100';
+      case 'critical': return 'text-red-600 bg-red-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
-
-  const totalReach = launchMetrics[0]?.metrics.websiteTraffic || 0;
-  const totalSignups = launchMetrics[0]?.metrics.signups || 0;
-  const totalRevenue = launchMetrics[0]?.metrics.revenue || 0;
-  const activeCampaigns = launchCampaigns.filter(c => c.status === 'active').length;
-  const completedMilestones = launchMilestones.filter(m => m.status === 'completed').length;
-  const totalMilestones = launchMilestones.length;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
+        exit={{ opacity: 0, scale: 0.95 }}
         className="bg-white rounded-2xl shadow-2xl w-full max-w-7xl h-[90vh] overflow-hidden"
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-orange-600 to-red-600 text-white p-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-2xl font-bold">🚀 Launch Execution & Market Entry</h2>
-              <p className="text-orange-100 mt-1">Execute Product Hunt launch, activate campaigns, and enter new markets</p>
+        <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white bg-opacity-20 rounded-lg">
+                <Rocket className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">Launch Execution & Market Entry</h2>
+                <p className="text-orange-100">Market penetration and launch execution</p>
+              </div>
             </div>
-            <button
-              onClick={onClose}
-              className="text-white hover:text-orange-200 transition-colors"
-            >
-              <X size={24} />
-            </button>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                <span className="text-sm">Active</span>
+              </div>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex space-x-1 mt-6 overflow-x-auto">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? 'bg-white bg-opacity-20 text-white'
+                      : 'text-orange-100 hover:bg-white hover:bg-opacity-10'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
+        {/* Content */}
         <div className="p-6 h-full overflow-y-auto">
-          {/* Launch Overview Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-orange-600 font-medium">Website Traffic</p>
-                  <p className="text-2xl font-bold text-orange-800">{totalReach.toLocaleString()}</p>
-                  <p className="text-xs text-orange-600">Launch week</p>
-                </div>
-                <Globe className="text-3xl text-orange-600" />
-              </div>
+          {isLoading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
             </div>
-
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-green-600 font-medium">Signups</p>
-                  <p className="text-2xl font-bold text-green-800">{totalSignups.toLocaleString()}</p>
-                  <p className="text-xs text-green-600">New users</p>
-                </div>
-                <Users className="text-3xl text-green-600" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-blue-600 font-medium">Active Campaigns</p>
-                  <p className="text-2xl font-bold text-blue-800">{activeCampaigns}</p>
-                  <p className="text-xs text-blue-600">Running campaigns</p>
-                </div>
-                <Megaphone className="text-3xl text-blue-600" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-purple-600 font-medium">Milestones</p>
-                  <p className="text-2xl font-bold text-purple-800">{completedMilestones}/{totalMilestones}</p>
-                  <p className="text-xs text-purple-600">Completed</p>
-                </div>
-                <Target className="text-3xl text-purple-600" />
-              </div>
-            </div>
-          </div>
-
-          {/* Launch Actions */}
-          <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-4 mb-6 border-2 border-orange-200">
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-orange-700 font-medium">
-                🚀 Launch Execution Active - Product Hunt launch live and campaigns running!
-              </div>
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={executeLaunch}
-                  disabled={isExecutingLaunch}
-                  className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:opacity-50 transition-colors"
+          ) : (
+            <AnimatePresence mode="wait">
+              {activeTab === 'overview' && (
+                <motion.div
+                  key="overview"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  {isExecutingLaunch ? '⏳ Executing...' : '🚀 Execute Launch'}
-                </button>
-                <button
-                  onClick={activateCampaign}
-                  disabled={isActivatingCampaign}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-orange-100">Total Reach</p>
+                          <p className="text-3xl font-bold">{overallMetrics?.reach.toLocaleString()}</p>
+                        </div>
+                        <Users className="w-8 h-8 text-orange-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-blue-100">Conversions</p>
+                          <p className="text-3xl font-bold">{overallMetrics?.conversions}</p>
+                        </div>
+                        <Target className="w-8 h-8 text-blue-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-green-100">Revenue</p>
+                          <p className="text-3xl font-bold">${overallMetrics?.revenue.toLocaleString()}</p>
+                        </div>
+                        <DollarSign className="w-8 h-8 text-green-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-purple-100">ROI</p>
+                          <p className="text-3xl font-bold">{overallMetrics?.roi}%</p>
+                        </div>
+                        <TrendingUp className="w-8 h-8 text-purple-200" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold mb-4">Campaign Performance</h3>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <BarChart data={launchCampaigns.map(campaign => ({
+                          name: campaign.name.substring(0, 15) + '...',
+                          reach: campaign.metrics.reach,
+                          conversions: campaign.metrics.conversions
+                        }))}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="name" />
+                          <YAxis />
+                          <Tooltip />
+                          <Bar dataKey="reach" fill="#f97316" />
+                          <Bar dataKey="conversions" fill="#10b981" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold mb-4">Milestone Status</h3>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <PieChart>
+                          <Pie
+                            data={[
+                              { name: 'Completed', value: launchMilestones.filter(m => m.status === 'completed').length },
+                              { name: 'In Progress', value: launchMilestones.filter(m => m.status === 'in_progress').length },
+                              { name: 'Pending', value: launchMilestones.filter(m => m.status === 'pending').length },
+                              { name: 'Delayed', value: launchMilestones.filter(m => m.status === 'delayed').length }
+                            ]}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            label={({ name, percent }) => `${name} ${((percent as number) * 100).toFixed(0)}%`}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                          >
+                            <Cell fill="#10b981" />
+                            <Cell fill="#3b82f6" />
+                            <Cell fill="#6b7280" />
+                            <Cell fill="#f97316" />
+                          </Pie>
+                          <Tooltip />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeTab === 'campaigns' && (
+                <motion.div
+                  key="campaigns"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  {isActivatingCampaign ? '⏳ Activating...' : '📢 Activate Campaign'}
-                </button>
-                <button
-                  onClick={monitorMetrics}
-                  disabled={isMonitoringMetrics}
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50 transition-colors"
+                  {launchCampaigns.map((campaign) => (
+                    <div key={campaign.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-orange-100 rounded-lg">
+                            <Rocket className="w-5 h-5 text-orange-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{campaign.name}</h3>
+                            <p className="text-sm text-gray-600">{campaign.type.replace('_', ' ')}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(campaign.status)}`}>
+                            {campaign.status}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            ROI: {campaign.metrics.roi}%
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Budget</span>
+                          <p className="font-semibold">${campaign.budget.toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Reach</span>
+                          <p className="font-semibold">{campaign.metrics.reach.toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Conversions</span>
+                          <p className="font-semibold">{campaign.metrics.conversions}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Revenue</span>
+                          <p className="font-semibold">${campaign.metrics.revenue.toLocaleString()}</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Target Audience:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {campaign.targetAudience.map((audience, index) => (
+                            <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
+                              {audience.replace('_', ' ')}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Channels:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {campaign.channels.map((channel, index) => (
+                            <span key={index} className="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">
+                              {channel.replace('_', ' ')}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+
+              {activeTab === 'milestones' && (
+                <motion.div
+                  key="milestones"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  {isMonitoringMetrics ? '⏳ Monitoring...' : '📊 Monitor Metrics'}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Launch Campaigns */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Megaphone className="mr-2 text-orange-600" />
-              Launch Campaigns ({launchCampaigns.length})
-            </h3>
-            <div className="space-y-4">
-              {launchCampaigns.map((campaign) => (
-                <div key={campaign.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{campaign.name}</h4>
-                      <p className="text-sm text-gray-600">{campaign.targetAudience}</p>
-                    </div>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getTypeColor(campaign.type)}`}>
-                        {campaign.type}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(campaign.status)}`}>
-                        {campaign.status}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                    <div className="text-sm">
-                      <span className="text-gray-600">Reach:</span>
-                      <span className="font-medium text-gray-900 ml-1">{campaign.metrics.reach.toLocaleString()}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Signups:</span>
-                      <span className="font-medium text-gray-900 ml-1">{campaign.metrics.signups}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Conversions:</span>
-                      <span className="font-medium text-gray-900 ml-1">{campaign.metrics.conversions}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Revenue:</span>
-                      <span className="font-medium text-gray-900 ml-1">${campaign.metrics.revenue.toLocaleString()}</span>
-                    </div>
-                  </div>
-
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Channels:</span> {campaign.channels.length} active | 
-                    <span className="font-medium ml-2">Team:</span> {campaign.team.length} members | 
-                    <span className="font-medium ml-2">Duration:</span> {formatDate(campaign.startDate)} - {formatDate(campaign.endDate)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Launch Milestones */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Target className="mr-2 text-blue-600" />
-              Launch Milestones ({launchMilestones.length})
-            </h3>
-            <div className="space-y-4">
-              {launchMilestones.map((milestone) => (
-                <div key={milestone.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{milestone.name}</h4>
-                      <p className="text-sm text-gray-600">{milestone.description}</p>
-                    </div>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getPriorityColor(milestone.priority)}`}>
-                        {milestone.priority}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(milestone.status)}`}>
-                        {milestone.status}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="mb-3">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm text-gray-600">Progress</span>
-                      <span className="text-sm font-medium text-gray-900">{milestone.progress}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${milestone.progress}%` }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3 text-sm">
-                    <div>
-                      <span className="text-gray-600">Assigned to:</span>
-                      <span className="font-medium text-gray-900 ml-1">{milestone.assignedTo}</span>
-                    </div>
-                    <div>
-                      <span className="text-gray-600">Due Date:</span>
-                      <span className="font-medium text-gray-900 ml-1">{formatDate(milestone.dueDate)}</span>
-                    </div>
-                    <div>
-                      <span className="text-gray-600">Dependencies:</span>
-                      <span className="font-medium text-gray-900 ml-1">{milestone.dependencies.length}</span>
-                    </div>
-                    <div>
-                      <span className="text-gray-600">Deliverables:</span>
-                      <span className="font-medium text-gray-900 ml-1">{milestone.deliverables.length}</span>
-                    </div>
-                  </div>
-
-                  {milestone.notes && (
-                    <div className="text-sm text-gray-600 bg-white rounded p-2">
-                      <span className="font-medium">Notes:</span> {milestone.notes}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Market Entry Strategies */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Globe className="mr-2 text-green-600" />
-              Market Entry Strategies ({marketEntryStrategies.length})
-            </h3>
-            <div className="space-y-4">
-              {marketEntryStrategies.map((strategy) => (
-                <div key={strategy.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{strategy.market} - {strategy.segment}</h4>
-                      <p className="text-sm text-gray-600">{strategy.targetCustomers.industry} • {strategy.targetCustomers.size}</p>
-                    </div>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(strategy.status)}`}>
-                        {strategy.status}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800`}>
-                        {strategy.approach}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                    <div className="text-sm">
-                      <span className="text-gray-600">Target Customers:</span>
-                      <span className="font-medium text-gray-900 ml-1">{strategy.metrics.targetCustomers.toLocaleString()}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Market Share:</span>
-                      <span className="font-medium text-gray-900 ml-1">{strategy.metrics.marketShare}%</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Revenue Target:</span>
-                      <span className="font-medium text-gray-900 ml-1">${strategy.metrics.revenue.toLocaleString()}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Timeline:</span>
-                      <span className="font-medium text-gray-900 ml-1">{strategy.metrics.timeline}</span>
-                    </div>
-                  </div>
-
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Competition:</span> {strategy.competition.length} competitors | 
-                    <span className="font-medium ml-2">Channels:</span> {strategy.channels.length} channels | 
-                    <span className="font-medium ml-2">Budget:</span> ${strategy.channels.reduce((sum, c) => sum + c.investment, 0).toLocaleString()}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Launch Team */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Users className="mr-2 text-purple-600" />
-              Launch Team ({launchTeam.length})
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {launchTeam.map((member) => (
-                <div key={member.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{member.person}</h4>
-                      <p className="text-sm text-gray-600">{member.role}</p>
-                    </div>
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(member.availability)}`}>
-                      {member.availability}
-                    </span>
-                  </div>
-                  
-                  <div className="mb-3">
-                    <div className="text-sm text-gray-600 mb-1">Responsibilities:</div>
-                    <div className="text-sm text-gray-800">
-                      {member.responsibilities.slice(0, 2).map((resp, index) => (
-                        <div key={index}>• {resp}</div>
-                      ))}
-                      {member.responsibilities.length > 2 && (
-                        <div className="text-gray-500">+{member.responsibilities.length - 2} more</div>
+                  {launchMilestones.map((milestone) => (
+                    <div key={milestone.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-blue-100 rounded-lg">
+                            <Target className="w-5 h-5 text-blue-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{milestone.name}</h3>
+                            <p className="text-sm text-gray-600">{milestone.type.replace('_', ' ')}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(milestone.status)}`}>
+                            {milestone.status.replace('_', ' ')}
+                          </span>
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getPriorityColor(milestone.priority)}`}>
+                            {milestone.priority}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <span className="text-sm text-gray-500">Description:</span>
+                        <p className="text-gray-700">{milestone.description}</p>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Due Date</span>
+                          <p className="font-semibold text-sm">
+                            {new Date(milestone.dueDate).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Assignee</span>
+                          <p className="font-semibold text-sm">{milestone.assignee}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Completed</span>
+                          <p className="font-semibold text-sm">
+                            {milestone.completedDate ? new Date(milestone.completedDate).toLocaleDateString() : 'Not completed'}
+                          </p>
+                        </div>
+                      </div>
+                      {milestone.dependencies.length > 0 && (
+                        <div className="space-y-2 mb-4">
+                          <h4 className="font-medium">Dependencies:</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {milestone.dependencies.map((dep, index) => (
+                              <span key={index} className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-sm">
+                                {dep}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
                       )}
                     </div>
-                  </div>
+                  ))}
+                </motion.div>
+              )}
 
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Current Tasks:</span> {member.currentTasks.length} | 
-                    <span className="font-medium ml-2">Expertise:</span> {member.expertise.length} areas
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+              {activeTab === 'market' && (
+                <motion.div
+                  key="market"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {marketEntryStrategies.map((strategy) => (
+                    <div key={strategy.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-green-100 rounded-lg">
+                            <Globe className="w-5 h-5 text-green-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{strategy.name}</h3>
+                            <p className="text-sm text-gray-600">{strategy.targetMarket}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(strategy.status)}`}>
+                            {strategy.status}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            ${strategy.budget.toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Region</span>
+                          <p className="font-semibold">{strategy.region}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Strategy</span>
+                          <p className="font-semibold">{strategy.strategy.replace('_', ' ')}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Timeline</span>
+                          <p className="font-semibold">{strategy.timeline}</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Success Metrics:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {strategy.successMetrics.map((metric, index) => (
+                            <span key={index} className="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">
+                              {metric}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Risks:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {strategy.risks.map((risk, index) => (
+                            <span key={index} className="px-2 py-1 bg-red-100 text-red-800 rounded text-sm">
+                              {risk}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Mitigation:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {strategy.mitigation.map((mitigation, index) => (
+                            <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
+                              {mitigation}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
 
-          {/* Launch Risks */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <AlertTriangle className="mr-2 text-red-600" />
-              Launch Risks ({launchRisks.length})
-            </h3>
-            <div className="space-y-4">
-              {launchRisks.map((risk) => (
-                <div key={risk.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{risk.description}</h4>
-                      <p className="text-sm text-gray-600">{risk.category} risk</p>
+              {activeTab === 'team' && (
+                <motion.div
+                  key="team"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {launchTeam.map((member) => (
+                    <div key={member.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-purple-100 rounded-lg">
+                            <Users className="w-5 h-5 text-purple-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{member.name}</h3>
+                            <p className="text-sm text-gray-600">{member.role.replace('_', ' ')}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(member.status)}`}>
+                            {member.status}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            {member.availability.replace('_', ' ')}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Email</span>
+                          <p className="font-semibold text-sm">{member.email}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Phone</span>
+                          <p className="font-semibold text-sm">{member.phone}</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Responsibilities:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {member.responsibilities.map((responsibility, index) => (
+                            <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
+                              {responsibility}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                          Contact
+                        </button>
+                        <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                          View Profile
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getImpactColor(risk.impact)}`}>
-                        {risk.impact} impact
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(risk.status)}`}>
-                        {risk.status}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-3 text-sm">
-                    <div>
-                      <span className="text-gray-600">Probability:</span>
-                      <span className="font-medium text-gray-900 ml-1">{risk.probability}</span>
-                    </div>
-                    <div>
-                      <span className="text-gray-600">Owner:</span>
-                      <span className="font-medium text-gray-900 ml-1">{risk.owner}</span>
-                    </div>
-                    <div>
-                      <span className="text-gray-600">Mitigations:</span>
-                      <span className="font-medium text-gray-900 ml-1">{risk.mitigation.length}</span>
-                    </div>
-                  </div>
+                  ))}
+                </motion.div>
+              )}
 
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Mitigation Actions:</span>
-                    <div className="mt-1">
-                      {risk.mitigation.map((action, index) => (
-                        <div key={index}>• {action}</div>
-                      ))}
+              {activeTab === 'risks' && (
+                <motion.div
+                  key="risks"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {launchRisks.map((risk) => (
+                    <div key={risk.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-red-100 rounded-lg">
+                            <AlertTriangle className="w-5 h-5 text-red-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{risk.name}</h3>
+                            <p className="text-sm text-gray-600">{risk.category.replace('_', ' ')}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(risk.status)}`}>
+                            {risk.status}
+                          </span>
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getPriorityColor(risk.probability)}`}>
+                            {risk.probability} probability
+                          </span>
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getImpactColor(risk.impact)}`}>
+                            {risk.impact} impact
+                          </span>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <span className="text-sm text-gray-500">Description:</span>
+                        <p className="text-gray-700">{risk.description}</p>
+                      </div>
+                      <div className="mb-4">
+                        <span className="text-sm text-gray-500">Mitigation:</span>
+                        <p className="text-gray-700">{risk.mitigation}</p>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Owner</span>
+                          <p className="font-semibold">{risk.owner}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Identified</span>
+                          <p className="font-semibold text-sm">
+                            {new Date(risk.createdAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                          Update
+                        </button>
+                        <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                          Mitigate
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
         </div>
       </motion.div>
     </div>
