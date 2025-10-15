@@ -102,6 +102,7 @@ import AdvancedSecurityFeatures from '../src/components/security/AdvancedSecurit
 import SystemIntegrationTesting from '../src/components/testing/SystemIntegrationTesting';
 import PlatformOptimizationDocumentation from '../src/components/documentation/PlatformOptimizationDocumentation';
 import AdvancedPerformanceOptimization from '../src/components/performance/AdvancedPerformanceOptimization';
+import BlockchainIntegration from '../src/components/blockchain/BlockchainIntegration';
 import AIPoweredEnhancements from '../src/components/ai/AIPoweredEnhancements';
 import EnterpriseIntegration from '../src/components/enterprise/EnterpriseIntegration';
 import PlatformDocumentationDeployment from '../src/components/deployment/PlatformDocumentationDeployment';
@@ -477,6 +478,7 @@ export default function Dashboard() {
 
   // Final Polish & Optimization State
   const [showPerformanceOptimization, setShowPerformanceOptimization] = React.useState(false);
+  const [showBlockchainIntegration, setShowBlockchainIntegration] = React.useState(false);
   const [showCodeQualityRefactoring, setShowCodeQualityRefactoring] = React.useState(false);
   const [showErrorHandlingResilience, setShowErrorHandlingResilience] = React.useState(false);
   const [showTestingValidation, setShowTestingValidation] = React.useState(false);
@@ -3727,6 +3729,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowBlockchainIntegration(true)}
+                title="Blockchain Integration"
+                aria-label="Blockchain Integration"
+                style={{ 
+                  background: 'linear-gradient(135deg, #7c3aed, #5b21b6)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                ⛓️ Blockchain
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowCodeQualityRefactoring(true)}
                 title="Code Quality & Refactoring"
                 aria-label="Code Quality & Refactoring"
@@ -5874,6 +5895,12 @@ export default function Dashboard() {
       {showPerformanceOptimization && (
         <PerformanceOptimizationSystem
           onClose={() => setShowPerformanceOptimization(false)}
+        />
+      )}
+
+      {showBlockchainIntegration && (
+        <BlockchainIntegration
+          onClose={() => setShowBlockchainIntegration(false)}
         />
       )}
 
