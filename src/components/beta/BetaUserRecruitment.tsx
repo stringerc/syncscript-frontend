@@ -1,977 +1,1013 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Users, UserPlus, Star, MessageSquare, BarChart3, CheckCircle, AlertTriangle, Clock, Settings, Code, Target, Award, TrendingUp, Mail, Phone, Calendar, MapPin, Building, Zap } from 'lucide-react';
+import { X, Users, UserCheck, Target, Bell, BarChart3, Mail, Phone, Video, MessageCircle, Calendar, Clock, Star, Award, Trophy, Crown, Diamond, Gem, Sparkles, Heart, ThumbsUp, ThumbsDown, Smile, Frown, Meh, Laugh, Angry, Building, Workflow, Shield, FileText, Flag, Info, HelpCircle, ExternalLink, Edit, Trash2, Save, Copy, Undo, Redo, Play, Pause, RefreshCw, RotateCcw, Maximize, Minimize, Filter, Search, Plus, Minus, ArrowUp, ArrowDown, ArrowRight, ArrowLeft, Database, Cpu, HardDrive, Network, Globe, Lock, CheckCircle, AlertTriangle, Clock as ClockIcon, Calendar as CalendarIcon, MessageCircle as MessageIcon, Mail as MailIcon, Phone as PhoneIcon, Video as VideoIcon, FileText as FileIcon, Share2 as ShareIcon, Heart as HeartIcon, ThumbsUp as ThumbsUpIcon, ThumbsDown as ThumbsDownIcon, Smile as SmileIcon, Frown as FrownIcon, Meh as MehIcon, Laugh as LaughIcon, Angry as AngryIcon, Target as TargetIcon, Building as BuildingIcon, UserCheck as UserCheckIcon, Server as ServerIcon, Cloud as CloudIcon, Workflow as WorkflowIcon, BarChart3 as AnalyticsIcon, Shield as ComplianceIcon, FileText as AuditIcon, Award as CertificateIcon, Award as BadgeIcon, Flag as FlagIcon, Info as InfoIcon, HelpCircle as HelpIcon, ExternalLink as ExternalIcon, Edit as EditIcon, Trash2 as TrashIcon, Save as SaveIcon, Copy as CopyIcon, Undo as UndoIcon, Redo as RedoIcon, Play as PlayIcon, Pause as PauseIcon, RefreshCw as RefreshIcon, RotateCcw as RotateIcon, Maximize as MaximizeIcon, Minimize as MinimizeIcon, Filter as FilterIcon, Search as SearchIcon, Plus as PlusIcon, Minus as MinusIcon, ArrowUp as ArrowUpIcon, ArrowDown as ArrowDownIcon, ArrowRight as ArrowRightIcon, ArrowLeft as ArrowLeftIcon, Code as CodeIcon, Database as DatabaseIcon, Cpu as CpuIcon, HardDrive as HardDriveIcon, Network as NetworkIcon } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import { toast } from 'react-hot-toast';
 
+// Beta User Recruitment interfaces
 interface BetaUser {
   id: string;
+  name: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  tier: 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
+  status: 'pending' | 'active' | 'inactive' | 'graduated';
+  joinDate: string;
+  lastActive: string;
+  profile: UserProfile;
+  incentives: Incentive[];
+  feedback: Feedback[];
+  metrics: UserMetrics;
+}
+
+interface UserProfile {
   company: string;
   role: string;
   industry: string;
-  location: string;
-  status: 'pending' | 'approved' | 'active' | 'completed' | 'rejected';
-  joinDate: Date;
-  lastActive: Date;
-  feedbackCount: number;
-  bugReports: number;
-  featureRequests: number;
-  satisfactionScore: number;
-  referralCount: number;
-  tier: 'bronze' | 'silver' | 'gold' | 'platinum';
-  incentives: {
-    earlyAccess: boolean;
-    premiumFeatures: boolean;
-    directSupport: boolean;
-    swag: boolean;
-    credits: number;
-  };
-  demographics: {
-    age: number;
-    experience: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-    teamSize: number;
-    useCase: string;
-  };
+  experience: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  interests: string[];
+  goals: string[];
+  preferences: UserPreferences;
 }
 
-interface BetaCampaign {
-  id: string;
-  name: string;
-  type: 'social-media' | 'email' | 'referral' | 'partnership' | 'content' | 'events';
-  status: 'active' | 'paused' | 'completed' | 'draft';
-  startDate: Date;
-  endDate: Date | null;
-  targetAudience: string;
-  message: string;
-  channels: string[];
-  metrics: {
-    impressions: number;
-    clicks: number;
-    signups: number;
-    conversions: number;
-    cost: number;
-    roi: number;
-  };
-  creative: {
-    headline: string;
-    description: string;
-    image: string;
-    cta: string;
-  };
+interface UserPreferences {
+  communicationFrequency: 'daily' | 'weekly' | 'monthly';
+  preferredChannels: string[];
+  timezone: string;
+  language: string;
 }
 
-interface FeedbackItem {
+interface Incentive {
   id: string;
-  userId: string;
-  type: 'bug-report' | 'feature-request' | 'usability' | 'performance' | 'general';
-  category: string;
+  type: 'discount' | 'early_access' | 'exclusive_feature' | 'recognition' | 'monetary';
   title: string;
   description: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  status: 'new' | 'in-review' | 'in-progress' | 'resolved' | 'closed';
-  submittedDate: Date;
-  resolvedDate: Date | null;
-  assignedTo: string;
-  tags: string[];
-  attachments: string[];
-  votes: number;
-  comments: {
-    id: string;
-    userId: string;
-    content: string;
-    timestamp: Date;
-  }[];
+  value: number;
+  currency: string;
+  status: 'available' | 'claimed' | 'expired';
+  claimedAt?: string;
+  expiresAt: string;
 }
 
-interface BetaProgram {
+interface Feedback {
+  id: string;
+  type: 'bug_report' | 'feature_request' | 'usability' | 'performance' | 'general';
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  title: string;
+  description: string;
+  status: 'submitted' | 'under_review' | 'in_progress' | 'resolved' | 'rejected';
+  submittedAt: string;
+  resolvedAt?: string;
+  votes: number;
+  comments: FeedbackComment[];
+}
+
+interface FeedbackComment {
+  id: string;
+  userId: string;
+  content: string;
+  timestamp: string;
+  isOfficial: boolean;
+}
+
+interface UserMetrics {
+  sessionsCount: number;
+  totalTimeSpent: number;
+  featuresUsed: number;
+  bugsReported: number;
+  feedbackSubmitted: number;
+  referralsMade: number;
+  satisfactionScore: number;
+}
+
+interface Campaign {
   id: string;
   name: string;
-  phase: 'recruitment' | 'testing' | 'feedback' | 'iteration' | 'completion';
-  status: 'active' | 'paused' | 'completed';
-  startDate: Date;
-  endDate: Date | null;
-  targetUsers: number;
-  currentUsers: number;
-  goals: {
-    feedbackCount: number;
-    bugReports: number;
-    featureRequests: number;
-    satisfactionScore: number;
-    retentionRate: number;
-  };
-  metrics: {
-    signupRate: number;
-    activationRate: number;
-    engagementRate: number;
-    satisfactionScore: number;
-    retentionRate: number;
-    referralRate: number;
-  };
-  incentives: {
-    earlyAccess: boolean;
-    premiumFeatures: boolean;
-    directSupport: boolean;
-    swag: boolean;
-    credits: number;
-    discount: number;
-  };
+  type: 'email' | 'social' | 'referral' | 'content' | 'event' | 'partnership';
+  status: 'planned' | 'active' | 'paused' | 'completed';
+  targetAudience: string[];
+  startDate: string;
+  endDate?: string;
+  budget: number;
+  metrics: CampaignMetrics;
+  content: CampaignContent[];
 }
 
-interface BetaAnalytics {
+interface CampaignMetrics {
+  reach: number;
+  impressions: number;
+  clicks: number;
+  conversions: number;
+  cost: number;
+  roi: number;
+}
+
+interface CampaignContent {
   id: string;
-  period: string;
-  metrics: {
-    totalSignups: number;
-    activeUsers: number;
-    feedbackItems: number;
-    bugReports: number;
-    featureRequests: number;
-    averageSatisfaction: number;
-    retentionRate: number;
-    referralRate: number;
-  };
-  trends: {
-    signupTrend: number[];
-    engagementTrend: number[];
-    satisfactionTrend: number[];
-    retentionTrend: number[];
-  };
-  demographics: {
-    industries: Record<string, number>;
-    roles: Record<string, number>;
-    locations: Record<string, number>;
-    companySizes: Record<string, number>;
-  };
+  type: 'email' | 'social_post' | 'blog_post' | 'video' | 'infographic';
+  title: string;
+  content: string;
+  status: 'draft' | 'review' | 'approved' | 'published';
+  publishDate?: string;
+}
+
+interface FeedbackAnalytics {
+  totalFeedback: number;
+  byType: Record<string, number>;
+  byPriority: Record<string, number>;
+  byStatus: Record<string, number>;
+  averageResolutionTime: number;
+  satisfactionScore: number;
+  topIssues: string[];
 }
 
 const BetaUserRecruitment: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const [activeTab, setActiveTab] = useState('overview');
+  const [isLoading, setIsLoading] = useState(false);
   const [betaUsers, setBetaUsers] = useState<BetaUser[]>([]);
-  const [betaCampaigns, setBetaCampaigns] = useState<BetaCampaign[]>([]);
-  const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>([]);
-  const [betaProgram, setBetaProgram] = useState<BetaProgram[]>([]);
-  const [betaAnalytics, setBetaAnalytics] = useState<BetaAnalytics[]>([]);
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [feedbackAnalytics, setFeedbackAnalytics] = useState<FeedbackAnalytics | null>(null);
   const [isRecruiting, setIsRecruiting] = useState(false);
-  const [isLaunchingCampaign, setIsLaunchingCampaign] = useState(false);
-  const [isAnalyzingFeedback, setIsAnalyzingFeedback] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<BetaUser | null>(null);
-  const [selectedCampaign, setSelectedCampaign] = useState<BetaCampaign | null>(null);
 
-  // Generate beta data
+  // SSR-safe data loading
   useEffect(() => {
-    const generateBetaUsers = (): BetaUser[] => {
-      return [
-        {
-          id: 'user-1',
-          email: 'sarah.johnson@techcorp.com',
-          firstName: 'Sarah',
-          lastName: 'Johnson',
-          company: 'TechCorp',
-          role: 'Product Manager',
-          industry: 'Technology',
-          location: 'San Francisco, CA',
-          status: 'active',
-          joinDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          lastActive: new Date(Date.now() - 2 * 60 * 60 * 1000),
-          feedbackCount: 12,
-          bugReports: 3,
-          featureRequests: 8,
-          satisfactionScore: 9.2,
-          referralCount: 2,
-          tier: 'gold',
-          incentives: {
-            earlyAccess: true,
-            premiumFeatures: true,
-            directSupport: true,
-            swag: true,
-            credits: 1000
-          },
-          demographics: {
-            age: 32,
-            experience: 'advanced',
-            teamSize: 15,
-            useCase: 'Team productivity and project management'
-          }
-        },
-        {
-          id: 'user-2',
-          email: 'mike.chen@startup.io',
-          firstName: 'Mike',
-          lastName: 'Chen',
-          company: 'StartupIO',
-          role: 'CTO',
-          industry: 'Startup',
-          location: 'Austin, TX',
-          status: 'active',
-          joinDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-          lastActive: new Date(Date.now() - 1 * 60 * 60 * 1000),
-          feedbackCount: 8,
-          bugReports: 1,
-          featureRequests: 6,
-          satisfactionScore: 8.8,
-          referralCount: 1,
-          tier: 'silver',
-          incentives: {
-            earlyAccess: true,
-            premiumFeatures: true,
-            directSupport: false,
-            swag: false,
-            credits: 500
-          },
-          demographics: {
-            age: 28,
-            experience: 'expert',
-            teamSize: 8,
-            useCase: 'Development team coordination'
-          }
-        },
-        {
-          id: 'user-3',
-          email: 'emma.davis@consulting.com',
-          firstName: 'Emma',
-          lastName: 'Davis',
-          company: 'Davis Consulting',
-          role: 'Consultant',
-          industry: 'Consulting',
-          location: 'New York, NY',
-          status: 'pending',
-          joinDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-          lastActive: new Date(Date.now() - 12 * 60 * 60 * 1000),
-          feedbackCount: 0,
-          bugReports: 0,
-          featureRequests: 0,
-          satisfactionScore: 0,
-          referralCount: 0,
-          tier: 'bronze',
-          incentives: {
-            earlyAccess: true,
-            premiumFeatures: false,
-            directSupport: false,
-            swag: false,
-            credits: 100
-          },
-          demographics: {
-            age: 35,
-            experience: 'intermediate',
-            teamSize: 3,
-            useCase: 'Client project management'
-          }
-        }
-      ];
-    };
+    const loadBetaData = async () => {
+      setIsLoading(true);
+      
+      try {
+        // Simulate API call with SSR-safe delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
-    const generateBetaCampaigns = (): BetaCampaign[] => {
-      return [
-        {
-          id: 'campaign-1',
-          name: 'LinkedIn Professional Outreach',
-          type: 'social-media',
-          status: 'active',
-          startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          targetAudience: 'Product Managers and CTOs at tech companies',
-          message: 'Join the beta for the most advanced productivity platform ever built',
-          channels: ['LinkedIn', 'Twitter', 'Product Hunt'],
-          metrics: {
-            impressions: 15000,
-            clicks: 450,
-            signups: 89,
-            conversions: 19.8,
-            cost: 500,
-            roi: 3.2
-          },
-          creative: {
-            headline: 'Revolutionize Your Team\'s Productivity',
-            description: 'SyncScript combines AI, energy management, and team collaboration in one powerful platform',
-            image: 'linkedin-ad-image.jpg',
-            cta: 'Join Beta Now'
-          }
-        },
-        {
-          id: 'campaign-2',
-          name: 'Email Newsletter Campaign',
-          type: 'email',
-          status: 'active',
-          startDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-          endDate: new Date(Date.now() + 9 * 24 * 60 * 60 * 1000),
-          targetAudience: 'Productivity enthusiasts and early adopters',
-          message: 'Get early access to SyncScript and shape the future of productivity',
-          channels: ['Email', 'Newsletter'],
-          metrics: {
-            impressions: 5000,
-            clicks: 250,
-            signups: 45,
-            conversions: 18.0,
-            cost: 200,
-            roi: 4.1
-          },
-          creative: {
-            headline: 'Shape the Future of Productivity',
-            description: 'Be among the first to experience SyncScript\'s revolutionary features',
-            image: 'email-header.jpg',
-            cta: 'Get Early Access'
-          }
-        },
-        {
-          id: 'campaign-3',
-          name: 'Referral Program',
-          type: 'referral',
-          status: 'active',
-          startDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-          endDate: null,
-          targetAudience: 'Existing beta users and their networks',
-          message: 'Refer friends and earn premium credits',
-          channels: ['In-app', 'Email', 'Social'],
-          metrics: {
-            impressions: 2000,
-            clicks: 180,
-            signups: 32,
-            conversions: 17.8,
-            cost: 0,
-            roi: 999
-          },
-          creative: {
-            headline: 'Invite Friends, Earn Rewards',
-            description: 'Share SyncScript with your network and earn premium credits',
-            image: 'referral-banner.jpg',
-            cta: 'Invite Friends'
-          }
-        }
-      ];
-    };
-
-    const generateFeedbackItems = (): FeedbackItem[] => {
-      return [
-        {
-          id: 'feedback-1',
-          userId: 'user-1',
-          type: 'feature-request',
-          category: 'AI Features',
-          title: 'Voice Command Integration',
-          description: 'Would love to see voice commands for task creation and navigation. This would make the platform even more accessible and efficient.',
-          priority: 'high',
-          status: 'in-review',
-          submittedDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-          resolvedDate: null,
-          assignedTo: 'AI Team',
-          tags: ['voice', 'accessibility', 'ai'],
-          attachments: ['voice-demo.mp4'],
-          votes: 8,
-          comments: [
-            {
-              id: 'comment-1',
-              userId: 'user-2',
-              content: 'Great idea! This would be perfect for hands-free task management.',
-              timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
+        // Mock beta users data
+        const mockBetaUsers: BetaUser[] = [
+          {
+            id: 'user-1',
+            name: 'Sarah Johnson',
+            email: 'sarah.johnson@techcorp.com',
+            tier: 'platinum',
+            status: 'active',
+            joinDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+            lastActive: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+            profile: {
+              company: 'TechCorp',
+              role: 'Product Manager',
+              industry: 'Technology',
+              experience: 'expert',
+              interests: ['Product Management', 'User Experience', 'Analytics'],
+              goals: ['Improve team productivity', 'Streamline workflows'],
+              preferences: {
+                communicationFrequency: 'weekly',
+                preferredChannels: ['email', 'slack'],
+                timezone: 'PST',
+                language: 'en'
+              }
+            },
+            incentives: [
+              {
+                id: 'incentive-1',
+                type: 'early_access',
+                title: 'Early Access to AI Features',
+                description: 'Get exclusive access to new AI-powered features',
+                value: 0,
+                currency: 'USD',
+                status: 'claimed',
+                claimedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+                expiresAt: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000).toISOString()
+              }
+            ],
+            feedback: [
+              {
+                id: 'feedback-1',
+                type: 'feature_request',
+                priority: 'high',
+                title: 'Advanced Analytics Dashboard',
+                description: 'Would love to see more detailed analytics and reporting features',
+                status: 'under_review',
+                submittedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+                votes: 12,
+                comments: []
+              }
+            ],
+            metrics: {
+              sessionsCount: 45,
+              totalTimeSpent: 1800,
+              featuresUsed: 15,
+              bugsReported: 3,
+              feedbackSubmitted: 8,
+              referralsMade: 5,
+              satisfactionScore: 9
             }
-          ]
-        },
-        {
-          id: 'feedback-2',
-          userId: 'user-2',
-          type: 'bug-report',
-          category: 'Performance',
-          title: 'Slow Loading on Mobile',
-          description: 'The mobile app takes too long to load, especially when switching between tasks. This impacts productivity significantly.',
-          priority: 'critical',
-          status: 'in-progress',
-          submittedDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-          resolvedDate: null,
-          assignedTo: 'Mobile Team',
-          tags: ['mobile', 'performance', 'loading'],
-          attachments: ['performance-logs.txt'],
-          votes: 12,
-          comments: [
-            {
-              id: 'comment-2',
-              userId: 'user-1',
-              content: 'I\'ve experienced this too. Hope it gets fixed soon!',
-              timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000)
+          },
+          {
+            id: 'user-2',
+            name: 'Michael Chen',
+            email: 'michael.chen@startup.io',
+            tier: 'gold',
+            status: 'active',
+            joinDate: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
+            lastActive: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+            profile: {
+              company: 'StartupIO',
+              role: 'CTO',
+              industry: 'Technology',
+              experience: 'advanced',
+              interests: ['Engineering', 'Scalability', 'Performance'],
+              goals: ['Scale team operations', 'Improve code quality'],
+              preferences: {
+                communicationFrequency: 'daily',
+                preferredChannels: ['email', 'phone'],
+                timezone: 'EST',
+                language: 'en'
+              }
+            },
+            incentives: [
+              {
+                id: 'incentive-2',
+                type: 'discount',
+                title: '50% Off Annual Plan',
+                description: 'Get 50% discount on annual subscription',
+                value: 500,
+                currency: 'USD',
+                status: 'available',
+                expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString()
+              }
+            ],
+            feedback: [
+              {
+                id: 'feedback-2',
+                type: 'bug_report',
+                priority: 'medium',
+                title: 'Performance Issue in Dashboard',
+                description: 'Dashboard loads slowly when there are many tasks',
+                status: 'in_progress',
+                submittedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+                votes: 8,
+                comments: []
+              }
+            ],
+            metrics: {
+              sessionsCount: 32,
+              totalTimeSpent: 1200,
+              featuresUsed: 12,
+              bugsReported: 5,
+              feedbackSubmitted: 6,
+              referralsMade: 3,
+              satisfactionScore: 8
             }
-          ]
-        },
-        {
-          id: 'feedback-3',
-          userId: 'user-1',
-          type: 'usability',
-          category: 'UI/UX',
-          title: 'Dashboard Customization',
-          description: 'Would be great to have more customization options for the dashboard layout. Different teams have different needs.',
-          priority: 'medium',
-          status: 'new',
-          submittedDate: new Date(Date.now() - 6 * 60 * 60 * 1000),
-          resolvedDate: null,
-          assignedTo: 'UX Team',
-          tags: ['dashboard', 'customization', 'ui'],
-          attachments: [],
-          votes: 5,
-          comments: []
-        }
-      ];
-    };
-
-    const generateBetaProgram = (): BetaProgram[] => {
-      return [
-        {
-          id: 'program-1',
-          name: 'SyncScript Beta Program',
-          phase: 'testing',
-          status: 'active',
-          startDate: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-          endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-          targetUsers: 500,
-          currentUsers: 125,
-          goals: {
-            feedbackCount: 1000,
-            bugReports: 100,
-            featureRequests: 200,
-            satisfactionScore: 8.5,
-            retentionRate: 80
           },
-          metrics: {
-            signupRate: 25.0,
-            activationRate: 78.4,
-            engagementRate: 65.2,
-            satisfactionScore: 8.9,
-            retentionRate: 85.6,
-            referralRate: 12.8
-          },
-          incentives: {
-            earlyAccess: true,
-            premiumFeatures: true,
-            directSupport: true,
-            swag: true,
-            credits: 500,
-            discount: 50
-          }
-        }
-      ];
-    };
-
-    const generateBetaAnalytics = (): BetaAnalytics[] => {
-      return [
-        {
-          id: 'analytics-1',
-          period: 'Last 30 Days',
-          metrics: {
-            totalSignups: 125,
-            activeUsers: 98,
-            feedbackItems: 45,
-            bugReports: 12,
-            featureRequests: 28,
-            averageSatisfaction: 8.9,
-            retentionRate: 85.6,
-            referralRate: 12.8
-          },
-          trends: {
-            signupTrend: [5, 8, 12, 15, 18, 22, 25, 28, 32, 35, 38, 42, 45, 48, 52, 55, 58, 62, 65, 68, 72, 75, 78, 82, 85, 88, 92, 95, 98, 125],
-            engagementTrend: [45, 48, 52, 55, 58, 62, 65, 68, 72, 75, 78, 82, 85, 88, 92, 95, 98, 102, 105, 108, 112, 115, 118, 122, 125, 128, 132, 135, 138, 142],
-            satisfactionTrend: [8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 8.8, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9, 8.9],
-            retentionTrend: [75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85]
-          },
-          demographics: {
-            industries: {
-              'Technology': 45,
-              'Consulting': 20,
-              'Startup': 15,
-              'Finance': 10,
-              'Healthcare': 5,
-              'Other': 5
+          {
+            id: 'user-3',
+            name: 'Emily Rodriguez',
+            email: 'emily.rodriguez@designstudio.com',
+            tier: 'silver',
+            status: 'active',
+            joinDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+            lastActive: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+            profile: {
+              company: 'Design Studio',
+              role: 'UX Designer',
+              industry: 'Design',
+              experience: 'intermediate',
+              interests: ['User Experience', 'Design Systems', 'Accessibility'],
+              goals: ['Improve user experience', 'Create better workflows'],
+              preferences: {
+                communicationFrequency: 'weekly',
+                preferredChannels: ['email', 'slack'],
+                timezone: 'CST',
+                language: 'en'
+              }
             },
-            roles: {
-              'Product Manager': 30,
-              'CTO': 25,
-              'Developer': 20,
-              'Consultant': 15,
-              'Other': 10
-            },
-            locations: {
-              'San Francisco': 25,
-              'New York': 20,
-              'Austin': 15,
-              'Seattle': 10,
-              'Boston': 10,
-              'Other': 20
-            },
-            companySizes: {
-              '1-10': 30,
-              '11-50': 25,
-              '51-200': 20,
-              '201-1000': 15,
-              '1000+': 10
+            incentives: [
+              {
+                id: 'incentive-3',
+                type: 'exclusive_feature',
+                title: 'Beta Design Tools',
+                description: 'Access to new design collaboration features',
+                value: 0,
+                currency: 'USD',
+                status: 'claimed',
+                claimedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+                expiresAt: new Date(Date.now() + 23 * 24 * 60 * 60 * 1000).toISOString()
+              }
+            ],
+            feedback: [
+              {
+                id: 'feedback-3',
+                type: 'usability',
+                priority: 'high',
+                title: 'Improve Mobile Experience',
+                description: 'The mobile app needs better touch interactions and navigation',
+                status: 'resolved',
+                submittedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+                resolvedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+                votes: 15,
+                comments: []
+              }
+            ],
+            metrics: {
+              sessionsCount: 28,
+              totalTimeSpent: 900,
+              featuresUsed: 10,
+              bugsReported: 2,
+              feedbackSubmitted: 4,
+              referralsMade: 2,
+              satisfactionScore: 9
             }
           }
-        }
-      ];
+        ];
+
+        // Mock campaigns data
+        const mockCampaigns: Campaign[] = [
+          {
+            id: 'campaign-1',
+            name: 'Product Hunt Launch',
+            type: 'social',
+            status: 'active',
+            targetAudience: ['tech_enthusiasts', 'early_adopters', 'product_managers'],
+            startDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+            endDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+            budget: 5000,
+            metrics: {
+              reach: 25000,
+              impressions: 150000,
+              clicks: 2500,
+              conversions: 125,
+              cost: 3500,
+              roi: 257
+            },
+            content: [
+              {
+                id: 'content-1',
+                type: 'social_post',
+                title: 'Product Hunt Launch Post',
+                content: '🚀 SyncScript is now live on Product Hunt! Help us reach #1!',
+                status: 'published',
+                publishDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+              }
+            ]
+          },
+          {
+            id: 'campaign-2',
+            name: 'Email Newsletter Series',
+            type: 'email',
+            status: 'active',
+            targetAudience: ['existing_users', 'waitlist'],
+            startDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+            budget: 1000,
+            metrics: {
+              reach: 5000,
+              impressions: 5000,
+              clicks: 750,
+              conversions: 45,
+              cost: 800,
+              roi: 563
+            },
+            content: [
+              {
+                id: 'content-2',
+                type: 'email',
+                title: 'Welcome to SyncScript Beta',
+                content: 'Thank you for joining our beta program! Here\'s what to expect...',
+                status: 'published',
+                publishDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
+              }
+            ]
+          }
+        ];
+
+        // Mock feedback analytics data
+        const mockFeedbackAnalytics: FeedbackAnalytics = {
+          totalFeedback: 45,
+          byType: {
+            'feature_request': 18,
+            'bug_report': 12,
+            'usability': 8,
+            'performance': 4,
+            'general': 3
+          },
+          byPriority: {
+            'high': 15,
+            'medium': 20,
+            'low': 10
+          },
+          byStatus: {
+            'resolved': 25,
+            'in_progress': 12,
+            'under_review': 8
+          },
+          averageResolutionTime: 3.2,
+          satisfactionScore: 8.7,
+          topIssues: ['Mobile Experience', 'Performance', 'Analytics', 'Notifications', 'Integrations']
+        };
+
+        setBetaUsers(mockBetaUsers);
+        setCampaigns(mockCampaigns);
+        setFeedbackAnalytics(mockFeedbackAnalytics);
+
+        toast.success('Beta user recruitment data loaded successfully!');
+      } catch (error) {
+        console.error('Failed to load beta data:', error);
+        toast.error('Failed to load beta user recruitment data');
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    setBetaUsers(generateBetaUsers());
-    setBetaCampaigns(generateBetaCampaigns());
-    setFeedbackItems(generateFeedbackItems());
-    setBetaProgram(generateBetaProgram());
-    setBetaAnalytics(generateBetaAnalytics());
+    loadBetaData();
   }, []);
 
-  const recruitBetaUsers = async () => {
+  const handleRecruitUser = useCallback(async (userId: string) => {
     setIsRecruiting(true);
-    
-    // Simulate beta user recruitment
-    await new Promise(resolve => setTimeout(resolve, 12000));
-    
-    // Add new beta users
-    const newUsers: BetaUser[] = [
-      {
-        id: `user-${Date.now()}`,
-        email: 'newuser@example.com',
-        firstName: 'New',
-        lastName: 'User',
-        company: 'Example Corp',
-        role: 'Product Manager',
-        industry: 'Technology',
-        location: 'San Francisco, CA',
-        status: 'pending',
-        joinDate: new Date(),
-        lastActive: new Date(),
-        feedbackCount: 0,
-        bugReports: 0,
-        featureRequests: 0,
-        satisfactionScore: 0,
-        referralCount: 0,
-        tier: 'bronze',
-        incentives: {
-          earlyAccess: true,
-          premiumFeatures: false,
-          directSupport: false,
-          swag: false,
-          credits: 100
-        },
-        demographics: {
-          age: 30,
-          experience: 'intermediate',
-          teamSize: 10,
-          useCase: 'Team productivity'
-        }
-      }
-    ];
-    
-    setBetaUsers(prev => [...prev, ...newUsers]);
-    setIsRecruiting(false);
-  };
-
-  const launchCampaign = async () => {
-    setIsLaunchingCampaign(true);
-    
-    // Simulate campaign launch
-    await new Promise(resolve => setTimeout(resolve, 8000));
-    
-    // Update campaign metrics
-    setBetaCampaigns(prev => prev.map(campaign => 
-      campaign.status === 'active' 
-        ? { 
-            ...campaign, 
-            metrics: {
-              ...campaign.metrics,
-              impressions: campaign.metrics.impressions + 1000,
-              clicks: campaign.metrics.clicks + 50,
-              signups: campaign.metrics.signups + 10
-            }
-          }
-        : campaign
-    ));
-    
-    setIsLaunchingCampaign(false);
-  };
-
-  const analyzeFeedback = async () => {
-    setIsAnalyzingFeedback(true);
-    
-    // Simulate feedback analysis
-    await new Promise(resolve => setTimeout(resolve, 10000));
-    
-    setIsAnalyzingFeedback(false);
-  };
-
-  const formatDate = (date: Date): string => {
-    return date.toLocaleString();
-  };
-
-  const getStatusColor = (status: string): string => {
-    switch (status) {
-      case 'active': case 'approved': case 'completed': case 'resolved': return 'bg-green-100 text-green-800';
-      case 'pending': case 'in-review': case 'in-progress': return 'bg-yellow-100 text-yellow-800';
-      case 'new': case 'draft': return 'bg-blue-100 text-blue-800';
-      case 'rejected': case 'closed': return 'bg-red-100 text-red-800';
-      case 'paused': return 'bg-orange-100 text-orange-800';
-      default: return 'bg-gray-100 text-gray-800';
+    try {
+      // Simulate recruitment process
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      toast.success(`🎉 Successfully recruited user ${userId}!`);
+    } catch (error) {
+      console.error('Failed to recruit user:', error);
+      toast.error('Failed to recruit user');
+    } finally {
+      setIsRecruiting(false);
     }
-  };
+  }, []);
 
-  const getTierColor = (tier: string): string => {
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: Users },
+    { id: 'users', label: 'Users', icon: UserCheck },
+    { id: 'campaigns', label: 'Campaigns', icon: Target },
+    { id: 'feedback', label: 'Feedback', icon: MessageCircle },
+    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'incentives', label: 'Incentives', icon: Award }
+  ];
+
+  const getTierColor = (tier: string) => {
     switch (tier) {
-      case 'platinum': return 'bg-purple-100 text-purple-800';
-      case 'gold': return 'bg-yellow-100 text-yellow-800';
-      case 'silver': return 'bg-gray-100 text-gray-800';
-      case 'bronze': return 'bg-orange-100 text-orange-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'bronze': return 'text-orange-600 bg-orange-100';
+      case 'silver': return 'text-gray-600 bg-gray-100';
+      case 'gold': return 'text-yellow-600 bg-yellow-100';
+      case 'platinum': return 'text-blue-600 bg-blue-100';
+      case 'diamond': return 'text-purple-600 bg-purple-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
 
-  const getPriorityColor = (priority: string): string => {
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active': return 'text-green-600 bg-green-100';
+      case 'pending': return 'text-yellow-600 bg-yellow-100';
+      case 'inactive': return 'text-gray-600 bg-gray-100';
+      case 'graduated': return 'text-blue-600 bg-blue-100';
+      default: return 'text-gray-600 bg-gray-100';
+    }
+  };
+
+  const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'text-red-600';
-      case 'high': return 'text-orange-600';
-      case 'medium': return 'text-yellow-600';
-      case 'low': return 'text-green-600';
-      default: return 'text-gray-600';
+      case 'low': return 'text-blue-600 bg-blue-100';
+      case 'medium': return 'text-yellow-600 bg-yellow-100';
+      case 'high': return 'text-orange-600 bg-orange-100';
+      case 'critical': return 'text-red-600 bg-red-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
-
-  const getTypeColor = (type: string): string => {
-    switch (type) {
-      case 'social-media': return 'bg-blue-100 text-blue-800';
-      case 'email': return 'bg-green-100 text-green-800';
-      case 'referral': return 'bg-purple-100 text-purple-800';
-      case 'partnership': return 'bg-orange-100 text-orange-800';
-      case 'content': return 'bg-pink-100 text-pink-800';
-      case 'events': return 'bg-indigo-100 text-indigo-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const totalUsers = betaUsers.length;
-  const activeUsers = betaUsers.filter(u => u.status === 'active').length;
-  const totalCampaigns = betaCampaigns.length;
-  const activeCampaigns = betaCampaigns.filter(c => c.status === 'active').length;
-  const totalFeedback = feedbackItems.length;
-  const resolvedFeedback = feedbackItems.filter(f => f.status === 'resolved').length;
-  const averageSatisfaction = betaUsers.reduce((sum, u) => sum + u.satisfactionScore, 0) / betaUsers.length;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
+        exit={{ opacity: 0, scale: 0.95 }}
         className="bg-white rounded-2xl shadow-2xl w-full max-w-7xl h-[90vh] overflow-hidden"
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-2xl font-bold">👥 Beta User Recruitment & Testing</h2>
-              <p className="text-blue-100 mt-1">Recruit beta users, collect feedback, and validate SyncScript with real users</p>
+        <div className="bg-gradient-to-r from-green-500 to-blue-500 text-white p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white bg-opacity-20 rounded-lg">
+                <Users className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">Beta User Recruitment</h2>
+                <p className="text-green-100">User testing and feedback collection</p>
+              </div>
             </div>
-            <button
-              onClick={onClose}
-              className="text-white hover:text-blue-200 transition-colors"
-            >
-              <X size={24} />
-            </button>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                <span className="text-sm">Active</span>
+              </div>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex space-x-1 mt-6 overflow-x-auto">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? 'bg-white bg-opacity-20 text-white'
+                      : 'text-green-100 hover:bg-white hover:bg-opacity-10'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
+        {/* Content */}
         <div className="p-6 h-full overflow-y-auto">
-          {/* Beta Program Overview Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-blue-600 font-medium">Beta Users</p>
-                  <p className="text-2xl font-bold text-blue-800">{activeUsers}/{totalUsers}</p>
-                  <p className="text-xs text-blue-600">Active users</p>
-                </div>
-                <Users className="text-3xl text-blue-600" />
-              </div>
+          {isLoading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
             </div>
-
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-green-600 font-medium">Campaigns</p>
-                  <p className="text-2xl font-bold text-green-800">{activeCampaigns}</p>
-                  <p className="text-xs text-green-600">Active campaigns</p>
-                </div>
-                <Target className="text-3xl text-green-600" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-purple-600 font-medium">Feedback Items</p>
-                  <p className="text-2xl font-bold text-purple-800">{totalFeedback}</p>
-                  <p className="text-xs text-purple-600">Total feedback</p>
-                </div>
-                <MessageSquare className="text-3xl text-purple-600" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-orange-600 font-medium">Satisfaction</p>
-                  <p className="text-2xl font-bold text-orange-800">{averageSatisfaction.toFixed(1)}</p>
-                  <p className="text-xs text-orange-600">Average score</p>
-                </div>
-                <Star className="text-3xl text-orange-600" />
-              </div>
-            </div>
-          </div>
-
-          {/* Beta Program Actions */}
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 mb-6 border-2 border-blue-200">
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-blue-700 font-medium">
-                🎯 Beta Program Active - Recruiting users and collecting valuable feedback!
-              </div>
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={recruitBetaUsers}
-                  disabled={isRecruiting}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
+          ) : (
+            <AnimatePresence mode="wait">
+              {activeTab === 'overview' && (
+                <motion.div
+                  key="overview"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  {isRecruiting ? '⏳ Recruiting...' : '👥 Recruit Users'}
-                </button>
-                <button
-                  onClick={launchCampaign}
-                  disabled={isLaunchingCampaign}
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50 transition-colors"
-                >
-                  {isLaunchingCampaign ? '⏳ Launching...' : '🚀 Launch Campaign'}
-                </button>
-                <button
-                  onClick={analyzeFeedback}
-                  disabled={isAnalyzingFeedback}
-                  className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 disabled:opacity-50 transition-colors"
-                >
-                  {isAnalyzingFeedback ? '⏳ Analyzing...' : '📊 Analyze Feedback'}
-                </button>
-              </div>
-            </div>
-          </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-green-100">Total Beta Users</p>
+                          <p className="text-3xl font-bold">{betaUsers.length}</p>
+                        </div>
+                        <Users className="w-8 h-8 text-green-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-blue-100">Active Users</p>
+                          <p className="text-3xl font-bold">{betaUsers.filter(u => u.status === 'active').length}</p>
+                        </div>
+                        <UserCheck className="w-8 h-8 text-blue-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-purple-100">Total Feedback</p>
+                          <p className="text-3xl font-bold">{feedbackAnalytics?.totalFeedback || 0}</p>
+                        </div>
+                        <MessageCircle className="w-8 h-8 text-purple-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-orange-100">Satisfaction Score</p>
+                          <p className="text-3xl font-bold">{feedbackAnalytics?.satisfactionScore || 0}</p>
+                        </div>
+                        <Star className="w-8 h-8 text-orange-200" />
+                      </div>
+                    </div>
+                  </div>
 
-          {/* Beta Users */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Users className="mr-2 text-blue-600" />
-              Beta Users ({betaUsers.length})
-            </h3>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tier</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Feedback</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Satisfaction</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Active</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold mb-4">User Tier Distribution</h3>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <PieChart>
+                          <Pie
+                            data={[
+                              { name: 'Diamond', value: betaUsers.filter(u => u.tier === 'diamond').length },
+                              { name: 'Platinum', value: betaUsers.filter(u => u.tier === 'platinum').length },
+                              { name: 'Gold', value: betaUsers.filter(u => u.tier === 'gold').length },
+                              { name: 'Silver', value: betaUsers.filter(u => u.tier === 'silver').length },
+                              { name: 'Bronze', value: betaUsers.filter(u => u.tier === 'bronze').length }
+                            ]}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            label={({ name, percent }) => `${name} ${((percent as number) * 100).toFixed(0)}%`}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                          >
+                            <Cell fill="#8b5cf6" />
+                            <Cell fill="#3b82f6" />
+                            <Cell fill="#f59e0b" />
+                            <Cell fill="#6b7280" />
+                            <Cell fill="#f97316" />
+                          </Pie>
+                          <Tooltip />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold mb-4">Feedback by Type</h3>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <BarChart data={Object.entries(feedbackAnalytics?.byType || {}).map(([type, count]) => ({
+                          type: type.replace('_', ' '),
+                          count
+                        }))}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="type" />
+                          <YAxis />
+                          <Tooltip />
+                          <Bar dataKey="count" fill="#10b981" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeTab === 'users' && (
+                <motion.div
+                  key="users"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
                   {betaUsers.map((user) => (
-                    <tr key={user.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">{user.firstName} {user.lastName}</div>
-                          <div className="text-sm text-gray-500">{user.email}</div>
+                    <div key={user.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-green-100 rounded-lg">
+                            <UserCheck className="w-5 h-5 text-green-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{user.name}</h3>
+                            <p className="text-sm text-gray-600">{user.email}</p>
+                          </div>
                         </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div>
-                          <div className="text-sm text-gray-900">{user.company}</div>
-                          <div className="text-sm text-gray-500">{user.role}</div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getTierColor(user.tier)}`}>
+                            {user.tier}
+                          </span>
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(user.status)}`}>
+                            {user.status}
+                          </span>
                         </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(user.status)}`}>
-                          {user.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getTierColor(user.tier)}`}>
-                          {user.tier}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {user.feedbackCount} items
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {user.satisfactionScore > 0 ? user.satisfactionScore.toFixed(1) : 'N/A'}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {formatDate(user.lastActive)}
-                      </td>
-                    </tr>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Company</span>
+                          <p className="font-semibold">{user.profile.company}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Role</span>
+                          <p className="font-semibold">{user.profile.role}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Experience</span>
+                          <p className="font-semibold capitalize">{user.profile.experience}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Satisfaction</span>
+                          <p className="font-semibold">{user.metrics.satisfactionScore}/10</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Interests:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {user.profile.interests.map((interest, index) => (
+                            <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
+                              {interest}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Metrics:</h4>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                          <div className="p-2 bg-gray-50 rounded">
+                            <span className="text-sm text-gray-500">Sessions</span>
+                            <p className="font-semibold">{user.metrics.sessionsCount}</p>
+                          </div>
+                          <div className="p-2 bg-gray-50 rounded">
+                            <span className="text-sm text-gray-500">Time Spent</span>
+                            <p className="font-semibold">{Math.round(user.metrics.totalTimeSpent / 60)}m</p>
+                          </div>
+                          <div className="p-2 bg-gray-50 rounded">
+                            <span className="text-sm text-gray-500">Features Used</span>
+                            <p className="font-semibold">{user.metrics.featuresUsed}</p>
+                          </div>
+                          <div className="p-2 bg-gray-50 rounded">
+                            <span className="text-sm text-gray-500">Referrals</span>
+                            <p className="font-semibold">{user.metrics.referralsMade}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <button
+                          onClick={() => handleRecruitUser(user.id)}
+                          disabled={isRecruiting}
+                          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors disabled:opacity-50"
+                        >
+                          {isRecruiting ? 'Recruiting...' : '🎯 Recruit'}
+                        </button>
+                        <button className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                          View Profile
+                        </button>
+                      </div>
+                    </div>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                </motion.div>
+              )}
 
-          {/* Beta Campaigns */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Target className="mr-2 text-green-600" />
-              Beta Campaigns ({betaCampaigns.length})
-            </h3>
-            <div className="space-y-4">
-              {betaCampaigns.map((campaign) => (
-                <div key={campaign.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{campaign.name}</h4>
-                      <p className="text-sm text-gray-600">{campaign.targetAudience}</p>
+              {activeTab === 'campaigns' && (
+                <motion.div
+                  key="campaigns"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {campaigns.map((campaign) => (
+                    <div key={campaign.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-blue-100 rounded-lg">
+                            <Target className="w-5 h-5 text-blue-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{campaign.name}</h3>
+                            <p className="text-sm text-gray-600">{campaign.type} campaign</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(campaign.status)}`}>
+                            {campaign.status}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            ROI: {campaign.metrics.roi}%
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Budget</span>
+                          <p className="font-semibold">${campaign.budget.toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Reach</span>
+                          <p className="font-semibold">{campaign.metrics.reach.toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Conversions</span>
+                          <p className="font-semibold">{campaign.metrics.conversions}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Cost</span>
+                          <p className="font-semibold">${campaign.metrics.cost.toLocaleString()}</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Target Audience:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {campaign.targetAudience.map((audience, index) => (
+                            <span key={index} className="px-2 py-1 bg-purple-100 text-purple-800 rounded text-sm">
+                              {audience.replace('_', ' ')}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Content:</h4>
+                        <div className="space-y-2">
+                          {campaign.content.map((content) => (
+                            <div key={content.id} className="p-3 bg-gray-50 rounded">
+                              <div className="flex items-center justify-between mb-2">
+                                <h5 className="font-medium">{content.title}</h5>
+                                <span className={`px-2 py-1 rounded text-xs ${getStatusColor(content.status)}`}>
+                                  {content.status}
+                                </span>
+                              </div>
+                              <p className="text-sm text-gray-600">{content.content}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getTypeColor(campaign.type)}`}>
-                        {campaign.type}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(campaign.status)}`}>
-                        {campaign.status}
-                      </span>
+                  ))}
+                </motion.div>
+              )}
+
+              {activeTab === 'feedback' && (
+                <motion.div
+                  key="feedback"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {betaUsers.flatMap(user => user.feedback).map((feedback) => (
+                    <div key={feedback.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-yellow-100 rounded-lg">
+                            <MessageCircle className="w-5 h-5 text-yellow-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{feedback.title}</h3>
+                            <p className="text-sm text-gray-600">{feedback.description}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getPriorityColor(feedback.priority)}`}>
+                            {feedback.priority}
+                          </span>
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(feedback.status)}`}>
+                            {feedback.status}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            {feedback.type.replace('_', ' ')}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Submitted</span>
+                          <p className="font-semibold text-sm">
+                            {new Date(feedback.submittedAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Votes</span>
+                          <p className="font-semibold">{feedback.votes}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Resolved</span>
+                          <p className="font-semibold text-sm">
+                            {feedback.resolvedAt ? new Date(feedback.resolvedAt).toLocaleDateString() : 'Not resolved'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                          Review
+                        </button>
+                        <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                          Resolve
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                    <div className="text-sm">
-                      <span className="text-gray-600">Impressions:</span>
-                      <span className="font-medium text-gray-900 ml-1">{campaign.metrics.impressions.toLocaleString()}</span>
+                  ))}
+                </motion.div>
+              )}
+
+              {activeTab === 'analytics' && feedbackAnalytics && (
+                <motion.div
+                  key="analytics"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-green-100">Total Feedback</p>
+                          <p className="text-3xl font-bold">{feedbackAnalytics.totalFeedback}</p>
+                        </div>
+                        <MessageCircle className="w-8 h-8 text-green-200" />
+                      </div>
                     </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Clicks:</span>
-                      <span className="font-medium text-gray-900 ml-1">{campaign.metrics.clicks}</span>
+                    <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-blue-100">Resolved</p>
+                          <p className="text-3xl font-bold">{feedbackAnalytics.byStatus.resolved}</p>
+                        </div>
+                        <CheckCircle className="w-8 h-8 text-blue-200" />
+                      </div>
                     </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Signups:</span>
-                      <span className="font-medium text-gray-900 ml-1">{campaign.metrics.signups}</span>
+                    <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-purple-100">Avg Resolution</p>
+                          <p className="text-3xl font-bold">{feedbackAnalytics.averageResolutionTime}d</p>
+                        </div>
+                        <Clock className="w-8 h-8 text-purple-200" />
+                      </div>
                     </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">ROI:</span>
-                      <span className="font-medium text-gray-900 ml-1">{campaign.metrics.roi}x</span>
+                    <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-orange-100">Satisfaction</p>
+                          <p className="text-3xl font-bold">{feedbackAnalytics.satisfactionScore}</p>
+                        </div>
+                        <Star className="w-8 h-8 text-orange-200" />
+                      </div>
                     </div>
                   </div>
 
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Channels:</span> {campaign.channels.join(', ')}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Feedback Items */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <MessageSquare className="mr-2 text-purple-600" />
-              User Feedback ({feedbackItems.length})
-            </h3>
-            <div className="space-y-4">
-              {feedbackItems.map((feedback) => (
-                <div key={feedback.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-semibold text-gray-800">{feedback.title}</h4>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(feedback.status)}`}>
-                        {feedback.status}
-                      </span>
-                      <span className={`text-xs px-2 py-1 rounded ${getPriorityColor(feedback.priority)} bg-gray-100`}>
-                        {feedback.priority} priority
-                      </span>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold mb-4">Feedback by Priority</h3>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <BarChart data={Object.entries(feedbackAnalytics.byPriority).map(([priority, count]) => ({
+                          priority,
+                          count
+                        }))}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="priority" />
+                          <YAxis />
+                          <Tooltip />
+                          <Bar dataKey="count" fill="#f59e0b" />
+                        </BarChart>
+                      </ResponsiveContainer>
                     </div>
-                  </div>
-                  
-                  <p className="text-sm text-gray-600 mb-2">{feedback.description}</p>
-                  
-                  <div className="flex justify-between items-center text-xs text-gray-500">
-                    <span>Type: {feedback.type} | Category: {feedback.category}</span>
-                    <span>Votes: {feedback.votes} | Submitted: {formatDate(feedback.submittedDate)}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Beta Analytics */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <BarChart3 className="mr-2 text-orange-600" />
-              Beta Program Analytics
-            </h3>
-            {betaAnalytics.map((analytics) => (
-              <div key={analytics.id} className="space-y-4">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="bg-blue-50 rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-blue-800">{analytics.metrics.totalSignups}</div>
-                    <div className="text-sm text-blue-600">Total Signups</div>
-                  </div>
-                  <div className="bg-green-50 rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-green-800">{analytics.metrics.activeUsers}</div>
-                    <div className="text-sm text-green-600">Active Users</div>
-                  </div>
-                  <div className="bg-purple-50 rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-purple-800">{analytics.metrics.feedbackItems}</div>
-                    <div className="text-sm text-purple-600">Feedback Items</div>
-                  </div>
-                  <div className="bg-orange-50 rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-orange-800">{analytics.metrics.averageSatisfaction.toFixed(1)}</div>
-                    <div className="text-sm text-orange-600">Avg Satisfaction</div>
-                  </div>
-                </div>
-                
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h4 className="font-semibold text-gray-800 mb-2">User Demographics</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <span className="text-gray-600 font-medium">Industries:</span>
-                      <div className="mt-1">
-                        {Object.entries(analytics.demographics.industries).map(([industry, count]) => (
-                          <div key={industry} className="flex justify-between">
-                            <span>{industry}:</span>
-                            <span className="font-medium">{count}</span>
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold mb-4">Top Issues</h3>
+                      <div className="space-y-2">
+                        {feedbackAnalytics.topIssues.map((issue, index) => (
+                          <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                            <span className="text-sm">{issue}</span>
+                            <span className="text-sm font-semibold text-gray-600">#{index + 1}</span>
                           </div>
                         ))}
                       </div>
                     </div>
-                    <div>
-                      <span className="text-gray-600 font-medium">Roles:</span>
-                      <div className="mt-1">
-                        {Object.entries(analytics.demographics.roles).map(([role, count]) => (
-                          <div key={role} className="flex justify-between">
-                            <span>{role}:</span>
-                            <span className="font-medium">{count}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <span className="text-gray-600 font-medium">Locations:</span>
-                      <div className="mt-1">
-                        {Object.entries(analytics.demographics.locations).map(([location, count]) => (
-                          <div key={location} className="flex justify-between">
-                            <span>{location}:</span>
-                            <span className="font-medium">{count}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <span className="text-gray-600 font-medium">Company Sizes:</span>
-                      <div className="mt-1">
-                        {Object.entries(analytics.demographics.companySizes).map(([size, count]) => (
-                          <div key={size} className="flex justify-between">
-                            <span>{size}:</span>
-                            <span className="font-medium">{count}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                </motion.div>
+              )}
+
+              {activeTab === 'incentives' && (
+                <motion.div
+                  key="incentives"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {betaUsers.flatMap(user => user.incentives).map((incentive) => (
+                    <div key={incentive.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-yellow-100 rounded-lg">
+                            <Award className="w-5 h-5 text-yellow-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{incentive.title}</h3>
+                            <p className="text-sm text-gray-600">{incentive.description}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(incentive.status)}`}>
+                            {incentive.status}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            {incentive.type.replace('_', ' ')}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Value</span>
+                          <p className="font-semibold">
+                            {incentive.value > 0 ? `$${incentive.value}` : 'Exclusive Access'}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Claimed</span>
+                          <p className="font-semibold text-sm">
+                            {incentive.claimedAt ? new Date(incentive.claimedAt).toLocaleDateString() : 'Not claimed'}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Expires</span>
+                          <p className="font-semibold text-sm">
+                            {new Date(incentive.expiresAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                          Manage
+                        </button>
+                        <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                          Claim
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
         </div>
       </motion.div>
     </div>
