@@ -107,6 +107,7 @@ import FinalPlatformOptimization from '../src/components/optimization/FinalPlatf
 import UltimatePlatformCompletion from '../src/components/ultimate/UltimatePlatformCompletion';
 import AIPoweredEnhancements from '../src/components/ai/AIPoweredEnhancements';
 import EnterpriseIntegration from '../src/components/enterprise/EnterpriseIntegration';
+import EnterpriseAdvancedFeatures from '../src/components/enterprise/EnterpriseAdvancedFeatures';
 import PlatformDocumentationDeployment from '../src/components/deployment/PlatformDocumentationDeployment';
 import ProductionDeploymentLaunch from '../src/components/launch/ProductionDeploymentLaunch';
 import BetaUserRecruitment from '../src/components/beta/BetaUserRecruitment';
@@ -496,6 +497,7 @@ export default function Dashboard() {
   const [showAdvancedPerformanceOptimization, setShowAdvancedPerformanceOptimization] = React.useState(false);
   const [showAIPoweredEnhancements, setShowAIPoweredEnhancements] = React.useState(false);
   const [showEnterpriseIntegration, setShowEnterpriseIntegration] = React.useState(false);
+  const [showEnterpriseAdvancedFeatures, setShowEnterpriseAdvancedFeatures] = React.useState(false);
   const [showPlatformDocumentationDeployment, setShowPlatformDocumentationDeployment] = React.useState(false);
   const [showUltimatePlatformCompletion, setShowUltimatePlatformCompletion] = React.useState(false);
   const [showProductionDeploymentLaunch, setShowProductionDeploymentLaunch] = React.useState(false);

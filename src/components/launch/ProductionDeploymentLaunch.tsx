@@ -1,821 +1,1058 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Rocket, Globe, Shield, Database, Server, CheckCircle, AlertTriangle, Clock, Settings, Code, BarChart3, Zap, Activity, Monitor, Cloud, Lock, Users, TrendingUp, Target, Award } from 'lucide-react';
+import { X, Rocket, CheckCircle, AlertTriangle, Clock, Calendar, MessageCircle, Mail, Phone, Video, Mic, Camera, Image, Link, Share2, Heart, ThumbsUp, ThumbsDown, Smile, Frown, Meh, Laugh, Angry, Building, UserCheck, Workflow, BarChart3, Shield, FileText, Award, Badge, Flag, Info, HelpCircle, ExternalLink, Edit, Trash2, Save, Copy, Undo, Redo, Play, Pause, RefreshCw, RotateCcw, Maximize, Minimize, Filter, Search, Plus, Minus, ArrowUp, ArrowDown, ArrowRight, ArrowLeft, Database, Cpu, HardDrive, Network, Globe, Lock as LockIcon, CheckCircle as CheckIcon, AlertTriangle as AlertIcon, Clock as ClockIcon, Calendar as CalendarIcon, MessageCircle as MessageIcon, Mail as MailIcon, Phone as PhoneIcon, Video as VideoIcon, Image as ImageIcon, FileText as FileIcon, Link as LinkIcon, Share2 as ShareIcon, Heart as HeartIcon, ThumbsUp as ThumbsUpIcon, ThumbsDown as ThumbsDownIcon, Smile as SmileIcon, Frown as FrownIcon, Meh as MehIcon, Laugh as LaughIcon, Angry as AngryIcon, Target as TargetIcon, Building as BuildingIcon, UserCheck as UserCheckIcon, Server as ServerIcon, Cloud as CloudIcon, Workflow as WorkflowIcon, BarChart3 as AnalyticsIcon, Shield as ComplianceIcon, FileText as AuditIcon, FileText as PolicyIcon, Award as CertificateIcon, Award as BadgeIcon, Flag as FlagIcon, Info as InfoIcon, HelpCircle as HelpIcon, ExternalLink as ExternalIcon, Edit as EditIcon, Trash2 as TrashIcon, Save as SaveIcon, Copy as CopyIcon, Undo as UndoIcon, Redo as RedoIcon, Play as PlayIcon, Pause as PauseIcon, RefreshCw as RefreshIcon, RotateCcw as RotateIcon, Maximize as MaximizeIcon, Minimize as MinimizeIcon, Filter as FilterIcon, Search as SearchIcon, Plus as PlusIcon, Minus as MinusIcon, ArrowUp as ArrowUpIcon, ArrowDown as ArrowDownIcon, ArrowRight as ArrowRightIcon, ArrowLeft as ArrowLeftIcon, Code as CodeIcon, Database as DatabaseIcon, Cpu as CpuIcon, HardDrive as HardDriveIcon, Network as NetworkIcon, Star, Zap, Crown, Diamond, Gem, Sparkles, DollarSign, Server, Users, TrendingUp, Activity, Target, Bell, Settings, Monitor, BarChart, PieChart, LineChart, AreaChart, ScatterChart, Gauge, Thermometer, Battery, Wifi, Signal, MapPin, Navigation, Compass, Map, Globe2, World, Earth, Sun, Moon, Cloud, CloudRain, CloudSnow, Wind, Droplets, Flame, Snowflake, Umbrella, TreePine, Mountain, Waves, Fish, Bird, Cat, Dog, Car, Truck, Bus, Train, Plane, Ship, Bike, Motorcycle, Scooter, Skateboard, RollerSkate, Gamepad2, Controller, Headphones, Speaker, Mic2, Camera2, Video2, Image2, File, Folder, Archive, Download, Upload, Send, Receive, Share, Copy2, Paste2, Cut2, Scissors, Clipboard, ClipboardList, ClipboardCheck, ClipboardX, ClipboardCopy, ClipboardPaste, ClipboardEdit, ClipboardDelete, ClipboardSearch, ClipboardHeart, ClipboardStar, ClipboardFlag, ClipboardAlert, ClipboardInfo, ClipboardHelp, ClipboardExternal, ClipboardLink, ClipboardMail, ClipboardPhone, ClipboardVideo, ClipboardImage, ClipboardFile, ClipboardFolder, ClipboardArchive, ClipboardDownload, ClipboardUpload, ClipboardSend, ClipboardReceive, ClipboardShare, ClipboardCopy2, ClipboardPaste2, ClipboardCut2, ClipboardScissors, ClipboardClipboard, ClipboardClipboardList, ClipboardClipboardCheck, ClipboardClipboardX, ClipboardClipboardCopy, ClipboardClipboardPaste, ClipboardClipboardEdit, ClipboardClipboardDelete, ClipboardClipboardSearch, ClipboardClipboardHeart, ClipboardClipboardStar, ClipboardClipboardFlag, ClipboardClipboardAlert, ClipboardClipboardInfo, ClipboardClipboardHelp, ClipboardClipboardExternal, ClipboardClipboardLink, ClipboardClipboardMail, ClipboardClipboardPhone, ClipboardClipboardVideo, ClipboardClipboardImage, ClipboardClipboardFile, ClipboardClipboardFolder, ClipboardClipboardArchive, ClipboardClipboardDownload, ClipboardClipboardUpload, ClipboardClipboardSend, ClipboardClipboardReceive, ClipboardClipboardShare, ClipboardClipboardCopy2, ClipboardClipboardPaste2, ClipboardClipboardCut2, ClipboardClipboardScissors } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area, ScatterChart, Scatter } from 'recharts';
+import { toast } from 'react-hot-toast';
 
+// Production Deployment & Launch interfaces
 interface DeploymentEnvironment {
   id: string;
   name: string;
-  type: 'production' | 'staging' | 'development';
-  status: 'deployed' | 'deploying' | 'failed' | 'pending';
+  type: 'development' | 'staging' | 'production' | 'canary';
+  status: 'active' | 'inactive' | 'maintenance';
   url: string;
   version: string;
-  healthScore: number;
-  uptime: number;
-  lastDeployed: Date;
-  deploymentTime: number;
-  infrastructure: {
-    frontend: string;
-    backend: string;
-    database: string;
-    cache: string;
-    cdn: string;
-    monitoring: string;
-  };
-  metrics: {
-    responseTime: number;
-    throughput: number;
-    errorRate: number;
-    availability: number;
-    cpuUsage: number;
-    memoryUsage: number;
-  };
-  sslStatus: 'active' | 'pending' | 'expired' | 'error';
-  domainStatus: 'active' | 'pending' | 'error';
+  lastDeployment: string;
+  healthStatus: 'healthy' | 'warning' | 'critical';
+  metrics: EnvironmentMetrics;
+  configuration: EnvironmentConfig;
 }
 
-interface LaunchChecklist {
+interface EnvironmentMetrics {
+  uptime: number;
+  responseTime: number;
+  errorRate: number;
+  throughput: number;
+  cpuUsage: number;
+  memoryUsage: number;
+  diskUsage: number;
+  networkLatency: number;
+}
+
+interface EnvironmentConfig {
+  autoScaling: boolean;
+  loadBalancing: boolean;
+  cdnEnabled: boolean;
+  sslEnabled: boolean;
+  monitoringEnabled: boolean;
+  backupEnabled: boolean;
+  securityScanning: boolean;
+  performanceTesting: boolean;
+}
+
+interface LaunchReadinessItem {
   id: string;
-  category: string;
-  items: {
-    id: string;
-    description: string;
-    status: 'completed' | 'pending' | 'failed' | 'in-progress';
-    critical: boolean;
-    priority: 'high' | 'medium' | 'low';
-    assignedTo: string;
-    dueDate: Date;
-    notes?: string;
-  }[];
+  category: 'technical' | 'business' | 'legal' | 'marketing' | 'operations';
+  title: string;
+  description: string;
+  status: 'pending' | 'in_progress' | 'completed' | 'blocked';
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  assignedTo: string;
+  dueDate: string;
+  completedDate?: string;
+  dependencies: string[];
+  evidence: string[];
+  notes: string[];
 }
 
 interface MonitoringAlert {
   id: string;
-  type: 'performance' | 'security' | 'error' | 'capacity' | 'ssl' | 'domain';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: 'performance' | 'security' | 'availability' | 'business' | 'system';
+  severity: 'info' | 'warning' | 'error' | 'critical';
   title: string;
   description: string;
-  timestamp: Date;
-  resolved: boolean;
-  component: string;
-  actionRequired: boolean;
+  status: 'active' | 'acknowledged' | 'resolved';
+  timestamp: string;
+  environment: string;
+  metrics: AlertMetrics;
+  actions: AlertAction[];
+  escalation: EscalationRule[];
 }
 
-interface LaunchMetrics {
+interface AlertMetrics {
+  threshold: number;
+  currentValue: number;
+  trend: 'increasing' | 'decreasing' | 'stable';
+  duration: number;
+  frequency: number;
+}
+
+interface AlertAction {
   id: string;
-  category: string;
-  metrics: {
-    totalUsers: number;
-    activeUsers: number;
-    pageViews: number;
-    sessions: number;
-    bounceRate: number;
-    conversionRate: number;
-    revenue: number;
-    supportTickets: number;
-  };
-  trends: {
-    userGrowth: number[];
-    performanceTrend: number[];
-    errorRateTrend: number[];
-    revenueTrend: number[];
-  };
-  goals: {
-    targetUsers: number;
-    targetRevenue: number;
-    targetUptime: number;
-    targetPerformance: number;
-  };
+  type: 'notification' | 'automation' | 'escalation' | 'rollback';
+  description: string;
+  executed: boolean;
+  executedAt?: string;
+  result?: string;
+}
+
+interface EscalationRule {
+  level: number;
+  condition: string;
+  action: string;
+  timeout: number;
+  contacts: string[];
+}
+
+interface LaunchMetric {
+  id: string;
+  name: string;
+  category: 'user' | 'performance' | 'business' | 'technical';
+  value: number;
+  target: number;
+  unit: string;
+  trend: 'up' | 'down' | 'stable';
+  change: number;
+  timestamp: string;
+  description: string;
 }
 
 interface LaunchStrategy {
   id: string;
-  phase: 'pre-launch' | 'soft-launch' | 'public-launch' | 'scale';
   name: string;
-  description: string;
-  startDate: Date;
-  endDate: Date | null;
+  phase: 'pre_launch' | 'launch' | 'post_launch' | 'growth';
   status: 'planned' | 'active' | 'completed' | 'paused';
-  activities: {
-    id: string;
-    name: string;
-    description: string;
-    status: 'pending' | 'in-progress' | 'completed';
-    priority: 'high' | 'medium' | 'low';
-    assignedTo: string;
-  }[];
-  metrics: {
-    usersTarget: number;
-    revenueTarget: number;
-    performanceTarget: number;
-    actualUsers: number;
-    actualRevenue: number;
-    actualPerformance: number;
-  };
+  startDate: string;
+  endDate?: string;
+  objectives: string[];
+  tactics: LaunchTactic[];
+  budget: number;
+  expectedROI: number;
+  actualROI?: number;
+  metrics: StrategyMetrics;
+}
+
+interface LaunchTactic {
+  id: string;
+  name: string;
+  type: 'marketing' | 'sales' | 'partnership' | 'content' | 'event' | 'advertising';
+  status: 'planned' | 'active' | 'completed' | 'cancelled';
+  budget: number;
+  expectedOutcome: string;
+  actualOutcome?: string;
+  startDate: string;
+  endDate?: string;
+  responsible: string;
+  deliverables: string[];
+}
+
+interface StrategyMetrics {
+  reach: number;
+  engagement: number;
+  conversion: number;
+  revenue: number;
+  cost: number;
+  roi: number;
 }
 
 const ProductionDeploymentLaunch: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [environments, setEnvironments] = useState<DeploymentEnvironment[]>([]);
-  const [launchChecklist, setLaunchChecklist] = useState<LaunchChecklist[]>([]);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [isLoading, setIsLoading] = useState(false);
+  const [deploymentEnvironments, setDeploymentEnvironments] = useState<DeploymentEnvironment[]>([]);
+  const [launchReadiness, setLaunchReadiness] = useState<LaunchReadinessItem[]>([]);
   const [monitoringAlerts, setMonitoringAlerts] = useState<MonitoringAlert[]>([]);
-  const [launchMetrics, setLaunchMetrics] = useState<LaunchMetrics[]>([]);
-  const [launchStrategy, setLaunchStrategy] = useState<LaunchStrategy[]>([]);
+  const [launchMetrics, setLaunchMetrics] = useState<LaunchMetric[]>([]);
+  const [launchStrategies, setLaunchStrategies] = useState<LaunchStrategy[]>([]);
   const [isDeploying, setIsDeploying] = useState(false);
-  const [isLaunching, setIsLaunching] = useState(false);
-  const [isMonitoring, setIsMonitoring] = useState(false);
-  const [selectedEnvironment, setSelectedEnvironment] = useState<DeploymentEnvironment | null>(null);
-  const [selectedPhase, setSelectedPhase] = useState<LaunchStrategy | null>(null);
 
-  // Generate deployment data
+  // SSR-safe data loading
   useEffect(() => {
-    const generateEnvironments = (): DeploymentEnvironment[] => {
-      return [
-        {
-          id: 'prod-1',
-          name: 'SyncScript Production',
-          type: 'production',
-          status: 'deployed',
-          url: 'https://syncscript.com',
-          version: '4.0.0',
-          healthScore: 99,
-          uptime: 99.9,
-          lastDeployed: new Date(Date.now() - 2 * 60 * 60 * 1000),
-          deploymentTime: 180,
-          infrastructure: {
-            frontend: 'Vercel',
-            backend: 'Render',
-            database: 'PostgreSQL 14',
-            cache: 'Redis 6',
-            cdn: 'Cloudflare',
-            monitoring: 'DataDog'
-          },
-          metrics: {
-            responseTime: 120,
-            throughput: 1500,
-            errorRate: 0.01,
-            availability: 99.9,
-            cpuUsage: 45,
-            memoryUsage: 60
-          },
-          sslStatus: 'active',
-          domainStatus: 'active'
-        },
-        {
-          id: 'staging-1',
-          name: 'SyncScript Staging',
-          type: 'staging',
-          status: 'deployed',
-          url: 'https://staging.syncscript.com',
-          version: '4.0.0-rc.1',
-          healthScore: 95,
-          uptime: 99.5,
-          lastDeployed: new Date(Date.now() - 6 * 60 * 60 * 1000),
-          deploymentTime: 120,
-          infrastructure: {
-            frontend: 'Vercel',
-            backend: 'Render',
-            database: 'PostgreSQL 14',
-            cache: 'Redis 6',
-            cdn: 'Cloudflare',
-            monitoring: 'DataDog'
-          },
-          metrics: {
-            responseTime: 150,
-            throughput: 200,
-            errorRate: 0.05,
-            availability: 99.5,
-            cpuUsage: 30,
-            memoryUsage: 45
-          },
-          sslStatus: 'active',
-          domainStatus: 'active'
-        }
-      ];
-    };
+    const loadProductionData = async () => {
+      setIsLoading(true);
+      
+      try {
+        // Simulate API call with SSR-safe delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
-    const generateLaunchChecklist = (): LaunchChecklist[] => {
-      return [
-        {
-          id: 'checklist-1',
-          category: 'Infrastructure & Deployment',
-          items: [
-            { id: 'infra-1', description: 'Production environment deployed and tested', status: 'completed', critical: true, priority: 'high', assignedTo: 'DevOps Team', dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-            { id: 'infra-2', description: 'SSL certificates configured and valid', status: 'completed', critical: true, priority: 'high', assignedTo: 'DevOps Team', dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-            { id: 'infra-3', description: 'CDN configured for global performance', status: 'completed', critical: true, priority: 'high', assignedTo: 'DevOps Team', dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-            { id: 'infra-4', description: 'Database backups and recovery tested', status: 'completed', critical: true, priority: 'high', assignedTo: 'DevOps Team', dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-            { id: 'infra-5', description: 'Monitoring and alerting configured', status: 'completed', critical: true, priority: 'high', assignedTo: 'DevOps Team', dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
-          ]
-        },
-        {
-          id: 'checklist-2',
-          category: 'Security & Compliance',
-          items: [
-            { id: 'sec-1', description: 'Security audit completed and vulnerabilities fixed', status: 'completed', critical: true, priority: 'high', assignedTo: 'Security Team', dueDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
-            { id: 'sec-2', description: 'GDPR compliance validation completed', status: 'completed', critical: true, priority: 'high', assignedTo: 'Compliance Team', dueDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
-            { id: 'sec-3', description: 'SOC2 compliance documentation ready', status: 'completed', critical: true, priority: 'high', assignedTo: 'Compliance Team', dueDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
-            { id: 'sec-4', description: 'Penetration testing completed', status: 'completed', critical: true, priority: 'high', assignedTo: 'Security Team', dueDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
-            { id: 'sec-5', description: 'Data encryption and privacy controls active', status: 'completed', critical: true, priority: 'high', assignedTo: 'Security Team', dueDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) }
-          ]
-        },
-        {
-          id: 'checklist-3',
-          category: 'Performance & Monitoring',
-          items: [
-            { id: 'perf-1', description: 'Core Web Vitals optimized and tested', status: 'completed', critical: true, priority: 'high', assignedTo: 'Performance Team', dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-            { id: 'perf-2', description: 'Load testing completed with expected traffic', status: 'completed', critical: true, priority: 'high', assignedTo: 'Performance Team', dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-            { id: 'perf-3', description: 'Error tracking and logging configured', status: 'completed', critical: true, priority: 'high', assignedTo: 'DevOps Team', dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-            { id: 'perf-4', description: 'Performance monitoring dashboards active', status: 'completed', critical: false, priority: 'medium', assignedTo: 'DevOps Team', dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-            { id: 'perf-5', description: 'Automated scaling configured', status: 'completed', critical: true, priority: 'high', assignedTo: 'DevOps Team', dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
-          ]
-        },
-        {
-          id: 'checklist-4',
-          category: 'Marketing & Launch',
-          items: [
-            { id: 'mkt-1', description: 'Landing page created and optimized', status: 'in-progress', critical: true, priority: 'high', assignedTo: 'Marketing Team', dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000) },
-            { id: 'mkt-2', description: 'User documentation and guides completed', status: 'completed', critical: true, priority: 'high', assignedTo: 'Content Team', dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-            { id: 'mkt-3', description: 'Demo environment prepared', status: 'completed', critical: true, priority: 'high', assignedTo: 'Product Team', dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-            { id: 'mkt-4', description: 'Beta user recruitment program launched', status: 'in-progress', critical: true, priority: 'high', assignedTo: 'Marketing Team', dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000) },
-            { id: 'mkt-5', description: 'Launch announcement prepared', status: 'pending', critical: true, priority: 'high', assignedTo: 'Marketing Team', dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) }
-          ]
-        }
-      ];
-    };
-
-    const generateMonitoringAlerts = (): MonitoringAlert[] => {
-      return [
-        {
-          id: 'alert-1',
-          type: 'performance',
-          severity: 'low',
-          title: 'Response Time Slightly Elevated',
-          description: 'Average response time increased to 150ms (target: 120ms)',
-          timestamp: new Date(Date.now() - 30 * 60 * 1000),
-          resolved: false,
-          component: 'API Gateway',
-          actionRequired: false
-        },
-        {
-          id: 'alert-2',
-          type: 'capacity',
-          severity: 'medium',
-          title: 'User Registration Spike',
-          description: 'User registrations increased 300% in the last hour',
-          timestamp: new Date(Date.now() - 15 * 60 * 1000),
-          resolved: false,
-          component: 'User Service',
-          actionRequired: true
-        },
-        {
-          id: 'alert-3',
-          type: 'ssl',
-          severity: 'low',
-          title: 'SSL Certificate Renewal Reminder',
-          description: 'SSL certificate expires in 30 days',
-          timestamp: new Date(Date.now() - 60 * 60 * 1000),
-          resolved: false,
-          component: 'SSL Manager',
-          actionRequired: true
-        }
-      ];
-    };
-
-    const generateLaunchMetrics = (): LaunchMetrics[] => {
-      return [
-        {
-          id: 'metrics-1',
-          category: 'Launch Performance',
-          metrics: {
-            totalUsers: 1250,
-            activeUsers: 980,
-            pageViews: 15420,
-            sessions: 8920,
-            bounceRate: 25.5,
-            conversionRate: 12.8,
-            revenue: 15420,
-            supportTickets: 23
-          },
-          trends: {
-            userGrowth: [100, 250, 500, 750, 1000, 1250],
-            performanceTrend: [95, 96, 97, 98, 99, 99],
-            errorRateTrend: [0.5, 0.3, 0.2, 0.1, 0.05, 0.01],
-            revenueTrend: [0, 2500, 5000, 7500, 10000, 15420]
-          },
-          goals: {
-            targetUsers: 1000,
-            targetRevenue: 10000,
-            targetUptime: 99.5,
-            targetPerformance: 95
-          }
-        }
-      ];
-    };
-
-    const generateLaunchStrategy = (): LaunchStrategy[] => {
-      return [
-        {
-          id: 'strategy-1',
-          phase: 'pre-launch',
-          name: 'Pre-Launch Preparation',
-          description: 'Final testing, security validation, and infrastructure optimization',
-          startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          endDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-          status: 'completed',
-          activities: [
-            { id: 'act-1', name: 'Security Audit', description: 'Complete security audit and vulnerability assessment', status: 'completed', priority: 'high', assignedTo: 'Security Team' },
-            { id: 'act-2', name: 'Performance Testing', description: 'Load testing and performance optimization', status: 'completed', priority: 'high', assignedTo: 'Performance Team' },
-            { id: 'act-3', name: 'Infrastructure Setup', description: 'Production infrastructure deployment', status: 'completed', priority: 'high', assignedTo: 'DevOps Team' }
-          ],
-          metrics: {
-            usersTarget: 0,
-            revenueTarget: 0,
-            performanceTarget: 95,
-            actualUsers: 0,
-            actualRevenue: 0,
-            actualPerformance: 99
-          }
-        },
-        {
-          id: 'strategy-2',
-          phase: 'soft-launch',
-          name: 'Soft Launch (Beta)',
-          description: 'Limited beta release with 100-500 users for feedback and validation',
-          startDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-          endDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-          status: 'active',
-          activities: [
-            { id: 'act-4', name: 'Beta User Recruitment', description: 'Recruit and onboard beta users', status: 'in-progress', priority: 'high', assignedTo: 'Marketing Team' },
-            { id: 'act-5', name: 'Feedback Collection', description: 'Collect and analyze user feedback', status: 'in-progress', priority: 'high', assignedTo: 'Product Team' },
-            { id: 'act-6', name: 'Bug Fixes', description: 'Address critical issues from beta testing', status: 'pending', priority: 'high', assignedTo: 'Dev Team' }
-          ],
-          metrics: {
-            usersTarget: 500,
-            revenueTarget: 5000,
-            performanceTarget: 98,
-            actualUsers: 250,
-            actualRevenue: 2500,
-            actualPerformance: 99
-          }
-        },
-        {
-          id: 'strategy-3',
-          phase: 'public-launch',
-          name: 'Public Launch',
-          description: 'Full public launch with marketing campaign and enterprise outreach',
-          startDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-          endDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
-          status: 'planned',
-          activities: [
-            { id: 'act-7', name: 'Marketing Campaign', description: 'Launch comprehensive marketing campaign', status: 'pending', priority: 'high', assignedTo: 'Marketing Team' },
-            { id: 'act-8', name: 'Enterprise Sales', description: 'Begin enterprise customer outreach', status: 'pending', priority: 'high', assignedTo: 'Sales Team' },
-            { id: 'act-9', name: 'Media Coverage', description: 'Secure media coverage and PR', status: 'pending', priority: 'medium', assignedTo: 'PR Team' }
-          ],
-          metrics: {
-            usersTarget: 5000,
-            revenueTarget: 50000,
-            performanceTarget: 99,
-            actualUsers: 0,
-            actualRevenue: 0,
-            actualPerformance: 0
-          }
-        },
-        {
-          id: 'strategy-4',
-          phase: 'scale',
-          name: 'Scale & Growth',
-          description: 'Scale infrastructure and team to support rapid growth',
-          startDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
-          endDate: null,
-          status: 'planned',
-          activities: [
-            { id: 'act-10', name: 'Team Expansion', description: 'Hire additional developers and support staff', status: 'pending', priority: 'high', assignedTo: 'HR Team' },
-            { id: 'act-11', name: 'Infrastructure Scaling', description: 'Scale infrastructure for increased load', status: 'pending', priority: 'high', assignedTo: 'DevOps Team' },
-            { id: 'act-12', name: 'Feature Development', description: 'Develop new features based on user feedback', status: 'pending', priority: 'medium', assignedTo: 'Product Team' }
-          ],
-          metrics: {
-            usersTarget: 25000,
-            revenueTarget: 250000,
-            performanceTarget: 99.5,
-            actualUsers: 0,
-            actualRevenue: 0,
-            actualPerformance: 0
-          }
-        }
-      ];
-    };
-
-    setEnvironments(generateEnvironments());
-    setLaunchChecklist(generateLaunchChecklist());
-    setMonitoringAlerts(generateMonitoringAlerts());
-    setLaunchMetrics(generateLaunchMetrics());
-    setLaunchStrategy(generateLaunchStrategy());
-  }, []);
-
-  const deployToProduction = async () => {
-    setIsDeploying(true);
-    
-    // Simulate production deployment
-    await new Promise(resolve => setTimeout(resolve, 20000));
-    
-    // Update environment
-    setEnvironments(prev => prev.map(env => 
-      env.type === 'production' 
-        ? { 
-            ...env, 
-            lastDeployed: new Date(),
-            version: '4.0.0-production',
-            status: 'deployed' as const,
-            healthScore: 100,
-            uptime: 99.99
-          }
-        : env
-    ));
-    
-    setIsDeploying(false);
-  };
-
-  const launchPlatform = async () => {
-    setIsLaunching(true);
-    
-    // Simulate platform launch
-    await new Promise(resolve => setTimeout(resolve, 15000));
-    
-    // Update launch strategy
-    setLaunchStrategy(prev => prev.map(strategy => 
-      strategy.phase === 'soft-launch' 
-        ? { 
-            ...strategy, 
-            status: 'active' as const,
+        // Mock deployment environments data
+        const mockEnvironments: DeploymentEnvironment[] = [
+          {
+            id: 'env-production',
+            name: 'Production',
+            type: 'production',
+            status: 'active',
+            url: 'https://syncscript.com',
+            version: '3.0.0',
+            lastDeployment: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+            healthStatus: 'healthy',
             metrics: {
-              ...strategy.metrics,
-              actualUsers: 500,
-              actualRevenue: 5000
+              uptime: 99.9,
+              responseTime: 245,
+              errorRate: 0.1,
+              throughput: 1250,
+              cpuUsage: 65,
+              memoryUsage: 78,
+              diskUsage: 45,
+              networkLatency: 12
+            },
+            configuration: {
+              autoScaling: true,
+              loadBalancing: true,
+              cdnEnabled: true,
+              sslEnabled: true,
+              monitoringEnabled: true,
+              backupEnabled: true,
+              securityScanning: true,
+              performanceTesting: true
+            }
+          },
+          {
+            id: 'env-staging',
+            name: 'Staging',
+            type: 'staging',
+            status: 'active',
+            url: 'https://staging.syncscript.com',
+            version: '3.1.0-beta',
+            lastDeployment: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+            healthStatus: 'healthy',
+            metrics: {
+              uptime: 99.5,
+              responseTime: 180,
+              errorRate: 0.2,
+              throughput: 450,
+              cpuUsage: 45,
+              memoryUsage: 62,
+              diskUsage: 38,
+              networkLatency: 8
+            },
+            configuration: {
+              autoScaling: true,
+              loadBalancing: true,
+              cdnEnabled: true,
+              sslEnabled: true,
+              monitoringEnabled: true,
+              backupEnabled: true,
+              securityScanning: true,
+              performanceTesting: true
             }
           }
-        : strategy
-    ));
-    
-    setIsLaunching(false);
-  };
+        ];
 
-  const startMonitoring = async () => {
-    setIsMonitoring(true);
-    
-    // Simulate monitoring setup
-    await new Promise(resolve => setTimeout(resolve, 10000));
-    
-    setIsMonitoring(false);
-  };
+        // Mock launch readiness data
+        const mockReadiness: LaunchReadinessItem[] = [
+          {
+            id: 'readiness-1',
+            category: 'technical',
+            title: 'Production Environment Setup',
+            description: 'Ensure production environment is properly configured and tested',
+            status: 'completed',
+            priority: 'critical',
+            assignedTo: 'DevOps Team',
+            dueDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+            completedDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+            dependencies: [],
+            evidence: ['Environment health check passed', 'Load testing completed', 'Security scan passed'],
+            notes: ['All systems green', 'Ready for production traffic']
+          },
+          {
+            id: 'readiness-2',
+            category: 'business',
+            title: 'Legal Compliance Review',
+            description: 'Complete legal compliance review for data protection and privacy',
+            status: 'completed',
+            priority: 'critical',
+            assignedTo: 'Legal Team',
+            dueDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+            completedDate: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+            dependencies: [],
+            evidence: ['GDPR compliance verified', 'Privacy policy updated', 'Terms of service reviewed'],
+            notes: ['All legal requirements met', 'Ready for EU market']
+          },
+          {
+            id: 'readiness-3',
+            category: 'marketing',
+            title: 'Launch Campaign Preparation',
+            description: 'Prepare and schedule launch marketing campaigns',
+            status: 'in_progress',
+            priority: 'high',
+            assignedTo: 'Marketing Team',
+            dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+            dependencies: ['readiness-1', 'readiness-2'],
+            evidence: ['Campaign assets created', 'Social media scheduled', 'Press release drafted'],
+            notes: ['Final review pending', 'Launch date confirmed']
+          },
+          {
+            id: 'readiness-4',
+            category: 'operations',
+            title: 'Support Team Training',
+            description: 'Train support team on new features and common issues',
+            status: 'in_progress',
+            priority: 'medium',
+            assignedTo: 'Support Team',
+            dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+            dependencies: [],
+            evidence: ['Training materials prepared', 'Knowledge base updated'],
+            notes: ['Training sessions scheduled', 'Documentation review in progress']
+          }
+        ];
 
-  const formatDate = (date: Date): string => {
-    return date.toLocaleString();
-  };
+        // Mock monitoring alerts data
+        const mockAlerts: MonitoringAlert[] = [
+          {
+            id: 'alert-1',
+            type: 'performance',
+            severity: 'warning',
+            title: 'High Response Time',
+            description: 'Average response time has increased by 15% in the last hour',
+            status: 'active',
+            timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+            environment: 'production',
+            metrics: {
+              threshold: 500,
+              currentValue: 575,
+              trend: 'increasing',
+              duration: 30,
+              frequency: 5
+            },
+            actions: [
+              {
+                id: 'action-1',
+                type: 'notification',
+                description: 'Alert sent to DevOps team',
+                executed: true,
+                executedAt: new Date(Date.now() - 25 * 60 * 1000).toISOString(),
+                result: 'Notification delivered'
+              }
+            ],
+            escalation: [
+              {
+                level: 1,
+                condition: 'Response time > 500ms for 5 minutes',
+                action: 'Scale up instances',
+                timeout: 10,
+                contacts: ['devops@syncscript.com']
+              }
+            ]
+          }
+        ];
 
-  const getStatusColor = (status: string): string => {
+        // Mock launch metrics data
+        const mockMetrics: LaunchMetric[] = [
+          {
+            id: 'metric-1',
+            name: 'User Registrations',
+            category: 'user',
+            value: 1250,
+            target: 1000,
+            unit: 'users',
+            trend: 'up',
+            change: 25,
+            timestamp: new Date().toISOString(),
+            description: 'Total user registrations since launch'
+          },
+          {
+            id: 'metric-2',
+            name: 'Page Load Time',
+            category: 'performance',
+            value: 245,
+            target: 300,
+            unit: 'ms',
+            trend: 'down',
+            change: -18,
+            timestamp: new Date().toISOString(),
+            description: 'Average page load time'
+          },
+          {
+            id: 'metric-3',
+            name: 'Revenue',
+            category: 'business',
+            value: 45000,
+            target: 50000,
+            unit: '$',
+            trend: 'up',
+            change: 12.5,
+            timestamp: new Date().toISOString(),
+            description: 'Total revenue generated'
+          }
+        ];
+
+        // Mock launch strategies data
+        const mockStrategies: LaunchStrategy[] = [
+          {
+            id: 'strategy-1',
+            name: 'Product Hunt Launch',
+            phase: 'launch',
+            status: 'active',
+            startDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+            endDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+            objectives: ['Generate initial user base', 'Create buzz around product', 'Drive early adoption'],
+            tactics: [
+              {
+                id: 'tactic-1',
+                name: 'Product Hunt Campaign',
+                type: 'marketing',
+                status: 'active',
+                budget: 5000,
+                expectedOutcome: 'Top 5 product of the day',
+                startDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+                endDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString(),
+                responsible: 'Marketing Team',
+                deliverables: ['Product Hunt listing', 'Launch day activities', 'Community engagement']
+              }
+            ],
+            budget: 15000,
+            expectedROI: 300,
+            metrics: {
+              reach: 50000,
+              engagement: 15,
+              conversion: 8,
+              revenue: 25000,
+              cost: 15000,
+              roi: 167
+            }
+          }
+        ];
+
+        setDeploymentEnvironments(mockEnvironments);
+        setLaunchReadiness(mockReadiness);
+        setMonitoringAlerts(mockAlerts);
+        setLaunchMetrics(mockMetrics);
+        setLaunchStrategies(mockStrategies);
+
+        toast.success('Production deployment and launch data loaded successfully!');
+      } catch (error) {
+        console.error('Failed to load production data:', error);
+        toast.error('Failed to load production deployment data');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadProductionData();
+  }, []);
+
+  const handleDeploy = useCallback(async (environmentId: string) => {
+    setIsDeploying(true);
+    try {
+      // Simulate deployment process
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      toast.success(`🚀 Successfully deployed to ${environmentId}!`);
+    } catch (error) {
+      console.error('Failed to deploy:', error);
+      toast.error('Failed to deploy');
+    } finally {
+      setIsDeploying(false);
+    }
+  }, []);
+
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: Rocket },
+    { id: 'environments', label: 'Environments', icon: Server },
+    { id: 'readiness', label: 'Readiness', icon: CheckCircle },
+    { id: 'monitoring', label: 'Monitoring', icon: Bell },
+    { id: 'metrics', label: 'Metrics', icon: BarChart3 },
+    { id: 'strategy', label: 'Strategy', icon: Target }
+  ];
+
+  const getStatusColor = (status: string) => {
     switch (status) {
-      case 'deployed': case 'completed': case 'active': case 'success': return 'bg-green-100 text-green-800';
-      case 'deploying': case 'in-progress': case 'running': return 'bg-blue-100 text-blue-800';
-      case 'pending': case 'planned': return 'bg-yellow-100 text-yellow-800';
-      case 'failed': case 'error': return 'bg-red-100 text-red-800';
-      case 'paused': case 'expired': return 'bg-orange-100 text-orange-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'completed': return 'text-green-600 bg-green-100';
+      case 'in_progress': return 'text-blue-600 bg-blue-100';
+      case 'pending': return 'text-yellow-600 bg-yellow-100';
+      case 'blocked': return 'text-red-600 bg-red-100';
+      case 'active': return 'text-green-600 bg-green-100';
+      case 'inactive': return 'text-gray-600 bg-gray-100';
+      case 'maintenance': return 'text-orange-600 bg-orange-100';
+      case 'healthy': return 'text-green-600 bg-green-100';
+      case 'warning': return 'text-yellow-600 bg-yellow-100';
+      case 'critical': return 'text-red-600 bg-red-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
 
-  const getSeverityColor = (severity: string): string => {
+  const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'low': return 'bg-green-100 text-green-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'high': return 'bg-orange-100 text-orange-800';
-      case 'critical': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'info': return 'text-blue-600 bg-blue-100';
+      case 'warning': return 'text-yellow-600 bg-yellow-100';
+      case 'error': return 'text-orange-600 bg-orange-100';
+      case 'critical': return 'text-red-600 bg-red-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
 
-  const getPriorityColor = (priority: string): string => {
+  const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'text-red-600';
-      case 'medium': return 'text-yellow-600';
-      case 'low': return 'text-green-600';
-      default: return 'text-gray-600';
+      case 'low': return 'text-blue-600 bg-blue-100';
+      case 'medium': return 'text-yellow-600 bg-yellow-100';
+      case 'high': return 'text-orange-600 bg-orange-100';
+      case 'critical': return 'text-red-600 bg-red-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
-
-  const getPhaseColor = (phase: string): string => {
-    switch (phase) {
-      case 'pre-launch': return 'bg-blue-100 text-blue-800';
-      case 'soft-launch': return 'bg-green-100 text-green-800';
-      case 'public-launch': return 'bg-purple-100 text-purple-800';
-      case 'scale': return 'bg-orange-100 text-orange-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const totalEnvironments = environments.length;
-  const deployedEnvironments = environments.filter(e => e.status === 'deployed').length;
-  const completedChecklistItems = launchChecklist.reduce((sum, cat) => 
-    sum + cat.items.filter(item => item.status === 'completed').length, 0);
-  const totalChecklistItems = launchChecklist.reduce((sum, cat) => sum + cat.items.length, 0);
-  const activeAlerts = monitoringAlerts.filter(alert => !alert.resolved).length;
-  const currentUsers = launchMetrics[0]?.metrics.totalUsers || 0;
-  const targetUsers = launchMetrics[0]?.goals.targetUsers || 0;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
+        exit={{ opacity: 0, scale: 0.95 }}
         className="bg-white rounded-2xl shadow-2xl w-full max-w-7xl h-[90vh] overflow-hidden"
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white p-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-2xl font-bold">🚀 Production Deployment & Launch</h2>
-              <p className="text-green-100 mt-1">Deploy SyncScript to production and launch the ultimate productivity platform</p>
+        <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white bg-opacity-20 rounded-lg">
+                <Rocket className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">Production Deployment & Launch</h2>
+                <p className="text-blue-100">Go-to-market execution</p>
+              </div>
             </div>
-            <button
-              onClick={onClose}
-              className="text-white hover:text-green-200 transition-colors"
-            >
-              <X size={24} />
-            </button>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                <span className="text-sm">Live</span>
+              </div>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex space-x-1 mt-6 overflow-x-auto">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? 'bg-white bg-opacity-20 text-white'
+                      : 'text-blue-100 hover:bg-white hover:bg-opacity-10'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
+        {/* Content */}
         <div className="p-6 h-full overflow-y-auto">
-          {/* Launch Overview Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-green-600 font-medium">Deployment Status</p>
-                  <p className="text-2xl font-bold text-green-800">{deployedEnvironments}/{totalEnvironments}</p>
-                  <p className="text-xs text-green-600">Environments deployed</p>
-                </div>
-                <Rocket className="text-3xl text-green-600" />
-              </div>
+          {isLoading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
             </div>
-
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-blue-600 font-medium">Launch Readiness</p>
-                  <p className="text-2xl font-bold text-blue-800">{completedChecklistItems}/{totalChecklistItems}</p>
-                  <p className="text-xs text-blue-600">Checklist items</p>
-                </div>
-                <CheckCircle className="text-3xl text-blue-600" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-purple-600 font-medium">Current Users</p>
-                  <p className="text-2xl font-bold text-purple-800">{currentUsers}</p>
-                  <p className="text-xs text-purple-600">of {targetUsers} target</p>
-                </div>
-                <Users className="text-3xl text-purple-600" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-orange-600 font-medium">Active Alerts</p>
-                  <p className="text-2xl font-bold text-orange-800">{activeAlerts}</p>
-                  <p className="text-xs text-orange-600">Monitoring alerts</p>
-                </div>
-                <AlertTriangle className="text-3xl text-orange-600" />
-              </div>
-            </div>
-          </div>
-
-          {/* Launch Actions */}
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-4 mb-6 border-2 border-green-200">
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-green-700 font-medium">
-                🎯 Ready for Production Launch - SyncScript is production-ready and optimized!
-              </div>
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={deployToProduction}
-                  disabled={isDeploying}
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50 transition-colors"
+          ) : (
+            <AnimatePresence mode="wait">
+              {activeTab === 'overview' && (
+                <motion.div
+                  key="overview"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  {isDeploying ? '⏳ Deploying...' : '🚀 Deploy to Production'}
-                </button>
-                <button
-                  onClick={launchPlatform}
-                  disabled={isLaunching}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
-                >
-                  {isLaunching ? '⏳ Launching...' : '🎉 Launch Platform'}
-                </button>
-                <button
-                  onClick={startMonitoring}
-                  disabled={isMonitoring}
-                  className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 disabled:opacity-50 transition-colors"
-                >
-                  {isMonitoring ? '⏳ Starting...' : '📊 Start Monitoring'}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Deployment Environments */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Globe className="mr-2 text-green-600" />
-              Deployment Environments ({environments.length})
-            </h3>
-            <div className="space-y-4">
-              {environments.map((env) => (
-                <div key={env.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{env.name}</h4>
-                      <p className="text-sm text-gray-600">{env.url}</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-green-100">Environments</p>
+                          <p className="text-3xl font-bold">{deploymentEnvironments.length}</p>
+                        </div>
+                        <Server className="w-8 h-8 text-green-200" />
+                      </div>
                     </div>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(env.status)}`}>
-                        {env.status}
-                      </span>
-                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                        v{env.version}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(env.sslStatus)}`}>
-                        SSL: {env.sslStatus}
-                      </span>
+                    <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-blue-100">Readiness Items</p>
+                          <p className="text-3xl font-bold">{launchReadiness.length}</p>
+                        </div>
+                        <CheckCircle className="w-8 h-8 text-blue-200" />
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                    <div className="text-sm">
-                      <span className="text-gray-600">Health Score:</span>
-                      <span className="font-medium text-gray-900 ml-1">{env.healthScore}%</span>
+                    <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-purple-100">Active Alerts</p>
+                          <p className="text-3xl font-bold">{monitoringAlerts.filter(a => a.status === 'active').length}</p>
+                        </div>
+                        <Bell className="w-8 h-8 text-purple-200" />
+                      </div>
                     </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Uptime:</span>
-                      <span className="font-medium text-gray-900 ml-1">{env.uptime}%</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Response Time:</span>
-                      <span className="font-medium text-gray-900 ml-1">{env.metrics.responseTime}ms</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Last Deployed:</span>
-                      <span className="text-gray-500 ml-1">{formatDate(env.lastDeployed)}</span>
+                    <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-orange-100">Launch Metrics</p>
+                          <p className="text-3xl font-bold">{launchMetrics.length}</p>
+                        </div>
+                        <BarChart3 className="w-8 h-8 text-orange-200" />
+                      </div>
                     </div>
                   </div>
 
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Infrastructure:</span> {env.infrastructure.frontend}, {env.infrastructure.backend}, {env.infrastructure.database}, {env.infrastructure.cdn}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold mb-4">Environment Health</h3>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <BarChart data={deploymentEnvironments.map(env => ({
+                          name: env.name,
+                          uptime: env.metrics.uptime
+                        }))}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="name" />
+                          <YAxis />
+                          <Tooltip />
+                          <Bar dataKey="uptime" fill="#10b981" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold mb-4">Readiness Progress</h3>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <PieChart>
+                          <Pie
+                            data={[
+                              { name: 'Completed', value: launchReadiness.filter(r => r.status === 'completed').length },
+                              { name: 'In Progress', value: launchReadiness.filter(r => r.status === 'in_progress').length },
+                              { name: 'Pending', value: launchReadiness.filter(r => r.status === 'pending').length }
+                            ]}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            label={({ name, percent }) => `${name} ${((percent as number) * 100).toFixed(0)}%`}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                          >
+                            <Cell fill="#10b981" />
+                            <Cell fill="#3b82f6" />
+                            <Cell fill="#f59e0b" />
+                          </Pie>
+                          <Tooltip />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                </motion.div>
+              )}
 
-          {/* Launch Checklist */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <CheckCircle className="mr-2 text-blue-600" />
-              Launch Readiness Checklist
-            </h3>
-            <div className="space-y-4">
-              {launchChecklist.map((category) => (
-                <div key={category.id} className="bg-gray-50 rounded-lg p-4">
-                  <h4 className="font-semibold text-gray-800 mb-3">{category.category}</h4>
-                  <div className="space-y-2">
-                    {category.items.map((item) => (
-                      <div key={item.id} className="flex items-center justify-between">
+              {activeTab === 'environments' && (
+                <motion.div
+                  key="environments"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {deploymentEnvironments.map((environment) => (
+                    <div key={environment.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center space-x-3">
-                          <div className={`w-4 h-4 rounded-full flex items-center justify-center ${
-                            item.status === 'completed' ? 'bg-green-500' : 
-                            item.status === 'in-progress' ? 'bg-blue-500' : 
-                            item.status === 'pending' ? 'bg-yellow-500' : 'bg-red-500'
-                          }`}>
-                            {item.status === 'completed' && <CheckCircle className="w-3 h-3 text-white" />}
-                            {item.status === 'in-progress' && <Clock className="w-3 h-3 text-white" />}
-                            {item.status === 'pending' && <Clock className="w-3 h-3 text-white" />}
-                            {item.status === 'failed' && <AlertTriangle className="w-3 h-3 text-white" />}
+                          <div className="p-2 bg-blue-100 rounded-lg">
+                            <Server className="w-5 h-5 text-blue-600" />
                           </div>
-                          <span className={`text-sm ${item.critical ? 'font-semibold' : ''}`}>
-                            {item.description}
-                          </span>
-                          {item.critical && <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Critical</span>}
-                          <span className={`text-xs px-2 py-1 rounded ${getPriorityColor(item.priority)} bg-gray-100`}>
-                            {item.priority} priority
-                          </span>
+                          <div>
+                            <h3 className="font-semibold">{environment.name}</h3>
+                            <p className="text-sm text-gray-600">{environment.url}</p>
+                          </div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(item.status)}`}>
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(environment.status)}`}>
+                            {environment.status}
+                          </span>
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(environment.healthStatus)}`}>
+                            {environment.healthStatus}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            v{environment.version}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Uptime</span>
+                          <p className="font-semibold">{environment.metrics.uptime}%</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Response Time</span>
+                          <p className="font-semibold">{environment.metrics.responseTime}ms</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Error Rate</span>
+                          <p className="font-semibold">{environment.metrics.errorRate}%</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Last Deployment</span>
+                          <p className="font-semibold text-sm">
+                            {new Date(environment.lastDeployment).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Configuration:</h4>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                          {Object.entries(environment.configuration).map(([key, value]) => (
+                            <div key={key} className="flex items-center space-x-2">
+                              <div className={`w-2 h-2 rounded-full ${value ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                              <span className="text-sm capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <button
+                          onClick={() => handleDeploy(environment.id)}
+                          disabled={isDeploying}
+                          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
+                        >
+                          {isDeploying ? 'Deploying...' : '🚀 Deploy'}
+                        </button>
+                        <button className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                          View Details
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+
+              {activeTab === 'readiness' && (
+                <motion.div
+                  key="readiness"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {launchReadiness.map((item) => (
+                    <div key={item.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-green-100 rounded-lg">
+                            <CheckCircle className="w-5 h-5 text-green-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{item.title}</h3>
+                            <p className="text-sm text-gray-600">{item.description}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(item.status)}`}>
                             {item.status}
                           </span>
-                          <span className="text-xs text-gray-500">{item.assignedTo}</span>
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getPriorityColor(item.priority)}`}>
+                            {item.priority}
+                          </span>
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${
+                            item.category === 'technical' ? 'bg-blue-100 text-blue-800' :
+                            item.category === 'business' ? 'bg-green-100 text-green-800' :
+                            item.category === 'legal' ? 'bg-purple-100 text-purple-800' :
+                            item.category === 'marketing' ? 'bg-pink-100 text-pink-800' : 'bg-orange-100 text-orange-800'
+                          }`}>
+                            {item.category}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Assigned To</span>
+                          <p className="font-semibold">{item.assignedTo}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Due Date</span>
+                          <p className="font-semibold text-sm">
+                            {new Date(item.dueDate).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Completed</span>
+                          <p className="font-semibold text-sm">
+                            {item.completedDate ? new Date(item.completedDate).toLocaleDateString() : 'Not completed'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Evidence:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {item.evidence.map((evidence, index) => (
+                            <span key={index} className="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">
+                              ✓ {evidence}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      {item.notes.length > 0 && (
+                        <div className="space-y-2 mb-4">
+                          <h4 className="font-medium">Notes:</h4>
+                          <ul className="list-disc list-inside space-y-1 text-sm text-gray-600">
+                            {item.notes.map((note, index) => (
+                              <li key={index}>{note}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+
+              {activeTab === 'monitoring' && (
+                <motion.div
+                  key="monitoring"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {monitoringAlerts.map((alert) => (
+                    <div key={alert.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-red-100 rounded-lg">
+                            <Bell className="w-5 h-5 text-red-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{alert.title}</h3>
+                            <p className="text-sm text-gray-600">{alert.description}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getSeverityColor(alert.severity)}`}>
+                            {alert.severity}
+                          </span>
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(alert.status)}`}>
+                            {alert.status}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            {alert.environment}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Current Value</span>
+                          <p className="font-semibold">{alert.metrics.currentValue}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Threshold</span>
+                          <p className="font-semibold">{alert.metrics.threshold}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Trend</span>
+                          <p className="font-semibold capitalize">{alert.metrics.trend}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Duration</span>
+                          <p className="font-semibold">{alert.metrics.duration} min</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Actions Taken:</h4>
+                        <div className="space-y-2">
+                          {alert.actions.map((action) => (
+                            <div key={action.id} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                              <span className="text-sm">{action.description}</span>
+                              <span className={`px-2 py-1 rounded text-xs ${
+                                action.executed ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                              }`}>
+                                {action.executed ? 'Executed' : 'Pending'}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                          Acknowledge
+                        </button>
+                        <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                          Resolve
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+
+              {activeTab === 'metrics' && (
+                <motion.div
+                  key="metrics"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {launchMetrics.map((metric) => (
+                      <div key={metric.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div>
+                            <h3 className="font-semibold">{metric.name}</h3>
+                            <p className="text-sm text-gray-600">{metric.description}</p>
+                          </div>
+                          <div className={`p-2 rounded-lg ${
+                            metric.trend === 'up' ? 'bg-green-100' :
+                            metric.trend === 'down' ? 'bg-red-100' : 'bg-gray-100'
+                          }`}>
+                            {metric.trend === 'up' ? (
+                              <ArrowUp className="w-5 h-5 text-green-600" />
+                            ) : metric.trend === 'down' ? (
+                              <ArrowDown className="w-5 h-5 text-red-600" />
+                            ) : (
+                              <Minus className="w-5 h-5 text-gray-600" />
+                            )}
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-500">Current</span>
+                            <span className="font-semibold">{metric.value.toLocaleString()} {metric.unit}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-500">Target</span>
+                            <span className="font-semibold">{metric.target.toLocaleString()} {metric.unit}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-500">Change</span>
+                            <span className={`font-semibold ${
+                              metric.change > 0 ? 'text-green-600' : metric.change < 0 ? 'text-red-600' : 'text-gray-600'
+                            }`}>
+                              {metric.change > 0 ? '+' : ''}{metric.change}%
+                            </span>
+                          </div>
+                        </div>
+                        <div className="mt-4">
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div 
+                              className={`h-2 rounded-full ${
+                                metric.value >= metric.target ? 'bg-green-500' : 'bg-blue-500'
+                              }`}
+                              style={{ width: `${Math.min((metric.value / metric.target) * 100, 100)}%` }}
+                            ></div>
+                          </div>
                         </div>
                       </div>
                     ))}
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                </motion.div>
+              )}
 
-          {/* Launch Strategy */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Target className="mr-2 text-purple-600" />
-              Launch Strategy ({launchStrategy.length})
-            </h3>
-            <div className="space-y-4">
-              {launchStrategy.map((strategy) => (
-                <div key={strategy.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{strategy.name}</h4>
-                      <p className="text-sm text-gray-600">{strategy.description}</p>
+              {activeTab === 'strategy' && (
+                <motion.div
+                  key="strategy"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {launchStrategies.map((strategy) => (
+                    <div key={strategy.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-purple-100 rounded-lg">
+                            <Target className="w-5 h-5 text-purple-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{strategy.name}</h3>
+                            <p className="text-sm text-gray-600">{strategy.phase} phase</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(strategy.status)}`}>
+                            {strategy.status}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            ROI: {strategy.actualROI || strategy.expectedROI}%
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Budget</span>
+                          <p className="font-semibold">${strategy.budget.toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Expected ROI</span>
+                          <p className="font-semibold">{strategy.expectedROI}%</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Start Date</span>
+                          <p className="font-semibold text-sm">
+                            {new Date(strategy.startDate).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">End Date</span>
+                          <p className="font-semibold text-sm">
+                            {strategy.endDate ? new Date(strategy.endDate).toLocaleDateString() : 'TBD'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Objectives:</h4>
+                        <ul className="list-disc list-inside space-y-1 text-sm text-gray-600">
+                          {strategy.objectives.map((objective, index) => (
+                            <li key={index}>{objective}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Tactics:</h4>
+                        <div className="space-y-2">
+                          {strategy.tactics.map((tactic) => (
+                            <div key={tactic.id} className="p-3 bg-gray-50 rounded">
+                              <div className="flex items-center justify-between mb-2">
+                                <h5 className="font-medium">{tactic.name}</h5>
+                                <span className={`px-2 py-1 rounded text-xs ${getStatusColor(tactic.status)}`}>
+                                  {tactic.status}
+                                </span>
+                              </div>
+                              <p className="text-sm text-gray-600 mb-2">{tactic.expectedOutcome}</p>
+                              <div className="flex justify-between text-sm">
+                                <span>Budget: ${tactic.budget.toLocaleString()}</span>
+                                <span>Responsible: {tactic.responsible}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Metrics:</h4>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                          <div className="p-2 bg-gray-50 rounded">
+                            <span className="text-sm text-gray-500">Reach</span>
+                            <p className="font-semibold">{strategy.metrics.reach.toLocaleString()}</p>
+                          </div>
+                          <div className="p-2 bg-gray-50 rounded">
+                            <span className="text-sm text-gray-500">Engagement</span>
+                            <p className="font-semibold">{strategy.metrics.engagement}%</p>
+                          </div>
+                          <div className="p-2 bg-gray-50 rounded">
+                            <span className="text-sm text-gray-500">Conversion</span>
+                            <p className="font-semibold">{strategy.metrics.conversion}%</p>
+                          </div>
+                          <div className="p-2 bg-gray-50 rounded">
+                            <span className="text-sm text-gray-500">Revenue</span>
+                            <p className="font-semibold">${strategy.metrics.revenue.toLocaleString()}</p>
+                          </div>
+                          <div className="p-2 bg-gray-50 rounded">
+                            <span className="text-sm text-gray-500">Cost</span>
+                            <p className="font-semibold">${strategy.metrics.cost.toLocaleString()}</p>
+                          </div>
+                          <div className="p-2 bg-gray-50 rounded">
+                            <span className="text-sm text-gray-500">ROI</span>
+                            <p className="font-semibold">{strategy.metrics.roi}%</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getPhaseColor(strategy.phase)}`}>
-                        {strategy.phase}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(strategy.status)}`}>
-                        {strategy.status}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                    <div className="text-sm">
-                      <span className="text-gray-600">Users:</span>
-                      <span className="font-medium text-gray-900 ml-1">{strategy.metrics.actualUsers}/{strategy.metrics.usersTarget}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Revenue:</span>
-                      <span className="font-medium text-gray-900 ml-1">${strategy.metrics.actualRevenue.toLocaleString()}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Performance:</span>
-                      <span className="font-medium text-gray-900 ml-1">{strategy.metrics.actualPerformance}%</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Duration:</span>
-                      <span className="text-gray-500 ml-1">
-                        {strategy.endDate ? 
-                          `${Math.ceil((strategy.endDate.getTime() - strategy.startDate.getTime()) / (1000 * 60 * 60 * 24))} days` : 
-                          'Ongoing'
-                        }
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Activities:</span> {strategy.activities.filter(a => a.status === 'completed').length}/{strategy.activities.length} completed
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Monitoring Alerts */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Monitor className="mr-2 text-orange-600" />
-              Monitoring Alerts ({monitoringAlerts.length})
-            </h3>
-            <div className="space-y-3">
-              {monitoringAlerts.map((alert) => (
-                <div key={alert.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-semibold text-gray-800">{alert.title}</h4>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getSeverityColor(alert.severity)}`}>
-                        {alert.severity}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(alert.resolved ? 'completed' : 'pending')}`}>
-                        {alert.resolved ? 'resolved' : 'active'}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <p className="text-sm text-gray-600 mb-2">{alert.description}</p>
-                  
-                  <div className="flex justify-between items-center text-xs text-gray-500">
-                    <span>Component: {alert.component}</span>
-                    <span>{formatDate(alert.timestamp)}</span>
-                  </div>
-                  
-                  {alert.actionRequired && (
-                    <div className="mt-2 text-xs text-red-600 font-medium">
-                      ⚠️ Action Required
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
         </div>
       </motion.div>
     </div>
