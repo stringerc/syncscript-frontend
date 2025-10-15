@@ -499,7 +499,6 @@ export default function Dashboard() {
   const [showEnterpriseIntegration, setShowEnterpriseIntegration] = React.useState(false);
   const [showEnterpriseAdvancedFeatures, setShowEnterpriseAdvancedFeatures] = React.useState(false);
   const [showPlatformDocumentationDeployment, setShowPlatformDocumentationDeployment] = React.useState(false);
-  const [showUltimatePlatformCompletion, setShowUltimatePlatformCompletion] = React.useState(false);
   const [showProductionDeploymentLaunch, setShowProductionDeploymentLaunch] = React.useState(false);
   const [showBetaUserRecruitment, setShowBetaUserRecruitment] = React.useState(false);
   const [showMarketingLaunchPreparation, setShowMarketingLaunchPreparation] = React.useState(false);
@@ -6076,12 +6075,6 @@ export default function Dashboard() {
       {showPlatformDocumentationDeployment && (
         <PlatformDocumentationDeployment
           onClose={() => setShowPlatformDocumentationDeployment(false)}
-        />
-      )}
-
-      {showUltimatePlatformCompletion && (
-        <UltimatePlatformCompletion
-          onClose={() => setShowUltimatePlatformCompletion(false)}
         />
       )}
 
