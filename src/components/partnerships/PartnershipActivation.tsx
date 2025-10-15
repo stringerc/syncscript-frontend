@@ -1,1269 +1,1190 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Handshake, Target, Users, DollarSign, TrendingUp, BarChart3, CheckCircle, AlertTriangle, Clock, Settings, Code, Award, Star, Zap, Mail, Phone, Calendar, MapPin, Building, Share2, Download, Upload, Eye, Edit, Save, Send, Globe, Megaphone, Briefcase, PieChart, LineChart, Activity, UserCheck, FileText, Presentation, Link } from 'lucide-react';
+import { X, Handshake, Target, Users, BarChart3, Calendar, Globe, Building, Phone, Mail, MessageCircle, FileText, Award, Clock, CheckCircle, AlertTriangle, Plus, Edit, Trash2, Save, Copy, ExternalLink, ArrowUp, ArrowDown, ArrowRight, ArrowLeft, Star, Zap, Shield, Activity, MapPin, Share2, Video, Briefcase, PieChart, LineChart, Network, Link, Layers, Cpu, Database, Code, Settings, Workflow } from 'lucide-react';
+import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell } from 'recharts';
+import { toast } from 'react-hot-toast';
 
-interface Partnership {
+// Partnership Activation interfaces
+interface ActivePartnership {
   id: string;
-  name: string;
-  type: 'technology' | 'channel' | 'strategic' | 'integration' | 'reseller' | 'distribution';
-  status: 'exploring' | 'negotiating' | 'active' | 'paused' | 'terminated' | 'launched';
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  partner: {
-    name: string;
-    website: string;
-    industry: string;
-    size: 'startup' | 'mid-market' | 'enterprise' | 'fortune-500';
-    location: string;
-    description: string;
-  };
-  contact: {
-    name: string;
-    email: string;
-    phone: string;
-    title: string;
-    role: 'partnership-manager' | 'business-development' | 'executive' | 'technical';
-  };
-  agreement: {
-    startDate: Date;
-    endDate: Date | null;
-    terms: string[];
-    revenue: {
-      type: 'revenue-share' | 'referral-fee' | 'licensing' | 'custom' | 'joint-venture';
-      percentage: number;
-      amount: number;
-      minimumCommit: number;
-    };
-    responsibilities: {
-      partner: string[];
-      syncscript: string[];
-    };
-    deliverables: {
-      partner: string[];
-      syncscript: string[];
-    };
-  };
-  metrics: {
-    leads: number;
-    conversions: number;
-    revenue: number;
-    satisfaction: number;
-    lastActivity: Date;
-    nextMilestone: string;
-  };
-  goals: {
-    leads: number;
-    revenue: number;
-    integrations: number;
-    coMarketing: number;
-    marketShare: number;
-  };
-  activities: {
-    id: string;
-    type: 'meeting' | 'demo' | 'integration' | 'marketing' | 'training' | 'support';
-    description: string;
-    date: Date;
-    status: 'completed' | 'scheduled' | 'overdue';
-    outcome: 'positive' | 'neutral' | 'negative';
-    notes: string;
-  }[];
-  risks: {
-    description: string;
-    impact: 'low' | 'medium' | 'high' | 'critical';
-    probability: 'low' | 'medium' | 'high';
-    mitigation: string[];
-    owner: string;
-    status: 'identified' | 'mitigating' | 'resolved';
-  }[];
+  partnerName: string;
+  partnerType: 'integration' | 'channel' | 'strategic' | 'technology' | 'reseller';
+  status: 'active' | 'paused' | 'terminated' | 'renewal_pending';
+  startDate: string;
+  endDate?: string;
+  contractValue: number;
+  currency: string;
+  revenue: number;
+  contactPerson: string;
+  email: string;
+  phone: string;
+  description: string;
+  benefits: string[];
+  metrics: PartnershipMetrics;
+  activities: PartnershipActivity[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface PartnershipMetrics {
+  leadsGenerated: number;
+  dealsClosed: number;
+  revenueGenerated: number;
+  customerAcquisition: number;
+  marketReach: number;
+  satisfactionScore: number;
+}
+
+interface PartnershipActivity {
+  id: string;
+  type: 'meeting' | 'call' | 'email' | 'event' | 'training' | 'review';
+  subject: string;
+  description: string;
+  date: string;
+  participants: string[];
+  outcome: 'positive' | 'neutral' | 'negative';
+  nextAction?: string;
+  createdAt: string;
 }
 
 interface PartnershipPipeline {
   id: string;
-  stage: string;
-  partnerships: Partnership[];
-  metrics: {
-    count: number;
-    expectedValue: number;
-    probability: number;
-    avgDealSize: number;
-    avgCycle: number;
-  };
-  goals: {
-    monthly: number;
-    quarterly: number;
-    yearly: number;
-  };
+  name: string;
+  stages: PartnershipStage[];
+  totalValue: number;
+  currency: string;
+  createdAt: string;
 }
 
-interface PartnershipTeam {
+interface PartnershipStage {
   id: string;
   name: string;
-  role: 'partnership-manager' | 'business-development' | 'technical-partner' | 'channel-manager';
-  territory: string;
-  partnerships: number;
-  performance: {
-    partnershipsClosed: number;
-    revenue: number;
-    quota: number;
-    attainment: number;
-  };
-  activities: {
-    meetings: number;
-    demos: number;
-    integrations: number;
-    training: number;
-  };
-  metrics: {
-    successRate: number;
-    avgPartnershipValue: number;
-    cycleTime: number;
-    satisfactionScore: number;
-  };
+  partnerships: ActivePartnership[];
+  value: number;
+  probability: number;
+  averageDays: number;
 }
 
-interface PartnershipForecast {
+interface PartnershipTeamMember {
   id: string;
-  period: string;
-  forecast: {
-    committed: number;
-    bestCase: number;
-    worstCase: number;
-    pipeline: number;
-  };
-  confidence: number;
-  partnerships: {
-    stage: string;
-    count: number;
-    value: number;
-    probability: number;
-    expectedValue: number;
-  }[];
-  trends: {
-    partnershipGrowth: number;
-    revenueGrowth: number;
-    satisfactionTrend: number;
-    cycleTimeTrend: number;
-  };
-  risks: {
-    description: string;
-    impact: number;
-    probability: number;
-    mitigation: string;
-  }[];
+  name: string;
+  role: 'partnership_manager' | 'business_development' | 'channel_manager' | 'integration_specialist' | 'partnership_director';
+  email: string;
+  phone: string;
+  territory: string;
+  responsibilities: string[];
+  performance: PartnershipPerformance;
+  status: 'active' | 'inactive' | 'on_leave';
+  joinDate: string;
+}
+
+interface PartnershipPerformance {
+  partnershipsManaged: number;
+  revenueGenerated: number;
+  dealsClosed: number;
+  satisfactionScore: number;
+  activitiesCompleted: number;
 }
 
 interface PartnershipAnalytics {
+  totalPartnerships: number;
+  activePartnerships: number;
+  totalRevenue: number;
+  averagePartnershipValue: number;
+  satisfactionScore: number;
+  renewalRate: number;
+  leadGeneration: number;
+  marketReach: number;
+}
+
+interface IntegrationPartnership {
   id: string;
-  period: string;
-  metrics: {
-    totalPartnerships: number;
-    activePartnerships: number;
-    newPartnerships: number;
-    terminatedPartnerships: number;
-    totalRevenue: number;
-    avgPartnershipValue: number;
-    satisfactionScore: number;
-    successRate: number;
-  };
-  trends: {
-    partnershipTrend: number[];
-    revenueTrend: number[];
-    satisfactionTrend: number[];
-    activityTrend: number[];
-  };
-  performance: {
-    topPartners: {
-      name: string;
-      revenue: number;
-      satisfaction: number;
-      partnership: string;
-    }[];
-    typeAnalysis: {
-      type: string;
-      count: number;
-      revenue: number;
-      successRate: number;
-    }[];
-  };
+  partnerName: string;
+  integrationType: 'api' | 'webhook' | 'sso' | 'data_sync' | 'workflow';
+  status: 'development' | 'testing' | 'live' | 'maintenance';
+  technicalContact: string;
+  documentation: string;
+  apiEndpoints: string[];
+  lastSync: string;
+  uptime: number;
+  createdAt: string;
+}
+
+interface StrategicPartnership {
+  id: string;
+  partnerName: string;
+  partnershipType: 'joint_venture' | 'co_marketing' | 'co_development' | 'exclusive' | 'preferred';
+  status: 'exploring' | 'negotiating' | 'active' | 'evaluating' | 'completed';
+  dealValue: number;
+  currency: string;
+  duration: string;
+  objectives: string[];
+  successMetrics: string[];
+  risks: string[];
+  mitigation: string[];
+  createdAt: string;
+}
+
+interface ChannelPartnership {
+  id: string;
+  partnerName: string;
+  channelType: 'reseller' | 'distributor' | 'consultant' | 'referral' | 'marketplace';
+  status: 'onboarding' | 'active' | 'suspended' | 'terminated';
+  commissionRate: number;
+  territory: string;
+  certifications: string[];
+  salesTarget: number;
+  currency: string;
+  performance: ChannelPerformance;
+  createdAt: string;
+}
+
+interface ChannelPerformance {
+  dealsClosed: number;
+  revenue: number;
+  targetAchievement: number;
+  customerSatisfaction: number;
+  trainingCompleted: boolean;
+}
+
+interface TechnologyPartnership {
+  id: string;
+  partnerName: string;
+  technologyType: 'platform' | 'infrastructure' | 'security' | 'analytics' | 'ai_ml';
+  status: 'evaluation' | 'integration' | 'live' | 'optimization';
+  technicalSpecs: string[];
+  documentation: string;
+  supportLevel: 'basic' | 'standard' | 'premium' | 'enterprise';
+  sla: string;
+  createdAt: string;
 }
 
 const PartnershipActivation: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [partnerships, setPartnerships] = useState<Partnership[]>([]);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [isLoading, setIsLoading] = useState(false);
+  const [activePartnerships, setActivePartnerships] = useState<ActivePartnership[]>([]);
   const [partnershipPipeline, setPartnershipPipeline] = useState<PartnershipPipeline[]>([]);
-  const [partnershipTeam, setPartnershipTeam] = useState<PartnershipTeam[]>([]);
-  const [partnershipForecast, setPartnershipForecast] = useState<PartnershipForecast[]>([]);
-  const [partnershipAnalytics, setPartnershipAnalytics] = useState<PartnershipAnalytics[]>([]);
-  const [isLaunchingPartnership, setIsLaunchingPartnership] = useState(false);
-  const [isScalingPartnership, setIsScalingPartnership] = useState(false);
-  const [isActivatingIntegration, setIsActivatingIntegration] = useState(false);
-  const [selectedPartnership, setSelectedPartnership] = useState<Partnership | null>(null);
-  const [selectedActivity, setSelectedActivity] = useState<any>(null);
+  const [partnershipTeam, setPartnershipTeam] = useState<PartnershipTeamMember[]>([]);
+  const [integrationPartnerships, setIntegrationPartnerships] = useState<IntegrationPartnership[]>([]);
+  const [strategicPartnerships, setStrategicPartnerships] = useState<StrategicPartnership[]>([]);
+  const [channelPartnerships, setChannelPartnerships] = useState<ChannelPartnership[]>([]);
+  const [technologyPartnerships, setTechnologyPartnerships] = useState<TechnologyPartnership[]>([]);
+  const [partnershipAnalytics, setPartnershipAnalytics] = useState<PartnershipAnalytics | null>(null);
 
-  // Generate partnership data
+  // SSR-safe data loading
   useEffect(() => {
-    const generatePartnerships = (): Partnership[] => {
-      return [
-        {
-          id: 'partnership-1',
-          name: 'Slack Integration Partnership',
-          type: 'integration',
-          status: 'active',
-          priority: 'high',
-          partner: {
-            name: 'Slack Technologies',
-            website: 'slack.com',
-            industry: 'Communication',
-            size: 'enterprise',
-            location: 'San Francisco, CA',
-            description: 'Leading team communication platform with 12+ million daily active users'
-          },
-          contact: {
-            name: 'David Wilson',
-            email: 'david.wilson@slack.com',
-            phone: '+1 (555) 111-2222',
-            title: 'Partnership Manager',
-            role: 'partnership-manager'
-          },
-          agreement: {
-            startDate: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000),
-            endDate: new Date(Date.now() + 275 * 24 * 60 * 60 * 1000),
-            terms: [
-              'Mutual integration promotion',
-              'Co-marketing opportunities',
-              'Technical support collaboration',
-              'Revenue sharing agreement'
-            ],
-            revenue: {
-              type: 'revenue-share',
-              percentage: 15,
-              amount: 5000,
-              minimumCommit: 0
-            },
-            responsibilities: {
-              partner: [
-                'Provide API access',
-                'Promote integration',
-                'Technical support',
-                'Co-marketing activities'
-              ],
-              syncscript: [
-                'Develop integration',
-                'Maintain compatibility',
-                'Customer support',
-                'Marketing materials'
-              ]
-            },
-            deliverables: {
-              partner: [
-                'API documentation',
-                'Marketing co-op funds',
-                'Technical resources',
-                'Sales enablement'
-              ],
-              syncscript: [
-                'Integration development',
-                'User documentation',
-                'Support resources',
-                'Marketing materials'
-              ]
-            }
-          },
-          metrics: {
-            leads: 250,
-            conversions: 45,
-            revenue: 5000,
-            satisfaction: 9.2,
-            lastActivity: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-            nextMilestone: 'Expand integration features'
-          },
-          goals: {
-            leads: 500,
-            revenue: 10000,
-            integrations: 100,
-            coMarketing: 5,
-            marketShare: 10
-          },
-          activities: [
-            {
-              id: 'activity-1',
-              type: 'integration',
-              description: 'Slack app integration development',
-              date: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-              status: 'completed',
-              outcome: 'positive',
-              notes: 'Integration successfully launched with positive user feedback'
-            },
-            {
-              id: 'activity-2',
-              type: 'marketing',
-              description: 'Co-marketing campaign launch',
-              date: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
-              status: 'completed',
-              outcome: 'positive',
-              notes: 'Campaign generated 150+ new leads'
-            },
-            {
-              id: 'activity-3',
-              type: 'meeting',
-              description: 'Quarterly partnership review',
-              date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-              status: 'scheduled',
-              outcome: 'neutral',
-              notes: 'Review partnership performance and plan next quarter'
-            }
-          ],
-          risks: [
-            {
-              description: 'API changes affecting integration',
-              impact: 'medium',
-              probability: 'low',
-              mitigation: ['Regular API monitoring', 'Backup integration options'],
-              owner: 'Technical Team',
-              status: 'mitigating'
-            }
-          ]
-        },
-        {
-          id: 'partnership-2',
-          name: 'Microsoft Teams Channel Partnership',
-          type: 'channel',
-          status: 'launched',
-          priority: 'critical',
-          partner: {
-            name: 'Microsoft Corporation',
-            website: 'microsoft.com',
-            industry: 'Technology',
-            size: 'fortune-500',
-            location: 'Redmond, WA',
-            description: 'Global technology leader with 280+ million Teams users'
-          },
-          contact: {
-            name: 'Lisa Anderson',
-            email: 'lisa.anderson@microsoft.com',
-            phone: '+1 (555) 333-4444',
-            title: 'Channel Partner Manager',
-            role: 'business-development'
-          },
-          agreement: {
-            startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-            endDate: new Date(Date.now() + 358 * 24 * 60 * 60 * 1000),
-            terms: [
-              'Channel partner program',
-              'Reseller agreement',
-              'Technical certification',
-              'Marketing support'
-            ],
-            revenue: {
-              type: 'referral-fee',
-              percentage: 20,
-              amount: 0,
-              minimumCommit: 0
-            },
-            responsibilities: {
-              partner: [
-                'Reseller certification',
-                'Sales training',
-                'Marketing support',
-                'Technical support'
-              ],
-              syncscript: [
-                'Product training',
-                'Sales enablement',
-                'Marketing materials',
-                'Technical documentation'
-              ]
-            },
-            deliverables: {
-              partner: [
-                'Partner portal access',
-                'Sales training materials',
-                'Marketing co-op funds',
-                'Technical resources'
-              ],
-              syncscript: [
-                'Partner certification',
-                'Sales enablement materials',
-                'Marketing support',
-                'Technical integration'
-              ]
-            }
-          },
-          metrics: {
-            leads: 0,
-            conversions: 0,
-            revenue: 0,
-            satisfaction: 0,
-            lastActivity: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-            nextMilestone: 'Complete partner certification'
-          },
-          goals: {
-            leads: 1000,
-            revenue: 50000,
-            integrations: 200,
-            coMarketing: 10,
-            marketShare: 15
-          },
-          activities: [
-            {
-              id: 'activity-4',
-              type: 'training',
-              description: 'Partner certification training',
-              date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-              status: 'completed',
-              outcome: 'positive',
-              notes: 'Team successfully completed Microsoft partner certification'
-            },
-            {
-              id: 'activity-5',
-              type: 'integration',
-              description: 'Teams app integration',
-              date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-              status: 'scheduled',
-              outcome: 'neutral',
-              notes: 'Develop native Teams app integration'
-            }
-          ],
-          risks: [
-            {
-              description: 'Complex partner certification requirements',
-              impact: 'high',
-              probability: 'medium',
-              mitigation: ['Dedicated certification team', 'Regular progress reviews'],
-              owner: 'Partnership Team',
-              status: 'mitigating'
-            }
-          ]
-        },
-        {
-          id: 'partnership-3',
-          name: 'Consulting Firm Strategic Partnership',
-          type: 'strategic',
-          status: 'active',
-          priority: 'medium',
-          partner: {
-            name: 'Productivity Consulting Group',
-            website: 'pcg.com',
-            industry: 'Consulting',
-            size: 'mid-market',
-            location: 'New York, NY',
-            description: 'Leading productivity consulting firm specializing in team optimization'
-          },
-          contact: {
-            name: 'Robert Taylor',
-            email: 'robert.taylor@pcg.com',
-            phone: '+1 (555) 555-6666',
-            title: 'Managing Partner',
-            role: 'executive'
-          },
-          agreement: {
-            startDate: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
-            endDate: null,
-            terms: [
-              'Strategic partnership',
-              'Joint go-to-market',
-              'Customer referrals',
-              'Knowledge sharing'
-            ],
-            revenue: {
-              type: 'referral-fee',
-              percentage: 25,
-              amount: 15000,
-              minimumCommit: 5000
-            },
-            responsibilities: {
-              partner: [
-                'Customer referrals',
-                'Implementation services',
-                'Training and support',
-                'Market insights'
-              ],
-              syncscript: [
-                'Product access',
-                'Sales support',
-                'Marketing collaboration',
-                'Technical training'
-              ]
-            },
-            deliverables: {
-              partner: [
-                'Implementation services',
-                'Customer training',
-                'Market research',
-                'Referral pipeline'
-              ],
-              syncscript: [
-                'Product licenses',
-                'Sales support',
-                'Marketing materials',
-                'Technical training'
-              ]
-            }
-          },
-          metrics: {
-            leads: 150,
-            conversions: 25,
-            revenue: 15000,
-            satisfaction: 8.8,
-            lastActivity: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-            nextMilestone: 'Expand joint go-to-market activities'
-          },
-          goals: {
-            leads: 300,
-            revenue: 30000,
-            integrations: 50,
-            coMarketing: 8,
-            marketShare: 5
-          },
-          activities: [
-            {
-              id: 'activity-6',
-              type: 'meeting',
-              description: 'Strategic planning session',
-              date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-              status: 'completed',
-              outcome: 'positive',
-              notes: 'Agreed on joint go-to-market strategy and referral process'
-            },
-            {
-              id: 'activity-7',
-              type: 'training',
-              description: 'Partner training session',
-              date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-              status: 'completed',
-              outcome: 'positive',
-              notes: 'Trained 15 consultants on SyncScript features and implementation'
-            }
-          ],
-          risks: [
-            {
-              description: 'Competing with partner\'s existing tools',
-              impact: 'medium',
-              probability: 'low',
-              mitigation: ['Clear value proposition', 'Joint customer success'],
-              owner: 'Partnership Team',
-              status: 'identified'
-            }
-          ]
-        }
-      ];
-    };
+    const loadPartnershipData = async () => {
+      setIsLoading(true);
+      
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
-    const generatePartnershipPipeline = (): PartnershipPipeline[] => {
-      return [
-        {
-          id: 'pipeline-1',
-          stage: 'Exploring',
-          partnerships: partnerships.filter(p => p.status === 'exploring'),
-          metrics: {
-            count: 8,
-            expectedValue: 150000,
-            probability: 20,
-            avgDealSize: 18750,
-            avgCycle: 45
-          },
-          goals: {
-            monthly: 25000,
-            quarterly: 75000,
-            yearly: 300000
-          }
-        },
-        {
-          id: 'pipeline-2',
-          stage: 'Negotiating',
-          partnerships: partnerships.filter(p => p.status === 'negotiating'),
-          metrics: {
-            count: 3,
-            expectedValue: 75000,
-            probability: 60,
-            avgDealSize: 25000,
-            avgCycle: 30
-          },
-          goals: {
-            monthly: 15000,
-            quarterly: 45000,
-            yearly: 180000
-          }
-        },
-        {
-          id: 'pipeline-3',
-          stage: 'Active',
-          partnerships: partnerships.filter(p => p.status === 'active'),
-          metrics: {
-            count: 2,
-            expectedValue: 20000,
-            probability: 100,
-            avgDealSize: 10000,
-            avgCycle: 0
-          },
-          goals: {
-            monthly: 10000,
-            quarterly: 30000,
-            yearly: 120000
-          }
-        },
-        {
-          id: 'pipeline-4',
-          stage: 'Launched',
-          partnerships: partnerships.filter(p => p.status === 'launched'),
-          metrics: {
-            count: 1,
-            expectedValue: 0,
-            probability: 100,
-            avgDealSize: 0,
-            avgCycle: 0
-          },
-          goals: {
-            monthly: 0,
-            quarterly: 0,
-            yearly: 0
-          }
-        }
-      ];
-    };
-
-    const generatePartnershipTeam = (): PartnershipTeam[] => {
-      return [
-        {
-          id: 'team-1',
-          name: 'Sarah Johnson',
-          role: 'partnership-manager',
-          territory: 'Technology Partners',
-          partnerships: 3,
-          performance: {
-            partnershipsClosed: 2,
-            revenue: 20000,
-            quota: 50000,
-            attainment: 40
-          },
-          activities: {
-            meetings: 25,
-            demos: 12,
-            integrations: 5,
-            training: 8
-          },
-          metrics: {
-            successRate: 67,
-            avgPartnershipValue: 10000,
-            cycleTime: 60,
-            satisfactionScore: 9.0
-          }
-        },
-        {
-          id: 'team-2',
-          name: 'Mike Chen',
-          role: 'business-development',
-          territory: 'Enterprise Partners',
-          partnerships: 2,
-          performance: {
-            partnershipsClosed: 1,
-            revenue: 50000,
-            quota: 75000,
-            attainment: 67
-          },
-          activities: {
-            meetings: 30,
-            demos: 15,
-            integrations: 3,
-            training: 5
-          },
-          metrics: {
-            successRate: 50,
-            avgPartnershipValue: 25000,
-            cycleTime: 90,
-            satisfactionScore: 8.5
-          }
-        },
-        {
-          id: 'team-3',
-          name: 'Emma Davis',
-          role: 'channel-manager',
-          territory: 'Channel Partners',
-          partnerships: 1,
-          performance: {
-            partnershipsClosed: 1,
-            revenue: 0,
-            quota: 25000,
-            attainment: 0
-          },
-          activities: {
-            meetings: 20,
-            demos: 8,
-            integrations: 2,
-            training: 10
-          },
-          metrics: {
-            successRate: 100,
-            avgPartnershipValue: 0,
-            cycleTime: 30,
-            satisfactionScore: 0
-          }
-        }
-      ];
-    };
-
-    const generatePartnershipForecast = (): PartnershipForecast[] => {
-      return [
-        {
-          id: 'forecast-1',
-          period: 'Q1 2024',
-          forecast: {
-            committed: 70000,
-            bestCase: 100000,
-            worstCase: 50000,
-            pipeline: 245000
-          },
-          confidence: 75,
-          partnerships: [
-            {
-              stage: 'Active',
-              count: 2,
-              value: 20000,
-              probability: 100,
-              expectedValue: 20000
+        // Mock active partnerships
+        const mockActivePartnerships: ActivePartnership[] = [
+          {
+            id: 'partnership-1',
+            partnerName: 'Microsoft',
+            partnerType: 'integration',
+            status: 'active',
+            startDate: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
+            contractValue: 500000,
+            currency: 'USD',
+            revenue: 125000,
+            contactPerson: 'David Wilson',
+            email: 'david.wilson@microsoft.com',
+            phone: '+1-555-0123',
+            description: 'Integration with Microsoft Teams and Office 365 for enterprise customers',
+            benefits: ['Increased market reach', 'Enterprise credibility', 'Technical integration'],
+            metrics: {
+              leadsGenerated: 250,
+              dealsClosed: 15,
+              revenueGenerated: 125000,
+              customerAcquisition: 45,
+              marketReach: 50000,
+              satisfactionScore: 9.2
             },
-            {
-              stage: 'Launched',
-              count: 1,
-              value: 0,
-              probability: 100,
-              expectedValue: 0
-            },
-            {
-              stage: 'Negotiating',
-              count: 3,
-              value: 75000,
-              probability: 60,
-              expectedValue: 45000
-            },
-            {
-              stage: 'Exploring',
-              count: 8,
-              value: 150000,
-              probability: 20,
-              expectedValue: 30000
-            }
-          ],
-          trends: {
-            partnershipGrowth: 25,
-            revenueGrowth: 40,
-            satisfactionTrend: 5,
-            cycleTimeTrend: -15
-          },
-          risks: [
-            {
-              description: 'Large enterprise partnership may be delayed',
-              impact: 50000,
-              probability: 30,
-              mitigation: 'Alternative partnership options and timeline flexibility'
-            }
-          ]
-        }
-      ];
-    };
-
-    const generatePartnershipAnalytics = (): PartnershipAnalytics[] => {
-      return [
-        {
-          id: 'analytics-1',
-          period: 'Last 30 Days',
-          metrics: {
-            totalPartnerships: 6,
-            activePartnerships: 3,
-            newPartnerships: 1,
-            terminatedPartnerships: 0,
-            totalRevenue: 20000,
-            avgPartnershipValue: 3333,
-            satisfactionScore: 9.0,
-            successRate: 67
-          },
-          trends: {
-            partnershipTrend: [4, 4, 5, 5, 6, 6, 6],
-            revenueTrend: [10000, 12000, 15000, 17000, 18000, 19000, 20000],
-            satisfactionTrend: [8.5, 8.6, 8.7, 8.8, 8.9, 8.9, 9.0],
-            activityTrend: [15, 18, 22, 25, 28, 30, 35]
-          },
-          performance: {
-            topPartners: [
+            activities: [
               {
-                name: 'Slack Technologies',
-                revenue: 5000,
-                satisfaction: 9.2,
-                partnership: 'Integration'
-              },
-              {
-                name: 'Productivity Consulting Group',
-                revenue: 15000,
-                satisfaction: 8.8,
-                partnership: 'Strategic'
-              },
-              {
-                name: 'Microsoft Corporation',
-                revenue: 0,
-                satisfaction: 0,
-                partnership: 'Channel'
+                id: 'activity-1',
+                type: 'meeting',
+                subject: 'Monthly Partnership Review',
+                description: 'Reviewed partnership performance and identified growth opportunities',
+                date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+                participants: ['David Wilson', 'Sarah Johnson'],
+                outcome: 'positive',
+                nextAction: 'Plan joint marketing campaign',
+                createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
               }
             ],
-            typeAnalysis: [
-              {
-                type: 'Integration',
-                count: 1,
-                revenue: 5000,
-                successRate: 100
-              },
-              {
-                type: 'Strategic',
-                count: 1,
-                revenue: 15000,
-                successRate: 100
-              },
-              {
-                type: 'Channel',
-                count: 1,
-                revenue: 0,
-                successRate: 100
-              }
-            ]
+            createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
+            updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+          },
+          {
+            id: 'partnership-2',
+            partnerName: 'Salesforce',
+            partnerType: 'strategic',
+            status: 'active',
+            startDate: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
+            contractValue: 750000,
+            currency: 'USD',
+            revenue: 200000,
+            contactPerson: 'Lisa Chen',
+            email: 'lisa.chen@salesforce.com',
+            phone: '+1-555-0456',
+            description: 'Strategic partnership for CRM integration and co-marketing',
+            benefits: ['CRM integration', 'Co-marketing opportunities', 'Customer referrals'],
+            metrics: {
+              leadsGenerated: 400,
+              dealsClosed: 25,
+              revenueGenerated: 200000,
+              customerAcquisition: 60,
+              marketReach: 75000,
+              satisfactionScore: 8.8
+            },
+            activities: [],
+            createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
+            updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
           }
-        }
-      ];
+        ];
+
+        // Mock partnership pipeline
+        const mockPipeline: PartnershipPipeline[] = [
+          {
+            id: 'pipeline-1',
+            name: 'Partnership Development Pipeline',
+            stages: [
+              {
+                id: 'stage-1',
+                name: 'Initial Contact',
+                partnerships: [],
+                value: 0,
+                probability: 10,
+                averageDays: 7
+              },
+              {
+                id: 'stage-2',
+                name: 'Qualification',
+                partnerships: [],
+                value: 0,
+                probability: 25,
+                averageDays: 14
+              },
+              {
+                id: 'stage-3',
+                name: 'Negotiation',
+                partnerships: [],
+                value: 0,
+                probability: 50,
+                averageDays: 30
+              },
+              {
+                id: 'stage-4',
+                name: 'Contract',
+                partnerships: [],
+                value: 0,
+                probability: 75,
+                averageDays: 45
+              },
+              {
+                id: 'stage-5',
+                name: 'Active',
+                partnerships: activePartnerships,
+                value: 1250000,
+                probability: 100,
+                averageDays: 0
+              }
+            ],
+            totalValue: 1250000,
+            currency: 'USD',
+            createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+
+        // Mock partnership team
+        const mockTeam: PartnershipTeamMember[] = [
+          {
+            id: 'team-1',
+            name: 'Sarah Johnson',
+            role: 'partnership_manager',
+            email: 'sarah.johnson@syncscript.com',
+            phone: '+1-555-0123',
+            territory: 'North America',
+            responsibilities: ['Partnership development', 'Relationship management', 'Contract negotiation'],
+            performance: {
+              partnershipsManaged: 8,
+              revenueGenerated: 325000,
+              dealsClosed: 40,
+              satisfactionScore: 9.0,
+              activitiesCompleted: 120
+            },
+            status: 'active',
+            joinDate: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString()
+          },
+          {
+            id: 'team-2',
+            name: 'Michael Chen',
+            role: 'channel_manager',
+            email: 'michael.chen@syncscript.com',
+            phone: '+1-555-0456',
+            territory: 'Asia Pacific',
+            responsibilities: ['Channel partner management', 'Training programs', 'Performance tracking'],
+            performance: {
+              partnershipsManaged: 12,
+              revenueGenerated: 450000,
+              dealsClosed: 55,
+              satisfactionScore: 8.7,
+              activitiesCompleted: 95
+            },
+            status: 'active',
+            joinDate: new Date(Date.now() - 120 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+
+        // Mock integration partnerships
+        const mockIntegrations: IntegrationPartnership[] = [
+          {
+            id: 'integration-1',
+            partnerName: 'Slack',
+            integrationType: 'api',
+            status: 'live',
+            technicalContact: 'tech@slack.com',
+            documentation: 'https://api.slack.com/syncscript',
+            apiEndpoints: ['/messages', '/channels', '/users'],
+            lastSync: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+            uptime: 99.9,
+            createdAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+
+        // Mock strategic partnerships
+        const mockStrategic: StrategicPartnership[] = [
+          {
+            id: 'strategic-1',
+            partnerName: 'Google Cloud',
+            partnershipType: 'co_development',
+            status: 'active',
+            dealValue: 1000000,
+            currency: 'USD',
+            duration: '2 years',
+            objectives: ['Cloud integration', 'AI/ML capabilities', 'Market expansion'],
+            successMetrics: ['Revenue growth', 'Customer acquisition', 'Technical integration'],
+            risks: ['Technical complexity', 'Market competition', 'Resource allocation'],
+            mitigation: ['Dedicated team', 'Regular reviews', 'Risk monitoring'],
+            createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+
+        // Mock channel partnerships
+        const mockChannels: ChannelPartnership[] = [
+          {
+            id: 'channel-1',
+            partnerName: 'TechCorp Solutions',
+            channelType: 'reseller',
+            status: 'active',
+            commissionRate: 15,
+            territory: 'West Coast',
+            certifications: ['Sales Certified', 'Technical Certified'],
+            salesTarget: 200000,
+            currency: 'USD',
+            performance: {
+              dealsClosed: 8,
+              revenue: 150000,
+              targetAchievement: 75,
+              customerSatisfaction: 9.1,
+              trainingCompleted: true
+            },
+            createdAt: new Date(Date.now() - 75 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+
+        // Mock technology partnerships
+        const mockTechnology: TechnologyPartnership[] = [
+          {
+            id: 'tech-1',
+            partnerName: 'AWS',
+            technologyType: 'infrastructure',
+            status: 'live',
+            technicalSpecs: ['EC2', 'S3', 'Lambda', 'RDS'],
+            documentation: 'https://aws.amazon.com/syncscript',
+            supportLevel: 'enterprise',
+            sla: '99.99% uptime',
+            createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+
+        // Mock partnership analytics
+        const mockAnalytics: PartnershipAnalytics = {
+          totalPartnerships: 15,
+          activePartnerships: 12,
+          totalRevenue: 325000,
+          averagePartnershipValue: 21667,
+          satisfactionScore: 9.0,
+          renewalRate: 85,
+          leadGeneration: 650,
+          marketReach: 125000
+        };
+
+        setActivePartnerships(mockActivePartnerships);
+        setPartnershipPipeline(mockPipeline);
+        setPartnershipTeam(mockTeam);
+        setIntegrationPartnerships(mockIntegrations);
+        setStrategicPartnerships(mockStrategic);
+        setChannelPartnerships(mockChannels);
+        setTechnologyPartnerships(mockTechnology);
+        setPartnershipAnalytics(mockAnalytics);
+
+        toast.success('Partnership activation data loaded successfully!');
+      } catch (error) {
+        console.error('Failed to load partnership data:', error);
+        toast.error('Failed to load partnership activation data');
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    setPartnerships(generatePartnerships());
-    setPartnershipPipeline(generatePartnershipPipeline());
-    setPartnershipTeam(generatePartnershipTeam());
-    setPartnershipForecast(generatePartnershipForecast());
-    setPartnershipAnalytics(generatePartnershipAnalytics());
+    loadPartnershipData();
   }, []);
 
-  const launchPartnership = async () => {
-    setIsLaunchingPartnership(true);
-    
-    // Simulate partnership launch
-    await new Promise(resolve => setTimeout(resolve, 10000));
-    
-    // Update partnership status
-    setPartnerships(prev => prev.map(partnership => 
-      partnership.status === 'negotiating' 
-        ? { 
-            ...partnership, 
-            status: 'launched' as const,
-            agreement: {
-              ...partnership.agreement,
-              startDate: new Date()
-            }
-          }
-        : partnership
-    ));
-    
-    setIsLaunchingPartnership(false);
-  };
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: BarChart3 },
+    { id: 'partnerships', label: 'Partnerships', icon: Handshake },
+    { id: 'pipeline', label: 'Pipeline', icon: Target },
+    { id: 'team', label: 'Team', icon: Users },
+    { id: 'integrations', label: 'Integrations', icon: Link },
+    { id: 'strategic', label: 'Strategic', icon: Star },
+    { id: 'channels', label: 'Channels', icon: Network },
+    { id: 'technology', label: 'Technology', icon: Cpu },
+    { id: 'analytics', label: 'Analytics', icon: PieChart }
+  ];
 
-  const scalePartnership = async () => {
-    setIsScalingPartnership(true);
-    
-    // Simulate partnership scaling
-    await new Promise(resolve => setTimeout(resolve, 8000));
-    
-    // Update partnership metrics
-    setPartnerships(prev => prev.map(partnership => 
-      partnership.status === 'active' 
-        ? { 
-            ...partnership, 
-            metrics: {
-              ...partnership.metrics,
-              leads: partnership.metrics.leads + 50,
-              conversions: partnership.metrics.conversions + 10,
-              revenue: partnership.metrics.revenue + 2000
-            }
-          }
-        : partnership
-    ));
-    
-    setIsScalingPartnership(false);
-  };
-
-  const activateIntegration = async () => {
-    setIsActivatingIntegration(true);
-    
-    // Simulate integration activation
-    await new Promise(resolve => setTimeout(resolve, 6000));
-    
-    // Add new integration activity
-    const newActivity = {
-      id: `activity-${Date.now()}`,
-      type: 'integration',
-      description: 'New integration activated',
-      date: new Date(),
-      status: 'completed',
-      outcome: 'positive',
-      notes: 'Integration successfully activated and tested'
-    };
-    
-    setPartnerships(prev => prev.map(partnership => 
-      partnership.type === 'integration' 
-        ? { 
-            ...partnership, 
-            activities: [...partnership.activities, newActivity]
-          }
-        : partnership
-    ));
-    
-    setIsActivatingIntegration(false);
-  };
-
-  const formatDate = (date: Date): string => {
-    return date.toLocaleString();
-  };
-
-  const getStatusColor = (status: string): string => {
+  const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': case 'launched': case 'completed': return 'bg-green-100 text-green-800';
-      case 'negotiating': case 'scheduled': return 'bg-yellow-100 text-yellow-800';
-      case 'exploring': case 'pending': return 'bg-blue-100 text-blue-800';
-      case 'paused': case 'overdue': return 'bg-orange-100 text-orange-800';
-      case 'terminated': case 'negative': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'active': return 'text-green-600 bg-green-100';
+      case 'paused': return 'text-yellow-600 bg-yellow-100';
+      case 'terminated': return 'text-red-600 bg-red-100';
+      case 'renewal_pending': return 'text-orange-600 bg-orange-100';
+      case 'development': return 'text-blue-600 bg-blue-100';
+      case 'testing': return 'text-purple-600 bg-purple-100';
+      case 'live': return 'text-green-600 bg-green-100';
+      case 'maintenance': return 'text-gray-600 bg-gray-100';
+      case 'exploring': return 'text-purple-600 bg-purple-100';
+      case 'negotiating': return 'text-blue-600 bg-blue-100';
+      case 'evaluating': return 'text-yellow-600 bg-yellow-100';
+      case 'completed': return 'text-green-600 bg-green-100';
+      case 'onboarding': return 'text-blue-600 bg-blue-100';
+      case 'suspended': return 'text-red-600 bg-red-100';
+      case 'evaluation': return 'text-purple-600 bg-purple-100';
+      case 'integration': return 'text-blue-600 bg-blue-100';
+      case 'optimization': return 'text-green-600 bg-green-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
 
-  const getPriorityColor = (priority: string): string => {
-    switch (priority) {
-      case 'critical': return 'bg-red-100 text-red-800';
-      case 'high': return 'bg-orange-100 text-orange-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const getTypeColor = (type: string): string => {
+  const getTypeColor = (type: string) => {
     switch (type) {
-      case 'technology': return 'bg-blue-100 text-blue-800';
-      case 'channel': return 'bg-green-100 text-green-800';
-      case 'strategic': return 'bg-purple-100 text-purple-800';
-      case 'integration': return 'bg-orange-100 text-orange-800';
-      case 'reseller': return 'bg-pink-100 text-pink-800';
-      case 'distribution': return 'bg-indigo-100 text-indigo-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'integration': return 'text-blue-600 bg-blue-100';
+      case 'channel': return 'text-green-600 bg-green-100';
+      case 'strategic': return 'text-purple-600 bg-purple-100';
+      case 'technology': return 'text-orange-600 bg-orange-100';
+      case 'reseller': return 'text-indigo-600 bg-indigo-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
-
-  const getImpactColor = (impact: string): string => {
-    switch (impact) {
-      case 'critical': return 'bg-red-100 text-red-800';
-      case 'high': return 'bg-orange-100 text-orange-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const getOutcomeColor = (outcome: string): string => {
-    switch (outcome) {
-      case 'positive': return 'bg-green-100 text-green-800';
-      case 'neutral': return 'bg-yellow-100 text-yellow-800';
-      case 'negative': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const totalPartnerships = partnershipAnalytics[0]?.metrics.totalPartnerships || 0;
-  const activePartnerships = partnershipAnalytics[0]?.metrics.activePartnerships || 0;
-  const totalRevenue = partnershipAnalytics[0]?.metrics.totalRevenue || 0;
-  const satisfactionScore = partnershipAnalytics[0]?.metrics.satisfactionScore || 0;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
+        exit={{ opacity: 0, scale: 0.95 }}
         className="bg-white rounded-2xl shadow-2xl w-full max-w-7xl h-[90vh] overflow-hidden"
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-2xl font-bold">🤝 Partnership Activation</h2>
-              <p className="text-purple-100 mt-1">Launch Microsoft partnership, scale existing partnerships, and activate integrations</p>
+        <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white bg-opacity-20 rounded-lg">
+                <Handshake className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">Partnership Activation</h2>
+                <p className="text-emerald-100">Strategic partnerships and channel development</p>
+              </div>
             </div>
-            <button
-              onClick={onClose}
-              className="text-white hover:text-purple-200 transition-colors"
-            >
-              <X size={24} />
-            </button>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                <span className="text-sm">Active</span>
+              </div>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex space-x-1 mt-6 overflow-x-auto">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? 'bg-white bg-opacity-20 text-white'
+                      : 'text-emerald-100 hover:bg-white hover:bg-opacity-10'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
+        {/* Content */}
         <div className="p-6 h-full overflow-y-auto">
-          {/* Partnership Overview Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-purple-600 font-medium">Total Partnerships</p>
-                  <p className="text-2xl font-bold text-purple-800">{totalPartnerships}</p>
-                  <p className="text-xs text-purple-600">Active partnerships</p>
-                </div>
-                <Handshake className="text-3xl text-purple-600" />
-              </div>
+          {isLoading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
             </div>
-
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-green-600 font-medium">Partnership Revenue</p>
-                  <p className="text-2xl font-bold text-green-800">${(totalRevenue / 1000).toFixed(0)}K</p>
-                  <p className="text-xs text-green-600">Monthly revenue</p>
-                </div>
-                <DollarSign className="text-3xl text-green-600" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-blue-600 font-medium">Active Partnerships</p>
-                  <p className="text-2xl font-bold text-blue-800">{activePartnerships}</p>
-                  <p className="text-xs text-blue-600">Currently active</p>
-                </div>
-                <Target className="text-3xl text-blue-600" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-orange-600 font-medium">Satisfaction Score</p>
-                  <p className="text-2xl font-bold text-orange-800">{satisfactionScore}/10</p>
-                  <p className="text-xs text-orange-600">Partner satisfaction</p>
-                </div>
-                <Star className="text-3xl text-orange-600" />
-              </div>
-            </div>
-          </div>
-
-          {/* Partnership Actions */}
-          <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-4 mb-6 border-2 border-purple-200">
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-purple-700 font-medium">
-                🤝 Partnership Activation Active - Microsoft partnership launched and scaling existing partnerships!
-              </div>
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={launchPartnership}
-                  disabled={isLaunchingPartnership}
-                  className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 disabled:opacity-50 transition-colors"
+          ) : (
+            <AnimatePresence mode="wait">
+              {activeTab === 'overview' && (
+                <motion.div
+                  key="overview"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  {isLaunchingPartnership ? '⏳ Launching...' : '🚀 Launch Partnership'}
-                </button>
-                <button
-                  onClick={scalePartnership}
-                  disabled={isScalingPartnership}
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50 transition-colors"
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-emerald-100">Total Partnerships</p>
+                          <p className="text-3xl font-bold">{partnershipAnalytics?.totalPartnerships}</p>
+                        </div>
+                        <Handshake className="w-8 h-8 text-emerald-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-blue-100">Active Partnerships</p>
+                          <p className="text-3xl font-bold">{partnershipAnalytics?.activePartnerships}</p>
+                        </div>
+                        <CheckCircle className="w-8 h-8 text-blue-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-purple-100">Total Revenue</p>
+                          <p className="text-3xl font-bold">${partnershipAnalytics?.totalRevenue.toLocaleString()}</p>
+                        </div>
+                        <BarChart3 className="w-8 h-8 text-purple-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-orange-100">Satisfaction Score</p>
+                          <p className="text-3xl font-bold">{partnershipAnalytics?.satisfactionScore}</p>
+                        </div>
+                        <Star className="w-8 h-8 text-orange-200" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold mb-4">Partnership Types</h3>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <RechartsPieChart>
+                          <Pie
+                            data={[
+                              { name: 'Integration', value: activePartnerships.filter(p => p.partnerType === 'integration').length },
+                              { name: 'Strategic', value: activePartnerships.filter(p => p.partnerType === 'strategic').length },
+                              { name: 'Channel', value: activePartnerships.filter(p => p.partnerType === 'channel').length },
+                              { name: 'Technology', value: activePartnerships.filter(p => p.partnerType === 'technology').length },
+                              { name: 'Reseller', value: activePartnerships.filter(p => p.partnerType === 'reseller').length }
+                            ]}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            label={({ name, percent }) => `${name} ${((percent as number) * 100).toFixed(0)}%`}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                          >
+                            <Cell fill="#3b82f6" />
+                            <Cell fill="#8b5cf6" />
+                            <Cell fill="#10b981" />
+                            <Cell fill="#f59e0b" />
+                            <Cell fill="#6366f1" />
+                          </Pie>
+                          <Tooltip />
+                        </RechartsPieChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold mb-4">Team Performance</h3>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <BarChart data={partnershipTeam.map(member => ({
+                          name: member.name.split(' ')[0],
+                          revenue: member.performance.revenueGenerated / 1000,
+                          satisfaction: member.performance.satisfactionScore
+                        }))}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="name" />
+                          <YAxis />
+                          <Tooltip />
+                          <Bar dataKey="revenue" fill="#10b981" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeTab === 'partnerships' && (
+                <motion.div
+                  key="partnerships"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  {isScalingPartnership ? '⏳ Scaling...' : '📈 Scale Partnership'}
-                </button>
-                <button
-                  onClick={activateIntegration}
-                  disabled={isActivatingIntegration}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
+                  {activePartnerships.map((partnership) => (
+                    <div key={partnership.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-emerald-100 rounded-lg">
+                            <Handshake className="w-5 h-5 text-emerald-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{partnership.partnerName}</h3>
+                            <p className="text-sm text-gray-600">{partnership.partnerType.replace('_', ' ')}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(partnership.status)}`}>
+                            {partnership.status.replace('_', ' ')}
+                          </span>
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getTypeColor(partnership.partnerType)}`}>
+                            {partnership.partnerType}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Contract Value</span>
+                          <p className="font-semibold">${partnership.contractValue.toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Revenue Generated</span>
+                          <p className="font-semibold">${partnership.revenue.toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Contact Person</span>
+                          <p className="font-semibold text-sm">{partnership.contactPerson}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Satisfaction Score</span>
+                          <p className="font-semibold">{partnership.metrics.satisfactionScore}/10</p>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <span className="text-sm text-gray-500">Description:</span>
+                        <p className="text-gray-700">{partnership.description}</p>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Benefits:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {partnership.benefits.map((benefit, index) => (
+                            <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
+                              {benefit}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Leads Generated</span>
+                          <p className="font-semibold">{partnership.metrics.leadsGenerated}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Deals Closed</span>
+                          <p className="font-semibold">{partnership.metrics.dealsClosed}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Market Reach</span>
+                          <p className="font-semibold">{partnership.metrics.marketReach.toLocaleString()}</p>
+                        </div>
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                          Manage
+                        </button>
+                        <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                          Contact
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+
+              {activeTab === 'pipeline' && (
+                <motion.div
+                  key="pipeline"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  {isActivatingIntegration ? '⏳ Activating...' : '🔗 Activate Integration'}
-                </button>
-              </div>
-            </div>
-          </div>
+                  {partnershipPipeline.map((pipeline) => (
+                    <div key={pipeline.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-teal-100 rounded-lg">
+                            <Target className="w-5 h-5 text-teal-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{pipeline.name}</h3>
+                            <p className="text-sm text-gray-600">Total Value: ${pipeline.totalValue.toLocaleString()}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        {pipeline.stages.map((stage) => (
+                          <div key={stage.id} className="bg-gray-50 rounded-lg p-4">
+                            <div className="text-center mb-3">
+                              <h4 className="font-medium text-gray-900">{stage.name}</h4>
+                              <p className="text-sm text-gray-600">{stage.partnerships.length} partnerships</p>
+                            </div>
+                            <div className="text-center mb-3">
+                              <p className="text-lg font-bold text-gray-900">${stage.value.toLocaleString()}</p>
+                              <p className="text-sm text-gray-600">{stage.probability}% probability</p>
+                            </div>
+                            <div className="space-y-2">
+                              {stage.partnerships.map((partnership) => (
+                                <div key={partnership.id} className="bg-white rounded p-2 text-sm">
+                                  <p className="font-medium">{partnership.partnerName}</p>
+                                  <p className="text-gray-600">${partnership.contractValue.toLocaleString()}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
 
-          {/* Active Partnerships */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Handshake className="mr-2 text-purple-600" />
-              Active Partnerships ({partnerships.length})
-            </h3>
-            <div className="space-y-4">
-              {partnerships.map((partnership) => (
-                <div key={partnership.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{partnership.name}</h4>
-                      <p className="text-sm text-gray-600">{partnership.partner.name} • {partnership.partner.industry}</p>
+              {activeTab === 'team' && (
+                <motion.div
+                  key="team"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {partnershipTeam.map((member) => (
+                    <div key={member.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-green-100 rounded-lg">
+                            <Users className="w-5 h-5 text-green-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{member.name}</h3>
+                            <p className="text-sm text-gray-600">{member.role.replace('_', ' ')}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(member.status)}`}>
+                            {member.status.replace('_', ' ')}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            {member.territory}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Partnerships Managed</span>
+                          <p className="font-semibold">{member.performance.partnershipsManaged}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Revenue Generated</span>
+                          <p className="font-semibold">${member.performance.revenueGenerated.toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Deals Closed</span>
+                          <p className="font-semibold">{member.performance.dealsClosed}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Satisfaction Score</span>
+                          <p className="font-semibold">{member.performance.satisfactionScore}/10</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Responsibilities:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {member.responsibilities.map((responsibility, index) => (
+                            <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
+                              {responsibility}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                          Contact
+                        </button>
+                        <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                          View Performance
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getTypeColor(partnership.type)}`}>
-                        {partnership.type}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(partnership.status)}`}>
-                        {partnership.status}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getPriorityColor(partnership.priority)}`}>
-                        {partnership.priority}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                    <div className="text-sm">
-                      <span className="text-gray-600">Leads:</span>
-                      <span className="font-medium text-gray-900 ml-1">{partnership.metrics.leads}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Conversions:</span>
-                      <span className="font-medium text-gray-900 ml-1">{partnership.metrics.conversions}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Revenue:</span>
-                      <span className="font-medium text-gray-900 ml-1">${partnership.metrics.revenue.toLocaleString()}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Satisfaction:</span>
-                      <span className="font-medium text-gray-900 ml-1">{partnership.metrics.satisfaction}/10</span>
-                    </div>
-                  </div>
+                  ))}
+                </motion.div>
+              )}
 
-                  <div className="mb-3">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm text-gray-600">Progress</span>
-                      <span className="text-sm font-medium text-gray-900">{partnership.metrics.satisfaction * 10}%</span>
+              {activeTab === 'integrations' && (
+                <motion.div
+                  key="integrations"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {integrationPartnerships.map((integration) => (
+                    <div key={integration.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-blue-100 rounded-lg">
+                            <Link className="w-5 h-5 text-blue-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{integration.partnerName}</h3>
+                            <p className="text-sm text-gray-600">{integration.integrationType.replace('_', ' ')}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(integration.status)}`}>
+                            {integration.status}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            {integration.uptime}% uptime
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Technical Contact</span>
+                          <p className="font-semibold text-sm">{integration.technicalContact}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Last Sync</span>
+                          <p className="font-semibold text-sm">
+                            {new Date(integration.lastSync).toLocaleString()}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">API Endpoints</span>
+                          <p className="font-semibold">{integration.apiEndpoints.length}</p>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <span className="text-sm text-gray-500">Documentation:</span>
+                        <p className="text-gray-700">{integration.documentation}</p>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">API Endpoints:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {integration.apiEndpoints.map((endpoint, index) => (
+                            <span key={index} className="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">
+                              {endpoint}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-purple-600 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${partnership.metrics.satisfaction * 10}%` }}
-                      ></div>
-                    </div>
-                  </div>
+                  ))}
+                </motion.div>
+              )}
 
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Contact:</span> {partnership.contact.name} | 
-                    <span className="font-medium ml-2">Revenue Type:</span> {partnership.agreement.revenue.type} | 
-                    <span className="font-medium ml-2">Next:</span> {partnership.metrics.nextMilestone}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+              {activeTab === 'strategic' && (
+                <motion.div
+                  key="strategic"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {strategicPartnerships.map((partnership) => (
+                    <div key={partnership.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-purple-100 rounded-lg">
+                            <Star className="w-5 h-5 text-purple-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{partnership.partnerName}</h3>
+                            <p className="text-sm text-gray-600">{partnership.partnershipType.replace('_', ' ')}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(partnership.status)}`}>
+                            {partnership.status}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            ${partnership.dealValue.toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Duration</span>
+                          <p className="font-semibold">{partnership.duration}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Deal Value</span>
+                          <p className="font-semibold">${partnership.dealValue.toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Currency</span>
+                          <p className="font-semibold">{partnership.currency}</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Objectives:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {partnership.objectives.map((objective, index) => (
+                            <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
+                              {objective}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Success Metrics:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {partnership.successMetrics.map((metric, index) => (
+                            <span key={index} className="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">
+                              {metric}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Risks:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {partnership.risks.map((risk, index) => (
+                            <span key={index} className="px-2 py-1 bg-red-100 text-red-800 rounded text-sm">
+                              {risk}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Mitigation:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {partnership.mitigation.map((mitigation, index) => (
+                            <span key={index} className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-sm">
+                              {mitigation}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
 
-          {/* Partnership Pipeline */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <BarChart3 className="mr-2 text-green-600" />
-              Partnership Pipeline
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {partnershipPipeline.map((stage) => (
-                <div key={stage.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-center mb-3">
-                    <h4 className="font-semibold text-gray-800">{stage.stage}</h4>
-                    <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                      {stage.metrics.count}
-                    </span>
-                  </div>
-                  
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Expected Value:</span>
-                      <span className="font-medium text-gray-900">${(stage.metrics.expectedValue / 1000).toFixed(0)}K</span>
+              {activeTab === 'channels' && (
+                <motion.div
+                  key="channels"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {channelPartnerships.map((channel) => (
+                    <div key={channel.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-green-100 rounded-lg">
+                            <Network className="w-5 h-5 text-green-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{channel.partnerName}</h3>
+                            <p className="text-sm text-gray-600">{channel.channelType.replace('_', ' ')}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(channel.status)}`}>
+                            {channel.status}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            {channel.commissionRate}% commission
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Territory</span>
+                          <p className="font-semibold">{channel.territory}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Sales Target</span>
+                          <p className="font-semibold">${channel.salesTarget.toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Target Achievement</span>
+                          <p className="font-semibold">{channel.performance.targetAchievement}%</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Customer Satisfaction</span>
+                          <p className="font-semibold">{channel.performance.customerSatisfaction}/10</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Certifications:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {channel.certifications.map((cert, index) => (
+                            <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
+                              {cert}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Deals Closed</span>
+                          <p className="font-semibold">{channel.performance.dealsClosed}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Revenue</span>
+                          <p className="font-semibold">${channel.performance.revenue.toLocaleString()}</p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Probability:</span>
-                      <span className="font-medium text-gray-900">{stage.metrics.probability}%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Avg Value:</span>
-                      <span className="font-medium text-gray-900">${(stage.metrics.avgDealSize / 1000).toFixed(0)}K</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Avg Cycle:</span>
-                      <span className="font-medium text-gray-900">{stage.metrics.avgCycle} days</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                  ))}
+                </motion.div>
+              )}
 
-          {/* Partnership Team */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Users className="mr-2 text-blue-600" />
-              Partnership Team ({partnershipTeam.length})
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {partnershipTeam.map((member) => (
-                <div key={member.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{member.name}</h4>
-                      <p className="text-sm text-gray-600">{member.role} • {member.territory}</p>
+              {activeTab === 'technology' && (
+                <motion.div
+                  key="technology"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {technologyPartnerships.map((tech) => (
+                    <div key={tech.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-orange-100 rounded-lg">
+                            <Cpu className="w-5 h-5 text-orange-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{tech.partnerName}</h3>
+                            <p className="text-sm text-gray-600">{tech.technologyType.replace('_', ' ')}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(tech.status)}`}>
+                            {tech.status}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            {tech.supportLevel}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <span className="text-sm text-gray-500">Documentation:</span>
+                        <p className="text-gray-700">{tech.documentation}</p>
+                      </div>
+                      <div className="mb-4">
+                        <span className="text-sm text-gray-500">SLA:</span>
+                        <p className="text-gray-700">{tech.sla}</p>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Technical Specs:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {tech.technicalSpecs.map((spec, index) => (
+                            <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
+                              {spec}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                    <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                      {member.performance.attainment}%
-                    </span>
-                  </div>
-                  
-                  <div className="space-y-2 mb-3">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Partnerships:</span>
-                      <span className="font-medium text-gray-900">{member.partnerships}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Revenue:</span>
-                      <span className="font-medium text-gray-900">${(member.performance.revenue / 1000).toFixed(0)}K</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Success Rate:</span>
-                      <span className="font-medium text-gray-900">{member.metrics.successRate}%</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Satisfaction:</span>
-                      <span className="font-medium text-gray-900">{member.metrics.satisfactionScore}/10</span>
-                    </div>
-                  </div>
+                  ))}
+                </motion.div>
+              )}
 
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Activities:</span> {Object.values(member.activities).reduce((sum, val) => sum + val, 0)} total | 
-                    <span className="font-medium ml-2">Avg Value:</span> ${(member.metrics.avgPartnershipValue / 1000).toFixed(0)}K
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Partnership Activities */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Activity className="mr-2 text-orange-600" />
-              Recent Partnership Activities
-            </h3>
-            <div className="space-y-4">
-              {partnerships.flatMap(p => p.activities).slice(0, 6).map((activity) => (
-                <div key={activity.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{activity.description}</h4>
-                      <p className="text-sm text-gray-600">{activity.type} activity</p>
+              {activeTab === 'analytics' && partnershipAnalytics && (
+                <motion.div
+                  key="analytics"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-emerald-100">Renewal Rate</p>
+                          <p className="text-3xl font-bold">{partnershipAnalytics.renewalRate}%</p>
+                        </div>
+                        <CheckCircle className="w-8 h-8 text-emerald-200" />
+                      </div>
                     </div>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getOutcomeColor(activity.outcome)}`}>
-                        {activity.outcome}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(activity.status)}`}>
-                        {activity.status}
-                      </span>
+                    <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-blue-100">Lead Generation</p>
+                          <p className="text-3xl font-bold">{partnershipAnalytics.leadGeneration}</p>
+                        </div>
+                        <Target className="w-8 h-8 text-blue-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-purple-100">Market Reach</p>
+                          <p className="text-3xl font-bold">{partnershipAnalytics.marketReach.toLocaleString()}</p>
+                        </div>
+                        <Globe className="w-8 h-8 text-purple-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-orange-100">Avg Partnership Value</p>
+                          <p className="text-3xl font-bold">${partnershipAnalytics.averagePartnershipValue.toLocaleString()}</p>
+                        </div>
+                        <DollarSign className="w-8 h-8 text-orange-200" />
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Date:</span> {formatDate(activity.date)}
-                    {activity.notes && (
-                      <span className="ml-2">| <span className="font-medium">Notes:</span> {activity.notes}</span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
         </div>
       </motion.div>
     </div>
