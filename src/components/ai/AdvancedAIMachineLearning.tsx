@@ -1,1424 +1,1079 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Brain, Zap, Target, TrendingUp, BarChart3, PieChart, LineChart, Activity, Eye, Users, Star, Award, Crown, Sparkles, Bell, Settings, Play, Pause, Stop, RefreshCw, Download, Upload, Maximize, Minimize, Filter, Search, Plus, Minus, ArrowUp, ArrowDown, ArrowRight, ArrowLeft, Code, Database, Cpu, HardDrive, Network, Globe, Lock, Shield, CheckCircle, AlertTriangle, Clock, Calendar, MessageCircle, Mail, Phone, Video, Mic, Camera, Image, FileText, Link, Share2, Heart, ThumbsUp, ThumbsDown, Smile, Frown, Meh, Laugh, Angry, Surprised } from 'lucide-react';
+import { X, Brain, Cpu, Database, Server, Cloud, Zap, Shield, Activity, TrendingUp, Target, Calendar, DollarSign, Building, Phone, Mail, MessageCircle, FileText, Award, Clock, CheckCircle, AlertTriangle, Plus, Edit, Trash2, Save, Copy, ExternalLink, ArrowUp, ArrowDown, ArrowRight, ArrowLeft, Star, Activity as ActivityIcon, MapPin, Share2, Video, Briefcase, PieChart, LineChart, Brain as BrainIcon, Cpu as CpuIcon, Database as DatabaseIcon, Server as ServerIcon, Cloud as CloudIcon, Wifi, Signal, Battery, WifiOff, Eye, EyeOff, Lock, Unlock, Key, Settings, Bell, Filter, Search, Download, Upload, RefreshCw, Monitor, Smartphone, Tablet, Laptop, Globe, Map, Flag, Building2, Home, Work, School, Coffee, Gamepad2, Music, Book, Code, Paintbrush, Calculator, Lightbulb, Target as TargetIcon, TrendingDown, Zap as ZapIcon, Shield as ShieldIcon, Star as StarIcon, Heart, ThumbsUp, ThumbsDown, Smile, Frown, Meh, UserCheck, UserX, UserPlus, UserMinus, UserCog, UserSettings, UserStar, UserHeart, UserShield, UserZap, UserTarget, UserTrendingUp, UserTrendingDown, UserActivity, UserMonitor, UserSmartphone, UserTablet, UserLaptop, UserGlobe, UserMap, UserFlag, UserBuilding, UserHome, UserWork, UserSchool, UserCoffee, UserGamepad, UserMusic, UserBook, UserCode, UserPaintbrush, UserCalculator, UserLightbulb, UserBell, UserFilter, UserSearch, UserDownload, UserUpload, UserRefresh, UserSettings as UserSettingsIcon, UserCog as UserCogIcon, UserStar as UserStarIcon, UserHeart as UserHeartIcon, UserShield as UserShieldIcon, UserZap as UserZapIcon, UserTarget as UserTargetIcon, UserTrendingUp as UserTrendingUpIcon, UserTrendingDown as UserTrendingDownIcon, UserActivity as UserActivityIcon, UserMonitor as UserMonitorIcon, UserSmartphone as UserSmartphoneIcon, UserTablet as UserTabletIcon, UserLaptop as UserLaptopIcon, UserGlobe as UserGlobeIcon, UserMap as UserMapIcon, UserFlag as UserFlagIcon, UserBuilding as UserBuildingIcon, UserHome as UserHomeIcon, UserWork as UserWorkIcon, UserSchool as UserSchoolIcon, UserCoffee as UserCoffeeIcon, UserGamepad as UserGamepadIcon, UserMusic as UserMusicIcon, UserBook as UserBookIcon, UserCode as UserCodeIcon, UserPaintbrush as UserPaintbrushIcon, UserCalculator as UserCalculatorIcon, UserLightbulb as UserLightbulbIcon, UserBell as UserBellIcon, UserFilter as UserFilterIcon, UserSearch as UserSearchIcon, UserDownload as UserDownloadIcon, UserUpload as UserUploadIcon, UserRefresh as UserRefreshIcon, Bot, Network, Microscope, Layers, GitBranch, GitCommit, GitMerge, GitPullRequest, GitCompare, GitBranchPlus, GitCommitHorizontal, GitMergeVertical, GitPullRequestArrow, GitCompareArrows } from 'lucide-react';
+import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, AreaChart, Area, ScatterChart, Scatter, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ComposedChart, ReferenceLine, Legend } from 'recharts';
+import { toast } from 'react-hot-toast';
 
+// Advanced AI & Machine Learning interfaces
 interface MLModel {
   id: string;
   name: string;
-  type: 'classification' | 'regression' | 'clustering' | 'recommendation' | 'nlp' | 'computer-vision';
-  purpose: string;
-  status: 'training' | 'deployed' | 'testing' | 'retired';
+  type: 'classification' | 'regression' | 'clustering' | 'recommendation' | 'nlp' | 'computer_vision' | 'timeseries' | 'reinforcement';
+  category: 'predictive' | 'analytical' | 'recommendation' | 'automation';
+  status: 'training' | 'active' | 'paused' | 'error' | 'deployed';
   accuracy: number;
-  performance: {
-    precision: number;
-    recall: number;
-    f1Score: number;
-    auc: number;
-  };
-  data: {
-    trainingSize: number;
-    validationSize: number;
-    testSize: number;
-    features: number;
-    lastTraining: Date;
-  };
-  metrics: {
-    predictions: number;
-    correctPredictions: number;
-    falsePositives: number;
-    falseNegatives: number;
-  };
-  deployment: {
-    version: string;
-    endpoint: string;
-    latency: number;
-    throughput: number;
-    lastDeployed: Date;
-  };
-  drift: {
-    detected: boolean;
-    severity: 'low' | 'medium' | 'high';
-    lastCheck: Date;
-    mitigation: string[];
-  };
+  precision: number;
+  recall: number;
+  f1Score: number;
+  lastTrained: string;
+  trainingData: string;
+  features: string[];
+  hyperparameters: Record<string, any>;
+  performance: ModelPerformance;
+  deployment: ModelDeployment;
+  createdAt: string;
 }
 
-interface AIInsight {
+interface ModelPerformance {
+  trainingAccuracy: number;
+  validationAccuracy: number;
+  testAccuracy: number;
+  trainingLoss: number;
+  validationLoss: number;
+  confusionMatrix: number[][];
+  rocCurve: { fpr: number; tpr: number }[];
+  featureImportance: { feature: string; importance: number }[];
+}
+
+interface ModelDeployment {
+  environment: 'development' | 'staging' | 'production';
+  endpoint: string;
+  version: string;
+  replicas: number;
+  resources: {
+    cpu: string;
+    memory: string;
+    gpu: string;
+  };
+  monitoring: boolean;
+  autoScaling: boolean;
+}
+
+interface AIGeneratedInsight {
   id: string;
   title: string;
+  category: 'prediction' | 'recommendation' | 'anomaly' | 'pattern' | 'optimization';
   description: string;
-  type: 'prediction' | 'recommendation' | 'anomaly' | 'trend' | 'optimization';
   confidence: number;
   impact: 'low' | 'medium' | 'high' | 'critical';
-  category: string;
-  data: {
-    source: string;
-    timeframe: string;
-    affected: number;
-    potential: number;
-  };
-  actionable: boolean;
+  priority: 'low' | 'medium' | 'high';
+  status: 'new' | 'validating' | 'implemented' | 'dismissed';
+  dataSource: string[];
+  models: string[];
   recommendations: string[];
+  tags: string[];
+  createdAt: string;
+}
+
+interface NaturalLanguageProcessing {
+  id: string;
+  name: string;
+  type: 'sentiment' | 'classification' | 'extraction' | 'summarization' | 'translation' | 'generation';
+  status: 'active' | 'processing' | 'error';
+  language: string;
   model: string;
-  generatedAt: Date;
-  expiresAt: Date;
-  status: 'new' | 'reviewed' | 'implemented' | 'dismissed';
+  accuracy: number;
+  inputText: string;
+  output: NLPOutput;
+  processingTime: number;
+  createdAt: string;
+}
+
+interface NLPOutput {
+  sentiment?: {
+    label: string;
+    score: number;
+  };
+  entities?: { text: string; label: string; confidence: number }[];
+  categories?: { category: string; confidence: number }[];
+  summary?: string;
+  translation?: string;
+  generatedText?: string;
 }
 
 interface PersonalizationEngine {
   id: string;
   userId: string;
-  segment: string;
-  preferences: {
-    theme: string;
-    layout: string;
-    notifications: boolean;
-    language: string;
-    timezone: string;
-    features: string[];
-  };
-  behavior: {
-    loginPattern: number[];
-    featureUsage: { [key: string]: number };
-    sessionDuration: number;
-    taskCompletionRate: number;
-    collaborationLevel: number;
-  };
-  predictions: {
-    nextFeature: string;
-    optimalTime: string;
-    recommendedTasks: string[];
-    riskLevel: number;
-  };
-  personalization: {
-    dashboard: any;
-    recommendations: any;
-    content: any;
-    ui: any;
-  };
-  lastUpdated: Date;
-  accuracy: number;
+  strategy: 'collaborative' | 'content_based' | 'hybrid' | 'demographic';
+  preferences: UserPreferences;
+  recommendations: Recommendation[];
+  performance: PersonalizationPerformance;
+  lastUpdated: string;
+  createdAt: string;
 }
 
-interface NLPModel {
-  id: string;
-  name: string;
-  purpose: 'chatbot' | 'sentiment' | 'classification' | 'extraction' | 'generation' | 'translation';
-  language: string;
-  capabilities: string[];
-  performance: {
-    accuracy: number;
-    bleu: number;
-    perplexity: number;
-    responseTime: number;
-  };
-  training: {
-    dataset: string;
-    epochs: number;
-    batchSize: number;
-    learningRate: number;
-    lastTraining: Date;
-  };
-  usage: {
-    requests: number;
-    successful: number;
-    failed: number;
-    averageLatency: number;
-  };
-  examples: {
-    input: string;
-    output: string;
-    confidence: number;
-  }[];
-  status: 'active' | 'training' | 'testing' | 'deprecated';
+interface UserPreferences {
+  categories: string[];
+  interests: string[];
+  behavior: Record<string, number>;
+  demographics: Record<string, string>;
+  interactions: UserInteraction[];
 }
 
-interface RecommendationEngine {
-  id: string;
-  name: string;
-  type: 'collaborative' | 'content-based' | 'hybrid' | 'deep-learning';
-  domain: 'tasks' | 'projects' | 'features' | 'content' | 'users';
-  algorithm: string;
-  performance: {
-    precision: number;
-    recall: number;
-    ndcg: number;
-    diversity: number;
-  };
-  data: {
-    users: number;
-    items: number;
-    interactions: number;
-    sparsity: number;
-  };
-  recommendations: {
-    generated: number;
-    accepted: number;
-    clicked: number;
-    converted: number;
-  };
-  coldStart: {
-    newUsers: number;
-    newItems: number;
-    strategies: string[];
-  };
-  lastUpdated: Date;
-  status: 'active' | 'training' | 'evaluating';
+interface UserInteraction {
+  type: string;
+  item: string;
+  rating: number;
+  timestamp: string;
+}
+
+interface Recommendation {
+  itemId: string;
+  itemType: string;
+  score: number;
+  reason: string;
+  category: string;
+}
+
+interface PersonalizationPerformance {
+  clickThroughRate: number;
+  conversionRate: number;
+  engagementScore: number;
+  satisfactionScore: number;
+  diversityScore: number;
 }
 
 interface AutoMLPipeline {
   id: string;
   name: string;
   description: string;
-  status: 'running' | 'completed' | 'failed' | 'paused';
-  progress: number;
-  startTime: Date;
-  endTime: Date;
-  data: {
-    source: string;
-    size: number;
-    features: number;
-    target: string;
-    problemType: 'classification' | 'regression' | 'clustering';
-  };
-  models: {
-    name: string;
-    algorithm: string;
-    accuracy: number;
-    crossValidation: number;
-    featureImportance: { [key: string]: number };
-  }[];
-  bestModel: {
-    name: string;
-    accuracy: number;
-    parameters: any;
-    deployment: boolean;
-  };
-  evaluation: {
-    trainScore: number;
-    testScore: number;
-    validationScore: number;
-    overfitting: boolean;
-  };
-  artifacts: {
-    model: string;
-    predictions: string;
-    report: string;
-    code: string;
-  };
+  status: 'draft' | 'running' | 'completed' | 'failed' | 'paused';
+  dataSource: string;
+  targetColumn: string;
+  problemType: 'classification' | 'regression' | 'time_series';
+  algorithms: string[];
+  evaluation: AutoMLEvaluation;
+  bestModel?: string;
+  createdAt: string;
+}
+
+interface AutoMLEvaluation {
+  crossValidationScore: number;
+  testScore: number;
+  featureImportance: { feature: string; importance: number }[];
+  modelComparison: ModelComparison[];
+  recommendations: string[];
+}
+
+interface ModelComparison {
+  algorithm: string;
+  accuracy: number;
+  precision: number;
+  recall: number;
+  f1Score: number;
+  trainingTime: number;
 }
 
 interface AIEthics {
   id: string;
   principle: string;
   description: string;
-  compliance: 'compliant' | 'partial' | 'non-compliant';
-  score: number;
-  issues: {
-    bias: boolean;
-    fairness: boolean;
-    transparency: boolean;
-    privacy: boolean;
-    accountability: boolean;
-  };
-  mitigation: string[];
-  audit: {
-    lastAudit: Date;
-    nextAudit: Date;
-    auditor: string;
-    findings: string[];
-  };
-  governance: {
-    reviewBoard: string[];
-    approvalProcess: string;
-    monitoring: boolean;
-    reporting: boolean;
+  compliance: boolean;
+  assessment: EthicsAssessment;
+  actions: EthicsAction[];
+  lastAudit: string;
+  createdAt: string;
+}
+
+interface EthicsAssessment {
+  fairness: number;
+  transparency: number;
+  privacy: number;
+  accountability: number;
+  overall: number;
+  issues: string[];
+  recommendations: string[];
+}
+
+interface EthicsAction {
+  action: string;
+  status: 'pending' | 'in_progress' | 'completed';
+  priority: 'low' | 'medium' | 'high';
+  dueDate: string;
+}
+
+interface PredictiveModel {
+  id: string;
+  name: string;
+  description: string;
+  type: 'forecasting' | 'classification' | 'regression' | 'anomaly_detection';
+  target: string;
+  features: string[];
+  status: 'training' | 'active' | 'retired';
+  accuracy: number;
+  predictions: Prediction[];
+  performance: PredictivePerformance;
+  createdAt: string;
+}
+
+interface Prediction {
+  id: string;
+  input: Record<string, any>;
+  output: any;
+  confidence: number;
+  timestamp: string;
+}
+
+interface PredictivePerformance {
+  accuracy: number;
+  precision: number;
+  recall: number;
+  f1Score: number;
+  mae: number;
+  mse: number;
+  rmse: number;
+}
+
+interface RecommendationSystem {
+  id: string;
+  name: string;
+  type: 'collaborative' | 'content_based' | 'hybrid' | 'contextual';
+  status: 'active' | 'training' | 'retired';
+  performance: RecommendationPerformance;
+  algorithms: RecommendationAlgorithm[];
+  users: number;
+  items: number;
+  interactions: number;
+  lastUpdated: string;
+  createdAt: string;
+}
+
+interface RecommendationPerformance {
+  precisionAtK: number;
+  recallAtK: number;
+  ndcg: number;
+  diversity: number;
+  novelty: number;
+  coverage: number;
+}
+
+interface RecommendationAlgorithm {
+  name: string;
+  weight: number;
+  performance: {
+    precision: number;
+    recall: number;
+    ndcg: number;
   };
 }
 
+interface ComputerVision {
+  id: string;
+  name: string;
+  task: 'classification' | 'detection' | 'segmentation' | 'recognition' | 'generation';
+  status: 'training' | 'active' | 'error';
+  model: string;
+  accuracy: number;
+  dataset: string;
+  classes: string[];
+  performance: CVPerformance;
+  createdAt: string;
+}
+
+interface CVPerformance {
+  accuracy: number;
+  precision: number;
+  recall: number;
+  f1Score: number;
+  iou: number;
+  map: number;
+}
+
+interface AITrainingPipeline {
+  id: string;
+  name: string;
+  description: string;
+  status: 'scheduled' | 'running' | 'completed' | 'failed' | 'cancelled';
+  modelType: string;
+  dataset: string;
+  configuration: TrainingConfiguration;
+  progress: TrainingProgress;
+  metrics: TrainingMetrics;
+  createdAt: string;
+}
+
+interface TrainingConfiguration {
+  epochs: number;
+  batchSize: number;
+  learningRate: number;
+  optimizer: string;
+  lossFunction: string;
+  regularization: Record<string, any>;
+}
+
+interface TrainingProgress {
+  currentEpoch: number;
+  totalEpochs: number;
+  currentBatch: number;
+  totalBatches: number;
+  estimatedTimeRemaining: number;
+}
+
+interface TrainingMetrics {
+  trainingLoss: number[];
+  validationLoss: number[];
+  trainingAccuracy: number[];
+  validationAccuracy: number[];
+  learningRate: number[];
+}
+
+interface AIMonitoring {
+  id: string;
+  modelId: string;
+  metric: string;
+  value: number;
+  threshold: number;
+  status: 'healthy' | 'warning' | 'critical';
+  trend: 'up' | 'down' | 'stable';
+  alerts: Alert[];
+  lastUpdated: string;
+}
+
+interface Alert {
+  id: string;
+  type: 'performance' | 'drift' | 'bias' | 'availability';
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  message: string;
+  timestamp: string;
+  resolved: boolean;
+}
+
 const AdvancedAIMachineLearning: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [mlModels, setMLModels] = useState<MLModel[]>([]);
-  const [aiInsights, setAIInsights] = useState<AIInsight[]>([]);
-  const [personalizationEngines, setPersonalizationEngines] = useState<PersonalizationEngine[]>([]);
-  const [nlpModels, setNLPModels] = useState<NLPModel[]>([]);
-  const [recommendationEngines, setRecommendationEngines] = useState<RecommendationEngine[]>([]);
-  const [autoMLPipelines, setAutoMLPipelines] = useState<AutoMLPipeline[]>([]);
-  const [aiEthics, setAIEthics] = useState<AIEthics[]>([]);
-  const [isTrainingModel, setIsTrainingModel] = useState(false);
-  const [isGeneratingInsights, setIsGeneratingInsights] = useState(false);
-  const [isRunningPipeline, setIsRunningPipeline] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<MLModel | null>(null);
-  const [selectedInsight, setSelectedInsight] = useState<AIInsight | null>(null);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [isLoading, setIsLoading] = useState(false);
+  const [mlModels, setMlModels] = useState<MLModel[]>([]);
+  const [aiInsights, setAiInsights] = useState<AIGeneratedInsight[]>([]);
+  const [nlp, setNlp] = useState<NaturalLanguageProcessing[]>([]);
+  const [personalization, setPersonalization] = useState<PersonalizationEngine[]>([]);
+  const [autoML, setAutoML] = useState<AutoMLPipeline[]>([]);
+  const [aiEthics, setAiEthics] = useState<AIEthics[]>([]);
+  const [predictiveModels, setPredictiveModels] = useState<PredictiveModel[]>([]);
+  const [recommendationSystems, setRecommendationSystems] = useState<RecommendationSystem[]>([]);
+  const [computerVision, setComputerVision] = useState<ComputerVision[]>([]);
+  const [trainingPipelines, setTrainingPipelines] = useState<AITrainingPipeline[]>([]);
+  const [aiMonitoring, setAiMonitoring] = useState<AIMonitoring[]>([]);
 
-  // Generate AI/ML data
+  // SSR-safe data loading
   useEffect(() => {
-    const generateMLModels = (): MLModel[] => {
-      return [
-        {
-          id: 'model-1',
-          name: 'User Behavior Prediction',
-          type: 'classification',
-          purpose: 'Predict user engagement and churn risk',
-          status: 'deployed',
-          accuracy: 92.5,
-          performance: {
+    const loadAIMLData = async () => {
+      setIsLoading(true);
+      
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        // Mock ML models
+        const mockMLModels: MLModel[] = [
+          {
+            id: 'model-1',
+            name: 'Customer Churn Predictor',
+            type: 'classification',
+            category: 'predictive',
+            status: 'active',
+            accuracy: 0.94,
             precision: 0.91,
-            recall: 0.94,
-            f1Score: 0.925,
-            auc: 0.96
-          },
-          data: {
-            trainingSize: 50000,
-            validationSize: 10000,
-            testSize: 5000,
-            features: 25,
-            lastTraining: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-          },
-          metrics: {
-            predictions: 15000,
-            correctPredictions: 13875,
-            falsePositives: 625,
-            falseNegatives: 500
-          },
-          deployment: {
-            version: 'v2.1.0',
-            endpoint: '/api/ml/user-behavior',
-            latency: 45,
-            throughput: 1000,
-            lastDeployed: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
-          },
-          drift: {
-            detected: false,
-            severity: 'low',
-            lastCheck: new Date(),
-            mitigation: []
-          }
-        },
-        {
-          id: 'model-2',
-          name: 'Task Recommendation Engine',
-          type: 'recommendation',
-          purpose: 'Recommend optimal tasks based on user context and energy',
-          status: 'deployed',
-          accuracy: 88.3,
-          performance: {
-            precision: 0.85,
-            recall: 0.92,
-            f1Score: 0.883,
-            auc: 0.91
-          },
-          data: {
-            trainingSize: 75000,
-            validationSize: 15000,
-            testSize: 10000,
-            features: 35,
-            lastTraining: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
-          },
-          metrics: {
-            predictions: 25000,
-            correctPredictions: 22075,
-            falsePositives: 1925,
-            falseNegatives: 1000
-          },
-          deployment: {
-            version: 'v1.8.2',
-            endpoint: '/api/ml/task-recommendations',
-            latency: 32,
-            throughput: 1500,
-            lastDeployed: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
-          },
-          drift: {
-            detected: true,
-            severity: 'medium',
-            lastCheck: new Date(Date.now() - 1 * 60 * 60 * 1000),
-            mitigation: ['Retraining scheduled', 'Data validation enhanced']
-          }
-        },
-        {
-          id: 'model-3',
-          name: 'Sentiment Analysis',
-          type: 'nlp',
-          purpose: 'Analyze user feedback and support ticket sentiment',
-          status: 'deployed',
-          accuracy: 94.7,
-          performance: {
-            precision: 0.94,
-            recall: 0.95,
-            f1Score: 0.945,
-            auc: 0.98
-          },
-          data: {
-            trainingSize: 30000,
-            validationSize: 6000,
-            testSize: 4000,
-            features: 50,
-            lastTraining: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000)
-          },
-          metrics: {
-            predictions: 8000,
-            correctPredictions: 7576,
-            falsePositives: 212,
-            falseNegatives: 212
-          },
-          deployment: {
-            version: 'v3.0.1',
-            endpoint: '/api/ml/sentiment-analysis',
-            latency: 28,
-            throughput: 2000,
-            lastDeployed: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
-          },
-          drift: {
-            detected: false,
-            severity: 'low',
-            lastCheck: new Date(),
-            mitigation: []
-          }
-        }
-      ];
-    };
-
-    const generateAIInsights = (): AIInsight[] => {
-      return [
-        {
-          id: 'insight-1',
-          title: 'Optimal Task Scheduling Pattern Detected',
-          description: 'AI analysis reveals that users are 23% more productive when scheduling high-energy tasks between 9-11 AM.',
-          type: 'optimization',
-          confidence: 94,
-          impact: 'high',
-          category: 'Productivity',
-          data: {
-            source: 'User behavior data',
-            timeframe: 'Last 30 days',
-            affected: 1250,
-            potential: 18
-          },
-          actionable: true,
-          recommendations: [
-            'Implement smart scheduling suggestions',
-            'Add energy-based task recommendations',
-            'Create productivity optimization alerts'
-          ],
-          model: 'User Behavior Prediction',
-          generatedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          status: 'new'
-        },
-        {
-          id: 'insight-2',
-          title: 'Churn Risk Alert: 45 Users Identified',
-          description: 'Machine learning model predicts 45 users are at high risk of churning in the next 7 days.',
-          type: 'prediction',
-          confidence: 87,
-          impact: 'critical',
-          category: 'Retention',
-          data: {
-            source: 'Engagement metrics',
-            timeframe: 'Last 14 days',
-            affected: 45,
-            potential: 22500
-          },
-          actionable: true,
-          recommendations: [
-            'Trigger retention campaigns immediately',
-            'Schedule proactive outreach calls',
-            'Offer personalized incentives'
-          ],
-          model: 'User Behavior Prediction',
-          generatedAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
-          expiresAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-          status: 'reviewed'
-        },
-        {
-          id: 'insight-3',
-          title: 'Feature Adoption Opportunity',
-          description: 'Users who adopt the collaboration features show 67% higher retention rates.',
-          type: 'recommendation',
-          confidence: 91,
-          impact: 'medium',
-          category: 'Feature Usage',
-          data: {
-            source: 'Feature usage analytics',
-            timeframe: 'Last 60 days',
-            affected: 850,
-            potential: 12
-          },
-          actionable: true,
-          recommendations: [
-            'Promote collaboration features in onboarding',
-            'Create feature adoption campaigns',
-            'Develop collaboration tutorials'
-          ],
-          model: 'Task Recommendation Engine',
-          generatedAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
-          expiresAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-          status: 'implemented'
-        }
-      ];
-    };
-
-    const generatePersonalizationEngines = (): PersonalizationEngine[] => {
-      return [
-        {
-          id: 'personalization-1',
-          userId: 'user-123',
-          segment: 'power-user',
-          preferences: {
-            theme: 'dark',
-            layout: 'compact',
-            notifications: true,
-            language: 'en',
-            timezone: 'PST',
-            features: ['analytics', 'collaboration', 'automation']
-          },
-          behavior: {
-            loginPattern: [1, 1, 1, 1, 1, 0, 0], // Mon-Fri active
-            featureUsage: {
-              'task-management': 0.95,
-              'analytics': 0.87,
-              'collaboration': 0.78,
-              'automation': 0.65
+            recall: 0.88,
+            f1Score: 0.89,
+            lastTrained: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+            trainingData: 'customer_behavior_dataset_v2',
+            features: ['usage_frequency', 'support_tickets', 'payment_history', 'engagement_score'],
+            hyperparameters: {
+              learningRate: 0.001,
+              batchSize: 32,
+              epochs: 100,
+              optimizer: 'adam'
             },
-            sessionDuration: 45,
-            taskCompletionRate: 0.92,
-            collaborationLevel: 0.85
-          },
-          predictions: {
-            nextFeature: 'advanced-analytics',
-            optimalTime: '09:00-11:00',
-            recommendedTasks: ['project-review', 'team-sync', 'data-analysis'],
-            riskLevel: 0.15
-          },
-          personalization: {
-            dashboard: {
-              widgets: ['productivity-chart', 'team-activity', 'project-status'],
-              layout: 'grid',
-              refreshRate: 300
-            },
-            recommendations: {
-              algorithm: 'collaborative-filtering',
-              frequency: 'daily',
-              categories: ['productivity', 'collaboration', 'analytics']
-            },
-            content: {
-              difficulty: 'advanced',
-              format: 'detailed',
-              topics: ['productivity', 'team-management', 'data-analysis']
-            },
-            ui: {
-              density: 'compact',
-              animations: true,
-              shortcuts: true
-            }
-          },
-          lastUpdated: new Date(),
-          accuracy: 0.89
-        }
-      ];
-    };
-
-    const generateNLPModels = (): NLPModel[] => {
-      return [
-        {
-          id: 'nlp-1',
-          name: 'SyncScript Assistant',
-          purpose: 'chatbot',
-          language: 'en',
-          capabilities: ['task-creation', 'query-answering', 'troubleshooting', 'recommendations'],
-          performance: {
-            accuracy: 91.2,
-            bleu: 0.78,
-            perplexity: 2.3,
-            responseTime: 1.2
-          },
-          training: {
-            dataset: 'syncscript-support-corpus',
-            epochs: 50,
-            batchSize: 32,
-            learningRate: 0.001,
-            lastTraining: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
-          },
-          usage: {
-            requests: 15000,
-            successful: 14250,
-            failed: 750,
-            averageLatency: 1200
-          },
-          examples: [
-            {
-              input: 'Create a task for reviewing the quarterly budget',
-              output: 'I\'ll create a task for reviewing the quarterly budget. What priority level would you like to set?',
-              confidence: 0.94
-            },
-            {
-              input: 'Show me my productivity trends',
-              output: 'Your productivity has increased by 15% this week compared to last week. Your most productive time is 9-11 AM.',
-              confidence: 0.87
-            }
-          ],
-          status: 'active'
-        },
-        {
-          id: 'nlp-2',
-          name: 'Feedback Sentiment Analyzer',
-          purpose: 'sentiment',
-          language: 'en',
-          capabilities: ['sentiment-classification', 'emotion-detection', 'topic-extraction'],
-          performance: {
-            accuracy: 94.7,
-            bleu: 0.85,
-            perplexity: 1.8,
-            responseTime: 0.8
-          },
-          training: {
-            dataset: 'user-feedback-dataset',
-            epochs: 30,
-            batchSize: 64,
-            learningRate: 0.002,
-            lastTraining: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000)
-          },
-          usage: {
-            requests: 8500,
-            successful: 8245,
-            failed: 255,
-            averageLatency: 800
-          },
-          examples: [
-            {
-              input: 'The new dashboard is amazing! Much better than before.',
-              output: 'Positive sentiment (0.92 confidence) - Features: dashboard, improvement',
-              confidence: 0.92
-            },
-            {
-              input: 'Having issues with the mobile app crashing frequently.',
-              output: 'Negative sentiment (0.89 confidence) - Features: mobile-app, technical-issues',
-              confidence: 0.89
-            }
-          ],
-          status: 'active'
-        }
-      ];
-    };
-
-    const generateRecommendationEngines = (): RecommendationEngine[] => {
-      return [
-        {
-          id: 'rec-1',
-          name: 'Task Recommendation System',
-          type: 'hybrid',
-          domain: 'tasks',
-          algorithm: 'Matrix Factorization + Content-Based',
-          performance: {
-            precision: 0.85,
-            recall: 0.92,
-            ndcg: 0.88,
-            diversity: 0.76
-          },
-          data: {
-            users: 2500,
-            items: 15000,
-            interactions: 125000,
-            sparsity: 0.67
-          },
-          recommendations: {
-            generated: 45000,
-            accepted: 38250,
-            clicked: 31500,
-            converted: 28350
-          },
-          coldStart: {
-            newUsers: 150,
-            newItems: 75,
-            strategies: ['content-based', 'popular-items', 'demographic']
-          },
-          lastUpdated: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-          status: 'active'
-        },
-        {
-          id: 'rec-2',
-          name: 'Feature Discovery Engine',
-          type: 'collaborative',
-          domain: 'features',
-          algorithm: 'Deep Neural Collaborative Filtering',
-          performance: {
-            precision: 0.78,
-            recall: 0.85,
-            ndcg: 0.82,
-            diversity: 0.83
-          },
-          data: {
-            users: 2500,
-            items: 45,
-            interactions: 87500,
-            sparsity: 0.22
-          },
-          recommendations: {
-            generated: 25000,
-            accepted: 21250,
-            clicked: 18750,
-            converted: 16875
-          },
-          coldStart: {
-            newUsers: 150,
-            newItems: 5,
-            strategies: ['feature-popularity', 'user-segment', 'onboarding-flow']
-          },
-          lastUpdated: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-          status: 'active'
-        }
-      ];
-    };
-
-    const generateAutoMLPipelines = (): AutoMLPipeline[] => {
-      return [
-        {
-          id: 'pipeline-1',
-          name: 'Customer Lifetime Value Prediction',
-          description: 'Automated ML pipeline to predict customer lifetime value',
-          status: 'completed',
-          progress: 100,
-          startTime: new Date(Date.now() - 6 * 60 * 60 * 1000),
-          endTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
-          data: {
-            source: 'customer-analytics-dataset',
-            size: 50000,
-            features: 30,
-            target: 'lifetime_value',
-            problemType: 'regression'
-          },
-          models: [
-            {
-              name: 'XGBoost',
-              algorithm: 'Gradient Boosting',
-              accuracy: 0.89,
-              crossValidation: 0.87,
-              featureImportance: {
-                'monthly_revenue': 0.25,
-                'engagement_score': 0.20,
-                'support_tickets': 0.15,
-                'feature_usage': 0.12,
-                'team_size': 0.10
-              }
-            },
-            {
-              name: 'Random Forest',
-              algorithm: 'Ensemble',
-              accuracy: 0.85,
-              crossValidation: 0.83,
-              featureImportance: {
-                'monthly_revenue': 0.28,
-                'engagement_score': 0.18,
-                'support_tickets': 0.16,
-                'feature_usage': 0.14,
-                'team_size': 0.08
-              }
-            }
-          ],
-          bestModel: {
-            name: 'XGBoost',
-            accuracy: 0.89,
-            parameters: {
-              n_estimators: 200,
-              max_depth: 6,
-              learning_rate: 0.1
-            },
-            deployment: true
-          },
-          evaluation: {
-            trainScore: 0.92,
-            testScore: 0.89,
-            validationScore: 0.87,
-            overfitting: false
-          },
-          artifacts: {
-            model: '/models/clv-prediction.pkl',
-            predictions: '/predictions/clv-results.csv',
-            report: '/reports/clv-analysis.pdf',
-            code: '/code/clv-pipeline.py'
-          }
-        }
-      ];
-    };
-
-    const generateAIEthics = (): AIEthics[] => {
-      return [
-        {
-          id: 'ethics-1',
-          principle: 'Fairness and Non-Discrimination',
-          description: 'Ensure AI models do not discriminate based on protected characteristics',
-          compliance: 'compliant',
-          score: 95,
-          issues: {
-            bias: false,
-            fairness: true,
-            transparency: true,
-            privacy: true,
-            accountability: true
-          },
-          mitigation: ['Regular bias audits', 'Diverse training data', 'Fairness metrics monitoring'],
-          audit: {
-            lastAudit: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-            nextAudit: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-            auditor: 'AI Ethics Board',
-            findings: ['Minor demographic bias in recommendation engine', 'Resolved through data augmentation']
-          },
-          governance: {
-            reviewBoard: ['AI Ethics Officer', 'Data Science Lead', 'Legal Counsel'],
-            approvalProcess: 'Multi-stage review with ethics assessment',
-            monitoring: true,
-            reporting: true
-          }
-        },
-        {
-          id: 'ethics-2',
-          principle: 'Transparency and Explainability',
-          description: 'Provide clear explanations for AI decisions and recommendations',
-          compliance: 'partial',
-          score: 78,
-          issues: {
-            bias: false,
-            fairness: true,
-            transparency: false,
-            privacy: true,
-            accountability: true
-          },
-          mitigation: ['Implement explainable AI techniques', 'Add decision transparency features', 'Create user education materials'],
-          audit: {
-            lastAudit: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000),
-            nextAudit: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
-            auditor: 'Technical Review Board',
-            findings: ['Complex models lack interpretability', 'Need for SHAP/LIME implementation']
-          },
-          governance: {
-            reviewBoard: ['AI Research Lead', 'Product Manager', 'User Experience Lead'],
-            approvalProcess: 'Technical review with explainability requirements',
-            monitoring: true,
-            reporting: true
-          }
-        }
-      ];
-    };
-
-    setMLModels(generateMLModels());
-    setAIInsights(generateAIInsights());
-    setPersonalizationEngines(generatePersonalizationEngines());
-    setNLPModels(generateNLPModels());
-    setRecommendationEngines(generateRecommendationEngines());
-    setAutoMLPipelines(generateAutoMLPipelines());
-    setAIEthics(generateAIEthics());
-  }, []);
-
-  const trainModel = async (modelId: string) => {
-    setIsTrainingModel(true);
-    
-    // Simulate model training
-    await new Promise(resolve => setTimeout(resolve, 12000));
-    
-    // Update model metrics
-    setMLModels(prev => prev.map(model => 
-      model.id === modelId 
-        ? { 
-            ...model, 
-            accuracy: Math.min(model.accuracy + 2, 99),
-            data: {
-              ...model.data,
-              lastTraining: new Date()
+            performance: {
+              trainingAccuracy: 0.96,
+              validationAccuracy: 0.94,
+              testAccuracy: 0.93,
+              trainingLoss: 0.12,
+              validationLoss: 0.18,
+              confusionMatrix: [[85, 8], [7, 147]],
+              rocCurve: [],
+              featureImportance: [
+                { feature: 'usage_frequency', importance: 0.35 },
+                { feature: 'engagement_score', importance: 0.28 },
+                { feature: 'support_tickets', importance: 0.22 },
+                { feature: 'payment_history', importance: 0.15 }
+              ]
             },
             deployment: {
-              ...model.deployment,
-              lastDeployed: new Date()
-            }
+              environment: 'production',
+              endpoint: 'https://api.syncscript.app/ml/churn-predictor',
+              version: 'v2.1.0',
+              replicas: 3,
+              resources: {
+                cpu: '2 cores',
+                memory: '4GB',
+                gpu: 'none'
+              },
+              monitoring: true,
+              autoScaling: true
+            },
+            createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+          },
+          {
+            id: 'model-2',
+            name: 'Revenue Forecasting Model',
+            type: 'timeseries',
+            category: 'predictive',
+            status: 'active',
+            accuracy: 0.87,
+            precision: 0.85,
+            recall: 0.89,
+            f1Score: 0.87,
+            lastTrained: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+            trainingData: 'revenue_time_series_dataset',
+            features: ['seasonal_patterns', 'market_trends', 'customer_growth', 'product_launches'],
+            hyperparameters: {
+              sequenceLength: 12,
+              hiddenUnits: 128,
+              dropout: 0.2,
+              epochs: 200
+            },
+            performance: {
+              trainingAccuracy: 0.89,
+              validationAccuracy: 0.87,
+              testAccuracy: 0.86,
+              trainingLoss: 0.08,
+              validationLoss: 0.12,
+              confusionMatrix: [],
+              rocCurve: [],
+              featureImportance: [
+                { feature: 'customer_growth', importance: 0.42 },
+                { feature: 'seasonal_patterns', importance: 0.31 },
+                { feature: 'market_trends', importance: 0.18 },
+                { feature: 'product_launches', importance: 0.09 }
+              ]
+            },
+            deployment: {
+              environment: 'production',
+              endpoint: 'https://api.syncscript.app/ml/revenue-forecast',
+              version: 'v1.8.2',
+              replicas: 2,
+              resources: {
+                cpu: '4 cores',
+                memory: '8GB',
+                gpu: 'none'
+              },
+              monitoring: true,
+              autoScaling: false
+            },
+            createdAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString()
           }
-        : model
-    ));
-    
-    setIsTrainingModel(false);
-  };
+        ];
 
-  const generateInsights = async () => {
-    setIsGeneratingInsights(true);
-    
-    // Simulate insight generation
-    await new Promise(resolve => setTimeout(resolve, 8000));
-    
-    // Add new insight
-    const newInsight: AIInsight = {
-      id: `insight-${Date.now()}`,
-      title: 'New AI-Powered Optimization Discovered',
-      description: 'Machine learning analysis reveals new patterns for productivity optimization.',
-      type: 'optimization',
-      confidence: 89,
-      impact: 'high',
-      category: 'AI Insights',
-      data: {
-        source: 'ML model analysis',
-        timeframe: 'Last 7 days',
-        affected: 500,
-        potential: 25
-      },
-      actionable: true,
-      recommendations: [
-        'Implement automated optimization',
-        'Update recommendation algorithms',
-        'Create personalized suggestions'
-      ],
-      model: 'Advanced AI Model',
-      generatedAt: new Date(),
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      status: 'new'
-    };
-    
-    setAIInsights(prev => [newInsight, ...prev]);
-    setIsGeneratingInsights(false);
-  };
-
-  const runPipeline = async () => {
-    setIsRunningPipeline(true);
-    
-    // Simulate pipeline execution
-    await new Promise(resolve => setTimeout(resolve, 15000));
-    
-    // Add new pipeline
-    const newPipeline: AutoMLPipeline = {
-      id: `pipeline-${Date.now()}`,
-      name: 'New AutoML Pipeline',
-      description: 'Automated machine learning pipeline for advanced analytics',
-      status: 'completed',
-      progress: 100,
-      startTime: new Date(Date.now() - 4 * 60 * 60 * 1000),
-      endTime: new Date(),
-      data: {
-        source: 'analytics-dataset',
-        size: 25000,
-        features: 20,
-        target: 'performance_metric',
-        problemType: 'regression'
-      },
-      models: [
-        {
-          name: 'Linear Regression',
-          algorithm: 'Linear',
-          accuracy: 0.82,
-          crossValidation: 0.80,
-          featureImportance: {
-            'feature_1': 0.30,
-            'feature_2': 0.25,
-            'feature_3': 0.20
+        // Mock AI insights
+        const mockAIInsights: AIGeneratedInsight[] = [
+          {
+            id: 'insight-1',
+            title: 'Customer Segmentation Insights',
+            category: 'pattern',
+            description: 'AI analysis identified 4 distinct customer segments with different engagement patterns and churn risks.',
+            confidence: 94,
+            impact: 'high',
+            priority: 'high',
+            status: 'new',
+            dataSource: ['customer_behavior', 'usage_analytics', 'transaction_history'],
+            models: ['Customer Churn Predictor', 'Behavior Clustering Model'],
+            recommendations: [
+              'Implement targeted campaigns for high-value segments',
+              'Adjust retention strategies for at-risk segments',
+              'Optimize onboarding for new customer patterns'
+            ],
+            tags: ['segmentation', 'clustering', 'customer_behavior'],
+            createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+          },
+          {
+            id: 'insight-2',
+            title: 'Feature Usage Optimization',
+            category: 'recommendation',
+            description: 'ML analysis suggests that customers who complete onboarding steps 3-5 have 73% higher retention rates.',
+            confidence: 89,
+            impact: 'medium',
+            priority: 'medium',
+            status: 'validating',
+            dataSource: ['feature_usage', 'onboarding_analytics', 'retention_metrics'],
+            models: ['Onboarding Optimization Model'],
+            recommendations: [
+              'Redesign onboarding flow to emphasize steps 3-5',
+              'Add progress indicators and gamification',
+              'Create automated nudges for incomplete steps'
+            ],
+            tags: ['onboarding', 'optimization', 'retention'],
+            createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
           }
-        }
-      ],
-      bestModel: {
-        name: 'Linear Regression',
-        accuracy: 0.82,
-        parameters: {
-          alpha: 0.1,
-          max_iter: 1000
-        },
-        deployment: true
-      },
-      evaluation: {
-        trainScore: 0.85,
-        testScore: 0.82,
-        validationScore: 0.80,
-        overfitting: false
-      },
-      artifacts: {
-        model: '/models/new-model.pkl',
-        predictions: '/predictions/new-results.csv',
-        report: '/reports/new-analysis.pdf',
-        code: '/code/new-pipeline.py'
+        ];
+
+        // Mock NLP
+        const mockNLP: NaturalLanguageProcessing[] = [
+          {
+            id: 'nlp-1',
+            name: 'Customer Sentiment Analysis',
+            type: 'sentiment',
+            status: 'active',
+            language: 'en',
+            model: 'BERT-base-sentiment',
+            accuracy: 0.92,
+            inputText: 'I love the new features but the UI could be better',
+            output: {
+              sentiment: {
+                label: 'mixed',
+                score: 0.68
+              },
+              entities: [],
+              categories: [
+                { category: 'positive_feedback', confidence: 0.76 },
+                { category: 'improvement_request', confidence: 0.82 }
+              ]
+            },
+            processingTime: 0.15,
+            createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+
+        // Mock AI ethics
+        const mockAIEthics: AIEthics[] = [
+          {
+            id: 'ethics-1',
+            principle: 'Algorithmic Fairness',
+            description: 'Ensure ML models do not discriminate based on protected attributes',
+            compliance: true,
+            assessment: {
+              fairness: 95,
+              transparency: 88,
+              privacy: 92,
+              accountability: 90,
+              overall: 91,
+              issues: [],
+              recommendations: [
+                'Continue regular bias testing',
+                'Implement fairness metrics monitoring'
+              ]
+            },
+            actions: [
+              {
+                action: 'Monthly bias audit',
+                status: 'completed',
+                priority: 'high',
+                dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+              }
+            ],
+            lastAudit: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+            createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+
+        // Mock AI monitoring
+        const mockAIMonitoring: AIMonitoring[] = [
+          {
+            id: 'monitor-1',
+            modelId: 'model-1',
+            metric: 'accuracy',
+            value: 0.94,
+            threshold: 0.85,
+            status: 'healthy',
+            trend: 'stable',
+            alerts: [],
+            lastUpdated: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString()
+          },
+          {
+            id: 'monitor-2',
+            modelId: 'model-2',
+            metric: 'response_time',
+            value: 0.45,
+            threshold: 1.0,
+            status: 'healthy',
+            trend: 'down',
+            alerts: [],
+            lastUpdated: new Date(Date.now() - 30 * 60 * 1000).toISOString()
+          }
+        ];
+
+        setMlModels(mockMLModels);
+        setAiInsights(mockAIInsights);
+        setNlp(mockNLP);
+        setAiEthics(mockAIEthics);
+        setAiMonitoring(mockAIMonitoring);
+
+        toast.success('Advanced AI & ML data loaded successfully!');
+      } catch (error) {
+        console.error('Failed to load AI ML data:', error);
+        toast.error('Failed to load advanced AI & ML data');
+      } finally {
+        setIsLoading(false);
       }
     };
-    
-    setAutoMLPipelines(prev => [newPipeline, ...prev]);
-    setIsRunningPipeline(false);
-  };
 
-  const getStatusColor = (status: string): string => {
+    loadAIMLData();
+  }, []);
+
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: Brain },
+    { id: 'models', label: 'Models', icon: Cpu },
+    { id: 'insights', label: 'Insights', icon: Lightbulb },
+    { id: 'nlp', label: 'NLP', icon: MessageCircle },
+    { id: 'personalization', label: 'Personalization', icon: UserSettings },
+    { id: 'automl', label: 'AutoML', icon: Zap },
+    { id: 'ethics', label: 'Ethics', icon: Shield },
+    { id: 'predictions', label: 'Predictions', icon: TrendingUp },
+    { id: 'recommendations', label: 'Recommendations', icon: Target },
+    { id: 'cv', label: 'Computer Vision', icon: Eye },
+    { id: 'training', label: 'Training', icon: GitBranch },
+    { id: 'monitoring', label: 'Monitoring', icon: Activity }
+  ];
+
+  const getStatusColor = (status: string) => {
     switch (status) {
-      case 'deployed': case 'active': case 'completed': return 'bg-green-100 text-green-800';
-      case 'training': case 'running': return 'bg-yellow-100 text-yellow-800';
-      case 'testing': case 'evaluating': return 'bg-blue-100 text-blue-800';
-      case 'retired': case 'deprecated': case 'failed': return 'bg-red-100 text-red-800';
-      case 'paused': return 'bg-orange-100 text-orange-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'active': return 'text-green-600 bg-green-100';
+      case 'training': return 'text-blue-600 bg-blue-100';
+      case 'paused': return 'text-yellow-600 bg-yellow-100';
+      case 'error': return 'text-red-600 bg-red-100';
+      case 'deployed': return 'text-purple-600 bg-purple-100';
+      case 'completed': return 'text-green-600 bg-green-100';
+      case 'failed': return 'text-red-600 bg-red-100';
+      case 'running': return 'text-blue-600 bg-blue-100';
+      case 'healthy': return 'text-green-600 bg-green-100';
+      case 'warning': return 'text-yellow-600 bg-yellow-100';
+      case 'critical': return 'text-red-600 bg-red-100';
+      case 'new': return 'text-blue-600 bg-blue-100';
+      case 'validating': return 'text-yellow-600 bg-yellow-100';
+      case 'implemented': return 'text-green-600 bg-green-100';
+      case 'dismissed': return 'text-gray-600 bg-gray-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
 
-  const getImpactColor = (impact: string): string => {
+  const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'critical': return 'bg-red-100 text-red-800';
-      case 'high': return 'bg-orange-100 text-orange-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'critical': return 'text-red-600 bg-red-100';
+      case 'high': return 'text-orange-600 bg-orange-100';
+      case 'medium': return 'text-yellow-600 bg-yellow-100';
+      case 'low': return 'text-green-600 bg-green-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
   };
 
-  const getTypeColor = (type: string): string => {
-    switch (type) {
-      case 'prediction': return 'bg-purple-100 text-purple-800';
-      case 'recommendation': return 'bg-blue-100 text-blue-800';
-      case 'optimization': return 'bg-green-100 text-green-800';
-      case 'anomaly': return 'bg-red-100 text-red-800';
-      case 'trend': return 'bg-indigo-100 text-indigo-800';
-      default: return 'bg-gray-100 text-gray-800';
+  const getTrendColor = (trend: string) => {
+    switch (trend) {
+      case 'up': return 'text-green-600';
+      case 'down': return 'text-red-600';
+      case 'stable': return 'text-gray-600';
+      default: return 'text-gray-600';
     }
   };
-
-  const getComplianceColor = (compliance: string): string => {
-    switch (compliance) {
-      case 'compliant': return 'bg-green-100 text-green-800';
-      case 'partial': return 'bg-yellow-100 text-yellow-800';
-      case 'non-compliant': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const formatNumber = (num: number): string => {
-    if (num >= 1000000) {
-      return (num / 1000000).toFixed(1) + 'M';
-    } else if (num >= 1000) {
-      return (num / 1000).toFixed(1) + 'K';
-    }
-    return num.toString();
-  };
-
-  const totalModels = mlModels.length;
-  const deployedModels = mlModels.filter(m => m.status === 'deployed').length;
-  const totalInsights = aiInsights.length;
-  const criticalInsights = aiInsights.filter(i => i.impact === 'critical').length;
-  const avgAccuracy = mlModels.reduce((sum, m) => sum + m.accuracy, 0) / mlModels.length || 0;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
+        exit={{ opacity: 0, scale: 0.95 }}
         className="bg-white rounded-2xl shadow-2xl w-full max-w-7xl h-[90vh] overflow-hidden"
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-2xl font-bold">🤖 Advanced AI & Machine Learning</h2>
-              <p className="text-purple-100 mt-1">Advanced AI features and ML models for personalization and automation</p>
+        <div className="bg-gradient-to-r from-purple-500 to-blue-500 text-white p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white bg-opacity-20 rounded-lg">
+                <Brain className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">Advanced AI & ML</h2>
+                <p className="text-purple-100">Machine learning models and AI-powered insights</p>
+              </div>
             </div>
-            <button
-              onClick={onClose}
-              className="text-white hover:text-purple-200 transition-colors"
-            >
-              <X size={24} />
-            </button>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                <span className="text-sm">Active</span>
+              </div>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex space-x-1 mt-6 overflow-x-auto">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? 'bg-white bg-opacity-20 text-white'
+                      : 'text-purple-100 hover:bg-white hover:bg-opacity-10'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
+        {/* Content */}
         <div className="p-6 h-full overflow-y-auto">
-          {/* AI/ML Overview Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-purple-600 font-medium">ML Models</p>
-                  <p className="text-2xl font-bold text-purple-800">{totalModels}</p>
-                  <p className="text-xs text-purple-600">{deployedModels} deployed</p>
-                </div>
-                <Brain className="text-3xl text-purple-600" />
-              </div>
+          {isLoading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
             </div>
-
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-blue-600 font-medium">Avg Accuracy</p>
-                  <p className="text-2xl font-bold text-blue-800">{avgAccuracy.toFixed(1)}%</p>
-                  <p className="text-xs text-blue-600">Model performance</p>
-                </div>
-                <Target className="text-3xl text-blue-600" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-green-600 font-medium">AI Insights</p>
-                  <p className="text-2xl font-bold text-green-800">{totalInsights}</p>
-                  <p className="text-xs text-green-600">{criticalInsights} critical</p>
-                </div>
-                <Sparkles className="text-3xl text-green-600" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-indigo-600 font-medium">NLP Models</p>
-                  <p className="text-2xl font-bold text-indigo-800">{nlpModels.length}</p>
-                  <p className="text-xs text-indigo-600">Active models</p>
-                </div>
-                <MessageCircle className="text-3xl text-indigo-600" />
-              </div>
-            </div>
-          </div>
-
-          {/* AI/ML Actions */}
-          <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 mb-6 border-2 border-purple-200">
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-purple-700 font-medium">
-                🤖 Advanced AI Active - Training models, generating insights, and running AutoML pipelines!
-              </div>
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => trainModel('model-1')}
-                  disabled={isTrainingModel}
-                  className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 disabled:opacity-50 transition-colors"
+          ) : (
+            <AnimatePresence mode="wait">
+              {activeTab === 'overview' && (
+                <motion.div
+                  key="overview"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  {isTrainingModel ? '⏳ Training...' : '🧠 Train Model'}
-                </button>
-                <button
-                  onClick={generateInsights}
-                  disabled={isGeneratingInsights}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-purple-100">ML Models</p>
+                          <p className="text-3xl font-bold">{mlModels.length}</p>
+                        </div>
+                        <Cpu className="w-8 h-8 text-purple-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-blue-100">AI Insights</p>
+                          <p className="text-3xl font-bold">{aiInsights.length}</p>
+                        </div>
+                        <Lightbulb className="w-8 h-8 text-blue-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-green-100">NLP Tasks</p>
+                          <p className="text-3xl font-bold">{nlp.length}</p>
+                        </div>
+                        <MessageCircle className="w-8 h-8 text-green-200" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-orange-100">Monitoring</p>
+                          <p className="text-3xl font-bold">{aiMonitoring.length}</p>
+                        </div>
+                        <Activity className="w-8 h-8 text-orange-200" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold mb-4">Model Performance Overview</h3>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <RechartsBarChart data={mlModels.map(model => ({
+                          name: model.name.split(' ')[0],
+                          accuracy: model.accuracy * 100,
+                          precision: model.precision * 100,
+                          recall: model.recall * 100
+                        }))}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="name" />
+                          <YAxis />
+                          <Tooltip />
+                          <Legend />
+                          <Bar dataKey="accuracy" fill="#8b5cf6" />
+                          <Bar dataKey="precision" fill="#3b82f6" />
+                          <Bar dataKey="recall" fill="#10b981" />
+                        </RechartsBarChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold mb-4">AI Insights by Category</h3>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <RechartsPieChart>
+                          <Pie
+                            data={[
+                              { name: 'Prediction', value: aiInsights.filter(i => i.category === 'prediction').length },
+                              { name: 'Recommendation', value: aiInsights.filter(i => i.category === 'recommendation').length },
+                              { name: 'Anomaly', value: aiInsights.filter(i => i.category === 'anomaly').length },
+                              { name: 'Pattern', value: aiInsights.filter(i => i.category === 'pattern').length },
+                              { name: 'Optimization', value: aiInsights.filter(i => i.category === 'optimization').length }
+                            ]}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            label={({ name, percent }) => `${name} ${((percent as number) * 100).toFixed(0)}%`}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                          >
+                            <Cell fill="#8b5cf6" />
+                            <Cell fill="#3b82f6" />
+                            <Cell fill="#ef4444" />
+                            <Cell fill="#f59e0b" />
+                            <Cell fill="#10b981" />
+                          </Pie>
+                          <Tooltip />
+                        </RechartsPieChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeTab === 'models' && (
+                <motion.div
+                  key="models"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  {isGeneratingInsights ? '⏳ Generating...' : '✨ Generate Insights'}
-                </button>
-                <button
-                  onClick={runPipeline}
-                  disabled={isRunningPipeline}
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50 transition-colors"
+                  {mlModels.map((model) => (
+                    <div key={model.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-purple-100 rounded-lg">
+                            <Cpu className="w-5 h-5 text-purple-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{model.name}</h3>
+                            <p className="text-sm text-gray-600">{model.type} • {model.category}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(model.status)}`}>
+                            {model.status}
+                          </span>
+                          <span className="px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded">
+                            {model.deployment.environment}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-500">Accuracy</span>
+                          <p className="font-semibold">{(model.accuracy * 100).toFixed(1)}%</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Precision</span>
+                          <p className="font-semibold">{(model.precision * 100).toFixed(1)}%</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Recall</span>
+                          <p className="font-semibold">{(model.recall * 100).toFixed(1)}%</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Last Trained</span>
+                          <p className="font-semibold text-sm">
+                            {new Date(model.lastTrained).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <span className="text-sm text-gray-500">Features:</span>
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          {model.features.map((feature, index) => (
+                            <span key={index} className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-sm">
+                              {feature}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <span className="text-sm text-gray-500">Top Feature Importance:</span>
+                        <div className="space-y-2 mt-2">
+                          {model.performance.featureImportance.slice(0, 3).map((feature, index) => (
+                            <div key={index} className="flex items-center justify-between">
+                              <span className="text-sm">{feature.feature}</span>
+                              <div className="flex items-center space-x-2">
+                                <div className="w-20 bg-gray-200 rounded-full h-2">
+                                  <div 
+                                    className="bg-purple-500 h-2 rounded-full" 
+                                    style={{ width: `${feature.importance * 100}%` }}
+                                  ></div>
+                                </div>
+                                <span className="text-sm text-gray-600">{(feature.importance * 100).toFixed(1)}%</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                          View Details
+                        </button>
+                        <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                          Retrain
+                        </button>
+                        <button className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">
+                          Deploy
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+
+              {activeTab === 'insights' && (
+                <motion.div
+                  key="insights"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  {isRunningPipeline ? '⏳ Running...' : '🔄 Run Pipeline'}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* ML Models */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Brain className="mr-2 text-purple-600" />
-              Machine Learning Models ({mlModels.length})
-            </h3>
-            <div className="space-y-4">
-              {mlModels.map((model) => (
-                <div key={model.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{model.name}</h4>
-                      <p className="text-sm text-gray-600">{model.type} • {model.purpose}</p>
-                    </div>
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(model.status)}`}>
-                      {model.status}
-                    </span>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                    <div className="text-sm">
-                      <span className="text-gray-600">Accuracy:</span>
-                      <span className="font-medium text-gray-900 ml-1">{model.accuracy}%</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Precision:</span>
-                      <span className="font-medium text-gray-900 ml-1">{model.performance.precision.toFixed(3)}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Recall:</span>
-                      <span className="font-medium text-gray-900 ml-1">{model.performance.recall.toFixed(3)}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">F1 Score:</span>
-                      <span className="font-medium text-gray-900 ml-1">{model.performance.f1Score.toFixed(3)}</span>
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600">Accuracy</span>
-                      <span className="font-medium text-gray-900">{model.accuracy}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className={`h-2 rounded-full transition-all duration-300 ${
-                          model.accuracy >= 90 ? 'bg-green-500' :
-                          model.accuracy >= 80 ? 'bg-yellow-500' :
-                          model.accuracy >= 70 ? 'bg-orange-500' : 'bg-red-500'
-                        }`}
-                        style={{ width: `${model.accuracy}%` }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                    <div className="text-sm">
-                      <span className="text-gray-600">Training Size:</span>
-                      <span className="font-medium text-gray-900 ml-1">{formatNumber(model.data.trainingSize)}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Features:</span>
-                      <span className="font-medium text-gray-900 ml-1">{model.data.features}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Latency:</span>
-                      <span className="font-medium text-gray-900 ml-1">{model.deployment.latency}ms</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Throughput:</span>
-                      <span className="font-medium text-gray-900 ml-1">{formatNumber(model.deployment.throughput)}/s</span>
-                    </div>
-                  </div>
-
-                  {model.drift.detected && (
-                    <div className="mb-3">
-                      <div className="text-sm text-red-600 mb-2">
-                        <span className="font-medium">⚠️ Model Drift Detected:</span> {model.drift.severity} severity
+                  {aiInsights.map((insight) => (
+                    <div key={insight.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-blue-100 rounded-lg">
+                            <Lightbulb className="w-5 h-5 text-blue-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{insight.title}</h3>
+                            <p className="text-sm text-gray-600">{insight.category}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(insight.status)}`}>
+                            {insight.status}
+                          </span>
+                          <span className={`px-2 py-1 rounded-full text-sm font-medium ${getImpactColor(insight.impact)}`}>
+                            {insight.impact} impact
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">
+                            {insight.confidence}% confidence
+                          </span>
+                        </div>
                       </div>
-                      <div className="space-y-1">
-                        {model.drift.mitigation.map((action, index) => (
-                          <div key={index} className="text-sm text-gray-700">• {action}</div>
-                        ))}
+                      <div className="mb-4">
+                        <span className="text-sm text-gray-500">Description:</span>
+                        <p className="text-gray-700">{insight.description}</p>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Recommendations:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {insight.recommendations.map((recommendation, index) => (
+                            <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
+                              {recommendation}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Models Used:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {insight.models.map((model, index) => (
+                            <span key={index} className="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">
+                              {model}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="space-y-2 mb-4">
+                        <h4 className="font-medium">Tags:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {insight.tags.map((tag, index) => (
+                            <span key={index} className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-sm">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                          Validate
+                        </button>
+                        <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                          Implement
+                        </button>
                       </div>
                     </div>
-                  )}
+                  ))}
+                </motion.div>
+              )}
 
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Version:</span> {model.deployment.version} | 
-                    <span className="font-medium ml-2">Last Training:</span> {model.data.lastTraining.toLocaleDateString()} | 
-                    <span className="font-medium ml-2">Predictions:</span> {formatNumber(model.metrics.predictions)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* AI Insights */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Sparkles className="mr-2 text-green-600" />
-              AI-Generated Insights ({aiInsights.length})
-            </h3>
-            <div className="space-y-4">
-              {aiInsights.map((insight) => (
-                <div key={insight.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{insight.title}</h4>
-                      <p className="text-sm text-gray-600">{insight.description}</p>
-                    </div>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getTypeColor(insight.type)}`}>
-                        {insight.type}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getImpactColor(insight.impact)}`}>
-                        {insight.impact}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                    <div className="text-sm">
-                      <span className="text-gray-600">Confidence:</span>
-                      <span className="font-medium text-gray-900 ml-1">{insight.confidence}%</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Category:</span>
-                      <span className="font-medium text-gray-900 ml-1">{insight.category}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Affected:</span>
-                      <span className="font-medium text-gray-900 ml-1">{insight.data.affected}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Potential:</span>
-                      <span className="font-medium text-green-600 ml-1">{insight.data.potential}%</span>
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <div className="text-sm text-gray-600 mb-2">
-                      <span className="font-medium">Recommendations:</span>
-                    </div>
-                    <ul className="text-sm text-gray-700 list-disc list-inside space-y-1">
-                      {insight.recommendations.slice(0, 2).map((rec, index) => (
-                        <li key={index}>{rec}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Model:</span> {insight.model} | 
-                    <span className="font-medium ml-2">Generated:</span> {insight.generatedAt.toLocaleString()} | 
-                    <span className="font-medium ml-2">Expires:</span> {insight.expiresAt.toLocaleDateString()} | 
-                    <span className="font-medium ml-2">Actionable:</span> {insight.actionable ? '✅' : '❌'}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* NLP Models */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <MessageCircle className="mr-2 text-indigo-600" />
-              Natural Language Processing ({nlpModels.length})
-            </h3>
-            <div className="space-y-4">
-              {nlpModels.map((model) => (
-                <div key={model.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{model.name}</h4>
-                      <p className="text-sm text-gray-600">{model.purpose} • {model.language}</p>
-                    </div>
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(model.status)}`}>
-                      {model.status}
-                    </span>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                    <div className="text-sm">
-                      <span className="text-gray-600">Accuracy:</span>
-                      <span className="font-medium text-gray-900 ml-1">{model.performance.accuracy}%</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">BLEU Score:</span>
-                      <span className="font-medium text-gray-900 ml-1">{model.performance.bleu.toFixed(3)}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Perplexity:</span>
-                      <span className="font-medium text-gray-900 ml-1">{model.performance.perplexity}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Response Time:</span>
-                      <span className="font-medium text-gray-900 ml-1">{model.performance.responseTime}s</span>
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <div className="text-sm text-gray-600 mb-2">
-                      <span className="font-medium">Capabilities:</span>
-                    </div>
-                    <div className="flex flex-wrap gap-1">
-                      {model.capabilities.map((capability, index) => (
-                        <span key={index} className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">
-                          {capability}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <div className="text-sm text-gray-600 mb-2">
-                      <span className="font-medium">Usage:</span>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="text-sm">
-                        <span className="text-gray-600">Requests:</span>
-                        <span className="font-medium text-gray-900 ml-1">{formatNumber(model.usage.requests)}</span>
+              {activeTab === 'monitoring' && (
+                <motion.div
+                  key="monitoring"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {aiMonitoring.map((monitor) => {
+                    const model = mlModels.find(m => m.id === monitor.modelId);
+                    return (
+                      <div key={monitor.id} className="bg-white border border-gray-200 rounded-xl p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center space-x-3">
+                            <div className="p-2 bg-green-100 rounded-lg">
+                              <Activity className="w-5 h-5 text-green-600" />
+                            </div>
+                            <div>
+                              <h3 className="font-semibold">{model?.name || 'Unknown Model'}</h3>
+                              <p className="text-sm text-gray-600">{monitor.metric}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(monitor.status)}`}>
+                              {monitor.status}
+                            </span>
+                            <span className={`px-2 py-1 rounded-full text-sm font-medium ${getTrendColor(monitor.trend)}`}>
+                              {monitor.trend === 'up' ? '↗' : monitor.trend === 'down' ? '↘' : '→'}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                          <div>
+                            <span className="text-sm text-gray-500">Current Value</span>
+                            <p className="font-semibold">{monitor.value.toFixed(3)}</p>
+                          </div>
+                          <div>
+                            <span className="text-sm text-gray-500">Threshold</span>
+                            <p className="font-semibold">{monitor.threshold.toFixed(3)}</p>
+                          </div>
+                          <div>
+                            <span className="text-sm text-gray-500">Last Updated</span>
+                            <p className="font-semibold text-sm">
+                              {new Date(monitor.lastUpdated).toLocaleString()}
+                            </p>
+                          </div>
+                        </div>
+                        {monitor.alerts.length > 0 && (
+                          <div className="mb-4">
+                            <h4 className="font-medium mb-2">Active Alerts:</h4>
+                            <div className="space-y-2">
+                              {monitor.alerts.map((alert, index) => (
+                                <div key={index} className="flex items-center justify-between p-2 bg-red-50 rounded">
+                                  <div>
+                                    <p className="text-sm font-medium">{alert.message}</p>
+                                    <p className="text-xs text-gray-600">{alert.type} • {alert.severity}</p>
+                                  </div>
+                                  <span className="text-xs text-gray-500">
+                                    {new Date(alert.timestamp).toLocaleString()}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <div className="text-sm">
-                        <span className="text-gray-600">Success Rate:</span>
-                        <span className="font-medium text-green-600 ml-1">
-                          {((model.usage.successful / model.usage.requests) * 100).toFixed(1)}%
-                        </span>
-                      </div>
-                      <div className="text-sm">
-                        <span className="text-gray-600">Failed:</span>
-                        <span className="font-medium text-red-600 ml-1">{model.usage.failed}</span>
-                      </div>
-                      <div className="text-sm">
-                        <span className="text-gray-600">Avg Latency:</span>
-                        <span className="font-medium text-gray-900 ml-1">{model.usage.averageLatency}ms</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Dataset:</span> {model.training.dataset} | 
-                    <span className="font-medium ml-2">Epochs:</span> {model.training.epochs} | 
-                    <span className="font-medium ml-2">Last Training:</span> {model.training.lastTraining.toLocaleDateString()}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* AI Ethics */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <Shield className="mr-2 text-red-600" />
-              AI Ethics & Governance
-            </h3>
-            <div className="space-y-4">
-              {aiEthics.map((ethics) => (
-                <div key={ethics.id} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{ethics.principle}</h4>
-                      <p className="text-sm text-gray-600">{ethics.description}</p>
-                    </div>
-                    <div className="flex space-x-2">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getComplianceColor(ethics.compliance)}`}>
-                        {ethics.compliance}
-                      </span>
-                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                        {ethics.score}/100
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="mb-3">
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600">Compliance Score</span>
-                      <span className="font-medium text-gray-900">{ethics.score}/100</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className={`h-2 rounded-full transition-all duration-300 ${
-                          ethics.score >= 90 ? 'bg-green-500' :
-                          ethics.score >= 70 ? 'bg-yellow-500' :
-                          ethics.score >= 50 ? 'bg-orange-500' : 'bg-red-500'
-                        }`}
-                        style={{ width: `${ethics.score}%` }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <div className="text-sm text-gray-600 mb-2">
-                      <span className="font-medium">Issues:</span>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                      {Object.entries(ethics.issues).map(([key, value]) => (
-                        <span key={key} className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                          value ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                        }`}>
-                          {key}: {value ? '✅' : '❌'}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <div className="text-sm text-gray-600 mb-2">
-                      <span className="font-medium">Mitigation:</span>
-                    </div>
-                    <ul className="text-sm text-gray-700 list-disc list-inside space-y-1">
-                      {ethics.mitigation.map((action, index) => (
-                        <li key={index}>{action}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="text-sm text-gray-600">
-                    <span className="font-medium">Last Audit:</span> {ethics.audit.lastAudit.toLocaleDateString()} | 
-                    <span className="font-medium ml-2">Next Audit:</span> {ethics.audit.nextAudit.toLocaleDateString()} | 
-                    <span className="font-medium ml-2">Auditor:</span> {ethics.audit.auditor}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                    );
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
         </div>
       </motion.div>
     </div>
