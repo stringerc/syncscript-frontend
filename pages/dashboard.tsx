@@ -119,6 +119,7 @@ import PartnershipActivation from '../src/components/partnerships/PartnershipAct
 import RevenueScaling from '../src/components/revenue/RevenueScaling';
 import MarketValidation from '../src/components/validation/MarketValidation';
 import AdvancedBusinessIntelligence from '../src/components/analytics/AdvancedBusinessIntelligence';
+import AdvancedAnalyticsBusinessIntelligence from '../src/components/analytics/AdvancedAnalyticsBusinessIntelligence';
 import CustomerSuccessRetentionProgram from '../src/components/customersuccess/CustomerSuccessRetentionProgram';
 import AdvancedAIMachineLearning from '../src/components/ai/AdvancedAIMachineLearning';
 import AdvancedAIFeatures from '../src/components/ai/AdvancedAIFeatures';
@@ -506,7 +507,8 @@ export default function Dashboard() {
   const [showLaunchExecutionMarketEntry, setShowLaunchExecutionMarketEntry] = React.useState(false);
   const [showEnterpriseSalesAcceleration, setShowEnterpriseSalesAcceleration] = React.useState(false);
   const [showPartnershipActivation, setShowPartnershipActivation] = React.useState(false);
-  const [showRevenueScaling, setShowRevenueScaling] = React.useState(false);
+    const [showRevenueScaling, setShowRevenueScaling] = React.useState(false);
+    const [showAdvancedAnalyticsBusinessIntelligence, setShowAdvancedAnalyticsBusinessIntelligence] = React.useState(false);
   const [showMarketValidation, setShowMarketValidation] = React.useState(false);
   const [showAdvancedBusinessIntelligence, setShowAdvancedBusinessIntelligence] = React.useState(false);
   const [showCustomerSuccessRetentionProgram, setShowCustomerSuccessRetentionProgram] = React.useState(false);
@@ -4302,6 +4304,25 @@ export default function Dashboard() {
 
               <button
                 className="btn btn-secondary"
+                onClick={() => setShowAdvancedAnalyticsBusinessIntelligence(true)}
+                title="Advanced Analytics & Business Intelligence"
+                aria-label="Advanced Analytics & Business Intelligence"
+                style={{ 
+                  background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📊 Advanced BI
+              </button>
+
+              <button
+                className="btn btn-secondary"
                 onClick={() => setShowMarketValidation(true)}
                 title="Market Validation"
                 aria-label="Market Validation"
@@ -6123,6 +6144,12 @@ export default function Dashboard() {
       {showRevenueScaling && (
         <RevenueScaling
           onClose={() => setShowRevenueScaling(false)}
+        />
+      )}
+
+      {showAdvancedAnalyticsBusinessIntelligence && (
+        <AdvancedAnalyticsBusinessIntelligence
+          onClose={() => setShowAdvancedAnalyticsBusinessIntelligence(false)}
         />
       )}
 
