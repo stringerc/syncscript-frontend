@@ -11,3 +11,4 @@ echo "Deploying without protection..."
 vercel deploy --prod --yes --confirm
 
 echo "Deployment complete!"
+
