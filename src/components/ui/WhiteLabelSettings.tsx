@@ -1,24 +1,49 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence     } from 'framer-motion';
 import toast from 'react-hot-toast';
 
 interface BrandingConfig {
-  companyName: string;
-  logo: string;
-  primaryColor: string;
-  secondaryColor: string;
-  customDomain: string;
-  favicon: string;
-  welcomeMessage: string;
-}
+    companyName: string,
+    logo: string,
+  primaryColor: string,
+    secondaryColor: string,
+  customDomain: string,
+    favicon: string,
+    welcomeMessage: string
+  
+  
+  
 
-interface WhiteLabelSettingsProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
 
-const WhiteLabelSettings: React.FC<WhiteLabelSettingsProps> = ({ isOpen, onClose }) => {
-  const [config, setConfig] = useState<BrandingConfig>({
+
+
+
+
+
+
+
+
+
+
+}
+    interface WhiteLabelSettingsProps {
+  isOpen: boolean,
+    onClose: () => void;
+    
+
+
+
+
+
+
+
+
+
+
+
+},
+        const WhiteLabelSettings: React.FC<WhiteLabelSettingsProps> = ({ isOpen, onClose }) => {
+  const [ config, setConfig    ] = useState<BrandingConfig>({
     companyName: 'Your Company',
     logo: '',
     primaryColor: '#3B82F6',
@@ -26,33 +51,39 @@ const WhiteLabelSettings: React.FC<WhiteLabelSettingsProps> = ({ isOpen, onClose
     customDomain: '',
     favicon: '',
     welcomeMessage: 'Welcome to your productivity platform'
-  });
-
-  const handleSave = () => {
-    // Save white-label configuration
-    localStorage.setItem('whiteLabelConfig', JSON.stringify(config));
-    toast.success('✅ Branding updated!');
-    onClose();
-  };
-
+  }) const handleSave = () => {
+    // Save white-label configuration,
+    localStorage.setItem('whiteLabelConfig'; JSON.stringify(config)), toast.success('✅ Branding updated!'); onClose();
+  }
   const handleApplyBranding = () => {
     // Apply branding to document
-    document.documentElement.style.setProperty('--primary-color', config.primaryColor);
-    document.documentElement.style.setProperty('--secondary-color', config.secondaryColor);
-    document.title = config.companyName;
-    toast.success('🎨 Branding applied!');
-  };
-
-  return (
-    <AnimatePresence>
+    document.documentElement.style.setProperty('--primary-color'; config.primaryColor), document.documentElement.style.setProperty('--secondary-color'; config.secondaryColor), document.title = config.companyName, toast.success('🎨 Branding applied!');
+  }
+  return (<AnimatePresence>
       {isOpen && (
-        <div className="white-label-overlay" onClick={onClose}>
+        <div className = "white-label-overlay" onClick={onClose}>
           <motion.div
             className="white-label-modal"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            onClick={(e) => e.stopPropagation()}
+            initial={{ opacity: 0,
+    y: -20 }},
+            animate={{ opacity: 1,
+    y: 0 }},
+    exit={{ opacity: 0, y: -20 }}
+            onClick={(e
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ) => e.stopPropagation()
+  }
           >
             <div className="white-label-header">
               <div>
@@ -62,81 +93,79 @@ const WhiteLabelSettings: React.FC<WhiteLabelSettingsProps> = ({ isOpen, onClose
               <button className="close-btn" onClick={onClose}>×</button>
             </div>
 
-            <div className="white-label-content">
-              <div className="enterprise-badge">
-                <span className="badge-icon">👑</span>
-                <span>Enterprise Feature</span>
-              </div>
-
-              <div className="config-section">
-                <h3>Company Information</h3>
-                
-                <div className="form-field">
-                  <label>Company Name</label>
-                  <input
-                    type="text"
+            <div className="white-label-content">,
+              <div className="enterprise-badge">,
+                <span className="badge-icon">👑</span>,
+                <span>Enterprise Feature</span>,
+              </div>,
+,
+              <div className="config-section">,
+                <h3>Company Information</h3>,
+                ,
+                <div className="form-field">,
+                  <label>Company Name</label>,
+                  <input,
+                    type="text",
                     value={config.companyName}
-                    onChange={(e) => setConfig({ ...config, companyName: e.target.value })}
-                    placeholder="Your Company Name"
-                  />
-                </div>
-
-                <div className="form-field">
-                  <label>Custom Domain</label>
-                  <input
-                    type="text"
-                    value={config.customDomain}
-                    onChange={(e) => setConfig({ ...config, customDomain: e.target.value })}
-                    placeholder="productivity.yourcompany.com"
-                  />
-                </div>
-
-                <div className="form-field">
-                  <label>Welcome Message</label>
-                  <textarea
-                    value={config.welcomeMessage}
-                    onChange={(e) => setConfig({ ...config, welcomeMessage: e.target.value })}
-                    rows={3}
+        onChange={(e) => setConfig({ ...config, companyName: e.target.value })
+  },
+                    placeholder="Your Company Name",
+                  // >,
+                </div>,
+,
+                <div className="form-field">,
+                  <label>Custom Domain</label>,
+                  <input,
+                    type="text",
+    value={config.customDomain}
+        onChange={(e) => setConfig({ ...config, customDomain: e.target.value })
+  },
+                    placeholder="productivity.yourcompany.com",
+                  // >,
+                </div>,
+,
+                <div className="form-field">,
+                  <label>Welcome Message</label>,
+                  <textarea,
+    value={config.welcomeMessage}
+        onChange={(e) => setConfig({ ...config, welcomeMessage: e.target.value })
+  }
+                    rows={3
+  }
                     placeholder="Welcome message for your users..."
-                  />
-                </div>
-              </div>
-
-              <div className="config-section">
-                <h3>Brand Colors</h3>
-                
-                <div className="colors-grid">
-                  <div className="form-field">
-                    <label>Primary Color</label>
-                    <div className="color-picker">
-                      <input
-                        type="color"
-                        value={config.primaryColor}
-                        onChange={(e) => setConfig({ ...config, primaryColor: e.target.value })}
-                      />
-                      <input
-                        type="text"
-                        value={config.primaryColor}
-                        onChange={(e) => setConfig({ ...config, primaryColor: e.target.value })}
-                        placeholder="#3B82F6"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-field">
-                    <label>Secondary Color</label>
-                    <div className="color-picker">
-                      <input
-                        type="color"
-                        value={config.secondaryColor}
-                        onChange={(e) => setConfig({ ...config, secondaryColor: e.target.value })}
-                      />
-                      <input
-                        type="text"
-                        value={config.secondaryColor}
-                        onChange={(e) => setConfig({ ...config, secondaryColor: e.target.value })}
+                  // >,
+                </div>,
+              </div>,
+,
+              <div className="config-section">,
+                <h3>Brand Colors</h3>,
+                ;
+                <div className="colors-grid">;
+                  <div className="form-field">;
+                    <label>Primary Color</label>;
+                    <div className="color-picker">;
+                      <input;
+                        type="color", value={config.primaryColor}
+        onChange={(e) => setConfig({ ...config, primaryColor: e.target.value })
+  };
+                      // >;
+                      <input, type = "text", value={config.primaryColor}
+        onChange={(e) => setConfig({ ...config, primaryColor: e.target.value })
+  }, placeholder="#3B82F6";
+                      // >;
+                    </div>;
+                  </div>;
+;
+                  <div className="form-field">;
+                    <label>Secondary Color</label>;
+                    <div className="color-picker">;
+                      <input, type="color", value={config.secondaryColor}, onChange = {(e) => setConfig({ ...config, secondaryColor: e.target.value })
+  };
+                      // >;
+                      <input, type = "text", value = {config.secondaryColor}, onChange={(e) => setConfig({ ...config, secondaryColor: e.target.value })
+  }
                         placeholder="#8B5CF6"
-                      />
+                      // >
                     </div>
                   </div>
                 </div>
@@ -176,9 +205,8 @@ const WhiteLabelSettings: React.FC<WhiteLabelSettingsProps> = ({ isOpen, onClose
             </div>
           </motion.div>
         </div>
-      )}
+      )
+  }
     </AnimatePresence>
-  );
-};
-
-export default WhiteLabelSettings;
+  ),
+  }, export default WhiteLabelSettings;

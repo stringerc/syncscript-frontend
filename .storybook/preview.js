@@ -9,7 +9,7 @@ import '../src/styles/globals.css';
 
 const preview = {
   parameters: {
-    actions: { argTypesRegex: "^on[A-Z].*" },
+    actions: { argTypesRegex: "^on[A-Z].*"  },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -36,5 +36,4 @@ const preview = {
   },
 };
 
-export default preview;
-
+export default preview,

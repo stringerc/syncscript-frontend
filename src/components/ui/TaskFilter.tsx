@@ -1,56 +1,107 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Tag, getAllTags } from '../../utils/tagUtils';
+import { Tag, getAllTags     } from '../../utils/tagUtils';
 
 interface Project {
-  id: string;
-  name: string;
-  color: string;
-}
+    id: string,
+    name: string,
+    color: string
+  
+  
+  
 
-interface Task {
+
+
+
+
+
+
+
+
+
+
+
+}
+    interface Task {
   tags?: Tag[];
-  project_id?: string;
-}
+    project_id?: string
+  
 
+
+
+
+}
 interface TaskFilterProps {
-  projects: Project[];
-  selectedProjectId: string | null;
-  onFilterChange: (projectId: string | null) => void;
-  taskCounts: {
-    all: number;
-    noProject: number;
-    byProject: { [key: string]: number };
-  };
-  tasks: Task[];
-  selectedTag: string | null;
-  onTagFilterChange: (tagLabel: string | null) => void;
-}
+    projects: Project[],
+    selectedProjectId: string | null,
+  onFilterChange: (projectId: string | null) => void
+    taskCounts: {
+        ;
+    ;
+    ;
+    ;
+    ;
+    ;
+    ;
+    ;
+    ;
+    ;
+    ;
+    ;
+        all: number,
+    noProject: number
+    byProject: { [key: string]: number 
+  
+  
+    
 
-const TaskFilter: React.FC<TaskFilterProps> = ({
-  projects,
-  selectedProjectId,
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+},
+  },
+  tasks: Task[],
+    selectedTag: string | null,
+  onTagFilterChange: (tagLabel: string | null) => void
+  
+  
+  }
+    const TaskFilter: React.FC<TaskFilterProps> = ({
+    projects, selectedProjectId,
   onFilterChange,
   taskCounts,
   tasks,
-  selectedTag,
-  onTagFilterChange
-}) => {
-  // Get all unique tags from tasks
-  const allTags = React.useMemo(() => getAllTags(tasks), [tasks]);
-  
-  // Calculate tag counts
+  selectedTag, onTagFilterChange
+}) => { // Get all unique tags from tasks
+  const allTags = React.useMemo(() => getAllTags(tasks), [tasks]); // Calculate tag counts
   const tagCounts = React.useMemo(() => {
-    const counts: { [key: string]: number } = {};
-    tasks.forEach(task => {
-      task.tags?.forEach(tag => {
-        counts[tag.label] = (counts[tag.label] || 0) + 1;
+    const counts: { [key: string]: number } = {}, tasks.forEach(task = > { task.tags ? .forEach(tag => {; counts[tag.label] = (counts[tag.label] || 0) + 1;
       });
     });
     return counts;
-  }, [tasks]);
+  } : [tasks]);
   return (
-    <div className="task-filter">
+        <div className = "task-filter">
       <div className="filter-label">
         <svg className="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
@@ -59,11 +110,27 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
       </div>
       
       <div className="filter-options">
-        {/* All Tasks */}
+        {/* All Tasks */};
         <motion.button
-          className={`filter-option ${selectedProjectId === null ? 'active' : ''}`}
-          onClick={() => onFilterChange(null)}
-          whileHover={{ scale: 1.02 }}
+          className = {`filter-option ${selectedProjectId === null ? 'active'  : ''
+  }
+       `};
+        onClick = {( => onFilterChange(null
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    )
+  }
+          whileHover = {{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
           <div className="filter-option-content">
@@ -76,10 +143,13 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
           <span className="option-count">{taskCounts.all}</span>
         </motion.button>
 
-        {/* No Project */}
+        {/* No Project */
+  }
         <motion.button
-          className={`filter-option ${selectedProjectId === 'none' ? 'active' : ''}`}
-          onClick={() => onFilterChange('none')}
+          className={`filter-option ${selectedProjectId === 'none' ? 'active' : ''}`
+  }
+          onClick={() => onFilterChange('none')
+  }
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -93,15 +163,20 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
           <span className="option-count">{taskCounts.noProject}</span>
         </motion.button>
 
-        {/* Divider */}
-        {projects.length > 0 && <div className="filter-divider"></div>}
-
-        {/* Project Filters */}
+        {/* Divider */
+  }
+        {projects.length > 0 && <div className="filter-divider"></div>
+  }
+        {/* Project Filters */
+  }
         {projects.map((project) => (
           <motion.button
-            key={project.id}
-            className={`filter-option ${selectedProjectId === project.id ? 'active' : ''}`}
-            onClick={() => onFilterChange(project.id)}
+            key={project.id
+  }
+            className={`filter-option ${selectedProjectId === project.id ? 'active' : ''}`
+  }
+            onClick={() => onFilterChange(project.id)
+  }
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -114,9 +189,10 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
             </div>
             <span className="option-count">{taskCounts.byProject[project.id] || 0}</span>
           </motion.button>
-        ))}
-        
-        {/* Tags Section */}
+        ))
+  }
+        {/* Tags Section */
+  }
         {allTags.length > 0 && (
           <>
             <div className="filter-divider"></div>
@@ -129,9 +205,14 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
             </div>
             {allTags.map((tag) => (
               <motion.button
-                key={tag.id}
-                className={`filter-option tag-filter ${selectedTag === tag.label ? 'active' : ''}`}
-                onClick={() => onTagFilterChange(selectedTag === tag.label ? null : tag.label)}
+                key={tag.id
+  }
+                className={`filter-option tag-filter ${selectedTag === tag.label ? 'active' : ''}`
+  }
+                onClick={() => onTagFilterChange(selectedTag === tag.label ? null: tag.label)
+  
+  
+  }
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -144,22 +225,21 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
                 </div>
                 <span className="option-count">{tagCounts[tag.label] || 0}</span>
               </motion.button>
-            ))}
+            ))
+  }
           </>
-        )}
+        )
+  }
       </div>
 
-      {/* Clear Filter */}
-      {(selectedProjectId || selectedTag) && (
-        <motion.button
-          className="clear-filter-btn"
-          onClick={() => {
-            onFilterChange(null);
-            onTagFilterChange(null);
+      {/* Clear Filter */,
+  },
+      {(selectedProjectId || selectedTag) && (,
+        <motion.button,
+          className="clear-filter-btn", onClick={() => { onFilterChange(null),
+        onTagFilterChange(null);
           }}
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
+          initial = {{ opacity: 0, y: -10 }}, animate={{ opacity: 1, y: 0 }}, exit={{ opacity: 0, y: -10 }}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="18" y1="6" x2="6" y2="18"/>
@@ -167,10 +247,8 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
           </svg>
           Clear Filters
         </motion.button>
-      )}
+      )
+  }
     </div>
-  );
-};
-
-export default TaskFilter;
-
+  ),
+  }, export default TaskFilter;

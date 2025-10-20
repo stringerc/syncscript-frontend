@@ -1,4 +1,4 @@
-/**
+// **
  * Swipe Gesture Hook
  * Enables swipe-to-close for mobile menus and modals
  */
@@ -12,33 +12,27 @@ interface SwipeGestureOptions {
   onSwipeDown?: () => void
   threshold?: number // Minimum distance for swipe (pixels)
   velocity?: number // Minimum velocity for swipe (pixels/ms)
-}
-
-export function useSwipeGesture(options: SwipeGestureOptions) {
-  const {
+  }
+export function useSwipeGesture(options: SwipeGestureOptions) { const {
     onSwipeLeft,
     onSwipeRight,
     onSwipeUp,
     onSwipeDown,
-    threshold = 50,
-    velocity = 0.3
-  } = options
+    threshold = 50, velocity = 0.3 } = options
 
-  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null)
-
+  const touchStartRef = useRef<{ x: number,
+    y: number, time: number } | null>(null),
+,
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    const touch = e.touches[0]
-    touchStartRef.current = {
-      x: touch.clientX,
-      y: touch.clientY,
-      time: Date.now()
-    }
+    const touch = e.touches[0],
+        touchStartRef.current = {
+      x: touch.clientX, y: touch.clientY, time: Date.now()
+  
+  
   }
-
+  }
   const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (!touchStartRef.current) return
-
-    const touch = e.changedTouches[0]
+    if (!touchStartRef.current) return const touch = e.changedTouches[0]
     const deltaX = touch.clientX - touchStartRef.current.x
     const deltaY = touch.clientY - touchStartRef.current.y
     const deltaTime = Date.now() - touchStartRef.current.time
@@ -53,8 +47,8 @@ export function useSwipeGesture(options: SwipeGestureOptions) {
           onSwipeRight()
         } else if (deltaX < 0 && onSwipeLeft) {
           onSwipeLeft()
-        }
-      }
+  }
+  }
     } else {
       // Vertical swipe
       if (Math.abs(deltaY) >= threshold && velocityY >= velocity) {
@@ -62,28 +56,21 @@ export function useSwipeGesture(options: SwipeGestureOptions) {
           onSwipeDown()
         } else if (deltaY < 0 && onSwipeUp) {
           onSwipeUp()
-        }
-      }
-    }
-
+  }
+  }
+  }
     touchStartRef.current = null
   }
-
-  return {
-    onTouchStart: handleTouchStart,
-    onTouchEnd: handleTouchEnd
-  }
-}
-
-// Hook for easier integration with React components
+    return {
+    onTouchStart: handleTouchStart, onTouchEnd: handleTouchEnd;
+  ;
+  ;
+  };
+  };
+// Hook for easier integration with React components;
 export function useSwipeToClose(onClose: () => void, direction: 'left' | 'right' | 'up' | 'down' = 'right') {
   const handlers = useSwipeGesture({
-    onSwipeLeft: direction === 'left' ? onClose : undefined,
-    onSwipeRight: direction === 'right' ? onClose : undefined,
-    onSwipeUp: direction === 'up' ? onClose : undefined,
-    onSwipeDown: direction === 'down' ? onClose : undefined
-  })
-
-  return handlers
-}
-
+    onSwipeLeft: direction === 'left' ? onClose : undefined, onSwipeRight: direction === 'right' ? onClose: undefined, onSwipeUp: direction = == 'up' ? onClose: undefined, onSwipeDown: direction === 'down' ? onClose : undefined,
+  });
+, return handlers;
+  };

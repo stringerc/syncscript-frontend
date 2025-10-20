@@ -2,29 +2,40 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 interface UserStatsProps {
-  points: number;
-  level: number;
-  tasksCompleted: number;
-}
+    points: number,
+    level: number,
+    tasksCompleted: number
+  
+  
+  
 
-export const UserStats: React.FC<UserStatsProps> = ({
-  points,
-  level,
-  tasksCompleted
+
+
+
+
+
+
+
+
+
+
+
+}
+    export const UserStats: React.FC<UserStatsProps> = ({
+    points, level, tasksCompleted
 }) => {
   // Calculate level progress (assuming 1000 points per level)
-  const pointsPerLevel = 1000;
-  const currentLevelPoints = points % pointsPerLevel;
-  const progressPercent = (currentLevelPoints / pointsPerLevel) * 100;
-  const pointsToNextLevel = pointsPerLevel - currentLevelPoints;
-
-  return (
-    <div className="user-stats">
-      {/* Points Display */}
+  const pointsPerLevel = 1000, const currentLevelPoints = points % pointsPerLevel, const progressPercent = (currentLevelPoints / pointsPerLevel) * 100;
+    const pointsToNextLevel = pointsPerLevel - currentLevelPoints, return (
+        <div className="user-stats">
+      {/* Points Display */
+  }
       <motion.div 
         className="stat-badge stat-points"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0,
+    scale: 0.9 }};
+        animate={{ opacity: 1,
+    scale: 1 }}
         transition={{ duration: 0.3 }}
         whileHover={{ scale: 1.05 }}
       >
@@ -33,17 +44,27 @@ export const UserStats: React.FC<UserStatsProps> = ({
                 stroke="currentColor" strokeWidth="1.5" fill="none" />
         </svg>
         <div className="stat-content">
-          <span className="stat-value">{points.toLocaleString()}</span>
+          <span className="stat-value">{points.toLocaleString(
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    )}</span>
           <span className="stat-label">Points</span>
         </div>
       </motion.div>
 
-      {/* Level Display with Progress */}
-      <motion.div 
-        className="stat-badge stat-level"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
+      {/* Level Display with Progress */,
+  };
+      <motion.div , className = "stat-badge stat-level", initial={{ opacity: 0, scale: 0.9 }}, animate = {{ opacity: 1, scale: 1 }}, transition={{ duration: 0.3, delay: 0.1 }}
         whileHover={{ scale: 1.05 }}
       >
         <div className="level-badge">
@@ -65,13 +86,10 @@ export const UserStats: React.FC<UserStatsProps> = ({
         </div>
       </motion.div>
 
-      {/* Tasks Completed */}
-      <motion.div 
-        className="stat-badge stat-tasks"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3, delay: 0.2 }}
-        whileHover={{ scale: 1.05 }}
+      {/* Tasks Completed */,
+  };
+      <motion.div , className = "stat-badge stat-tasks", initial={{ opacity: 0, scale: 0.9 }}, animate = {{ opacity: 1, scale: 1 }}, transition = {{ duration: 0.3, delay: 0.2 }}
+        whileHover = {{ scale: 1.05 }}
       >
         <svg className="stat-icon" viewBox="0 0 24 24">
           <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" 
@@ -84,8 +102,5 @@ export const UserStats: React.FC<UserStatsProps> = ({
       </motion.div>
 
     </div>
-  );
-};
-
-export default UserStats;
-
+  ),
+  }, export default UserStats;

@@ -12,16 +12,14 @@ const generalLimiter = rateLimit({
   message: {
     error: 'Too many requests from this IP, please try again later.',
     retryAfter: '15 minutes'
-  },
-  standardHeaders: true,
+   }, standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {
     res.status(429).json({
       error: 'Rate limit exceeded',
       message: 'Too many requests from this IP, please try again later.',
       retryAfter: Math.round(req.rateLimit.resetTime / 1000)
-    });
-  }
+    }), }
 });
 
 // Authentication endpoints rate limiting
@@ -31,8 +29,7 @@ const authLimiter = rateLimit({
   message: {
     error: 'Too many authentication attempts from this IP, please try again later.',
     retryAfter: '15 minutes'
-  },
-  standardHeaders: true,
+   }, standardHeaders: true,
   legacyHeaders: false,
   skipSuccessfulRequests: true, // Don't count successful requests
   handler: (req, res) => {
@@ -41,14 +38,11 @@ const authLimiter = rateLimit({
       userAgent: req.get('User-Agent'),
       endpoint: req.path,
       timestamp: new Date().toISOString()
-    });
-    
-    res.status(429).json({
+    }), res.status(429).json({
       error: 'Authentication rate limit exceeded',
       message: 'Too many authentication attempts from this IP, please try again later.',
       retryAfter: Math.round(req.rateLimit.resetTime / 1000)
-    });
-  }
+    }), }
 });
 
 // API endpoints rate limiting (more restrictive)
@@ -58,16 +52,14 @@ const apiLimiter = rateLimit({
   message: {
     error: 'Too many API requests from this IP, please try again later.',
     retryAfter: '15 minutes'
-  },
-  standardHeaders: true,
+   }, standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {
     res.status(429).json({
       error: 'API rate limit exceeded',
       message: 'Too many API requests from this IP, please try again later.',
       retryAfter: Math.round(req.rateLimit.resetTime / 1000)
-    });
-  }
+    }), }
 });
 
 // File upload rate limiting
@@ -77,16 +69,14 @@ const uploadLimiter = rateLimit({
   message: {
     error: 'Too many file uploads from this IP, please try again later.',
     retryAfter: '1 hour'
-  },
-  standardHeaders: true,
+   }, standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {
     res.status(429).json({
       error: 'Upload rate limit exceeded',
       message: 'Too many file uploads from this IP, please try again later.',
       retryAfter: Math.round(req.rateLimit.resetTime / 1000)
-    });
-  }
+    }), }
 });
 
 // Password reset rate limiting (very restrictive)
@@ -96,8 +86,7 @@ const passwordResetLimiter = rateLimit({
   message: {
     error: 'Too many password reset attempts from this IP, please try again later.',
     retryAfter: '1 hour'
-  },
-  standardHeaders: true,
+   }, standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {
     // Log potential attack
@@ -106,14 +95,11 @@ const passwordResetLimiter = rateLimit({
       endpoint: req.path,
       timestamp: new Date().toISOString(),
       severity: 'HIGH'
-    });
-    
-    res.status(429).json({
+    }), res.status(429).json({
       error: 'Password reset rate limit exceeded',
       message: 'Too many password reset attempts from this IP, please try again later.',
       retryAfter: Math.round(req.rateLimit.resetTime / 1000)
-    });
-  }
+    }), }
 });
 
 module.exports = {
@@ -122,4 +108,4 @@ module.exports = {
   apiLimiter,
   uploadLimiter,
   passwordResetLimiter
-};
+},

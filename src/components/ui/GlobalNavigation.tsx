@@ -1,168 +1,219 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useSwipeToClose } from '@/hooks/useSwipeGesture'
-
-const FEATURE_CATEGORIES = [
-  {
-    title: 'Core Features',
-    features: [
-      { href: '/dashboard', label: 'Dashboard', icon: '📊', description: 'Your productivity command center' },
-      { href: '/features', label: 'Feature Hub', icon: '🌟', description: 'Explore all available features' },
-      { href: '/ai-breakdown', label: 'AI Task Breakdown', icon: '🤖', description: 'Intelligent task analysis' },
-      { href: '/smart-schedule', label: 'Smart Scheduling', icon: '🧠', description: 'AI-powered time optimization' }
-    ]
-  },
-  {
-    title: 'Productivity Tools',
-    features: [
-      { href: '/calendar-sync', label: 'Calendar Sync', icon: '📅', description: 'Seamless calendar integration' },
-      { href: '/voice-commands', label: 'Voice Commands', icon: '🎤', description: 'Hands-free productivity' },
-      { href: '/analytics', label: 'Analytics', icon: '📈', description: 'Deep insights and reports' },
-      { href: '/team-collaboration', label: 'Team Collaboration', icon: '👥', description: 'Work together seamlessly' }
-    ]
-  },
-  {
-    title: 'Advanced Features',
-    features: [
-      { href: '/gamification', label: 'Gamification', icon: '🎮', description: 'Make work fun and engaging' },
-      { href: '/productivity', label: 'Productivity', icon: '⚡', description: 'Boost your efficiency' },
-      { href: '/team', label: 'Team Workspace', icon: '🤝', description: 'Collaborative workspace' },
-      { href: '/integrations', label: 'Integrations', icon: '🔌', description: 'Connect your favorite tools' }
-    ]
-  },
-  {
-    title: 'Settings & More',
-    features: [
-      { href: '/settings', label: 'Settings', icon: '⚙️', description: 'Customize your experience' },
-      { href: '/polish', label: 'Polish Showcase', icon: '✨', description: 'See our beautiful design', badge: 'New' }
-    ]
-  }
-]
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { 
+  Menu, 
+  X, 
+  Home, 
+  Calendar, 
+  Users, 
+  Settings,
+  LogOut,
+  User,
+  Bell,
+  Search
+} from 'lucide-react';
 
 export default function GlobalNavigation() {
-  const [isOpen, setIsOpen] = useState(false)
-  const swipeHandlers = useSwipeToClose(() => setIsOpen(false), 'right')
+  const [isOpen, setIsOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
-  const handleToggle = () => {
-    setIsOpen(!isOpen)
-  }
+  const navigationItems = [
+    { name: 'Dashboard', href: '/dashboard', icon: Home },
+    { name: 'Calendar', href: '/calendar', icon: Calendar },
+    { name: 'Team', href: '/team', icon: Users },
+    { name: 'Settings', href: '/settings', icon: Settings },
+  ];
+
+  const handleLogout = () => {
+    console.log('Logging out...');
+    // Implement logout logic here
+  };
 
   return (
-    <>
-      {/* Stunning Spaceship Button */}
-      <button
-        onClick={handleToggle}
-        className="spaceship-nav-fab"
-        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-      >
-        {isOpen ? '✕' : '🚀'}
-      </button>
+    <nav className="bg-white shadow-lg border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link href="/" className="flex items-center">
+              <div className="bg-blue-600 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold text-lg">
+                S
+              </div>
+              <span className="ml-2 text-xl font-bold text-gray-900">
+                SyncScript
+              </span>
+            </Link>
+          </div>
 
-      {/* Stunning Navigation Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            {/* Enhanced Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
-              className="modal-backdrop"
-              style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: 'rgba(0, 0, 0, 0.6)',
-                backdropFilter: 'blur(8px)',
-                zIndex: 9998
-              }}
-              aria-hidden="true"
-            />
+          {/* Desktop Navigation */}
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-baseline space-x-4">
+              {navigationItems.map((item) => {
+                const IconComponent = item.icon;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-2"
+                  >
+                    <IconComponent className="h-4 w-4" />
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
 
-            {/* Stunning Menu Panel */}
-            <motion.div
-              initial={{ x: -400, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -400, opacity: 0 }}
-              transition={{ 
-                type: "spring", 
-                damping: 25, 
-                stiffness: 200,
-                mass: 0.8
-              }}
-              className="global-navigation"
-              role="dialog"
-              aria-label="Navigation menu"
-              {...swipeHandlers}
+          {/* Right side - Search, Notifications, User Menu */}
+          <div className="hidden md:flex items-center space-x-4">
+            {/* Search */}
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-4 w-4 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search..."
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            {/* Notifications */}
+            <button className="relative p-2 text-gray-700 hover:text-blue-600 transition-colors duration-200">
+              <Bell className="h-5 w-5" />
+              <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+            </button>
+
+            {/* User Menu */}
+            <div className="relative">
+              <button
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
+                  <User className="h-5 w-5 text-gray-600" />
+                </div>
+              </button>
+
+              {userMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200"
+                >
+                  <Link
+                    href="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setUserMenuOpen(false)}
+                  >
+                    Your Profile
+                  </Link>
+                  <Link
+                    href="/settings"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setUserMenuOpen(false)}
+                  >
+                    Settings
+                  </Link>
+                  <div className="border-t border-gray-100"></div>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign out
+                  </button>
+                </motion.div>
+              )}
+            </div>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600"
             >
-              <div className="menu-content-container">
-                {/* Stunning Header */}
-                <div className="menu-header">
-                  <h2 className="menu-title">Feature Command Center</h2>
-                  <p className="menu-subtitle">Your gateway to productivity</p>
-                </div>
+              {isOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
 
-                {/* Feature Categories */}
-                <div className="feature-categories">
-                  {FEATURE_CATEGORIES.map((category, categoryIndex) => (
-                    <div key={category.title} className="category-section">
-                      <h3 className="category-title">{category.title}</h3>
-                      <div className="features-grid">
-                        {category.features.map((feature, featureIndex) => (
-                          <motion.div
-                            key={feature.href}
-                            initial={{ x: 50, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            transition={{ 
-                              delay: (categoryIndex * 0.1) + (featureIndex * 0.05),
-                              duration: 0.4,
-                              ease: "easeOut"
-                            }}
-                          >
-                            <Link
-                              href={feature.href}
-                              onClick={() => setIsOpen(false)}
-                              className="feature-item"
-                            >
-                              <div className="feature-icon">
-                                {feature.icon}
-                              </div>
-                              <div className="feature-content">
-                                <div className="feature-name">{feature.label}</div>
-                                <div className="feature-description">{feature.description}</div>
-                              </div>
-                              <div className="feature-arrow">→</div>
-                              {feature.badge && (
-                                <div className="feature-badge">{feature.badge}</div>
-                              )}
-                            </Link>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+      {/* Mobile Navigation */}
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          className="md:hidden border-t border-gray-200"
+        >
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            {navigationItems.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 flex items-center gap-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <IconComponent className="h-5 w-5" />
+                  {item.name}
+                </Link>
+              );
+            })}
+          </div>
 
-                {/* Achievement Section */}
-                <div className="achievement-section">
-                  <div className="achievement-icon">🎉</div>
-                  <div className="achievement-title">100 Features Ready!</div>
-                  <div className="achievement-description">
-                    Experience the most comprehensive productivity platform ever built
-                  </div>
+          {/* Mobile User Section */}
+          <div className="pt-4 pb-3 border-t border-gray-200">
+            <div className="flex items-center px-3">
+              <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
+                <User className="h-6 w-6 text-gray-600" />
+              </div>
+              <div className="ml-3">
+                <div className="text-base font-medium text-gray-800">
+                  User Name
+                </div>
+                <div className="text-sm font-medium text-gray-500">
+                  user@example.com
                 </div>
               </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-    </>
-  )
+            </div>
+            <div className="mt-3 px-2 space-y-1">
+              <Link
+                href="/profile"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600"
+                onClick={() => setIsOpen(false)}
+              >
+                Your Profile
+              </Link>
+              <Link
+                href="/settings"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600"
+                onClick={() => setIsOpen(false)}
+              >
+                Settings
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 flex items-center gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                Sign out
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </nav>
+  );
 }
-

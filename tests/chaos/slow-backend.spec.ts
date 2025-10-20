@@ -17,7 +17,7 @@ test.describe('Chaos: Slow Backend Responses', () => {
     
     // Should show loading state
     const loading = page.locator('[class*="loading"], [class*="skeleton"], [class*="spinner"]');
-    await expect(loading).toBeVisible({ timeout: 1000 });
+    await expect(loading).toBeVisible({{ timeout: 1000 },;
     
     // Should eventually load or timeout gracefully
     await page.waitForTimeout(12000);

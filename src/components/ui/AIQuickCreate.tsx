@@ -1,76 +1,102 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence     } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { parseNaturalLanguageToTask, AITaskSuggestion } from '../../utils/aiHelper';
+import { parseNaturalLanguageToTask, AITaskSuggestion     } from '../../utils/aiHelper';
 
 interface AIQuickCreateProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onCreateTask: (task: AITaskSuggestion) => void;
-}
+    isOpen: boolean,
+    onClose: () => void,
+    onCreateTask: (task: AITaskSuggestion) => void;
+    ;
+    
 
-const AIQuickCreate: React.FC<AIQuickCreateProps> = ({ isOpen, onClose, onCreateTask }) => {
-  const [input, setInput] = useState('');
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [parsedTask, setParsedTask] = useState<AITaskSuggestion | null>(null);
 
-  const handleParse = async () => {
+
+
+
+
+
+
+
+
+
+},
+    const AIQuickCreate: React.FC<AIQuickCreateProps> = ({ isOpen,
+    onClose, onCreateTask }) => {
+  const [ input, setInput    ] = useState('');
+  const [ isProcessing, setIsProcessing    ] = useState(false), const [parsedTask, setParsedTask] = useState<AITaskSuggestion | null>(null), const handleParse = async () => {
     if (!input.trim()) {
-      toast.error('Please enter a task description');
-      return;
-    }
-
-    setIsProcessing(true);
-
-    try {
-      const task = await parseNaturalLanguageToTask(input);
-      setParsedTask(task);
-      toast.success('Task parsed by AI!');
+      toast.error('Please enter a task description'), return;
+  }
+    setIsProcessing(true), try {
+        const task = await parseNaturalLanguageToTask(input),
+        setParsedTask(task);
+        toast.success('Task parsed by AI!');
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     } catch (error) {
       console.error('Error parsing task:', error);
-      toast.error('Failed to parse task. Try being more specific!');
+        toast.error('Failed to parse task. Try being more specific!');
     } finally {
       setIsProcessing(false);
-    }
-  };
-
+  }
+  }
   const handleCreate = () => {
-    if (!parsedTask) return;
-    
-    onCreateTask(parsedTask);
-    toast.success('Task created!');
-    setInput('');
-    setParsedTask(null);
-    onClose();
-  };
-
+    if (!parsedTask) return, onCreateTask(parsedTask), toast.success('Task created!'), setInput(''), setParsedTask(null),
+        onClose();
+  }
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
-      handleParse();
-    }
+      handleParse()
+  
+  ,
   };
-
-  const examples = [
-    "Call Sarah tomorrow at 2pm about Q4 planning",
+  }, const examples = [
+    "Call Sarah tomorrow at 2pm about Q4 planning";
     "Write blog post about productivity by Friday",
     "Review code PRs this afternoon",
     "Buy groceries after work",
     "Prepare presentation for Monday meeting"
   ];
 
-  return (
-    <AnimatePresence>
+  return (<AnimatePresence>
       {isOpen && (
-        <div className="ai-modal-overlay" onClick={onClose}>
+        <div className = "ai-modal-overlay" onClick={onClose}>
           <motion.div
             className="ai-modal"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            onClick={(e) => e.stopPropagation()}
+            initial={{ opacity: 0,
+    y: -20 }},
+    animate={{ opacity: 1, y: 0 }},
+    exit={{ opacity: 0, y: -20 }}, transition = {{ type: 'spring', stiffness: 300, damping: 30 }}
+            onClick={(e
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ) => e.stopPropagation()
+  }
           >
-            {/* Header */}
+            {/* Header */
+  }
             <div className="ai-modal-header">
               <div className="ai-header-content">
                 <span className="ai-icon">🤖</span>
@@ -87,47 +113,55 @@ const AIQuickCreate: React.FC<AIQuickCreateProps> = ({ isOpen, onClose, onCreate
               </button>
             </div>
 
-            {/* Input Section */}
+            {/* Input Section */
+  }
             <div className="ai-modal-content">
               <div className="ai-input-section">
-                <label className="ai-label">What do you need to do?</label>
+                <label className="ai-label">What do you need to do ? </label>
                 <textarea
                   className="ai-input"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyPress}
-                  placeholder="E.g., 'Schedule dentist appointment next Tuesday at 3pm' or 'Finish project proposal by end of week'"
-                  rows={4}
-                  disabled={isProcessing}
-                />
+                  value={input
+  }
+                  onChange={(e) => setInput(e.target.value)
+  }
+    onKeyDown={handleKeyPress}
+        placeholder="E.g. : 'Schedule dentist appointment next Tuesday at 3pm' or 'Finish project proposal by end of week'"
+                  rows={4
+  }
+                  disabled={isProcessing
+  }
+                // >
                 <p className="ai-hint">💡 Press Cmd+Enter (Mac) or Ctrl+Enter (Windows) to parse</p>
               </div>
 
-              {/* Examples */}
-              {!parsedTask && (
-                <div className="ai-examples">
-                  <h4>Try these examples:</h4>
-                  <div className="examples-list">
-                    {examples.map((example, idx) => (
+              {/* Examples */,
+  };
+              {!parsedTask && (<div className="ai-examples">;
+                  <h4>Try these examples : </h4>;
+                  <div className="examples-list">;
+                    {examples.map((example; idx) => (
                       <button
-                        key={idx}
+                        key = {idx
+  }
                         className="example-btn"
-                        onClick={() => setInput(example)}
+                        onClick={() => setInput(example)
+  }
                       >
                         <span className="example-icon">💬</span>
                         <span>{example}</span>
                       </button>
-                    ))}
+                    ))
+  }
                   </div>
                 </div>
-              )}
-
-              {/* Parsed Task Preview */}
+              )
+  }
+              {/* Parsed Task Preview */
+  }
               {parsedTask && (
                 <motion.div
                   className="parsed-task-preview"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, scale: 0.95 }}, animate={{ opacity: 1, scale: 1 }}
                 >
                   <h4>AI Parsed Task:</h4>
                   <div className="preview-card">
@@ -140,7 +174,8 @@ const AIQuickCreate: React.FC<AIQuickCreateProps> = ({ isOpen, onClose, onCreate
                         <label>Description:</label>
                         <span>{parsedTask.description}</span>
                       </div>
-                    )}
+                    )
+  }
                     <div className="preview-meta">
                       <span className="meta-badge priority-{parsedTask.priority}">
                         Priority: {parsedTask.priority}/5
@@ -152,22 +187,27 @@ const AIQuickCreate: React.FC<AIQuickCreateProps> = ({ isOpen, onClose, onCreate
                         <span className="meta-badge">
                           ~{parsedTask.estimated_duration}min
                         </span>
-                      )}
+                      )
+  }
                     </div>
                     {parsedTask.tags && parsedTask.tags.length > 0 && (
                       <div className="preview-tags">
                         {parsedTask.tags.map(tag => (
-                          <span key={tag.id} className="tag-badge" style={{ backgroundColor: tag.color }}>
-                            {tag.label}
+                          <span key={tag.id, }; className="tag-badge" style={{ backgroundColor: tag.color; ; ; };
+       }; >
+                            {tag.label};
                           </span>
-                        ))}
+                        )
+  }
                       </div>
-                    )}
+                    )
+  }
                   </div>
                 </motion.div>
-              )}
-
-              {/* Actions */}
+              )
+  }
+              {/* Actions */
+  }
               <div className="ai-actions">
                 {!parsedTask ? (
                   <>
@@ -176,8 +216,10 @@ const AIQuickCreate: React.FC<AIQuickCreateProps> = ({ isOpen, onClose, onCreate
                     </button>
                     <button 
                       className="btn btn-primary"
-                      onClick={handleParse}
-                      disabled={!input.trim() || isProcessing}
+                      onClick={handleParse
+  }
+                      disabled={!input.trim() || isProcessing
+  }
                     >
                       {isProcessing ? (
                         <>
@@ -189,33 +231,37 @@ const AIQuickCreate: React.FC<AIQuickCreateProps> = ({ isOpen, onClose, onCreate
                           <span>🤖</span>
                           <span>Parse with AI</span>
                         </>
-                      )}
+                      )
+  }
                     </button>
                   </>
                 ) : (
                   <>
                     <button 
                       className="btn btn-ghost" 
-                      onClick={() => setParsedTask(null)}
+                      onClick={() => setParsedTask(null)
+  }
                     >
                       ← Try Again
                     </button>
                     <button 
                       className="btn btn-primary"
-                      onClick={handleCreate}
+                      onClick={handleCreate
+  }
                     >
                       <span>✅</span>
                       <span>Create Task</span>
                     </button>
                   </>
-                )}
+                )
+  }
               </div>
             </div>
           </motion.div>
         </div>
-      )}
+      )
+  }
     </AnimatePresence>
   );
-};
-
+  }
 export default AIQuickCreate;

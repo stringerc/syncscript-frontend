@@ -1,229 +1,287 @@
-/**
- * Calendar View Page
- * Visual calendar with tasks, events, and time blocking
- */
+"use client";
 
-'use client'
-
-import { useState } from 'react'
-import Link from 'next/link'
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus, Clock, Zap } from 'lucide-react'
+import React, { useState } from 'react';
+import Head from 'next/head';
+import { motion } from 'framer-motion';
+import { 
+  Calendar, 
+  Plus, 
+  Filter, 
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Users
+} from 'lucide-react';
 
 export default function CalendarPage() {
-  const [currentDate, setCurrentDate] = useState(new Date())
-  
-  const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ]
-  
-  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  
-  const getDaysInMonth = (date: Date) => {
-    const year = date.getFullYear()
-    const month = date.getMonth()
-    const firstDay = new Date(year, month, 1)
-    const lastDay = new Date(year, month + 1, 0)
-    const daysInMonth = lastDay.getDate()
-    const startingDayOfWeek = firstDay.getDay()
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [view, setView] = useState<'month' | 'week' | 'day'>('month');
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  const events = [
+    {
+      id: 1,
+      title: 'Team Standup',
+      time: '09:00',
+      duration: 30,
+      type: 'meeting',
+      attendees: 8
+    },
+    {
+      id: 2,
+      title: 'Project Review',
+      time: '14:00',
+      duration: 60,
+      type: 'meeting',
+      attendees: 5
+    },
+    {
+      id: 3,
+      title: 'Deep Work Session',
+      time: '10:00',
+      duration: 120,
+      type: 'focus',
+      attendees: 1
+    }
+  ];
+
+  const getEventColor = (type: string) => {
+    switch (type) {
+      case 'meeting': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'focus': return 'bg-green-100 text-green-800 border-green-200';
+      case 'deadline': return 'bg-red-100 text-red-800 border-red-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
+  const getEventIcon = (type: string) => {
+    switch (type) {
+      case 'meeting': return <Users className="h-4 w-4" />;
+      case 'focus': return <Clock className="h-4 w-4" />;
+      case 'deadline': return <Calendar className="h-4 w-4" />;
+      default: return <Calendar className="h-4 w-4" />;
+    }
+  };
+
+  const generateCalendarDays = () => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startDate = new Date(firstDay);
+    startDate.setDate(startDate.getDate() - firstDay.getDay());
     
-    return { daysInMonth, startingDayOfWeek }
-  }
-  
-  const { daysInMonth, startingDayOfWeek } = getDaysInMonth(currentDate)
-  
-  const previousMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))
-  }
-  
-  const nextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))
-  }
-  
-  const isToday = (day: number) => {
-    const today = new Date()
-    return (
-      day === today.getDate() &&
-      currentDate.getMonth() === today.getMonth() &&
-      currentDate.getFullYear() === today.getFullYear()
-    )
-  }
+    const days = [];
+    const currentDay = new Date(startDate);
+    
+    for (let i = 0; i < 42; i++) {
+      days.push(new Date(currentDay));
+      currentDay.setDate(currentDay.getDate() + 1);
+    }
+    
+    return days;
+  };
+
+  const isToday = (date: Date) => {
+    const today = new Date();
+    return date.toDateString() === today.toDateString();
+  };
+
+  const isCurrentMonth = (date: Date) => {
+    return date.getMonth() === currentDate.getMonth();
+  };
+
+  const navigateMonth = (direction: 'prev' | 'next') => {
+    const newDate = new Date(currentDate);
+    newDate.setMonth(newDate.getMonth() + (direction === 'next' ? 1 : -1));
+    setCurrentDate(newDate);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <CalendarIcon className="w-8 h-8 text-blue-600" />
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Calendar View
-              </h1>
-            </div>
-            <Link
-              href="/dashboard"
-              className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-2"
-            >
-              ← Back to Dashboard
-            </Link>
-          </div>
-          <p className="text-gray-600 dark:text-gray-400">
-            Visual calendar with time blocking, task scheduling, and energy optimization
-          </p>
-        </div>
+    <>
+      <Head>
+        <title>Calendar - SyncScript</title>
+        <meta name="description" content="Manage your schedule and stay organized with SyncScript's intelligent calendar." />
+      </Head>
 
-        {/* Calendar Controls */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
-          <div className="flex items-center justify-between mb-6">
-            <button
-              onClick={previousMonth}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition"
-              aria-label="Previous month"
-            >
-              <ChevronLeft className="w-6 h-6 text-gray-600 dark:text-gray-400" />
-            </button>
-            
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-              {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-            </h2>
-            
-            <button
-              onClick={nextMonth}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition"
-              aria-label="Next month"
-            >
-              <ChevronRight className="w-6 h-6 text-gray-600 dark:text-gray-400" />
-            </button>
-          </div>
-
-          {/* Day Headers */}
-          <div className="grid grid-cols-7 gap-2 mb-2">
-            {daysOfWeek.map(day => (
-              <div
-                key={day}
-                className="text-center text-sm font-semibold text-gray-600 dark:text-gray-400 py-2"
-              >
-                {day}
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                  Calendar
+                </h1>
+                <p className="text-gray-600">
+                  Manage your schedule and stay organized
+                </p>
               </div>
-            ))}
-          </div>
+              <div className="flex items-center space-x-4">
+                <button className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center">
+                  <Filter className="h-5 w-5 mr-2" />
+                  Filter
+                </button>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center">
+                  <Plus className="h-5 w-5 mr-2" />
+                  Add Event
+                </button>
+              </div>
+            </div>
 
-          {/* Calendar Grid */}
-          <div className="grid grid-cols-7 gap-2">
-            {/* Empty cells for days before month starts */}
-            {Array.from({ length: startingDayOfWeek }).map((_, i) => (
-              <div key={`empty-${i}`} className="aspect-square" />
-            ))}
-            
-            {/* Days of month */}
-            {Array.from({ length: daysInMonth }).map((_, i) => {
-              const day = i + 1
-              const today = isToday(day)
-              
-              return (
-                <div
-                  key={day}
-                  className={`aspect-square border rounded-lg p-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer transition ${
-                    today
-                      ? 'bg-blue-600 text-white border-blue-600'
-                      : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600'
+            {/* View Toggle */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setView('month')}
+                  className={`px-4 py-2 rounded-lg transition-colors ${
+                    view === 'month' 
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-white text-gray-700 hover:bg-gray-50'
                   }`}
                 >
-                  <div className={`text-sm font-semibold mb-1 ${today ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+                  Month
+                </button>
+                <button
+                  onClick={() => setView('week')}
+                  className={`px-4 py-2 rounded-lg transition-colors ${
+                    view === 'week' 
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-white text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  Week
+                </button>
+                <button
+                  onClick={() => setView('day')}
+                  className={`px-4 py-2 rounded-lg transition-colors ${
+                    view === 'day' 
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-white text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  Day
+                </button>
+              </div>
+
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => navigateMonth('prev')}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <h2 className="text-xl font-semibold text-gray-900">
+                  {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                </h2>
+                <button
+                  onClick={() => navigateMonth('next')}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Calendar Grid */}
+            <div className="bg-white rounded-lg shadow">
+              {/* Day Headers */}
+              <div className="grid grid-cols-7 border-b border-gray-200">
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                  <div key={day} className="p-4 text-center font-semibold text-gray-700">
                     {day}
                   </div>
-                  
-                  {/* Sample tasks (you can connect to real data later) */}
-                  {day === new Date().getDate() && (
-                    <div className="space-y-1">
-                      <div className="text-xs bg-green-500 text-white rounded px-1 py-0.5 truncate">
-                        ⚡ Task 1
-                      </div>
-                      <div className="text-xs bg-orange-500 text-white rounded px-1 py-0.5 truncate">
-                        🔥 Task 2
-                      </div>
+                ))}
+              </div>
+
+              {/* Calendar Days */}
+              <div className="grid grid-cols-7">
+                {generateCalendarDays().map((date, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3, delay: index * 0.01 }}
+                    className={`min-h-[120px] p-2 border-r border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors ${
+                      !isCurrentMonth(date) ? 'bg-gray-50 text-gray-400' : ''
+                    } ${isToday(date) ? 'bg-blue-50' : ''}`}
+                    onClick={() => setSelectedDate(date)}
+                  >
+                    <div className={`text-sm font-medium mb-2 ${
+                      isToday(date) ? 'text-blue-600' : 'text-gray-900'
+                    }`}>
+                      {date.getDate()}
                     </div>
-                  )}
+                    
+                    {/* Events */}
+                    <div className="space-y-1">
+                      {events.slice(0, 2).map((event) => (
+                        <div
+                          key={event.id}
+                          className={`text-xs p-1 rounded border ${getEventColor(event.type)} flex items-center`}
+                        >
+                          <span className="mr-1">{getEventIcon(event.type)}</span>
+                          <span className="truncate">{event.title}</span>
+                        </div>
+                      ))}
+                      {events.length > 2 && (
+                        <div className="text-xs text-gray-500">
+                          +{events.length - 2} more
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            {/* Selected Date Events */}
+            {selectedDate && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-6 bg-white rounded-lg shadow p-6"
+              >
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Events for {selectedDate.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}
+                </h3>
+                <div className="space-y-3">
+                  {events.map((event) => (
+                    <div
+                      key={event.id}
+                      className={`p-3 rounded-lg border ${getEventColor(event.type)}`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <span className="mr-2">{getEventIcon(event.type)}</span>
+                          <span className="font-medium">{event.title}</span>
+                        </div>
+                        <div className="text-sm">
+                          {event.time} ({event.duration}min)
+                        </div>
+                      </div>
+                      {event.attendees > 1 && (
+                        <div className="text-sm mt-1 opacity-75">
+                          {event.attendees} attendees
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                <Plus className="w-6 h-6 text-blue-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Add Event
-              </h3>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Schedule tasks and events on your calendar
-            </p>
-            <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-              Create Event
-            </button>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                <Clock className="w-6 h-6 text-purple-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Time Blocking
-              </h3>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Block time for focused work sessions
-            </p>
-            <button className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition">
-              Block Time
-            </button>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
-                <Zap className="w-6 h-6 text-green-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Energy Planning
-              </h3>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Schedule tasks based on your energy patterns
-            </p>
-            <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
-              Optimize Schedule
-            </button>
-          </div>
-        </div>
-
-        {/* Coming Soon Notice */}
-        <div className="mt-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-6 text-center">
-          <h3 className="text-xl font-bold mb-2">🚀 Full Calendar Features Coming Soon!</h3>
-          <p className="text-blue-100 mb-4">
-            Advanced calendar integration, drag-and-drop scheduling, and Google Calendar sync
-            are being refined for the best possible experience.
-          </p>
-          <p className="text-sm text-blue-200">
-            In the meantime, use the dashboard for task management with energy-based recommendations!
-          </p>
-          <Link
-            href="/dashboard"
-            className="inline-block mt-4 bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
-          >
-            Go to Dashboard
-          </Link>
+              </motion.div>
+            )}
+          </motion.div>
         </div>
       </div>
-    </div>
-  )
+    </>
+  );
 }
-

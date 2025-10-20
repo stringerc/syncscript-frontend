@@ -3,5 +3,4 @@ import { VoiceCommandsCenter } from '@/utils/lazyComponents'
 
 export default function VoiceCommandsPage() {
   return <VoiceCommandsCenter />
-}
-
+  }

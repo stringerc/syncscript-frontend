@@ -1,336 +1,247 @@
-/**
- * About Page
- * Learn about SyncScript's mission and story
- */
+"use client";
 
-import Link from 'next/link'
-import { Rocket, Target, Users, Heart, Zap, TrendingUp } from 'lucide-react'
-
-export const metadata = {
-  title: 'About SyncScript - Our Mission & Story',
-  description: 'Learn about SyncScript and our mission to help you work with your energy, not against it',
-}
+import React from 'react';
+import Navigation from '../../components/Navigation';
+import Head from 'next/head';
+import { motion } from 'framer-motion';
+import { 
+  Users, 
+  Target, 
+  Zap, 
+  Heart,
+  Award,
+  Globe
+} from 'lucide-react';
 
 export default function AboutPage() {
+  const teamMembers = [
+    {
+      name: 'Sarah Johnson',
+      role: 'CEO & Co-Founder',
+      bio: 'Passionate about productivity and helping teams achieve their goals.',
+      image: '/team/sarah.jpg'
+    },
+    {
+      name: 'Michael Chen',
+      role: 'CTO & Co-Founder',
+      bio: 'Full-stack engineer with expertise in AI and machine learning.',
+      image: '/team/michael.jpg'
+    },
+    {
+      name: 'Emily Rodriguez',
+      role: 'Head of Design',
+      bio: 'Creating beautiful and intuitive user experiences.',
+      image: '/team/emily.jpg'
+    }
+  ];
+
+  const values = [
+    {
+      icon: <Users className="h-6 w-6" />,
+      title: 'Collaboration',
+      description: 'We believe in the power of teamwork and shared goals.'
+    },
+    {
+      icon: <Target className="h-6 w-6" />,
+      title: 'Focus',
+      description: 'Helping you stay focused on what matters most.'
+    },
+    {
+      icon: <Zap className="h-6 w-6" />,
+      title: 'Innovation',
+      description: 'Continuously pushing the boundaries of productivity.'
+    },
+    {
+      icon: <Heart className="h-6 w-6" />,
+      title: 'Passion',
+      description: 'We love what we do and it shows in our work.'
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Hero */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <Rocket className="w-16 h-16 mx-auto mb-6" />
-          <h1 className="text-5xl font-bold mb-6">
-            Work With Your Energy,<br />Not Against It
-          </h1>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-            SyncScript is a productivity platform that recognizes your energy fluctuates—and helps 
-            you match tasks to your current state for maximum effectiveness.
-          </p>
-        </div>
-      </div>
+    <>
+      <Head>
+        <title>About Us - SyncScript</title>
+        <meta name="description" content="Learn about SyncScript's mission to revolutionize productivity and help teams achieve their goals." />
+      </Head>
 
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        {/* Mission */}
-        <section className="mb-16">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <Target className="w-8 h-8 text-blue-600" />
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Our Mission</h2>
-            </div>
-            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              Traditional productivity tools treat you like a machine—expecting consistent output 
-              regardless of how you feel. But humans don&apos;t work that way.
-            </p>
-            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              We built SyncScript on a simple truth: <strong>your energy varies throughout the day, 
-              week, and month.</strong> When you&apos;re at peak energy, you can tackle complex problems. 
-              When you&apos;re drained, even simple tasks feel overwhelming.
-            </p>
-            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-              Our mission is to help you <strong>work smarter by working with your natural rhythms</strong>—not 
-              fighting against them.
-            </p>
+      <div className="min-h-screen bg-white">
+        {/* Hero Section */}
+        <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center"
+            >
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                About
+                <span className="text-blue-600"> SyncScript</span>
+              </h1>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                We're on a mission to revolutionize productivity and help teams 
+                achieve their goals through intelligent task management and collaboration.
+              </p>
+            </motion.div>
           </div>
         </section>
 
-        {/* The Problem */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">The Problem We Solve</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-lg p-6">
-              <h3 className="text-xl font-semibold text-red-900 dark:text-red-100 mb-3">
-                ❌ Traditional Approach
-              </h3>
-              <ul className="space-y-2 text-red-800 dark:text-red-200">
-                <li>• Same expectations every day</li>
-                <li>• No consideration for energy</li>
-                <li>• Feel guilty when &quot;not productive&quot;</li>
-                <li>• Burnout from pushing through</li>
-                <li>• One-size-fits-all prioritization</li>
-              </ul>
-            </div>
-            <div className="bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 rounded-lg p-6">
-              <h3 className="text-xl font-semibold text-green-900 dark:text-green-100 mb-3">
-                ✅ SyncScript Way
-              </h3>
-              <ul className="space-y-2 text-green-800 dark:text-green-200">
-                <li>• Adapts to your energy levels</li>
-                <li>• Suggests what matches your state</li>
-                <li>• Work with your biology</li>
-                <li>• Sustainable productivity</li>
-                <li>• Personalized recommendations</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* Core Principles */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-            Our Core Principles
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
-              <div className="p-4 bg-blue-100 dark:bg-blue-900/30 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-blue-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                Energy-First
-              </h3>
-              <p className="text-gray-700 dark:text-gray-300">
-                Match tasks to your current energy level for natural, sustainable productivity.
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
-              <div className="p-4 bg-purple-100 dark:bg-purple-900/30 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Heart className="w-8 h-8 text-purple-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                Human-Centered
-              </h3>
-              <p className="text-gray-700 dark:text-gray-300">
-                Designed for real humans with fluctuating energy, not productivity machines.
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
-              <div className="p-4 bg-green-100 dark:bg-green-900/30 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                Evidence-Based
-              </h3>
-              <p className="text-gray-700 dark:text-gray-300">
-                Built on research about circadian rhythms, cognitive load, and energy management.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Features Highlight */}
-        <section className="mb-16">
-          <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-8">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
-              What Makes Us Different
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">⚡</div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Energy Matching</h3>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    AI suggests tasks that fit your current energy level
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">💰</div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Budget Intelligence</h3>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Track costs and savings goals alongside your tasks
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">🧠</div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">AI Explainability</h3>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Understand why tasks are suggested—full transparency
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">📊</div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Pattern Learning</h3>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Learns your peak times and habits over time
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">🎮</div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Gamification</h3>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Earn points, unlock achievements, build streaks
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">🔐</div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Privacy-First</h3>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Your data is yours—never sold, always encrypted
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* The Story */}
-        <section className="mb-16">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Our Story</h2>
-            <div className="prose prose-lg dark:prose-invert max-w-none">
-              <p>
-                SyncScript was born from a simple frustration: why do productivity tools expect 
-                us to be robots?
-              </p>
-              <p>
-                After years of fighting through low-energy days and feeling guilty about it, 
-                we realized the problem wasn&apos;t us—it was the tools. They were designed for 
-                consistent output, not human reality.
-              </p>
-              <p>
-                So we built something different. A tool that asks: <em>&quot;What&apos;s your energy 
-                like right now?&quot;</em> and then suggests tasks that actually fit.
-              </p>
-              <p>
-                What started as a personal project has grown into a platform used by thousands 
-                who are tired of fighting their biology and ready to work <em>with</em> it instead.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Values */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
-            Our Values
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                🌟 Sustainability Over Speed
-              </h3>
-              <p className="text-gray-700 dark:text-gray-300">
-                We believe in sustainable productivity that doesn&apos;t lead to burnout.
-              </p>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                🔍 Transparency Always
-              </h3>
-              <p className="text-gray-700 dark:text-gray-300">
-                AI recommendations explained, pricing clear, data practices open.
-              </p>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                👥 Users First
-              </h3>
-              <p className="text-gray-700 dark:text-gray-300">
-                Your feedback shapes our roadmap. We build what you need, not what&apos;s trendy.
-              </p>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                🔒 Privacy Non-Negotiable
-              </h3>
-              <p className="text-gray-700 dark:text-gray-300">
-                Your data is yours. We never sell it, we always encrypt it, you control it.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Stats */}
-        <section className="mb-16">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-8">
-            <h2 className="text-3xl font-bold mb-8 text-center">SyncScript by the Numbers</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              <div>
-                <div className="text-4xl font-bold mb-2">100+</div>
-                <div className="text-blue-100">Features</div>
-              </div>
-              <div>
-                <div className="text-4xl font-bold mb-2">0</div>
-                <div className="text-blue-100">Security Vulnerabilities</div>
-              </div>
-              <div>
-                <div className="text-4xl font-bold mb-2">99.9%</div>
-                <div className="text-blue-100">Uptime</div>
-              </div>
-              <div>
-                <div className="text-4xl font-bold mb-2">24/7</div>
-                <div className="text-blue-100">Support</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Join Us */}
-        <section className="mb-16">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 text-center">
-            <Users className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              Join the Movement
-            </h2>
-            <p className="text-lg text-gray-700 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
-              Thousands of people are already working smarter by syncing with their energy. 
-              Ready to join them?
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
-                href="/api/auth/login"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold
-                         py-3 px-8 rounded-lg hover:from-blue-700 hover:to-purple-700 transition"
+        {/* Mission Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
               >
-                Start Free Trial
-              </Link>
-              <Link 
-                href="/features"
-                className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white font-semibold
-                         py-3 px-8 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+                <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Mission</h2>
+                <p className="text-lg text-gray-600 mb-6">
+                  At SyncScript, we believe that productivity shouldn't be complicated. 
+                  Our platform combines the power of AI with intuitive design to help 
+                  individuals and teams work smarter, not harder.
+                </p>
+                <p className="text-lg text-gray-600">
+                  We're building the future of productivity tools, where artificial 
+                  intelligence meets human creativity to unlock unprecedented levels 
+                  of efficiency and collaboration.
+                </p>
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+                className="bg-gray-100 rounded-lg p-8"
               >
-                Explore Features
-              </Link>
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-blue-600 mb-2">50K+</div>
+                    <div className="text-gray-600">Active Users</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-blue-600 mb-2">1M+</div>
+                    <div className="text-gray-600">Tasks Completed</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-blue-600 mb-2">99.9%</div>
+                    <div className="text-gray-600">Uptime</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-blue-600 mb-2">4.9★</div>
+                    <div className="text-gray-600">User Rating</div>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* Footer Links */}
-        <div className="text-center text-sm text-gray-600 dark:text-gray-400">
-          <Link href="/contact" className="hover:text-blue-600 dark:hover:text-blue-400 mx-3">
-            Contact Us
-          </Link>
-          <Link href="/help" className="hover:text-blue-600 dark:hover:text-blue-400 mx-3">
-            Help Center
-          </Link>
-          <Link href="/privacy" className="hover:text-blue-600 dark:hover:text-blue-400 mx-3">
-            Privacy Policy
-          </Link>
-          <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 mx-3">
-            Back to Home
-          </Link>
-        </div>
+        {/* Values Section */}
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Values</h2>
+              <p className="text-xl text-gray-600">
+                The principles that guide everything we do
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {values.map((value, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="text-center p-6 bg-white rounded-lg shadow-sm"
+                >
+                  <div className="text-blue-600 mb-4 flex justify-center">
+                    {value.icon}
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                    {value.title}
+                  </h3>
+                  <p className="text-gray-600">
+                    {value.description}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Team Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
+              <p className="text-xl text-gray-600">
+                The passionate people behind SyncScript
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {teamMembers.map((member, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="text-center"
+                >
+                  <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <span className="text-2xl font-bold text-gray-600">
+                      {member.name.split(' ').map(n => n[0]).join('')}
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {member.name}
+                  </h3>
+                  <p className="text-blue-600 font-medium mb-3">
+                    {member.role}
+                  </p>
+                  <p className="text-gray-600">
+                    {member.bio}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-20 bg-blue-600">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <h2 className="text-3xl font-bold text-white mb-4">
+                Ready to Transform Your Productivity?
+              </h2>
+              <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                Join thousands of users who have already revolutionized their workflow with SyncScript.
+              </p>
+              <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                Get Started Today
+              </button>
+            </motion.div>
+          </div>
+        </section>
       </div>
-    </div>
-  )
+    </>
+  );
 }
-

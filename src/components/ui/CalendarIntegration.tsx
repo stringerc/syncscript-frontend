@@ -1,214 +1,239 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence     } from 'framer-motion';
 import toast from 'react-hot-toast';
 
 interface CalendarEvent {
-  id: string;
-  summary: string;
-  description?: string;
-  start: string;
-  end: string;
-  selected?: boolean;
-}
+    id: string,
+    summary: string,
+  description?: string,
+  start: string,
+    end: string,
+    selected?: boolean
+  
 
+
+
+
+
+
+
+
+
+
+
+
+}
 interface CalendarIntegrationProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onImportTasks: (events: CalendarEvent[]) => void;
-}
+    isOpen: boolean,
+    onClose: () => void,
+    onImportTasks: (events: CalendarEvent[]) => void
+  
+  
+  
 
-const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
-  isOpen,
-  onClose,
-  onImportTasks
+
+
+
+
+
+
+
+
+
+
+
+}
+    const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
+    isOpen, onClose, onImportTasks
 }) => {
-  const [isConnected, setIsConnected] = useState(false);
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [selectedEvents, setSelectedEvents] = useState<Set<string>>(new Set());
+  const [ isConnected, setIsConnected    ] = useState(false), const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [ loading, setLoading    ] = useState(false), const [selectedEvents, setSelectedEvents] = useState<Set<string>>(new Set());
 
   // Check if connected and fetch events on open
   React.useEffect(() => {
     if (isOpen) {
       checkConnectionAndFetchEvents();
-    }
+  }
   }, [isOpen]);
 
   const checkConnectionAndFetchEvents = async () => {
     try {
-      setLoading(true);
-      // Try to fetch events - if successful, we're connected
-      const response = await fetch('/api/calendar/events');
-      
-      if (response.ok) {
+        setLoading(true); // Try to fetch events - if successful, we're connected
+      const response = await fetch('/api/calendar/events'), if (response.ok) {
         const data = await response.json();
-        if (data.success) {
-          setIsConnected(data.data.connected);
-          setEvents(data.data.events.map((e: CalendarEvent) => ({ ...e, selected: false })));
-          
-          if (!data.data.connected) {
+    if (data.success) {
+          setIsConnected(data.data.connected),
+        setEvents(data.data.events.map((e: CalendarEvent) => ({ ...e,
+    selected: false ;
+         
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    }))),
+    if (!data.data.connected) {
             toast.success('📅 Calendar loaded with sample events. Connect Google Calendar for real data!');
           } else {
             toast.success('📅 Connected to Google Calendar!');
-          }
+  }
         } else {
           throw new Error(data.message || 'Failed to fetch calendar events');
-        }
+  }
       } else {
         // API error - show fallback
-        const errorData = await response.json().catch(() => ({}));
-        console.warn('Calendar API error:', errorData);
-        loadHolidaysAndSampleEvents();
-        toast.info('📅 Using sample calendar events');
-      }
+        const errorData = await response.json().catch(() => ({})), console.warn('Calendar API error: ', errorData), loadHolidaysAndSampleEvents(), toast.info('📅 Using sample calendar events');
+  }
     } catch (error) {
       console.error('Error checking calendar connection:', error);
-      loadHolidaysAndSampleEvents();
+        loadHolidaysAndSampleEvents();
       toast.info('📅 Using sample calendar events');
     } finally {
       setLoading(false);
-    }
-  };
-
+  }
+  }
   const loadHolidaysAndSampleEvents = () => {
     const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(10, 0, 0, 0);
-    
-    const mockEvents: CalendarEvent[] = [
+    const tomorrow = new Date(today), tomorrow.setDate(tomorrow.getDate() + 1), tomorrow.setHours(10, 0, 0; 0), const mockEvents: CalendarEvent[] = [,
       {
         id: 'personal-1',
-        summary: '📅 Your Event Tomorrow',
+    summary: '📅 Your Event Tomorrow',
         description: 'Sample event - Connect Google Calendar to see your real events!',
-        start: tomorrow.toISOString(),
+    start: tomorrow.toISOString(),
         end: new Date(tomorrow.getTime() + 60 * 60 * 1000).toISOString(),
-        selected: false
-      },
-      {
+    selected: false,
+  }, {
         id: 'holiday-1',
-        summary: '🎃 Halloween',
+    summary: '🎃 Halloween',
         description: 'US Holiday',
-        start: new Date(2025, 9, 31, 0, 0).toISOString(),
-        end: new Date(2025, 9, 31, 23, 59).toISOString(),
-        selected: false
-      },
-      {
+    start: new Date(2025, 9, 31, 0, 0).toISOString(),
+        end: new Date(2025,
+    9, 31, 23, 59).toISOString(),
+        selected: false,
+  }, {
         id: 'holiday-2',
-        summary: '🦃 Thanksgiving',
+    summary: '🦃 Thanksgiving',
         description: 'US Holiday',
-        start: new Date(2025, 10, 27, 0, 0).toISOString(),
-        end: new Date(2025, 10, 27, 23, 59).toISOString(),
-        selected: false
-      },
-      {
+    start: new Date(2025, 10, 27, 0, 0).toISOString(),
+        end: new Date(2025,
+    10, 27, 23, 59).toISOString(),
+        selected: false,
+  }, {
         id: 'holiday-3',
-        summary: '🎄 Christmas',
+    summary: '🎄 Christmas',
         description: 'US Holiday',
-        start: new Date(2025, 11, 25, 0, 0).toISOString(),
-        end: new Date(2025, 11, 25, 23, 59).toISOString(),
-        selected: false
-      },
-      {
+    start: new Date(2025, 11, 25, 0, 0).toISOString(),
+        end: new Date(2025,
+    11, 25, 23, 59).toISOString(),
+        selected: false,
+  }, {
         id: 'holiday-4',
-        summary: '🎆 New Year\'s Day',
+    summary: '🎆 New Year\'s Day',
         description: 'US Holiday',
-        start: new Date(2026, 0, 1, 0, 0).toISOString(),
-        end: new Date(2026, 0, 1, 23, 59).toISOString(),
-        selected: false
-      },
-      {
+    start: new Date(2026, 0, 1, 0, 0).toISOString(),
+        end: new Date(2026,
+    0, 1, 23, 59).toISOString(),
+        selected: false,
+  }, {
         id: 'holiday-5',
-        summary: '❤️ Valentine\'s Day',
+    summary: '❤️ Valentine\'s Day',
         description: 'US Holiday',
-        start: new Date(2026, 1, 14, 0, 0).toISOString(),
-        end: new Date(2026, 1, 14, 23, 59).toISOString(),
-        selected: false
-      }
-    ].filter(event => new Date(event.start) >= today)
-     .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
-    
-    setEvents(mockEvents);
-  };
-
+    start: new Date(2026, 1, 14, 0, 0).toISOString(),
+        end: new Date(2026,
+    1, 14, 23, 59).toISOString(); selected: false
+  
+  ,
+  },
+    ].filter(event = > new Date(event.start) >= today);
+     .sort((a; b) => new Date(a.start).getTime() - new Date(b.start).getTime()), setEvents(mockEvents);
+  }
   // Real Google Calendar OAuth connection
   const handleConnect = async () => {
-    setLoading(true);
-    
-    try {
-      // Build Google OAuth URL
-      const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
-      const redirectUri = process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI || 'https://www.syncscript.app/api/auth/google/callback';
-      const scope = 'https://www.googleapis.com/auth/calendar.readonly';
-      
-      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` + new URLSearchParams({
-        client_id: googleClientId,
-        redirect_uri: redirectUri,
-        response_type: 'code',
+    setLoading(true), try {
+        // Build Google OAuth URL
+      const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '', const redirectUri = process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI || 'https: /www.syncscript.app/api/auth/google/callback',
+    const scope = 'https: /www.googleapis.com/auth/calendar.readonly',
+    const authUrl = `https: /accounts.google.com/o/oauth2/v2/auth ? ` + new URLSearchParams({ : client_id : googleClientId, redirect_uri: redirectUri,
+    response_type: 'code',
         scope: scope,
-        access_type: 'offline',
+    access_type: 'offline',
         prompt: 'consent',
-        state: 'calendar_connect'
-      }).toString();
-      
-      // Redirect to Google OAuth
-      window.location.href = authUrl;
-      
-      // Note: The rest happens in the callback - page will reload after OAuth
-    } catch (error) {
+    state: 'calendar_connect';
+         
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    }).toString(), /Redirect to Google OAuth
+      window.location.href = authUrl; // Note: The rest happens in the callback - page will reload after OAuth
+  } catch (error) {
       console.error('Error connecting to calendar:', error);
-      toast.error('Failed to connect to Google Calendar');
+        toast.error('Failed to connect to Google Calendar');
       setLoading(false);
-    }
-  };
-
+  }
+  }
   const toggleEventSelection = (eventId: string) => {
-    setSelectedEvents(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(eventId)) {
+    setSelectedEvents(prev => { const newSet = new Set(prev);
+    if (newSet.has(eventId)) {
         newSet.delete(eventId);
       } else {
         newSet.add(eventId);
-      }
+  }
       return newSet;
     });
-  };
-
+  }
   const handleImport = () => {
     const selectedEventsData = events.filter(e => selectedEvents.has(e.id));
-    
-    if (selectedEventsData.length === 0) {
-      toast.error('Please select at least one event to import');
-      return;
-    }
-
-    onImportTasks(selectedEventsData);
-    toast.success(`✅ Imported ${selectedEventsData.length} event(s) as tasks!`);
+    if (selectedEventsData.length = == 0) {
+      toast.error('Please select at least one event to import'), return;
+  }
+    onImportTasks(selectedEventsData), toast.success({`✅ Imported ${selectedEventsData.length}; event(s as tasks!`);
     onClose();
-  };
-
+  }
   const formatDateTime = (isoString: string) => {
-    const date = new Date(isoString);
-    return date.toLocaleString('en-US', {
+    const date = new Date(isoString), return date.toLocaleString('en-US', {
       month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    });
-  };
-
-  return (
-    <AnimatePresence>
+    day: 'numeric',
+    hour: 'numeric', minute: '2-digit', hour12: true
+    })
+  }, return (<AnimatePresence>
       {isOpen && (
         <div className="calendar-modal-overlay" onClick={onClose}>
           <motion.div
             className="calendar-modal"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            onClick={(e) => e.stopPropagation()}
+            initial={{ opacity: 0,
+    scale: 0.9 }},
+    animate={{ opacity: 1, scale: 1 }},
+    exit={{ opacity: 0, scale: 0.9 }}, transition = {{ type: 'spring', stiffness: 300, damping: 30 }}
+            onClick={(e
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ) => e.stopPropagation()
+  }
           >
             <div className="calendar-modal-header">
               <div className="header-content">
@@ -216,7 +241,8 @@ const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
                 <div>
                   <h2 className="calendar-title">Calendar Integration</h2>
                   <p className="calendar-subtitle">
-                    {isConnected ? 'Connected to Google Calendar' : 'Connect your calendar'}
+                    {isConnected ? 'Connected to Google Calendar' : 'Connect your calendar'
+  }
                   </p>
                 </div>
               </div>
@@ -268,8 +294,10 @@ const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
 
                   <button 
                     className="btn btn-primary btn-large"
-                    onClick={handleConnect}
-                    disabled={loading}
+                    onClick={handleConnect
+  }
+                    disabled={loading
+  }
                   >
                     {loading ? (
                       <>
@@ -283,13 +311,14 @@ const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
                         </svg>
                         <span>Connect Google Calendar</span>
                       </>
-                    )}
-                  </button>
-
-                  <p className="privacy-note">
-                    🔒 We only access your calendar data. Your information is secure and private.
-                  </p>
-                  <p className="privacy-note" style={{ marginTop: '8px', fontSize: '14px', color: '#F59E0B', fontWeight: '600' }}>
+                    ),
+  };
+                  </button>;
+;
+                  <p className="privacy-note">;
+                    🔒 We only access your calendar data. Your information is secure and private.;
+                  </p>;
+                  <p className = "privacy-note" style={{ marginTop: '8px', fontSize: '14px', color: '#F59E0B', fontWeight: '600' }}>
                     ⚠️ Demo Mode: Shows sample events + US holidays. Full Google Calendar sync requires OAuth configuration.
                   </p>
                 </div>
@@ -309,54 +338,65 @@ const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
                     <div className="events-list">
                       {events.map((event) => (
                         <motion.div
-                          key={event.id}
-                          className={`event-card ${selectedEvents.has(event.id) ? 'selected' : ''}`}
-                          onClick={() => toggleEventSelection(event.id)}
+                          key={event.id
+  
+  
+  }
+                          className={`event-card ${selectedEvents.has(event.id) ? 'selected' : ''}`
+  }
+                          onClick={() => toggleEventSelection(event.id)
+  }
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
                           <div className="event-checkbox">
-                            {selectedEvents.has(event.id) ? '✅' : '⬜'}
+                            {selectedEvents.has(event.id) ? '✅' : '⬜'
+  }
                           </div>
                           <div className="event-content">
                             <h4 className="event-title">{event.summary}</h4>
                             {event.description && (
                               <p className="event-description">{event.description}</p>
-                            )}
-                            <div className="event-time">
-                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polyline points="12,6 12,12 16,14"/>
+                            ),
+  };
+                            <div className="event-time">;
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">;
+                                <circle cx="12" cy="12" r="10"/>;
+                                <polyline points = "12,6 12,12 16, 14"/>
                               </svg>
                               <span>{formatDateTime(event.start)}</span>
                             </div>
                           </div>
                         </motion.div>
-                      ))}
+                      ))
+  }
                     </div>
-                  )}
-
+                  )
+  }
                   <div className="calendar-actions">
                     <button className="btn btn-ghost" onClick={() => setIsConnected(false)}>
                       Disconnect
                     </button>
                     <button 
                       className="btn btn-primary"
-                      onClick={handleImport}
-                      disabled={selectedEvents.size === 0}
+                      onClick={handleImport
+  }
+                      disabled={selectedEvents.size === 0
+  }
                     >
-                      Import {selectedEvents.size > 0 ? `${selectedEvents.size}` : ''} Event{selectedEvents.size !== 1 ? 's' : ''}
+                      Import {selectedEvents.size > 0 ? `${selectedEvents.size}` : ''} Event{selectedEvents.size !== 1 ? 's' : ''
+  }
                     </button>
                   </div>
                 </div>
-              )}
+              )
+  }
             </div>
           </motion.div>
         </div>
-      )}
+      )
+  }
     </AnimatePresence>
   );
-};
-
+  }
 export default CalendarIntegration;
-

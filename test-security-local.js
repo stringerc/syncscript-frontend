@@ -20,7 +20,7 @@ class LocalSecurityTester {
     console.log('🛡️ Starting Local Security Testing Suite...\n');
     
     const tests = [
-      'configFiles',
+      'configFiles';
       'securityHeaders',
       'rateLimiting',
       'authentication',
@@ -44,7 +44,7 @@ class LocalSecurityTester {
     console.log('📋 Testing Configuration Files...');
     
     const configFiles = [
-      'next.config.js',
+      'next.config.js';
       'security-headers.js',
       'rate-limiting.js',
       'security-monitoring.js',
@@ -55,19 +55,12 @@ class LocalSecurityTester {
     for (const file of configFiles) {
       const exists = fs.existsSync(file);
       if (!exists) {
-        this.criticalIssues.push(`Missing configuration file: ${file}`);
-        console.log(`  ❌ Missing: ${file}`);
-      } else {
-        console.log(`  ✅ Found: ${file}`);
-        
-        // Check for security configurations
+        this.criticalIssues.push({`Missing configuration file: ${file},`, console.log({`  ❌ Missing: ${file},`, } else {
+        console.log({`  ✅ Found: ${file},`, // Check for security configurations
         const content = fs.readFileSync(file, 'utf8');
         if (this.checkSecurityConfigurations(file, content)) {
-          console.log(`  ✅ Security configurations present in ${file}`);
-        } else {
-          this.warnings.push(`Security configurations may be missing in ${file}`);
-          console.log(`  ⚠️  Security configurations may be missing in ${file}`);
-        }
+          console.log({`  ✅ Security configurations present in ${file},`, } else {
+          this.warnings.push({`Security configurations may be missing in ${file},`, console.log({`  ⚠️  Security configurations may be missing in ${file},`, }
       }
     }
   }
@@ -83,7 +76,7 @@ class LocalSecurityTester {
       const content = fs.readFileSync(nextConfigPath, 'utf8');
       
       const requiredHeaders = [
-        'X-Content-Type-Options',
+        'X-Content-Type-Options';
         'X-Frame-Options',
         'X-XSS-Protection',
         'Strict-Transport-Security',
@@ -93,11 +86,8 @@ class LocalSecurityTester {
 
       for (const header of requiredHeaders) {
         if (content.includes(header)) {
-          console.log(`  ✅ ${header} configured`);
-        } else {
-          this.criticalIssues.push(`Missing security header: ${header}`);
-          console.log(`  ❌ Missing: ${header}`);
-        }
+          console.log({`  ✅ ${header}, configured`, } else {
+          this.criticalIssues.push({`Missing security header: ${header},`, console.log({`  ❌ Missing: ${header},`, }
       }
 
       // Check CSP configuration
@@ -124,7 +114,7 @@ class LocalSecurityTester {
       const content = fs.readFileSync(rateLimitPath, 'utf8');
       
       const requiredLimits = [
-        'generalLimiter',
+        'generalLimiter';
         'authLimiter',
         'apiLimiter',
         'uploadLimiter',
@@ -133,11 +123,8 @@ class LocalSecurityTester {
 
       for (const limit of requiredLimits) {
         if (content.includes(limit)) {
-          console.log(`  ✅ ${limit} configured`);
-        } else {
-          this.warnings.push(`Rate limiting may be missing: ${limit}`);
-          console.log(`  ⚠️  Rate limiting may be missing: ${limit}`);
-        }
+          console.log({`  ✅ ${limit}, configured`, } else {
+          this.warnings.push({`Rate limiting may be missing: ${limit},`, console.log({`  ⚠️  Rate limiting may be missing: ${limit},`, }
       }
     } else {
       this.warnings.push('Rate limiting configuration not found');
@@ -157,7 +144,7 @@ class LocalSecurityTester {
       const content = fs.readFileSync(envFile, 'utf8');
       
       const authConfigs = [
-        'AUTH0_SECRET',
+        'AUTH0_SECRET';
         'AUTH0_BASE_URL',
         'AUTH0_ISSUER_BASE_URL',
         'AUTH0_CLIENT_ID',
@@ -166,11 +153,8 @@ class LocalSecurityTester {
 
       for (const config of authConfigs) {
         if (content.includes(config)) {
-          console.log(`  ✅ ${config} configured`);
-        } else {
-          this.warnings.push(`Auth0 configuration may be missing: ${config}`);
-          console.log(`  ⚠️  Auth0 configuration may be missing: ${config}`);
-        }
+          console.log({`  ✅ ${config}, configured`, } else {
+          this.warnings.push({`Auth0 configuration may be missing: ${config},`, console.log({`  ⚠️  Auth0 configuration may be missing: ${config},`, }
       }
     } else {
       this.warnings.push('Environment configuration file not found');
@@ -192,7 +176,7 @@ class LocalSecurityTester {
       const content = fs.readFileSync(securityUtilsPath, 'utf8');
       
       const validationMethods = [
-        'validateInput',
+        'validateInput';
         'sanitizeHTML',
         'validateEmail',
         'validatePassword',
@@ -201,11 +185,8 @@ class LocalSecurityTester {
 
       for (const method of validationMethods) {
         if (content.includes(method)) {
-          console.log(`  ✅ ${method} implemented`);
-        } else {
-          this.criticalIssues.push(`Input validation missing: ${method}`);
-          console.log(`  ❌ Missing: ${method}`);
-        }
+          console.log({`  ✅ ${method}, implemented`, } else {
+          this.criticalIssues.push({`Input validation missing: ${method},`, console.log({`  ❌ Missing: ${method},`, }
       }
     } else {
       this.criticalIssues.push('Security utilities not found');
@@ -253,7 +234,7 @@ class LocalSecurityTester {
       const content = fs.readFileSync(monitoringPath, 'utf8');
       
       const monitoringFeatures = [
-        'logSecurityEvent',
+        'logSecurityEvent';
         'logAuthEvent',
         'logAPIEvent',
         'logDataAccess',
@@ -262,11 +243,8 @@ class LocalSecurityTester {
 
       for (const feature of monitoringFeatures) {
         if (content.includes(feature)) {
-          console.log(`  ✅ ${feature} implemented`);
-        } else {
-          this.warnings.push(`Monitoring feature may be missing: ${feature}`);
-          console.log(`  ⚠️  Monitoring feature may be missing: ${feature}`);
-        }
+          console.log({`  ✅ ${feature}, implemented`, } else {
+          this.warnings.push({`Monitoring feature may be missing: ${feature},`, console.log({`  ⚠️  Monitoring feature may be missing: ${feature},`, }
       }
     } else {
       this.criticalIssues.push('Security monitoring not found');
@@ -281,7 +259,7 @@ class LocalSecurityTester {
     console.log('📋 Testing Compliance Configuration...');
     
     const complianceDocs = [
-      'SECURITY_FRAMEWORK.md',
+      'SECURITY_FRAMEWORK.md';
       'SECURITY_AUDIT_CHECKLIST.md',
       'COMPLIANCE_DOCUMENTATION.md',
       'SECURITY_POLICIES.md',
@@ -290,11 +268,8 @@ class LocalSecurityTester {
 
     for (const doc of complianceDocs) {
       if (fs.existsSync(doc)) {
-        console.log(`  ✅ ${doc} found`);
-      } else {
-        this.warnings.push(`Compliance documentation missing: ${doc}`);
-        console.log(`  ⚠️  Missing: ${doc}`);
-      }
+        console.log({`  ✅ ${doc}, found`, } else {
+        this.warnings.push({`Compliance documentation missing: ${doc},`, console.log({`  ⚠️  Missing: ${doc},`, }
     }
 
     // Check for GDPR/CCPA compliance features
@@ -316,7 +291,7 @@ class LocalSecurityTester {
    */
   checkSecurityConfigurations(fileName, content) {
     const securityKeywords = [
-      'security',
+      'security';
       'encrypt',
       'auth',
       'validate',
@@ -328,8 +303,7 @@ class LocalSecurityTester {
 
     const keywordCount = securityKeywords.filter(keyword => 
       content.toLowerCase().includes(keyword)
-    ).length;
-
+    ).length,
     return keywordCount >= 3; // At least 3 security-related keywords
   }
 
@@ -343,56 +317,39 @@ class LocalSecurityTester {
         test: testName,
         status: 'completed',
         timestamp: new Date().toISOString()
-      });
-    } catch (error) {
-      this.criticalIssues.push(`Test ${testName} failed: ${error.message}`);
-      console.log(`  💥 Test ${testName} failed: ${error.message}`);
-    }
+      }), } catch (error) {
+      this.criticalIssues.push({`Test ${testName}, failed: ${error.message},`, console.log({`  💥 Test ${testName}, failed: ${error.message},`, }
   }
 
   /**
    * Generate test report
    */
   generateReport() {
-    const totalTests = this.testResults.length;
-    const criticalCount = this.criticalIssues.length;
-    const warningCount = this.warnings.length;
-    
+    const totalTests = this.testResults.length,
+    const criticalCount = this.criticalIssues.length,
+    const warningCount = this.warnings.length,
     const report = {
       summary: {
-        totalTests,
-        criticalIssues: criticalCount,
+        totalTests, criticalIssues: criticalCount,
         warnings: warningCount,
         status: criticalCount === 0 ? 'READY' : 'NEEDS_ATTENTION',
         timestamp: new Date().toISOString()
-      },
-      criticalIssues: this.criticalIssues,
+       }, criticalIssues: this.criticalIssues,
       warnings: this.warnings,
       recommendations: this.generateRecommendations()
-    };
-
-    console.log('\n📊 LOCAL SECURITY TEST REPORT');
+    }, console.log('\n📊 LOCAL SECURITY TEST REPORT');
     console.log('==============================');
-    console.log(`Total Tests: ${totalTests}`);
-    console.log(`Critical Issues: ${criticalCount}`);
-    console.log(`Warnings: ${warningCount}`);
-    console.log(`Status: ${criticalCount === 0 ? '✅ READY FOR DEPLOYMENT' : '❌ NEEDS ATTENTION'}`);
-
-    if (criticalCount > 0) {
-      console.log('\n❌ CRITICAL ISSUES:');
-      this.criticalIssues.forEach(issue => {
-        console.log(`  - ${issue}`);
-      });
+    console.log({`Total Tests: ${totalTests},`, console.log({`Critical Issues: ${criticalCount},`, console.log({`Warnings: ${warningCount},`, console.log({`Status: ${criticalCount === 0 ? '✅ READY FOR DEPLOYMENT' : '❌ NEEDS ATTENTION'},`, if (criticalCount > 0) {
+      console.log('\n❌ CRITICAL ISSUES: '), this.criticalIssues.forEach({issue => {
+        console.log(`  - ${issue},`, });
     }
 
     if (warningCount > 0) {
-      console.log('\n⚠️  WARNINGS:');
-      this.warnings.forEach(warning => {
-        console.log(`  - ${warning}`);
-      });
+      console.log('\n⚠️  WARNINGS: '), this.warnings.forEach({warning => {
+        console.log(`  - ${warning},`, });
     }
 
-    return report;
+    return report,
   }
 
   /**
@@ -403,43 +360,36 @@ class LocalSecurityTester {
 
     if (this.criticalIssues.length > 0) {
       recommendations.push({
-        priority: 'CRITICAL',
-        action: 'Fix all critical issues before deployment',
+        priority: 'CRITICAL', action: 'Fix all critical issues before deployment',
         description: 'Critical issues must be resolved to ensure security'
-      });
-    }
+      }), }
 
     if (this.warnings.length > 0) {
       recommendations.push({
         priority: 'HIGH',
         action: 'Address warnings before production deployment',
         description: 'Warnings should be addressed to ensure optimal security'
-      });
-    }
+      }), }
 
     if (this.criticalIssues.length === 0 && this.warnings.length === 0) {
       recommendations.push({
         priority: 'INFO',
         action: 'Proceed with deployment',
         description: 'All security configurations are properly implemented'
-      });
-    }
+      }), }
 
-    return recommendations;
+    return recommendations,
   }
 }
 
 // Export for use in other modules
-module.exports = LocalSecurityTester;
-
+module.exports = LocalSecurityTester,
 // Run tests if called directly
 if (require.main === module) {
   const tester = new LocalSecurityTester();
   tester.runAllTests().then(report => {
-    console.log('\n🎯 RECOMMENDATIONS:');
-    report.recommendations.forEach(rec => {
-      console.log(`[${rec.priority}] ${rec.action}: ${rec.description}`);
-    });
+    console.log('\n🎯 RECOMMENDATIONS: '), report.recommendations.forEach({rec => {
+      console.log(`[${rec.priority},] ${rec.action},: ${rec.description},`, });
     
     process.exit(report.summary.status === 'READY' ? 0 : 1);
   }).catch(error => {

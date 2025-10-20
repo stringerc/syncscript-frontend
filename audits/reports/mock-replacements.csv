@@ -1,0 +1,6 @@
+file,pattern,replacement,status,backup,error
+src/components/performance/RealTimePerformanceAnalytics.tsx,empty-arrays,Mock data replaced with adapter,completed,/Users/Apple/syncscript-frontend/src/components/performance/RealTimePerformanceAnalytics.tsx.backup,
+src/utils/advancedAnalyticsBIManager.ts,empty-arrays,Mock data replaced with adapter,completed,/Users/Apple/syncscript-frontend/src/utils/advancedAnalyticsBIManager.ts.backup,
+src/utils/enterpriseSystemIntegrationsManager.ts,empty-arrays,Mock data replaced with adapter,completed,/Users/Apple/syncscript-frontend/src/utils/enterpriseSystemIntegrationsManager.ts.backup,
+src/utils/leaveByCalculations.ts,env-mocks,Mock data replaced with adapter,completed,/Users/Apple/syncscript-frontend/src/utils/leaveByCalculations.ts.backup,
+src/utils/syntheticData.ts,faker,Mock data replaced with adapter,completed,/Users/Apple/syncscript-frontend/src/utils/syntheticData.ts.backup,

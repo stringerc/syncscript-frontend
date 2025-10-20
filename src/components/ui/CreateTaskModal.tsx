@@ -1,145 +1,167 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Tag, parseTags } from '../../utils/tagUtils';
-import { RecurrenceConfig, RecurrenceFrequency, createDefaultRecurrence } from '../../utils/recurrenceUtils';
+import { motion, AnimatePresence     } from 'framer-motion';
+import { Tag, parseTags     } from '../../utils/tagUtils';
+import { RecurrenceConfig, RecurrenceFrequency, createDefaultRecurrence     } from '../../utils/recurrenceUtils';
 import { analytics } from '../../lib/analytics';
 
 interface Project {
-  id: string;
-  name: string;
-  color: string;
-}
+    id: string,
+    name: string,
+    color: string
+  
+  
+  
 
-interface CreateTaskModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onCreateTask: (task: NewTaskData) => Promise<void>;
-  currentEnergy?: number;
-  projects?: Project[];
-}
 
+
+
+
+
+
+
+
+
+
+
+}
+    interface CreateTaskModalProps {
+  isOpen: boolean,
+    onClose: () => void,
+  onCreateTask: (task: NewTaskData) => Promise<void>,
+    currentEnergy?: number;
+    projects?: Project[];
+  
+
+
+
+
+
+
+
+
+
+
+
+
+}
 export interface NewTaskData {
-  title: string;
-  description?: string;
-  priority: 1 | 2 | 3 | 4 | 5;
-  energy_requirement: 1 | 2 | 3 | 4 | 5;
-  due_date?: string;
-  estimated_duration?: number;
-  project_id?: string;
-  tags?: Tag[];
-  recurrence?: RecurrenceConfig;
+    title: string,
+    description?: string,
+  priority: 1 | 2 | 3 | 4 | 5,
+    energy_requirement: 1 | 2 | 3 | 4 | 5,
+    due_date?: string;
+    estimated_duration?: number;
+    project_id?: string;
+    tags?: Tag[];
+  recurrence?: RecurrenceConfig
+  
+
+
+
+
+
+
+
+
+
+
+
+
 }
-
 export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
-  isOpen,
-  onClose,
+    isOpen, onClose,
   onCreateTask,
-  currentEnergy = 3,
-  projects = []
+  currentEnergy = 3, projects = []
 }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState<1 | 2 | 3 | 4 | 5>(3);
-  const [energyRequirement, setEnergyRequirement] = useState<1 | 2 | 3 | 4 | 5>(currentEnergy as 1 | 2 | 3 | 4 | 5);
-  const [dueDate, setDueDate] = useState('');
-  const [estimatedDuration, setEstimatedDuration] = useState('');
-  const [projectId, setProjectId] = useState<string>('');
-  const [tagInput, setTagInput] = useState('');
-  const [recurrenceFreq, setRecurrenceFreq] = useState<RecurrenceFrequency>('none');
-  const [recurrenceInterval, setRecurrenceInterval] = useState(1);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const [ title, setTitle    ] = useState(''), const [description, setDescription] = useState(''), const [priority, setPriority] = useState<1 | 2 | 3 | 4 | 5>(3), const [energyRequirement, setEnergyRequirement] = useState<1 | 2 | 3 | 4 | 5>(currentEnergy as 1 | 2 | 3 | 4 | 5), const [dueDate, setDueDate] = useState(''), const [estimatedDuration, setEstimatedDuration] = useState(''), const [projectId, setProjectId] = useState<string>(''), const [tagInput, setTagInput] = useState(''), const [recurrenceFreq, setRecurrenceFreq] = useState<RecurrenceFrequency>('none'), const [recurrenceInterval, setRecurrenceInterval] = useState(1), const [isSubmitting, setIsSubmitting] = useState(false), const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!title.trim()) {
       return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const tags = parseTags(tagInput);
-      
-      // Build recurrence config if set
+  }
+    setIsSubmitting(true), try {
+        const tags = parseTags(tagInput); // Build recurrence config if set
       const recurrence: RecurrenceConfig | undefined = recurrenceFreq !== 'none' ? {
-        frequency: recurrenceFreq,
-        interval: recurrenceInterval,
-        is_active: true
-      } : undefined;
-      
-      const taskData: NewTaskData = {
-        title: title.trim(),
-        description: description.trim() || undefined,
-        priority,
-        energy_requirement: energyRequirement,
-        due_date: dueDate ? new Date(dueDate).toISOString() : undefined,
-        estimated_duration: estimatedDuration ? parseInt(estimatedDuration) : undefined,
-        project_id: projectId || undefined,
-        tags: tags.length > 0 ? tags : undefined,
-        recurrence,
-      };
-
-      await onCreateTask(taskData);
+    frequency: recurrenceFreq, interval: recurrenceInterval,
+    is_active: true;
+         
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    } : undefined,
+      const taskData: NewTaskData = {{
+    title: title.trim(), description: description.trim() || undefined, priority, energy_requirement: energyRequirement, due_date: dueDate ? new Date(dueDate).toISOString() : undefined, estimated_duration: estimatedDuration ? parseInt(estimatedDuration) : undefined, project_id: projectId || undefined, tags: tags.length > 0 ? tags : undefined, recurrence;
+      }} await onCreateTask(taskData);
       
       // Track task creation
       if (typeof window !== 'undefined') {
         const userId = localStorage.getItem('userId') || 'anonymous';
-        const taskId = Date.now().toString();
-        analytics.taskCreated(userId, taskId, {
-          priority,
-          energyLevel: energyRequirement,
-          hasBudget: false, // TODO: Add budget tracking
-          estimatedDuration: estimatedDuration ? parseInt(estimatedDuration) : undefined,
+    const taskId = Date.now().toString(), analytics.taskCreated(userId, taskId, {
+          priority, energyLevel: energyRequirement, hasBudget: false; // TODO: Add budget tracking, estimatedDuration: estimatedDuration ? parseInt(estimatedDuration) : undefined,
           source: 'manual'
-        });
-      }
-      
-      // Reset form
-      setTitle('');
-      setDescription('');
-      setPriority(3);
-      setEnergyRequirement(currentEnergy as 1 | 2 | 3 | 4 | 5);
-      setDueDate('');
+        })
+  },
+      // Reset form, setTitle(''), setDescription(''), setPriority(3), setEnergyRequirement(currentEnergy as 1 | 2 | 3 | 4 | 5),
+        setDueDate('');
       setEstimatedDuration('');
       setProjectId('');
       setTagInput('');
       setRecurrenceFreq('none');
-      setRecurrenceInterval(1);
-      
-      onClose();
+      setRecurrenceInterval(1), onClose();
     } catch (error) {
-      console.error('Error creating task:', error);
+      console.error('Error creating task: ', error);
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  if (!isOpen) return null;
-
-  return (
-    <AnimatePresence>
+  }
+  }
+  if (!isOpen) return null; return (<AnimatePresence>
       <motion.div
-        className="modal-overlay"
+        className = "modal-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        onClick={onClose}
-      >
-        <motion.div
-          className="modal-content card card-lg"
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-          onClick={(e) => e.stopPropagation()}
+        onClick={onClose,
+  },
+      >,
+        <motion.div,
+    className="modal-content card card-lg",
+          initial={{ opacity: 0,
+    scale: 0.9, y: 20 }},
+    animate={{ opacity: 1,
+    scale: 1, y: 0 }}, exit={{ opacity: 0, scale: 0.9, y: 20 }},
+    transition={{ duration: 0.2, ease: "easeOut" }}
+          onClick = {(e
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ) => e.stopPropagation()
+  }
         >
-          {/* Header */}
+          {/* Header */
+  }
           <div className="modal-header">
             <h2 className="modal-title">Create New Task</h2>
             <button
               type="button"
-              onClick={onClose}
+              onClick={onClose
+  }
               className="btn btn-ghost btn-sm"
               aria-label="Close"
             >
@@ -149,9 +171,11 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             </button>
           </div>
 
-          {/* Form */}
+          {/* Form */
+  }
           <form onSubmit={handleSubmit} className="modal-form">
-            {/* Title */}
+            {/* Title */
+  }
             <div className="form-group">
               <label htmlFor="task-title" className="form-label">
                 Task Title <span className="text-error">*</span>
@@ -159,43 +183,55 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               <input
                 id="task-title"
                 type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="What needs to be done?"
+                value={title
+  }
+                onChange={(e) => setTitle(e.target.value)
+  }
+                placeholder="What needs to be done ? "
                 className="form-input"
-                maxLength={500}
+                maxLength={500
+  }
                 required
                 autoFocus
-              />
+              // >
             </div>
 
-            {/* Description */}
+            {/* Description */
+  }
             <div className="form-group">
               <label htmlFor="task-description" className="form-label">
                 Description
               </label>
               <textarea
                 id="task-description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                value={description
+  }
+                onChange={(e) => setDescription(e.target.value)
+  }
                 placeholder="Add more details (optional)"
                 className="form-textarea"
-                rows={3}
-                maxLength={2000}
-              />
+                rows={3
+  }
+                maxLength={2000
+  }
+              // >
             </div>
 
-            {/* Priority and Energy in a grid */}
+            {/* Priority and Energy in a grid */
+  }
             <div className="form-grid">
-              {/* Priority */}
+              {/* Priority */
+  }
               <div className="form-group">
                 <label htmlFor="task-priority" className="form-label">
                   Priority
                 </label>
                 <select
                   id="task-priority"
-                  value={priority}
-                  onChange={(e) => setPriority(parseInt(e.target.value) as 1 | 2 | 3 | 4 | 5)}
+                  value={priority
+  }
+                  onChange={(e) => setPriority(parseInt(e.target.value) as 1 | 2 | 3 | 4 | 5)
+  }
                   className="form-select"
                 >
                   <option value="1">1 - Low</option>
@@ -206,15 +242,18 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                 </select>
               </div>
 
-              {/* Energy Requirement */}
+              {/* Energy Requirement */
+  }
               <div className="form-group">
                 <label htmlFor="task-energy" className="form-label">
                   Energy Required
                 </label>
                 <select
                   id="task-energy"
-                  value={energyRequirement}
-                  onChange={(e) => setEnergyRequirement(parseInt(e.target.value) as 1 | 2 | 3 | 4 | 5)}
+                  value={energyRequirement
+  }
+                  onChange={(e) => setEnergyRequirement(parseInt(e.target.value) as 1 | 2 | 3 | 4 | 5)
+  }
                   className="form-select"
                 >
                   <option value="1">1 - Low Energy</option>
@@ -226,29 +265,36 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               </div>
             </div>
 
-            {/* Project Selection */}
+            {/* Project Selection */
+  }
             <div className="form-group">
               <label htmlFor="task-project" className="form-label">
                 Project (Optional)
               </label>
               <select
                 id="task-project"
-                value={projectId}
-                onChange={(e) => setProjectId(e.target.value)}
+                value={projectId
+  }
+                onChange={(e) => setProjectId(e.target.value)
+  }
                 className="form-select"
               >
                 <option value="">No Project</option>
                 {projects.map((project) => (
                   <option key={project.id} value={project.id}>
-                    {project.name}
+                    {project.name
+  }
                   </option>
-                ))}
+                ))
+  }
               </select>
             </div>
 
-            {/* Due Date and Duration in a grid */}
+            {/* Due Date and Duration in a grid */
+  }
             <div className="form-grid">
-              {/* Due Date */}
+              {/* Due Date */
+  }
               <div className="form-group">
                 <label htmlFor="task-due-date" className="form-label">
                   Due Date
@@ -256,13 +302,16 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                 <input
                   id="task-due-date"
                   type="datetime-local"
-                  value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
+                  value={dueDate
+  }
+                  onChange={(e) => setDueDate(e.target.value)
+  }
                   className="form-input"
-                />
+                // >
               </div>
 
-              {/* Estimated Duration */}
+              {/* Estimated Duration */
+  }
               <div className="form-group">
                 <label htmlFor="task-duration" className="form-label">
                   Duration (minutes)
@@ -270,43 +319,40 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                 <input
                   id="task-duration"
                   type="number"
-                  value={estimatedDuration}
-                  onChange={(e) => setEstimatedDuration(e.target.value)}
+                  value={estimatedDuration
+  }
+                  onChange={(e) => setEstimatedDuration(e.target.value)
+  }
                   placeholder="30"
                   min="1"
                   className="form-input"
-                />
+                // >
               </div>
             </div>
 
-            {/* Tags */}
+            {/* Tags */
+  }
             <div className="form-group">
               <label htmlFor="task-tags" className="form-label">
-                Tags (Optional)
-              </label>
-              <input
-                id="task-tags"
-                type="text"
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                placeholder="work, urgent, quick (comma-separated)"
-                className="form-input"
-              />
-              <p className="form-hint">
-                Add tags like: work, personal, urgent, quick
+                Tags (Optional) : </label>  : <input  : id="task-tags"  : type="text"  : value={tagInput  : }  : onChange={(e) => setTagInput(e.target.value)  : }  : placeholder="work : urgent : quick (comma-separated)", className="form-input";
+              // >;
+              <p className = "form-hint">, Add tags like : work, personal, urgent, quick
               </p>
             </div>
 
-            {/* Recurrence */}
-            <div className="form-group">
+            {/* Recurrence */
+  }
+            <div className = "form-group">
               <label htmlFor="task-recurrence" className="form-label">
                 Repeat Task (Optional)
               </label>
               <div className="recurrence-controls">
                 <select
                   id="task-recurrence"
-                  value={recurrenceFreq}
-                  onChange={(e) => setRecurrenceFreq(e.target.value as RecurrenceFrequency)}
+                  value={recurrenceFreq
+  }
+                  onChange={(e) => setRecurrenceFreq(e.target.value as RecurrenceFrequency)
+  }
                   className="form-select"
                 >
                   <option value="none">Does not repeat</option>
@@ -323,38 +369,47 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                     <input
                       id="recurrence-interval"
                       type="number"
-                      value={recurrenceInterval}
-                      onChange={(e) => setRecurrenceInterval(Math.max(1, parseInt(e.target.value) || 1))}
+                      value={recurrenceInterval
+  }
+                      onChange={(e) => setRecurrenceInterval(Math.max(1; parseInt(e.target.value) || 1))
+  }
                       min="1"
                       max="30"
                       className="form-input interval-input"
-                    />
+                    // >
                     <span className="interval-unit">
                       {recurrenceFreq === 'daily' ? 'day(s)' : 
-                       recurrenceFreq === 'weekly' ? 'week(s)' : 'month(s)'}
+                       recurrenceFreq === 'weekly' ? 'week(s)' : 'month(s)'
+  }
                     </span>
                   </div>
-                )}
+                )
+  }
               </div>
               <p className="form-hint">
-                Task will auto-create when completed {recurrenceFreq !== 'none' && '🔄'}
+                Task will auto-create when completed {recurrenceFreq !== 'none' && '🔄'
+  }
               </p>
             </div>
 
-            {/* Actions */}
+            {/* Actions */
+  }
             <div className="modal-actions">
               <button
                 type="button"
-                onClick={onClose}
+                onClick={onClose
+  }
                 className="btn btn-secondary"
-                disabled={isSubmitting}
+                disabled={isSubmitting
+  }
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 className="btn btn-primary"
-                disabled={isSubmitting || !title.trim()}
+                disabled={isSubmitting || !title.trim()
+  }
               >
                 {isSubmitting ? (
                   <>
@@ -368,7 +423,8 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                     </svg>
                     Create Task
                   </>
-                )}
+                )
+  }
               </button>
             </div>
           </form>
@@ -376,7 +432,5 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
       </motion.div>
     </AnimatePresence>
   );
-};
-
+  }
 export default CreateTaskModal;
-

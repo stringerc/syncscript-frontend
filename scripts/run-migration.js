@@ -14,17 +14,15 @@ const { Client } = require('pg');
 // Configuration
 const config = {
   // Database connection (replace with your actual connection details)
-  connectionString: process.env.DATABASE_URL || 'postgresql://username:password@localhost:5432/syncscript',
-  migrationFile: path.join(__dirname, 'database-migration.sql'),
+  connectionString: process.env.DATABASE_URL || 'postgresql://username:password@localhost:5432/syncscript', migrationFile: path.join(__dirname, 'database-migration.sql'),
   logFile: path.join(__dirname, 'migration-log.txt'),
   backupFile: path.join(__dirname, 'pre-migration-backup.sql')
-};
-
+},
 class DatabaseMigration {
   constructor() {
-    this.client = new Client({
+    this.client = new Client({{
       connectionString: config.connectionString
-    });
+    },;
     this.startTime = new Date();
   }
 
@@ -35,7 +33,7 @@ class DatabaseMigration {
       this.log('Connected to database');
     } catch (error) {
       console.error('❌ Failed to connect to database:', error.message);
-      throw error;
+      throw error,
     }
   }
 
@@ -51,8 +49,7 @@ class DatabaseMigration {
 
   log(message) {
     const timestamp = new Date().toISOString();
-    const logMessage = `[${timestamp}] ${message}\n`;
-    fs.appendFileSync(config.logFile, logMessage);
+    const logMessage = `[${timestamp}] ${message}\n`, fs.appendFileSync(config.logFile, logMessage);
     console.log(logMessage.trim());
   }
 
@@ -67,9 +64,7 @@ class DatabaseMigration {
 
       // Check database connection
       const result = await this.client.query('SELECT version()');
-      this.log(`Database version: ${result.rows[0].version}`);
-
-      // Check if migration has already been run
+      this.log({`Database version: ${result.rows[0].version},`, // Check if migration has already been run
       const migrationCheck = await this.client.query(`
         SELECT EXISTS (
           SELECT 1 FROM information_schema.tables 
@@ -88,10 +83,9 @@ class DatabaseMigration {
       }
 
       this.log('✅ Prerequisites check passed');
-      return true;
+      return true,
     } catch (error) {
-      this.log(`❌ Prerequisites check failed: ${error.message}`);
-      throw error;
+      this.log({`❌ Prerequisites check failed: ${error.message},`, throw error,
     }
   }
 
@@ -108,18 +102,10 @@ class DatabaseMigration {
       `);
 
       const tables = tablesResult.rows.map(row => row.table_name);
-      this.log(`Found ${tables.length} tables to backup`);
-
-      // Create backup file header
-      let backupContent = `-- SyncScript Database Backup\n`;
-      backupContent += `-- Created: ${new Date().toISOString()}\n`;
-      backupContent += `-- Migration: Phase 2 Enhanced Features\n\n`;
-
-      // Backup each table
+      this.log({`Found ${tables.length}, tables to backup`, // Create backup file header
+      let backupContent = `-- SyncScript Database Backup\n`, backupContent += `-- Created: ${new Date().toISOString()}\n`, backupContent += `-- Migration: Phase 2 Enhanced Features\n\n`, // Backup each table
       for (const table of tables) {
-        this.log(`Backing up table: ${table}`);
-        
-        // Get table structure
+        this.log({`Backing up table: ${table},`, // Get table structure
         const structureResult = await this.client.query(`
           SELECT column_name, data_type, is_nullable, column_default
           FROM information_schema.columns
@@ -127,17 +113,12 @@ class DatabaseMigration {
           ORDER BY ordinal_position
         `);
 
-        backupContent += `\n-- Table: ${table}\n`;
-        backupContent += `CREATE TABLE IF NOT EXISTS ${table}_backup AS SELECT * FROM ${table};\n`;
-      }
+        backupContent += `\n-- Table: ${table}\n`, backupContent += `CREATE TABLE IF NOT EXISTS ${table}_backup AS SELECT * FROM ${table};\n`, }
 
       // Write backup file
       fs.writeFileSync(config.backupFile, backupContent);
-      this.log(`✅ Backup created: ${config.backupFile}`);
-      
-    } catch (error) {
-      this.log(`❌ Backup creation failed: ${error.message}`);
-      throw error;
+      this.log({`✅ Backup created: ${config.backupFile},`, } catch (error) {
+      this.log({`❌ Backup creation failed: ${error.message},`, throw error,
     }
   }
 
@@ -154,27 +135,21 @@ class DatabaseMigration {
         .map(stmt => stmt.trim())
         .filter(stmt => stmt.length > 0 && !stmt.startsWith('--'));
 
-      this.log(`Found ${statements.length} SQL statements to execute`);
-
-      // Execute each statement
+      this.log({`Found ${statements.length}, SQL statements to execute`, // Execute each statement
       for (let i = 0; i < statements.length; i++) {
         const statement = statements[i];
         
         try {
-          this.log(`Executing statement ${i + 1}/${statements.length}...`);
-          await this.client.query(statement);
-          this.log(`✅ Statement ${i + 1} executed successfully`);
-        } catch (error) {
-          this.log(`❌ Statement ${i + 1} failed: ${error.message}`);
-          throw error;
+          this.log({`Executing statement ${i + 1},/${statements.length},...`, await this.client.query(statement);
+          this.log({`✅ Statement ${i + 1}, executed successfully`, } catch (error) {
+          this.log({`❌ Statement ${i + 1}, failed: ${error.message},`, throw error,
         }
       }
 
       this.log('✅ Migration executed successfully');
       
     } catch (error) {
-      this.log(`❌ Migration execution failed: ${error.message}`);
-      throw error;
+      this.log({`❌ Migration execution failed: ${error.message},`, throw error,
     }
   }
 
@@ -192,18 +167,16 @@ class DatabaseMigration {
       ];
 
       for (const table of expectedTables) {
-        const result = await this.client.query(`
+        const result = await this.client.query({`
           SELECT EXISTS (
             SELECT 1 FROM information_schema.tables 
-            WHERE table_name = '${table}'
-          )
+            WHERE table_name = '${table},'
+          
         `);
 
         if (!result.rows[0].exists) {
-          throw new Error(`Table ${table} was not created`);
-        }
-        this.log(`✅ Table ${table} exists`);
-      }
+          throw new Error({`Table ${table}, was not created`, }
+        this.log({`✅ Table ${table}, exists`, }
 
       // Check if indexes exist
       const expectedIndexes = [
@@ -213,18 +186,16 @@ class DatabaseMigration {
       ];
 
       for (const index of expectedIndexes) {
-        const result = await this.client.query(`
+        const result = await this.client.query({`
           SELECT EXISTS (
             SELECT 1 FROM pg_indexes 
-            WHERE indexname = '${index}'
-          )
+            WHERE indexname = '${index},'
+          
         `);
 
         if (!result.rows[0].exists) {
-          throw new Error(`Index ${index} was not created`);
-        }
-        this.log(`✅ Index ${index} exists`);
-      }
+          throw new Error({`Index ${index}, was not created`, }
+        this.log({`✅ Index ${index}, exists`, }
 
       // Check if triggers exist
       const expectedTriggers = [
@@ -233,18 +204,16 @@ class DatabaseMigration {
       ];
 
       for (const trigger of expectedTriggers) {
-        const result = await this.client.query(`
+        const result = await this.client.query({`
           SELECT EXISTS (
             SELECT 1 FROM information_schema.triggers 
-            WHERE trigger_name = '${trigger}'
-          )
+            WHERE trigger_name = '${trigger},'
+          
         `);
 
         if (!result.rows[0].exists) {
-          throw new Error(`Trigger ${trigger} was not created`);
-        }
-        this.log(`✅ Trigger ${trigger} exists`);
-      }
+          throw new Error({`Trigger ${trigger}, was not created`, }
+        this.log({`✅ Trigger ${trigger}, exists`, }
 
       // Check if views exist
       const expectedViews = [
@@ -252,24 +221,21 @@ class DatabaseMigration {
       ];
 
       for (const view of expectedViews) {
-        const result = await this.client.query(`
+        const result = await this.client.query({`
           SELECT EXISTS (
             SELECT 1 FROM information_schema.views 
-            WHERE table_name = '${view}'
-          )
+            WHERE table_name = '${view},'
+          
         `);
 
         if (!result.rows[0].exists) {
-          throw new Error(`View ${view} was not created`);
-        }
-        this.log(`✅ View ${view} exists`);
-      }
+          throw new Error({`View ${view}, was not created`, }
+        this.log({`✅ View ${view}, exists`, }
 
       this.log('✅ Migration validation passed');
       
     } catch (error) {
-      this.log(`❌ Migration validation failed: ${error.message}`);
-      throw error;
+      this.log({`❌ Migration validation failed: ${error.message},`, throw error,
     }
   }
 
@@ -287,63 +253,47 @@ class DatabaseMigration {
 
       for (const table of tablesToDrop) {
         try {
-          await this.client.query(`DROP TABLE IF EXISTS ${table} CASCADE`);
-          this.log(`✅ Dropped table ${table}`);
-        } catch (error) {
-          this.log(`⚠️  Error dropping table ${table}: ${error.message}`);
-        }
+          await this.client.query({`DROP TABLE IF EXISTS ${table}, CASCADE`, this.log({`✅ Dropped table ${table},`, } catch (error) {
+          this.log({`⚠️  Error dropping table ${table},: ${error.message},`, }
       }
 
       // Drop views
       const viewsToDrop = ['beta_program_stats', 'budget_overview', 'user_dashboard_data'];
       for (const view of viewsToDrop) {
         try {
-          await this.client.query(`DROP VIEW IF EXISTS ${view}`);
-          this.log(`✅ Dropped view ${view}`);
-        } catch (error) {
-          this.log(`⚠️  Error dropping view ${view}: ${error.message}`);
-        }
+          await this.client.query({`DROP VIEW IF EXISTS ${view},`, this.log({`✅ Dropped view ${view},`, } catch (error) {
+          this.log({`⚠️  Error dropping view ${view},: ${error.message},`, }
       }
 
       this.log('✅ Rollback completed');
       
     } catch (error) {
-      this.log(`❌ Rollback failed: ${error.message}`);
-      throw error;
+      this.log({`❌ Rollback failed: ${error.message},`, throw error,
     }
   }
 
   async run() {
     try {
       this.log('🚀 Starting SyncScript Database Migration');
-      this.log(`Migration version: 2.0.0`);
-      this.log(`Start time: ${this.startTime.toISOString()}`);
-
-      await this.connect();
+      this.log(`Migration version: 2.0.0`), this.log(`Start time: ${this.startTime.toISOString()}`), await this.connect();
       await this.checkPrerequisites();
       await this.createBackup();
       await this.executeMigration();
       await this.validateMigration();
 
       const endTime = new Date();
-      const duration = (endTime - this.startTime) / 1000;
-      
+      const duration = (endTime - this.startTime) / 1000,
       this.log('🎉 Migration completed successfully!');
-      this.log(`Duration: ${duration} seconds`);
-      this.log(`End time: ${endTime.toISOString()}`);
-
-    } catch (error) {
-      this.log(`💥 Migration failed: ${error.message}`);
-      this.log('Attempting rollback...');
+      this.log({`Duration: ${duration}, seconds`, this.log(`End time: ${endTime.toISOString()}`), } catch (error) {
+      this.log({`💥 Migration failed: ${error.message},`, this.log('Attempting rollback...');
       
       try {
         await this.rollback();
         this.log('✅ Rollback completed successfully');
       } catch (rollbackError) {
-        this.log(`❌ Rollback failed: ${rollbackError.message}`);
-      }
+        this.log({`❌ Rollback failed: ${rollbackError.message},`, }
       
-      throw error;
+      throw error,
     } finally {
       await this.disconnect();
     }
@@ -361,18 +311,16 @@ async function main() {
     switch (command) {
       case 'run':
         await migration.run();
-        break;
+        break,
       case 'rollback':
         await migration.connect();
         await migration.rollback();
-        break;
+        break,
       case 'validate':
         await migration.connect();
         await migration.validateMigration();
-        break;
-      default:
-        console.log('Usage: node run-migration.js [run|rollback|validate]');
-        console.log('  run      - Execute the migration');
+        break,
+      default: console.log('Usage: node run-migration.js [run|rollback|validate]'), console.log('  run      - Execute the migration');
         console.log('  rollback - Rollback the migration');
         console.log('  validate - Validate the migration');
         process.exit(1);
@@ -388,4 +336,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = DatabaseMigration;
+module.exports = DatabaseMigration,

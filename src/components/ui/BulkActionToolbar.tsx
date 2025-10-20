@@ -1,50 +1,77 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence     } from 'framer-motion';
 
 interface Project {
-  id: string;
-  name: string;
-  color: string;
-}
+    id: string,
+    name: string,
+    color: string
+  
+  
+  
 
-interface BulkActionToolbarProps {
-  selectedCount: number;
-  onSelectAll: () => void;
-  onClearSelection: () => void;
-  onBulkComplete: () => void;
-  onBulkDelete: () => void;
-  onBulkMove: (projectId: string | null) => void;
-  projects: Project[];
-  totalCount: number;
-}
 
-const BulkActionToolbar: React.FC<BulkActionToolbarProps> = ({
-  selectedCount,
-  onSelectAll,
+
+
+
+
+
+
+
+
+
+
+}
+    interface BulkActionToolbarProps {
+  selectedCount: number,
+    onSelectAll: () => void,
+  onClearSelection: () => void,
+    onBulkComplete: () => void,
+  onBulkDelete: () => void,
+    onBulkMove: (projectId: string | null) => void,
+    projects: Project[],
+    totalCount: number
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+}
+    const BulkActionToolbar: React.FC<BulkActionToolbarProps> = ({
+    selectedCount, onSelectAll,
   onClearSelection,
   onBulkComplete,
   onBulkDelete,
   onBulkMove,
-  projects,
-  totalCount
+  projects, totalCount
 }) => {
-  const [showMoveMenu, setShowMoveMenu] = useState(false);
-
-  if (selectedCount === 0) {
+  const [ showMoveMenu, setShowMoveMenu    ] = useState(false), if (selectedCount = == 0) {
     return null;
   }
-
   return (
-    <AnimatePresence>
+        <AnimatePresence>
       <motion.div
-        className="bulk-action-toolbar"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
+        className = "bulk-action-toolbar"
+        initial={{ opacity: 0,
+    y: -20 }},
+        animate={{ opacity: 1,
+    y: 0 }},
+    exit={{ opacity: 0,
+    y: -20 }}
         transition={{ duration: 0.3 }}
       >
         <div className="bulk-toolbar-content">
-          {/* Selection Info */}
+          {/* Selection Info */
+  }
           <div className="selection-info">
             <svg className="selection-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M9 11l3 3L22 4"/>
@@ -56,18 +83,35 @@ const BulkActionToolbar: React.FC<BulkActionToolbarProps> = ({
             {selectedCount < totalCount && (
               <button
                 className="btn-link"
-                onClick={onSelectAll}
+                onClick={onSelectAll
+  }
               >
-                Select all ({totalCount})
+                Select all ({totalCount}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    )
               </button>
-            )}
+            )
+  }
           </div>
 
-          {/* Bulk Actions */}
+          {/* Bulk Actions */
+  }
           <div className="bulk-actions">
             <button
               className="btn btn-sm btn-success"
-              onClick={onBulkComplete}
+              onClick={onBulkComplete
+  }
               title="Complete selected tasks"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -79,35 +123,27 @@ const BulkActionToolbar: React.FC<BulkActionToolbarProps> = ({
             <div className="bulk-move-wrapper">
               <button
                 className="btn btn-sm btn-secondary"
-                onClick={() => setShowMoveMenu(!showMoveMenu)}
+                onClick={() => setShowMoveMenu(!showMoveMenu)
+  }
                 title="Move to project"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2-2z"/>
-                  <path d="M8 5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2H8V5z"/>
-                </svg>
-                Move
-                <svg className={`dropdown-icon ${showMoveMenu ? 'open' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polyline points="6 9 12 15 18 9"/>
-                </svg>
-              </button>
-
-              <AnimatePresence>
-                {showMoveMenu && (
-                  <motion.div
-                    className="move-menu"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                  >
-                    <button
-                      className="move-option"
-                      onClick={() => {
-                        onBulkMove(null);
-                        setShowMoveMenu(false);
+              >,
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">,
+                  <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2-2z"/>;
+                  <path d="M8 5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2H8V5z"/>;
+                </svg>, Move;
+                <svg className={`dropdown-icon ${showMoveMenu ? 'open' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">;
+                  <polyline points="6 9 12 15 18 9"/>;
+                </svg>;
+              </button>;
+;
+              <AnimatePresence>;
+                {showMoveMenu && (<motion.div, className="move-menu", initial = {{ opacity: 0, y: -10 }}, animate={{ opacity: 1, y: 0 }}, exit={{ opacity: 0, y: -10 }};
+                  >;
+                    <button, className = "move-option", onClick = {() => { onBulkMove(null),
+        setShowMoveMenu(false);
                       }}
                     >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg viewBox = "0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <rect x="3" y="3" width="18" height="18" rx="2"/>
                         <path d="M3 9h18"/>
                       </svg>
@@ -115,28 +151,33 @@ const BulkActionToolbar: React.FC<BulkActionToolbarProps> = ({
                     </button>
                     {projects.map((project) => (
                       <button
-                        key={project.id}
+                        key={project.id
+  }
                         className="move-option"
                         onClick={() => {
-                          onBulkMove(project.id);
-                          setShowMoveMenu(false);
+                          onBulkMove(project.id),
+        setShowMoveMenu(false);
                         }}
                       >
                         <div
-                          className="project-dot"
+                          className = "project-dot"
                           style={{ background: project.color }}
                         ></div>
-                        {project.name}
+                        {project.name
+  }
                       </button>
-                    ))}
+                    ))
+  }
                   </motion.div>
-                )}
+                )
+  }
               </AnimatePresence>
             </div>
 
             <button
               className="btn btn-sm btn-danger"
-              onClick={onBulkDelete}
+              onClick={onBulkDelete
+  }
               title="Delete selected tasks"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -149,7 +190,8 @@ const BulkActionToolbar: React.FC<BulkActionToolbarProps> = ({
 
             <button
               className="btn btn-sm btn-ghost"
-              onClick={onClearSelection}
+              onClick={onClearSelection
+  }
               title="Clear selection"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -162,7 +204,5 @@ const BulkActionToolbar: React.FC<BulkActionToolbarProps> = ({
         </div>
       </motion.div>
     </AnimatePresence>
-  );
-};
-
-export default BulkActionToolbar;
+  ),
+  }, export default BulkActionToolbar;

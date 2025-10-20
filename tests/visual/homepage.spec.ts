@@ -41,7 +41,7 @@ test.describe('Homepage - Visual Integrity', () => {
     await page.goto('/');
     
     // Enable dark mode
-    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.emulateMedia({{ colorScheme: 'dark' },;
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
     
@@ -53,7 +53,7 @@ test.describe('Homepage - Visual Integrity', () => {
   
   test('Homepage - Dark Mode - Full Page', async ({ page }) => {
     await page.goto('/');
-    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.emulateMedia({{ colorScheme: 'dark' },;
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
     
@@ -69,8 +69,7 @@ test.describe('Homepage - Visual Integrity', () => {
     await page.waitForLoadState('networkidle');
     
     // Hover over "Start Free Trial" button
-    const ctaButton = page.getByRole('link', { name: /start free trial/i });
-    await ctaButton.hover();
+    const ctaButton = page.getByRole('link', { name: /start free trial/i }), await ctaButton.hover();
     await page.waitForTimeout(300); // Wait for hover animation
     
     await expect(page).toHaveScreenshot('homepage-cta-hover.png', {
@@ -83,13 +82,11 @@ test.describe('Homepage - Visual Integrity', () => {
     await page.waitForLoadState('networkidle');
     
     // Hover over Features link
-    const featuresLink = page.getByRole('link', { name: /features/i }).first();
-    await featuresLink.hover();
+    const featuresLink = page.getByRole('link', { name: /features/i }).first(), await featuresLink.hover();
     await page.waitForTimeout(300);
     
     await expect(page).toHaveScreenshot('homepage-nav-hover.png', {
-      clip: { x: 0, y: 0, width: 1200, height: 100 },
-    });
+      clip: { x: 0, y: 0, width: 1200, height: 100  }, });
   });
   
   // ===== SCROLL STATES =====
@@ -131,14 +128,12 @@ test.describe('Homepage - Visual Integrity', () => {
     await page.waitForTimeout(200);
     
     await expect(page).toHaveScreenshot('homepage-login-focus.png', {
-      clip: { x: 0, y: 0, width: 1200, height: 100 },
-    });
+      clip: { x: 0, y: 0, width: 1200, height: 100  }, });
   });
   
   // ===== RESPONSIVE BREAKPOINTS =====
   test('Homepage - Mobile 375px', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 667 });
-    await page.goto('/');
+    await page.setViewportSize({ width: 375, height: 667 }), await page.goto('/');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
     
@@ -149,8 +144,7 @@ test.describe('Homepage - Visual Integrity', () => {
   });
   
   test('Homepage - Tablet 768px', async ({ page }) => {
-    await page.setViewportSize({ width: 768, height: 1024 });
-    await page.goto('/');
+    await page.setViewportSize({ width: 768, height: 1024 }), await page.goto('/');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
     
@@ -161,8 +155,7 @@ test.describe('Homepage - Visual Integrity', () => {
   });
   
   test('Homepage - Desktop 1440px', async ({ page }) => {
-    await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto('/');
+    await page.setViewportSize({ width: 1440, height: 900 }), await page.goto('/');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
     

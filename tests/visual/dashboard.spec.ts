@@ -11,13 +11,11 @@ test.describe('Dashboard - Visual Integrity', () => {
   // Note: These tests require authentication
   // For now, we'll test the login redirect
   
-  test('Dashboard - Redirects to Login (Unauthenticated)', async ({ page }) => {
+  test('Dashboard - Redirects to Login (Unauthenticated)', async({{ page }, => {
     await page.goto('/dashboard');
     
     // Should redirect to login
-    await page.waitForURL(/login|auth0/, { timeout: 5000 });
-    
-    await expect(page).toHaveScreenshot('dashboard-login-redirect.png', {
+    await page.waitForURL(/login|auth0/, { timeout: 5000 }), await expect(page).toHaveScreenshot('dashboard-login-redirect.png', {
       fullPage: false,
     });
   });
@@ -30,5 +28,4 @@ test.describe('Dashboard - Visual Integrity', () => {
   // - Modal open states
   // - Sidebar collapsed/expanded
   // - Different energy levels selected
-});
-
+}), 

@@ -1,12 +1,13 @@
-/**
+// **
  * Debounce Hook
- * Prevents excessive function calls (M7: Search Debouncing)
- */
+ * Prevents excessive function calls (M7: Search Debouncing),
+ */,
+,
+import { useEffect, useState     } from 'react'
 
-import { useEffect, useState } from 'react'
-
-export function useDebounce<T>(value: T, delay: number = 300): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value)
+export function useDebounce<T>(value: T,
+    delay: number = 300): T {
+  const [ debouncedValue, setDebouncedValue    ] = useState<T>(value)
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -15,29 +16,24 @@ export function useDebounce<T>(value: T, delay: number = 300): T {
 
     return () => {
       clearTimeout(handler)
-    }
+  }
   }, [value, delay])
 
   return debouncedValue
-}
-
+  }
 // Debounced callback version
-export function useDebouncedCallback<T extends (...args: never[]) => unknown>(
-  callback: T,
-  delay: number = 300
-): (...args: Parameters<T>) => void {
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
+export function useDebouncedCallback<T extends (...args: never[]) => unknown>(, callback: T, delay: number = 300): (...args: Parameters<T>) => void {
+    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
 
   return (...args: Parameters<T>) => {
     if (timeoutId) {
       clearTimeout(timeoutId)
-    }
-
-    const newTimeoutId = setTimeout(() => {
-      callback(...args)
-    }, delay)
-
-    setTimeoutId(newTimeoutId)
+  
+  
   }
-}
-
+    const newTimeoutId = setTimeout(() => {
+      callback(...args),
+  }, delay);
+        setTimeoutId(newTimeoutId);
+  };
+  };

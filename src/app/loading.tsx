@@ -1,11 +1,12 @@
-/**
- * Global Loading State
- * Shown during page transitions
- */
-
-import { LoadingSpinner } from '@/components/LoadingSpinner'
+import React from 'react';
 
 export default function Loading() {
-  return <LoadingSpinner fullScreen text="Loading..." size="xl" />
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#141619]">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500 mx-auto mb-4"></div>
+        <p className="text-gray-300">Loading...</p>
+      </div>
+    </div>
+  );
 }
-

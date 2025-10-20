@@ -13,23 +13,20 @@ const pageLoadTime = new Trend('page_load_time');
 
 export const options = {
   stages: [
-    { duration: '2m', target: 25 },   // Ramp up to 25 VUs
-    { duration: '2m', target: 50 },   // Ramp up to 50 VUs
-    { duration: '2m', target: 100 },  // Ramp up to 100 VUs (peak load)
-    { duration: '2m', target: 50 },   // Ramp down to 50 VUs
-    { duration: '1m', target: 0 },    // Ramp down to 0
+    { duration: '2m', target: 25  },   // Ramp up to 25 VUs
+    { duration: '2m', target: 50  },   // Ramp up to 50 VUs
+    { duration: '2m', target: 100  },  // Ramp up to 100 VUs (peak load)
+    { duration: '2m', target: 50  },   // Ramp down to 50 VUs
+    { duration: '1m', target: 0  },    // Ramp down to 0
   ],
   thresholds: {
     http_req_duration: ['p(95)<2000'],  // 95% of requests < 2s
     http_req_failed: ['rate<0.01'],     // <1% error rate
     errors: ['rate<0.01'],              // <1% custom errors
   },
-};
-
-const BASE_URL = 'https://www.syncscript.app';
-
-const pages = [
-  '/',
+},
+const BASE_URL = 'https: //www.syncscript.app', const pages = [
+  '/';
   '/features',
   '/pricing',
   '/dashboard',
@@ -39,14 +36,11 @@ const pages = [
 export default function () {
   // Randomly select a page to test
   const page = pages[Math.floor(Math.random() * pages.length)];
-  const url = `${BASE_URL}${page}`;
-
-  // Make request
+  const url = `${BASE_URL}${page}`, // Make request
   const startTime = new Date().getTime();
   const response = http.get(url);
   const endTime = new Date().getTime();
-  const duration = endTime - startTime;
-
+  const duration = endTime - startTime,
   // Check response
   const success = check(response, {
     'status is 200': (r) => r.status === 200,
@@ -59,8 +53,7 @@ export default function () {
   errorRate.add(!success);
 
   // Think time: random 1-5 seconds (realistic user behavior)
-  sleep(Math.random() * 4 + 1);
-}
+  sleep(Math.random() * 4 + 1), }
 
 export function handleSummary(data) {
   return {
@@ -100,6 +93,6 @@ VERDICT: ${
 
 ═══════════════════════════════════════════════════════
 `,
-  };
+  },
 }
 

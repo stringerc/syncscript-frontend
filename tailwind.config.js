@@ -7,33 +7,57 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  darkMode: 'class',
+  darkMode: ["class"],
   theme: {
+    container: { 
+      center: true, 
+      padding: "1rem", 
+      screens: { "2xl": "1400px" } 
+    },
     extend: {
+      fontFamily: {
+        sans: ["Inter Variable", "Inter", "system-ui", "-apple-system", "sans-serif"],
+        mono: ["JetBrains Mono", "Consolas", "Monaco", "monospace"],
+      },
       colors: {
+        // Brand + UI tokens from blueprint
+        bg: { 
+          DEFAULT: "#0E1116", 
+          raised: "#151923", 
+          sunken: "#0B0E13" 
+        },
+        text: { 
+          primary: "#E6EAF2", 
+          subtle: "#B8C0CF", 
+          mute: "#8C95A6" 
+        },
+        card: { 
+          DEFAULT: "#141926", 
+          hover: "#1A2132" 
+        },
+        border: { 
+          DEFAULT: "#1F2A3B", 
+          soft: "#131927" 
+        },
+        accent: { 
+          green: "#3AE08D", 
+          blue: "#51A4FF", 
+          amber: "#F6A21A", 
+          red: "#F07178", 
+          purple: "#A78BFA" 
+        },
+        // Legacy colors for backward compatibility
         'syncscript-blue': {
           50: '#EBF5FF',
           100: '#D6EBFF',
           200: '#ADD6FF',
           300: '#85C2FF',
           400: '#5CADFF',
-          500: '#3399FF',
+          500: '#51A4FF', // Updated to match accent.blue
           600: '#0A7AFF',
           700: '#0062CC',
           800: '#004999',
           900: '#003166',
-        },
-        'syncscript-purple': {
-          50: '#F5F0FF',
-          100: '#EBE0FF',
-          200: '#D6C2FF',
-          300: '#C2A3FF',
-          400: '#AD85FF',
-          500: '#9966FF',
-          600: '#7A3DFF',
-          700: '#5C14CC',
-          800: '#3D0A99',
-          900: '#1F0566',
         },
         'syncscript-green': {
           50: '#F0FFF4',
@@ -41,54 +65,31 @@ module.exports = {
           200: '#9AE6B4',
           300: '#68D391',
           400: '#48BB78',
-          500: '#38A169',
+          500: '#3AE08D', // Updated to match accent.green
           600: '#2F855A',
           700: '#276749',
           800: '#22543D',
           900: '#1C4532',
         },
-        'syncscript-orange': {
-          50: '#FFF5EB',
-          100: '#FFE6CC',
-          200: '#FFCC99',
-          300: '#FFB366',
-          400: '#FF9933',
-          500: '#FF8000',
-          600: '#CC6600',
-          700: '#994D00',
-          800: '#663300',
-          900: '#331A00',
-        },
-        'syncscript-charcoal': {
-          50: '#F7F7F8',
-          100: '#E3E4E6',
-          200: '#C7C9CD',
-          300: '#ABAFB4',
-          400: '#8F949B',
-          500: '#6B7280',
-          600: '#4B5563',
-          700: '#374151',
-          800: '#1F2937',
-          900: '#111827',
-        },
       },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Consolas', 'Monaco', 'monospace'],
+      borderRadius: { 
+        xl: "16px", 
+        "2xl": "20px" 
+      },
+      boxShadow: {
+        card: "0 2px 24px rgba(0,0,0,.35)",
+        glow: "0 0 0 1px rgba(255,255,255,.04), 0 10px 40px rgba(0,0,0,.55)",
+        // Legacy shadows
+        'glow-legacy': '0 depth 20px rgba(51, 153, 255, 0.5)',
+        'glow-lg-legacy': '0 0 40px rgba(51, 153, 255, 0.6)',
+      },
+      backdropBlur: { 
+        xs: "2px" 
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'bounce-subtle': 'bounce 2s infinite',
         'spin-slow': 'spin 3s linear infinite',
-      },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'gradient-ribbon': 'linear-gradient(90deg, #FF8000 0%, #FF9933 25%, #FFCC99 50%, #FF9933 75%, #FF8000 100%)',
-      },
-      boxShadow: {
-        'glow': '0 0 20px rgba(51, 153, 255, 0.5)',
-        'glow-lg': '0 0 40px rgba(51, 153, 255, 0.6)',
       },
     },
   },

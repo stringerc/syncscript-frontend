@@ -1,57 +1,83 @@
-/**
- * PostHog Analytics Integration
- * Tracks user behavior and enables feature flags
- */
+import posthog from 'posthog-js';
 
-import posthog from 'posthog-js'
-
+// Initialize PostHog
 export const initPostHog = () => {
   if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
-    console.log('🎯 Initializing PostHog with key:', process.env.NEXT_PUBLIC_POSTHOG_KEY.substring(0, 10) + '...')
-    
     posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-      api_host: 'https://app.posthog.com',
+      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://app.posthog.com',
       person_profiles: 'identified_only',
-      capture_pageview: true,
+      capture_pageview: false, // We'll capture pageviews manually
       capture_pageleave: true,
-      loaded: (posthog) => {
-        console.log('🎯 PostHog initialized successfully!')
-        console.log('🎯 PostHog instance:', posthog)
-        
-        // Test event
-        posthog.capture('posthog_test_event', {
-          test: true,
-          timestamp: new Date().toISOString()
-        })
-        console.log('🎯 Test event sent to PostHog')
-      }
-    })
-  } else {
-    console.log('⚠️ PostHog not initialized:', {
-      window: typeof window !== 'undefined',
-      hasKey: !!process.env.NEXT_PUBLIC_POSTHOG_KEY,
-      key: process.env.NEXT_PUBLIC_POSTHOG_KEY?.substring(0, 10) + '...'
-    })
+    });
   }
-}
+};
 
+// Track page views
+export const trackPageView = (url: string) => {
+  if (typeof window !== 'undefined') {
+    posthog.capture('$pageview', {
+      $current_url: url,
+    });
+  }
+};
+
+// Track custom events
 export const trackEvent = (eventName: string, properties?: Record<string, any>) => {
-  if (typeof window !== 'undefined' && posthog) {
-    posthog.capture(eventName, properties)
+  if (typeof window !== 'undefined') {
+    posthog.capture(eventName, properties);
   }
-}
+};
 
+// Identify user
 export const identifyUser = (userId: string, properties?: Record<string, any>) => {
-  if (typeof window !== 'undefined' && posthog) {
-    posthog.identify(userId, properties)
+  if (typeof window !== 'undefined') {
+    posthog.identify(userId, properties);
   }
-}
+};
 
-export const getFeatureFlag = (flagKey: string): boolean => {
-  if (typeof window !== 'undefined' && posthog) {
-    return posthog.isFeatureEnabled(flagKey) || false
+// Set user properties
+export const setUserProperties = (properties: Record<string, any>) => {
+  if (typeof window !== 'undefined') {
+    posthog.people.set(properties);
   }
-  return false
-}
+};
 
-export default posthog
+// Reset user (on logout)
+export const resetUser = () => {
+  if (typeof window !== 'undefined') {
+    posthog.reset();
+  }
+};
+
+// Common event tracking functions
+export const trackUserAction = (action: string, context?: Record<string, any>) => {
+  trackEvent('user_action', {
+    action,
+    ...context,
+  });
+};
+
+export const trackFeatureUsage = (feature: string, usage?: Record<string, any>) => {
+  trackEvent('feature_used', {
+    feature,
+    ...usage,
+  });
+};
+
+export const trackError = (error: string, context?: Record<string, any>) => {
+  trackEvent('error_occurred', {
+    error,
+    ...context,
+  });
+};
+
+export const trackPerformance = (metric: string, value: number, context?: Record<string, any>) => {
+  trackEvent('performance_metric', {
+    metric,
+    value,
+    ...context,
+  });
+};
+
+// Export PostHog instance for direct use if needed
+export { posthog };

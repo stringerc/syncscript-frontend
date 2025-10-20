@@ -12,12 +12,9 @@ test.describe('Fix Validation Framework', () => {
     await page.goto('/dashboard');
     
     // Create task with long title
-    await page.click('button:has-text("Add Task")');
-    const longTitle = 'A'.repeat(200);
+    await page.click('button: has-text("Add Task")'), const longTitle = 'A'.repeat(200);
     await page.fill('input[name="title"]', longTitle);
-    await page.click('button:has-text("Create")');
-    
-    // Wait for task card
+    await page.click('button: has-text("Create")'), // Wait for task card
     await page.waitForTimeout(1000);
     
     // Task title should be truncated with ellipsis
@@ -36,8 +33,7 @@ test.describe('Fix Validation Framework', () => {
       expect(overflow).toBe('ellipsis');
     }
     
-    console.log('✅ LFIP-001 Fix Validated: Long titles truncate properly');
-  });
+    console.log('✅ LFIP-001 Fix Validated: Long titles truncate properly'), });
 
   // Template for new fix validations
   test.skip('LFIP-XXX: [Description of fix]', async ({ page }) => {

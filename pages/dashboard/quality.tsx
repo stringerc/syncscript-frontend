@@ -1,267 +1,280 @@
-/**
- * Quality Dashboard
- * VIRE + IAOB + LFIP quality metrics
- */
-
-'use client'
-
-import React from 'react'
-import { useRouter } from 'next/router'
-import { motion } from 'framer-motion'
-import {
-  CheckCircle, Eye, Layers, Shield, Target, TrendingUp,
-  AlertCircle, Activity, BarChart3, Zap
-} from 'lucide-react'
+import React, { useState } from 'react';
+import Head from 'next/head';
+import { motion } from 'framer-motion';
+import { 
+  Award, 
+  Target, 
+  TrendingUp, 
+  CheckCircle, 
+  AlertTriangle,
+  Star,
+  Users,
+  Zap
+} from 'lucide-react';
 
 export default function QualityDashboard() {
-  const router = useRouter()
+  const [qualityMetrics, setQualityMetrics] = useState({
+    overallScore: 87,
+    codeQuality: 92,
+    testCoverage: 78,
+    performanceScore: 85,
+    securityScore: 94,
+    userSatisfaction: 4.2,
+    bugCount: 3,
+    technicalDebt: 15
+  });
 
-  const frameworks = [
+  const [recentImprovements, setRecentImprovements] = useState([
     {
-      name: 'VIRE',
-      fullName: 'Visual Integrity & Rendering Excellence',
-      score: 100,
-      status: 'excellent',
-      icon: Eye,
-      metrics: [
-        { label: 'P3 Defects', value: '0', target: '0', status: 'pass' },
-        { label: 'Visual Tests', value: '15/15', target: '15', status: 'pass' },
-        { label: 'Accessibility', value: 'WCAG AA', target: 'WCAG AA', status: 'pass' },
-        { label: 'Performance', value: '267ms', target: '<1000ms', status: 'pass' }
-      ]
+      id: 1,
+      area: 'Code Quality',
+      improvement: 'Improved error handling',
+      impact: '+5%',
+      date: '2 days ago'
     },
     {
-      name: 'IAOB',
-      fullName: 'Integration Assurance & Orchestration',
-      score: 97,
-      status: 'excellent',
-      icon: Layers,
-      metrics: [
-        { label: 'Integration Tests', value: '8/8', target: '8', status: 'pass' },
-        { label: 'Backend Health', value: '100%', target: '>99%', status: 'pass' },
-        { label: 'Error Rate', value: '0.00%', target: '<0.1%', status: 'pass' },
-        { label: 'Uptime', value: '99.8%', target: '>99.5%', status: 'pass' }
-      ]
+      id: 2,
+      area: 'Performance',
+      improvement: 'Optimized database queries',
+      impact: '+12%',
+      date: '1 week ago'
     },
     {
-      name: 'LFIP',
-      fullName: 'Legendary Feature-Integrity Program',
-      score: 97,
-      status: 'excellent',
-      icon: Shield,
-      metrics: [
-        { label: 'Features Tested', value: '100/100', target: '100', status: 'pass' },
-        { label: 'Journeys Tested', value: '20/20', target: '20', status: 'pass' },
-        { label: 'Load Test', value: 'Pass', target: 'Pass', status: 'pass' },
-        { label: 'Success Rate', value: '100%', target: '>95%', status: 'pass' }
-      ]
+      id: 3,
+      area: 'Security',
+      improvement: 'Updated authentication',
+      impact: '+3%',
+      date: '2 weeks ago'
     }
-  ]
-
-  const overallScore = Math.round(
-    frameworks.reduce((sum, f) => sum + f.score, 0) / frameworks.length
-  )
+  ]);
 
   const getScoreColor = (score: number) => {
-    if (score >= 95) return 'text-green-600 bg-green-100'
-    if (score >= 80) return 'text-yellow-600 bg-yellow-100'
-    return 'text-red-600 bg-red-100'
-  }
+    if (score >= 90) return 'text-green-600';
+    if (score >= 80) return 'text-blue-600';
+    if (score >= 70) return 'text-yellow-600';
+    return 'text-red-600';
+  };
+
+  const getScoreBgColor = (score: number) => {
+    if (score >= 90) return 'bg-green-100';
+    if (score >= 80) return 'bg-blue-100';
+    if (score >= 70) return 'bg-yellow-100';
+    return 'bg-red-100';
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8">
-          <button
-            onClick={() => router.back()}
-            className="mb-4 text-blue-600 hover:text-blue-700 dark:text-blue-400 flex items-center gap-2"
-          >
-            ← Back
-          </button>
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-            Quality Dashboard
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Master Quality Certification Status
-          </p>
-        </div>
+    <>
+      <Head>
+        <title>Quality Dashboard - SyncScript</title>
+        <meta name="description" content="Monitor code quality, performance, and user satisfaction metrics." />
+      </Head>
 
-        {/* Overall Score */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 shadow-lg mb-6 text-white"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-3xl font-bold mb-2">
-                Overall Quality Score
-              </h2>
-              <p className="text-blue-100">
-                Based on VIRE + IAOB + LFIP frameworks
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Quality Dashboard
+              </h1>
+              <p className="text-gray-600">
+                Monitor code quality, performance, and user satisfaction
               </p>
             </div>
-            <div className="text-right">
-              <div className="text-6xl font-bold">{overallScore}</div>
-              <div className="text-xl text-blue-100">/100</div>
-              <div className="mt-2 text-sm">
-                {overallScore >= 95 ? '⭐⭐⭐⭐⭐' : overallScore >= 80 ? '⭐⭐⭐⭐' : '⭐⭐⭐'}
+
+            {/* Overall Score */}
+            <div className="bg-white rounded-lg shadow p-8 mb-8">
+              <div className="text-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className={`inline-flex items-center justify-center w-32 h-32 rounded-full ${getScoreBgColor(qualityMetrics.overallScore)} mb-4`}
+                >
+                  <span className={`text-4xl font-bold ${getScoreColor(qualityMetrics.overallScore)}`}>
+                    {qualityMetrics.overallScore}
+                  </span>
+                </motion.div>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                  Overall Quality Score
+                </h2>
+                <p className="text-gray-600">
+                  Based on code quality, performance, security, and user satisfaction
+                </p>
               </div>
             </div>
-          </div>
-        </motion.div>
 
-        {/* Framework Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-          {frameworks.map((framework, index) => {
-            const Icon = framework.icon
-            return (
+            {/* Quality Metrics Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               <motion.div
-                key={framework.name}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg"
+                whileHover={{ scale: 1.05 }}
+                className="bg-white rounded-lg shadow p-6"
               >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                      <Icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 dark:text-white">{framework.name}</h3>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
-                        {framework.fullName.split('&')[0].trim()}
-                      </p>
-                    </div>
-                  </div>
-                  <div className={`px-4 py-2 rounded-lg text-2xl font-bold ${getScoreColor(framework.score)}`}>
-                    {framework.score}
+                <div className="flex items-center">
+                  <CheckCircle className="h-8 w-8 text-green-500" />
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Code Quality</p>
+                    <p className={`text-2xl font-semibold ${getScoreColor(qualityMetrics.codeQuality)}`}>
+                      {qualityMetrics.codeQuality}%
+                    </p>
                   </div>
                 </div>
+              </motion.div>
 
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white rounded-lg shadow p-6"
+              >
+                <div className="flex items-center">
+                  <Target className="h-8 w-8 text-blue-500" />
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Test Coverage</p>
+                    <p className={`text-2xl font-semibold ${getScoreColor(qualityMetrics.testCoverage)}`}>
+                      {qualityMetrics.testCoverage}%
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white rounded-lg shadow p-6"
+              >
+                <div className="flex items-center">
+                  <Zap className="h-8 w-8 text-yellow-500" />
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Performance</p>
+                    <p className={`text-2xl font-semibold ${getScoreColor(qualityMetrics.performanceScore)}`}>
+                      {qualityMetrics.performanceScore}%
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white rounded-lg shadow p-6"
+              >
+                <div className="flex items-center">
+                  <Award className="h-8 w-8 text-purple-500" />
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Security</p>
+                    <p className={`text-2xl font-semibold ${getScoreColor(qualityMetrics.securityScore)}`}>
+                      {qualityMetrics.securityScore}%
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* User Satisfaction */}
+              <div className="bg-white rounded-lg shadow p-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                  <Users className="h-6 w-6 mr-2" />
+                  User Satisfaction
+                </h2>
+                <div className="text-center mb-6">
+                  <div className="flex items-center justify-center mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-8 w-8 ${
+                          i < Math.floor(qualityMetrics.userSatisfaction)
+                            ? 'text-yellow-400 fill-current'
+                            : 'text-gray-300'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {qualityMetrics.userSatisfaction}/5.0
+                  </p>
+                  <p className="text-gray-600">Based on 1,247 reviews</p>
+                </div>
                 <div className="space-y-3">
-                  {framework.metrics.map((metric, i) => (
-                    <div key={i} className="flex items-center justify-between">
-                      <div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">{metric.label}</div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">{metric.value}</div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-700">Excellent (5★)</span>
+                    <span className="text-gray-900 font-medium">68%</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-700">Good (4★)</span>
+                    <span className="text-gray-900 font-medium">22%</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-700">Average (3★)</span>
+                    <span className="text-gray-900 font-medium">8%</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-700">Poor (2★)</span>
+                    <span className="text-gray-900 font-medium">2%</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Recent Improvements */}
+              <div className="bg-white rounded-lg shadow p-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                  <TrendingUp className="h-6 w-6 mr-2" />
+                  Recent Improvements
+                </h2>
+                <div className="space-y-4">
+                  {recentImprovements.map((improvement) => (
+                    <div key={improvement.id} className="border border-gray-200 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-medium text-gray-900">
+                          {improvement.area}
+                        </h3>
+                        <span className="text-green-600 font-semibold">
+                          {improvement.impact}
+                        </span>
                       </div>
-                      <div className="text-green-600">
-                        <CheckCircle className="w-5 h-5" />
-                      </div>
+                      <p className="text-gray-600 text-sm mb-2">
+                        {improvement.improvement}
+                      </p>
+                      <p className="text-gray-500 text-xs">
+                        {improvement.date}
+                      </p>
                     </div>
                   ))}
                 </div>
-              </motion.div>
-            )
-          })}
+              </div>
+            </div>
+
+            {/* Issues & Technical Debt */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+              <div className="bg-white rounded-lg shadow p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                  <AlertTriangle className="h-5 w-5 mr-2 text-red-500" />
+                  Active Issues
+                </h3>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-red-600 mb-2">
+                    {qualityMetrics.bugCount}
+                  </p>
+                  <p className="text-gray-600">Open bugs requiring attention</p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg shadow p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                  <Target className="h-5 w-5 mr-2 text-yellow-500" />
+                  Technical Debt
+                </h3>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-yellow-600 mb-2">
+                    {qualityMetrics.technicalDebt}
+                  </p>
+                  <p className="text-gray-600">Story points of technical debt</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
-
-        {/* Test Results Summary */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg mb-6"
-        >
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-            Test Results Summary
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-green-600">8/8</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Critical Tests</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-green-600">100%</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Success Rate</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-green-600">0</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Failures</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600">267ms</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Avg Load Time</div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Coverage Breakdown */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg"
-        >
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-            Coverage Breakdown
-          </h2>
-          <div className="space-y-4">
-            <div>
-              <div className="flex justify-between mb-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Visual Quality (VIRE)</span>
-                <span className="text-sm font-medium text-green-600">100%</span>
-              </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                <div className="bg-green-600 h-2 rounded-full" style={{ width: '100%' }}></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between mb-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Integration Testing (IAOB)</span>
-                <span className="text-sm font-medium text-green-600">97%</span>
-              </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                <div className="bg-green-600 h-2 rounded-full" style={{ width: '97%' }}></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between mb-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Feature Coverage (LFIP)</span>
-                <span className="text-sm font-medium text-green-600">97%</span>
-              </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                <div className="bg-green-600 h-2 rounded-full" style={{ width: '97%' }}></div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Production Ready Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="mt-6 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-8 shadow-lg text-white text-center"
-        >
-          <CheckCircle className="w-16 h-16 mx-auto mb-4" />
-          <h2 className="text-3xl font-bold mb-2">Production Ready</h2>
-          <p className="text-green-100 mb-4">
-            All quality frameworks passing • Zero blocking issues • Cleared for launch
-          </p>
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-lg px-6 py-3">
-            <Trophy className="w-5 h-5" />
-            <span className="font-medium">Quality Score: {overallScore}/100</span>
-          </div>
-        </motion.div>
       </div>
-    </div>
-  )
+    </>
+  );
 }
-
-function Trophy(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-      <path d="M4 22h16" />
-      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
-      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
-      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
-    </svg>
-  )
-}
-

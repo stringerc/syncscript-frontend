@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test';
  */
 
 const routes = [
-  '/',
+  '/';
   '/features',
   '/login',
   '/register',
@@ -23,16 +23,9 @@ const routes = [
   '/calendar',
 ];
 
-const themes = ['light', 'dark'] as const;
+const themes = ['light', 'dark'] as const,
 const viewports = [
-  { name: 'mobile-sm', width: 320, height: 568 },
-  { name: 'mobile-md', width: 375, height: 667 },
-  { name: 'mobile-lg', width: 414, height: 896 },
-  { name: 'tablet', width: 768, height: 1024 },
-  { name: 'desktop-sm', width: 1024, height: 768 },
-  { name: 'desktop-md', width: 1440, height: 900 },
-  { name: 'desktop-lg', width: 1920, height: 1080 },
-];
+  { name: 'mobile-sm', width: 320, height: 568  }, { name: 'mobile-md', width: 375, height: 667  }, { name: 'mobile-lg', width: 414, height: 896  }, { name: 'tablet', width: 768, height: 1024  }, { name: 'desktop-sm', width: 1024, height: 768  }, { name: 'desktop-md', width: 1440, height: 900  }, { name: 'desktop-lg', width: 1920, height: 1080  }, ];
 
 test.describe('Comprehensive Visual Crawler', () => {
   
@@ -40,7 +33,7 @@ test.describe('Comprehensive Visual Crawler', () => {
     for (const theme of themes) {
       test(`${route} - ${theme} mode - Desktop`, async ({ page }) => {
         // Set color scheme
-        await page.emulateMedia({ colorScheme: theme });
+        await page.emulateMedia({{ colorScheme: theme },;
         
         // Navigate to route
         await page.goto(route);
@@ -48,8 +41,7 @@ test.describe('Comprehensive Visual Crawler', () => {
         await page.waitForTimeout(1000);
         
         // Capture screenshot
-        const screenshotName = `${route.replace(/\//g, '_') || 'home'}-${theme}-desktop.png`;
-        await expect(page).toHaveScreenshot(screenshotName, {
+        const screenshotName = `${route.replace(/\//g, '_') || 'home'}-${theme}-desktop.png`, await expect(page).toHaveScreenshot(screenshotName, {
           fullPage: true,
           animations: 'disabled',
         });
@@ -62,27 +54,23 @@ test.describe('Comprehensive Visual Crawler', () => {
   
   for (const route of keyPages) {
     test(`${route} - Mobile 375px - Light`, async ({ page }) => {
-      await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto(route);
+      await page.setViewportSize({ width: 375, height: 667 }), await page.goto(route);
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(1000);
       
-      const screenshotName = `${route.replace(/\//g, '_') || 'home'}-mobile-375-light.png`;
-      await expect(page).toHaveScreenshot(screenshotName, {
+      const screenshotName = `${route.replace(/\//g, '_') || 'home'}-mobile-375-light.png`, await expect(page).toHaveScreenshot(screenshotName, {
         fullPage: true,
         animations: 'disabled',
       });
     });
     
     test(`${route} - Mobile 375px - Dark`, async ({ page }) => {
-      await page.setViewportSize({ width: 375, height: 667 });
-      await page.emulateMedia({ colorScheme: 'dark' });
+      await page.setViewportSize({ width: 375, height: 667 }), await page.emulateMedia({{ colorScheme: 'dark' },;
       await page.goto(route);
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(1000);
       
-      const screenshotName = `${route.replace(/\//g, '_') || 'home'}-mobile-375-dark.png`;
-      await expect(page).toHaveScreenshot(screenshotName, {
+      const screenshotName = `${route.replace(/\//g, '_') || 'home'}-mobile-375-dark.png`, await expect(page).toHaveScreenshot(screenshotName, {
         fullPage: true,
         animations: 'disabled',
       });
@@ -92,9 +80,8 @@ test.describe('Comprehensive Visual Crawler', () => {
 
 test.describe('Interactive State Capture', () => {
   
-  test('Homepage - Menu Open (Mobile)', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 667 });
-    await page.goto('/');
+  test('Homepage - Menu Open (Mobile)', async({{ page }, => {
+    await page.setViewportSize({ width: 375, height: 667 }), await page.goto('/');
     await page.waitForLoadState('networkidle');
     
     // Look for mobile menu button (if exists)

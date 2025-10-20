@@ -1,36 +1,37 @@
-/**
- * Root Layout
- * Wraps entire app with providers
- */
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import '../styles/globals.css';
+import { RubeProvider } from '../contexts/RubeContext';
 
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import '../styles/globals.css'
-import '../styles/reduced-motion.css'
-import '../styles/focus-indicators.css'
-import { ErrorBoundary } from '@/components/ErrorBoundary'
-import { ToastProvider } from '@/components/Toast'
-import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
-import { AnalyticsProvider } from '@/components/AnalyticsProvider'
-
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'SyncScript - Productivity That Actually Works',
-  description: 'The only platform that considers your energy, budget, and context. AI-powered insights that make every decision easier.',
-  keywords: ['productivity', 'task management', 'AI', 'budget tracking', 'energy management'],
-  authors: [{ name: 'SyncScript' }],
+  title: 'SyncScript - AI-Powered Productivity Platform',
+  description: 'Transform your productivity with AI-driven task management, smart scheduling, and seamless team collaboration.',
+  keywords: 'productivity, AI, task management, team collaboration, scheduling',
+  authors: [{ name: 'SyncScript Team' }],
+  creator: 'SyncScript',
+  publisher: 'SyncScript',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://syncscript.com'),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
-    title: 'SyncScript - Productivity That Actually Works',
-    description: 'AI-powered productivity with energy, budget, and context awareness',
-    url: 'https://www.syncscript.app',
+    title: 'SyncScript - AI-Powered Productivity Platform',
+    description: 'Transform your productivity with AI-driven task management, smart scheduling, and seamless team collaboration.',
+    url: 'https://syncscript.com',
     siteName: 'SyncScript',
     images: [
       {
-        url: 'https://www.syncscript.app/og-image.png',
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
+        alt: 'SyncScript - AI-Powered Productivity Platform',
       },
     ],
     locale: 'en_US',
@@ -38,31 +39,47 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SyncScript - Productivity That Actually Works',
-    description: 'AI-powered productivity with energy, budget, and context awareness',
-    images: ['https://www.syncscript.app/og-image.png'],
+    title: 'SyncScript - AI-Powered Productivity Platform',
+    description: 'Transform your productivity with AI-driven task management, smart scheduling, and seamless team collaboration.',
+    images: ['/og-image.jpg'],
   },
-}
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  manifest: '/manifest.json',
+  themeColor: '#1e2128',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'SyncScript'
+  },
+  icons: {
+    icon: '/icons/icon-192x192.svg',
+    apple: '/icons/icon-192x192.svg'
+  },
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ErrorBoundary>
-          <ToastProvider>
-            <AnalyticsProvider>
-              {children}
-            </AnalyticsProvider>
-            <Analytics />
-            <SpeedInsights />
-          </ToastProvider>
-        </ErrorBoundary>
+    <html lang="en" className="h-full">
+      <body className={`${inter.className} h-full antialiased`}>
+        <RubeProvider>
+          {children}
+        </RubeProvider>
       </body>
     </html>
-  )
+  );
 }
-

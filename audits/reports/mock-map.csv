@@ -1,0 +1,7 @@
+location,pattern,feature_screen_impacted,current_api_hook,intended_real_source,risk,mock_data_type,migration_complexity,dependencies,estimated_effort
+src/components/performance/RealTimePerformanceAnalytics.tsx,empty-arrays,Unknown Feature,useState,Unknown API,High,general,Low,,1d
+src/utils/advancedAnalyticsBIManager.ts,empty-arrays,getAdvancedAnalyticsBIManager,None,==================== PUBLIC API ====================,High,events,Low,,1d
+src/utils/enterpriseSystemIntegrationsManager.ts,empty-arrays,getEnterpriseSystemIntegrationsManager,None,Simulate API call delay,High,events,Low,,1d
+src/utils/leaveByCalculations.ts,env-mocks,formatLeaveByTime,None,MOCK: Simulate API call delay,High,user-profile,High,Error handling|Rate limiting,2w
+src/utils/syntheticData.ts,faker,generateTasks,None,Unknown API,Medium,user-profile,Low,,1d
+src/utils/weatherIntegration.ts,env-mocks,getWeatherDisplayIcon,None,MOCK: Simulate API delay,High,events,High,Error handling|Rate limiting,2w

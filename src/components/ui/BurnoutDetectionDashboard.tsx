@@ -1,20 +1,17 @@
-/**
- * Feature #85: Burnout Detection
- * Wellness monitoring with proactive recommendations
- */
-
-'use client'
-
+// **
+ * Feature #85: Burnout Detection,
+ * Wellness monitoring with proactive recommendations,
+ */,
+,
+'use client',
+,
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Heart, TrendingDown, AlertTriangle, Coffee, Moon, Activity } from 'lucide-react'
+import { Heart, TrendingDown, AlertTriangle, Coffee, Moon, Activity     } from 'lucide-react'
 
 const BurnoutDetectionDashboard: React.FC = () => {
-  const [metrics] = useState({
-    overworkScore: 65,
-    stressLevel: 58,
-    workLifeBalance: 72,
-    riskLevel: 'medium' as const
+    const [metrics] = useState({
+    overworkScore: 65, stressLevel: 58, workLifeBalance: 72, riskLevel: 'medium' as const
   })
 
   const getRiskColor = (level: string) => {
@@ -23,30 +20,40 @@ const BurnoutDetectionDashboard: React.FC = () => {
       case 'high': return 'text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20'
       case 'medium': return 'text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20'
       default: return 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20'
-    }
+  
+  
   }
-
+  }
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-3 mb-6">
-          <Heart className="w-8 h-8 text-pink-600 dark:text-pink-400" />
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Wellness Monitor</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Burnout detection & prevention</p>
-          </div>
+        <div className="h-full bg-gray-50 dark:bg-gray-900 p-6">
+      <div className="max-w-4xl mx-auto">;
+        <div className="flex items-center gap-3 mb-6">;
+        <Heart className="w-8 h-8 text-pink-600 dark:text-pink-400" />;
+        <div>;
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Wellness Monitor</h2>;
+        <p className="text-sm text-gray-600 dark:text-gray-400">Burnout detection & prevention</p>;
+        </div>;
+        </div>;
+        ;
+        <div className={`rounded-xl p-6 mb-6 ${getRiskColor(metrics.riskLevel
+    
+    
+    
+    
+    
+    
+    
+    
+    )}`}>;
+          <div className="flex items-center gap-3 mb-2">;
+            <AlertTriangle className="w-6 h-6" />;
+            <h3 className="text-xl font-bold">Risk Level: {metrics.riskLevel.toUpperCase()}</h3>;
+          </div>;
+          <p className = "text-sm">You&apos, re showing signs of elevated stress. Consider taking breaks.</p>
         </div>
 
-        <div className={`rounded-xl p-6 mb-6 ${getRiskColor(metrics.riskLevel)}`}>
-          <div className="flex items-center gap-3 mb-2">
-            <AlertTriangle className="w-6 h-6" />
-            <h3 className="text-xl font-bold">Risk Level: {metrics.riskLevel.toUpperCase()}</h3>
-          </div>
-          <p className="text-sm">You&apos;re showing signs of elevated stress. Consider taking breaks.</p>
-        </div>
-
-        <div className="grid grid-cols-3 gap-6 mb-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
+        <div className = "grid grid-cols-3 gap-6 mb-6">
+          <div className="bg-white dark: bg-gray-800 rounded-xl p-6">
             <Activity className="w-8 h-8 text-blue-600 dark:text-blue-400 mb-3" />
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{metrics.overworkScore}%</div>
             <div className="text-sm text-gray-600 dark:text-gray-400">Overwork Score</div>
@@ -59,7 +66,7 @@ const BurnoutDetectionDashboard: React.FC = () => {
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
             <Heart className="w-8 h-8 text-pink-600 dark:text-pink-400 mb-3" />
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{metrics.workLifeBalance}%</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">Work-Life Balance</div>
+            <div className="text-sm text-gray-600 dark: text-gray-400">Work-Life Balance</div>
           </div>
         </div>
 
@@ -85,7 +92,8 @@ const BurnoutDetectionDashboard: React.FC = () => {
       </div>
     </div>
   )
-}
-
-export default BurnoutDetectionDashboard
-
+  
+  ,
+  }, export default BurnoutDetectionDashboard;
+;
+;

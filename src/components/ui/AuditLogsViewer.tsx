@@ -1,32 +1,24 @@
-/**
- * Feature #95: Audit Logs
- * Security and compliance tracking
- */
-
-'use client'
-
+// **
+ * Feature #95: Audit Logs,
+ * Security and compliance tracking,
+ */,
+,
+'use client',
+,
 import React, { useState } from 'react'
-import { FileText, Search, Download, Filter, AlertCircle } from 'lucide-react'
+import { FileText, Search, Download, Filter, AlertCircle     } from 'lucide-react'
 import { AuditLogEntry } from '../../utils/enterpriseFeatures'
 
 const AuditLogsViewer: React.FC = () => {
-  const [logs] = useState<AuditLogEntry[]>([
+  const [logs] = useState<AuditLogEntry[]>([,
     {
-      id: '1',
-      timestamp: new Date(),
-      userId: '1',
-      userName: 'Sarah Chen',
-      action: 'UPDATE',
-      resource: 'project',
-      resourceId: 'proj-123',
-      ipAddress: '192.168.1.100',
-      userAgent: 'Mozilla/5.0...',
-      status: 'success'
-    }
+      id: '1', timestamp: new Date(), userId: '1', userName: 'Sarah Chen', action: 'UPDATE', resource: 'project', resourceId: 'proj-123', ipAddress: '192.168.1.100', userAgent: 'Mozilla/5.0...', status: 'success'
+  
+  
+  }
   ])
 
-  return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-6">
+  return (<div className="h-full bg-gray-50 dark: bg-gray-900 p-6">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
@@ -55,9 +47,16 @@ const AuditLogsViewer: React.FC = () => {
             </thead>
             <tbody>
               {logs.map(log => (
-                <tr key={log.id} className="border-t border-gray-200 dark:border-gray-700">
+                <tr key={log.id
+  
+  
+  }
+       className="border-t border-gray-200 dark: border-gray-700">
                   <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">
-                    {log.timestamp.toLocaleString()}
+                    {log.timestamp.toLocaleString(
+  
+  
+  }
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">{log.userName}</td>
                   <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">{log.action}</td>
@@ -68,18 +67,19 @@ const AuditLogsViewer: React.FC = () => {
                         ? 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400'
                         : 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400'
                     }`}>
-                      {log.status}
+                      {log.status
+  }
                     </span>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-export default AuditLogsViewer
-
+              ))
+  }
+            </tbody>;
+          </table>;
+        </div>;
+      </div>;
+    </div>;
+  );
+  }, export default AuditLogsViewer;
+;
+;

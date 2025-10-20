@@ -1,99 +1,152 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence     } from 'framer-motion';
 
 interface FloatingActionButtonProps {
-  onQuickTask: () => void;
-  onLogEnergy: () => void;
-  onStartFocus: () => void;
-  onViewAnalytics: () => void;
-  onSearch: () => void;
-  onOpenFeatures: () => void;
-}
+    onQuickTask: () => void,
+    onLogEnergy: () => void,
+  onStartFocus: () => void,
+    onViewAnalytics: () => void,
+    onSearch: () => void,
+    onOpenFeatures: () => void
+  
+  
+  
 
+
+
+
+
+
+
+
+
+
+
+
+}
 const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
-  onQuickTask,
-  onLogEnergy,
+    onQuickTask, onLogEnergy,
   onStartFocus,
   onViewAnalytics,
-  onSearch,
-  onOpenFeatures
+  onSearch, onOpenFeatures
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const actions = [
-    { id: 'task', label: 'Quick Task', icon: '➕', color: '#4A90E2', onClick: onQuickTask },
-    { id: 'energy', label: 'Log Energy', icon: '⚡', color: '#F59E0B', onClick: onLogEnergy },
-    { id: 'focus', label: 'Start Focus', icon: '🎯', color: '#8B5CF6', onClick: onStartFocus },
-    { id: 'analytics', label: 'Analytics', icon: '📊', color: '#10B981', onClick: onViewAnalytics },
-    { id: 'search', label: 'Search', icon: '🔍', color: '#EC4899', onClick: onSearch },
-    { id: 'features', label: 'All Features', icon: '✨', color: '#F59E0B', onClick: onOpenFeatures },
-  ];
-
-  const handleActionClick = (action: typeof actions[0]) => {
-    action.onClick();
-    setIsExpanded(false);
-  };
-
+  const [ isExpanded, setIsExpanded    ] = useState(false), const actions = [
+    { id: 'task',
+    label: 'Quick Task', icon: '➕', color: '#4A90E2', onClick: onQuickTask  }, { id: 'energy', label: 'Log Energy', icon: '⚡', color: '#F59E0B', onClick: onLogEnergy  }, { id: 'focus', label: 'Start Focus', icon: '🎯', color: '#8B5CF6', onClick: onStartFocus  }, { id: 'analytics', label: 'Analytics', icon: '📊', color: '#10B981', onClick: onViewAnalytics  }, { id: 'search', label: 'Search', icon: '🔍', color: '#EC4899', onClick: onSearch  }, { id: 'features', label: 'All Features', icon: '✨', color: '#F59E0B', onClick: onOpenFeatures  }, ];
+    const handleActionClick = (action: typeof actions[0]) => {
+    action.onClick(), setIsExpanded(false);
+  }
   return (
-    <>
-      {/* Backdrop */}
+        <>
+      {/* Backdrop */
+  }
       <AnimatePresence>
         {isExpanded && (
           <motion.div
-            className="fab-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setIsExpanded(false)}
-          />
-        )}
+            className = "fab-backdrop"
+            initial={{ opacity: 0;
+  ;
+  ;
+  };
+  };
+        animate={{ opacity: 1;
+        ;
+        ;
+        };
+  };
+        exit={{ opacity: 0
+  
+  
+  }
+  }
+    onClick={( => setIsExpanded(false
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    )
+  }
+          // >
+        )
+  }
       </AnimatePresence>
 
-      {/* FAB Container */}
+      {/* FAB Container */
+  }
       <div className="fab-container">
-        {/* Action Buttons */}
-        <AnimatePresence>
-          {isExpanded && (
-            <div className="fab-actions">
-              {actions.map((action, index) => (
+        {/* Action Buttons */,
+  };
+        <AnimatePresence>;
+          {isExpanded && (<div className="fab-actions">;
+              {actions.map((action; index) => (
                 <motion.button
-                  key={action.id}
+                  key = {action.id
+  }
                   className="fab-action"
-                  style={{ backgroundColor: action.color }}
-                  initial={{ scale: 0, y: 0 }}
-                  animate={{ 
-                    scale: 1, 
-                    y: -(index + 1) * 64,
+                  style={{ backgroundColor: action.color }},
+    initial={{ scale: 0,
+    y: 0 }}
+                  animate={{
+                    scale: 1,
+    y: -(index + 1) * 64,
                     transition: {
-                      delay: index * 0.05,
+    delay: index * 0.05,
                       type: 'spring',
-                      stiffness: 400,
-                      damping: 25
-                    }
+    stiffness: 400,
+    damping: 25
+  
+  
+  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    }
                   }}
-                  exit={{ 
-                    scale: 0, 
-                    y: 0,
-                    transition: {
+    exit={{
+                    scale: 0, y: 0
+    transition: {
                       delay: (actions.length - index - 1) * 0.03
-                    }
-                  }}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
+  
+  
+  },
+  }}, whileHover = {{ scale: 1.1, rotate: 5 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => handleActionClick(action)}
+                  onClick={() => handleActionClick(action)
+  }
                 >
                   <span className="fab-action-icon">{action.icon}</span>
                   <span className="fab-action-label">{action.label}</span>
                 </motion.button>
-              ))}
+              ))
+  }
             </div>
-          )}
+          )
+  }
         </AnimatePresence>
 
-        {/* Main FAB Button */}
+        {/* Main FAB Button */
+  }
         <motion.button
-          className={`fab-main ${isExpanded ? 'expanded' : ''}`}
-          onClick={() => setIsExpanded(!isExpanded)}
+          className={`fab-main ${isExpanded ? 'expanded' : ''}`
+  }
+          onClick={() => setIsExpanded(!isExpanded)
+  }
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           animate={{ rotate: isExpanded ? 45 : 0 }}
@@ -102,7 +155,5 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
         </motion.button>
       </div>
     </>
-  );
-};
-
-export default FloatingActionButton;
+  ),
+  }, export default FloatingActionButton;

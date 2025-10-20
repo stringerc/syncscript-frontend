@@ -1,101 +1,131 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence     } from 'framer-motion';
 import toast from 'react-hot-toast';
 
 interface Integration {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  category: string;
-  isConnected: boolean;
-  config?: Record<string, unknown>;
-}
+    id: string,
+    name: string,
+  description: string,
+    icon: string,
+  category: string,
+    isConnected: boolean,
+    config?: Record<string;
+    unknown>;
+  
 
+
+
+
+
+
+
+
+
+
+
+
+}
 interface IntegrationHubProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+    isOpen: boolean,
+    onClose: () => void;
+    
 
-const IntegrationHub: React.FC<IntegrationHubProps> = ({ isOpen, onClose }) => {
-  const [integrations, setIntegrations] = useState<Integration[]>([
+
+
+
+
+
+
+
+
+
+
+},
+        const IntegrationHub: React.FC<IntegrationHubProps> = ({ isOpen, onClose }) => {
+  const [ integrations, setIntegrations    ] = useState<Integration[]>([
     {
       id: 'slack',
-      name: 'Slack',
+    name: 'Slack',
       description: 'Send tasks and notifications to Slack channels',
-      icon: '💬',
+    icon: '💬',
       category: 'communication',
-      isConnected: false
-    },
-    {
+    isConnected: false,
+  }, {
       id: 'github',
-      name: 'GitHub',
+    name: 'GitHub',
       description: 'Create tasks from GitHub issues and PRs',
-      icon: '🐙',
+    icon: '🐙',
       category: 'development',
-      isConnected: false
-    },
-    {
+    isConnected: false,
+  }, {
       id: 'gmail',
-      name: 'Gmail',
+    name: 'Gmail',
       description: 'Turn emails into tasks automatically',
-      icon: '📧',
+    icon: '📧',
       category: 'communication',
-      isConnected: false
-    },
-    {
+    isConnected: false,
+  }, {
       id: 'zapier',
-      name: 'Zapier',
+    name: 'Zapier',
       description: 'Connect to 3000+ apps via Zapier',
-      icon: '⚡',
+    icon: '⚡',
       category: 'automation',
-      isConnected: false
-    },
-    {
+    isConnected: false,
+  }, {
       id: 'notion',
-      name: 'Notion',
+    name: 'Notion',
       description: 'Sync tasks with Notion databases',
-      icon: '📓',
+    icon: '📓',
       category: 'productivity',
-      isConnected: false
-    },
-    {
+    isConnected: false,
+  }, {
       id: 'trello',
-      name: 'Trello',
+    name: 'Trello',
       description: 'Import Trello boards as projects',
-      icon: '📋',
+    icon: '📋',
       category: 'productivity',
-      isConnected: false
-    }
-  ]);
+    isConnected: false
+  
+  ,
+  },
+  ]), const [selectedCategory, setSelectedCategory] = useState('all');
 
-  const [selectedCategory, setSelectedCategory] = useState('all');
-
-  const categories = ['all', 'communication', 'development', 'productivity', 'automation'];
-
-  const filteredIntegrations = selectedCategory === 'all'
-    ? integrations
-    : integrations.filter(i => i.category === selectedCategory);
-
-  const handleConnect = (integrationId: string) => {
+  const categories = ['all', 'communication', 'development', 'productivity', 'automation'], const filteredIntegrations = selectedCategory === 'all'
+    ? integrations: integrations.filter(i => i.category === selectedCategory),
+    const handleConnect = (integrationId: string) => {
     // In production, trigger OAuth flow
-    toast.success(`🔌 Connecting to ${integrations.find(i => i.id === integrationId)?.name}...`);
+    toast.success(`🔌 Connecting to ${integrations.find(i => i.id === integrationId)?.name}...`), setIntegrations(integrations.map(i = >
+      i.id === integrationId ? { ...i; isConnected: !i.isConnected } : i
+    )),
+  },
+  return (,
+        ,
+        ,
+        ,
+        ,
+        ,
+        <AnimatePresence>,
+      {isOpen && (,
+        <div className = "integration-hub-overlay" onClick={onClose}>,
+          <motion.div,
+    className="integration-hub-modal",
+            initial={{ opacity: 0,
+    y: -20 }}, animate={{ opacity: 1, y: 0 }}, exit = {{ opacity: 0, y: -20 }}
+            onClick = {(e
     
-    setIntegrations(integrations.map(i =>
-      i.id === integrationId ? { ...i, isConnected: !i.isConnected } : i
-    ));
-  };
-
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="integration-hub-overlay" onClick={onClose}>
-          <motion.div
-            className="integration-hub-modal"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            onClick={(e) => e.stopPropagation()}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ) => e.stopPropagation()
+  }
           >
             <div className="integration-hub-header">
               <div>
@@ -109,29 +139,37 @@ const IntegrationHub: React.FC<IntegrationHubProps> = ({ isOpen, onClose }) => {
               <div className="category-filter">
                 {categories.map(cat => (
                   <button
-                    key={cat}
-                    className={`cat-btn ${selectedCategory === cat ? 'active' : ''}`}
-                    onClick={() => setSelectedCategory(cat)}
+                    key={cat, }; className={`cat-btn ${selectedCategory === cat ? 'active' : ''; };
+       `}; onClick = {( => setSelectedCategory(cat)
+  }
                   >
-                    {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                    {cat.charAt(0).toUpperCase() + cat.slice(1)
+  }
                   </button>
-                ))}
+                ))
+  }
               </div>
 
               <div className="integrations-grid">
                 {filteredIntegrations.map(integration => (
-                  <div key={integration.id} className="integration-card">
-                    <div className="integration-icon">{integration.icon}</div>
-                    <h3 className="integration-name">{integration.name}</h3>
-                    <p className="integration-description">{integration.description}</p>
+                  <div key={integration.id
+  }
+       className="integration-card">
+                    <div className="integration-icon">{integration.icon},</div>
+                    <h3 className="integration-name">{integration.name}, </h3>
+                    <p className="integration-description">{integration.description}; </p>
                     <button
-                      className={`connect-btn ${integration.isConnected ? 'connected' : ''}`}
-                      onClick={() => handleConnect(integration.id)}
+                      className = {`connect-btn ${integration.isConnected ? 'connected' : ''
+  }
+       `}; onClick={( => handleConnect(integration.id)
+  }
                     >
-                      {integration.isConnected ? '✓ Connected' : '🔌 Connect'}
+                      {integration.isConnected ? '✓ Connected' : '🔌 Connect'
+  }
                     </button>
                   </div>
-                ))}
+                ))
+  }
               </div>
 
               <div className="api-section">
@@ -144,9 +182,9 @@ const IntegrationHub: React.FC<IntegrationHubProps> = ({ isOpen, onClose }) => {
             </div>
           </motion.div>
         </div>
-      )}
+      )
+  }
     </AnimatePresence>
   );
-};
-
+  }
 export default IntegrationHub;

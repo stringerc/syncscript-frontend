@@ -25,11 +25,9 @@ describe('Tasks API - Consumer Contract', () => {
               generate: 'Bearer mock-jwt-token'
             })
           }
-        },
-        willRespondWith: {
+        }, willRespondWith: {
           status: 200,
-          headers: { 'Content-Type': 'application/json' },
-          body: {
+          headers: { 'Content-Type': 'application/json'  }, body: {
             success: true,
             data: {
               tasks: eachLike({
@@ -41,19 +39,14 @@ describe('Tasks API - Consumer Contract', () => {
                 user_id: like('auth0|123'),
                 created_at: like('2025-10-13T04:00:00Z'),
                 updated_at: like('2025-10-13T04:00:00Z')
-              }, { min: 1 }),
+               }, { min: 1 }),
               total: integer(3)
-            },
-            timestamp: like('2025-10-13T04:30:00Z')
+             }, timestamp: like('2025-10-13T04:30:00Z')
           }
         }
-      });
-
-      const response = await fetch(`${provider.mockService.baseUrl}/api/tasks`, {
+      }), const response = await fetch(`${provider.mockService.baseUrl}/api/tasks`, {
         headers: { Authorization: 'Bearer mock-jwt-token' }
-      });
-
-      const data = await response.json();
+      }), const data = await response.json();
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
@@ -78,8 +71,7 @@ describe('Tasks API - Consumer Contract', () => {
             priority: 2,
             energy_level: 3
           }
-        },
-        willRespondWith: {
+        }, willRespondWith: {
           status: 201,
           body: {
             success: true,
@@ -94,18 +86,14 @@ describe('Tasks API - Consumer Contract', () => {
             }
           }
         }
-      });
-
-      const response = await fetch(`${provider.mockService.baseUrl}/api/tasks`, {
+      }), const response = await fetch(`${provider.mockService.baseUrl}/api/tasks`, {
         method: 'POST',
         headers: {
           Authorization: 'Bearer token',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ title: 'New task', priority: 2, energy_level: 3 })
-      });
-
-      expect(response.status).toBe(201);
+      }), expect(response.status).toBe(201);
     });
   });
 });

@@ -1,0 +1,206 @@
+@import "tailwindcss";
+
+/* Tailwind v4 Theme Configuration */
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+  
+  --color-syncscript-blue-50: #EBF5FF;
+  --color-syncscript-blue-500: #3399FF;
+  --color-syncscript-blue-600: #0A7AFF;
+  --color-syncscript-purple-500: #9966FF;
+  --color-syncscript-purple-600: #7A3DFF;
+  --color-syncscript-green-500: #38A169;
+  --color-syncscript-orange-500: #FF8000;
+}
+
+/* 🎨 SYNCSCRIPT THEME IMPORTS */
+@import './tokens.css';
+@import './theme-variables.css';
+
+/* 🌙 Dark Mode Global Styles - Comprehensive */
+[data-theme="dark"] {
+  background-color: var(--color-neutral-900) !important;
+  color: var(--color-neutral-100) !important;
+}
+
+[data-theme="dark"] body {
+  background-color: var(--color-neutral-900) !important;
+  color: var(--color-neutral-100) !important;
+}
+
+[data-theme="dark"] .dashboard-container,
+[data-theme="dark"] .dashboard-main,
+[data-theme="dark"] main {
+  background-color: var(--color-neutral-900) !important;
+  color: var(--color-neutral-100) !important;
+}
+
+[data-theme="dark"] .task-card,
+[data-theme="dark"] .project-card,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .energy-insight-card,
+[data-theme="dark"] .card,
+[data-theme="dark"] .metric-card,
+[data-theme="dark"] .challenge-card,
+[data-theme="dark"] .performer-card,
+[data-theme="dark"] .member-card {
+  background-color: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
+  border-color: var(--color-neutral-700) !important;
+}
+
+[data-theme="dark"] .dashboard-header {
+  background: linear-gradient(135deg, var(--color-neutral-800), var(--color-neutral-900)) !important;
+  border-bottom-color: var(--color-neutral-700) !important;
+}
+
+[data-theme="dark"] .section-header h2,
+[data-theme="dark"] .section-title,
+[data-theme="dark"] h1, [data-theme="dark"] h2,
+[data-theme="dark"] h3, [data-theme="dark"] h4,
+[data-theme="dark"] h5, [data-theme="dark"] h6 {
+  color: var(--color-neutral-100) !important;
+}
+
+[data-theme="dark"] p,
+[data-theme="dark"] span:not(.gradient-text):not([class*="badge"]):not([class*="icon"]),
+[data-theme="dark"] .task-title,
+[data-theme="dark"] .project-name,
+[data-theme="dark"] .task-description,
+[data-theme="dark"] label,
+[data-theme="dark"] .text-sm,
+[data-theme="dark"] .text-base,
+[data-theme="dark"] .text-xs,
+[data-theme="dark"] div:not([class*="gradient"]) {
+  color: var(--color-neutral-300) !important;
+}
+
+/* Force light text on dark backgrounds */
+[data-theme="dark"] * {
+  color: inherit;
+}
+
+[data-theme="dark"] *:not(.gradient-text):not([class*="badge"]):not(button):not(a):not([class*="icon"]) {
+  color: var(--color-neutral-300);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background-color: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
+  border-color: var(--color-neutral-700) !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: var(--color-neutral-400) !important;
+}
+
+[data-theme="dark"] .btn {
+  color: var(--color-neutral-100) !important;
+}
+
+[data-theme="dark"] .btn-primary {
+  background: var(--gradient-ribbon) !important;
+  color: white !important;
+}
+
+[data-theme="dark"] .btn-secondary,
+[data-theme="dark"] .btn-ghost {
+  background-color: var(--color-neutral-800) !important;
+  border-color: var(--color-neutral-700) !important;
+  color: var(--color-neutral-100) !important;
+}
+
+[data-theme="dark"] .btn-secondary:hover,
+[data-theme="dark"] .btn-ghost:hover {
+  background-color: var(--color-neutral-700) !important;
+}
+
+[data-theme="dark"] .modal,
+[data-theme="dark"] .team-modal,
+[data-theme="dark"] .dependency-modal,
+[data-theme="dark"] .theme-settings-modal,
+[data-theme="dark"] .notification-panel,
+[data-theme="dark"] .suggestions-panel {
+  background-color: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
+}
+
+[data-theme="dark"] .dashboard-section {
+  background-color: transparent !important;
+}
+
+[data-theme="dark"] .energy-selector,
+[data-theme="dark"] .filter-sidebar,
+[data-theme="dark"] .analytics-card {
+  background-color: var(--color-neutral-800) !important;
+  color: var(--color-neutral-100) !important;
+  border-color: var(--color-neutral-700) !important;
+}
+
+[data-theme="dark"] .task-meta,
+[data-theme="dark"] .project-meta,
+[data-theme="dark"] .stat-label {
+  color: var(--color-neutral-400) !important;
+}
+
+[data-theme="dark"] .border-t,
+[data-theme="dark"] .border-b,
+[data-theme="dark"] [class*="border"] {
+  border-color: var(--color-neutral-700) !important;
+}
+@import './components.css';
+@import './EnergySelector.css';
+@import './TaskCard.css';
+@import './ThemeDemo.css';
+@import './Dashboard.css';
+@import './LandingPage.css';
+@import './CreateTaskModal.css';
+@import './EnergyInsights.css';
+@import './UserStats.css';
+@import './ProjectCard.css';
+@import './CreateProjectModal.css';
+@import './EditTaskModal.css';
+@import './TaskFilter.css';
+@import './TaskSearch.css';
+@import './KeyboardHint.css';
+@import './StreakCounter.css';
+@import './SaveTemplateModal.css';
+@import './TemplateLibrary.css';
+@import './BulkActionToolbar.css';
+@import './FocusTimer.css';
+@import './AnalyticsDashboard.css';
+@import './ThemeSettings.css';
+@import './NotificationCenter.css';
+
+/* React Hot Toast Dismiss Button Styling */
+.react-hot-toast-dismissible [data-close-button] {
+  background: rgba(0, 0, 0, 0.1) !important;
+  border-radius: 50% !important;
+  padding: 4px !important;
+  margin-left: 8px !important;
+  opacity: 0.8 !important;
+  transition: all 0.2s ease !important;
+}
+
+.react-hot-toast-dismissible [data-close-button]:hover {
+  background: rgba(0, 0, 0, 0.2) !important;
+  opacity: 1 !important;
+  transform: scale(1.1) !important;
+}
+
+.react-hot-toast-dismissible [data-close-button] svg {
+  width: 14px !important;
+  height: 14px !important;
+  color: var(--syncscript-charcoal-600) !important;
+}
+@import './InstallPWA.css';
+
+/* Global Spin Animation for Loading Screens */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

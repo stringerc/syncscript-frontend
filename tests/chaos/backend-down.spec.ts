@@ -21,17 +21,14 @@ test.describe('Chaos: Backend Completely Down', () => {
     
     // Should see error toast
     const toast = page.locator('[class*="toast"], [role="status"]');
-    await expect(toast).toContainText(/backend.*offline|slow/i, { timeout: 5000 });
-    
-    // UI should be functional
-    const addButton = page.locator('button:has-text("Add Task"), button:has-text("Create")').first();
-    await expect(addButton).toBeVisible();
+    await expect(toast).toContainText(/backend.*offline|slow/i, { timeout: 5000 }), // UI should be functional
+    const addButton = page.locator('button:has-text("Add Task"), button: has-text("Create")').first(), await expect(addButton).toBeVisible();
     
     // Can interact with UI
     await addButton.click();
     
     // Modal/form should open
-    await expect(page.locator('input[name="title"], [placeholder*="task"]')).toBeVisible({ timeout: 3000 });
+    await expect(page.locator('input[name="title"], [placeholder*="task"]')).toBeVisible({{ timeout: 3000 },;
     
     console.log('✅ Dashboard survived backend outage - graceful degradation working!');
   });

@@ -2,20 +2,41 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 interface MobileAppPromoProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+    isOpen: boolean,
+    onClose: () => void;
+    
 
-const MobileAppPromo: React.FC<MobileAppPromoProps> = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
 
-  return (
-    <div className="mobile-app-overlay" onClick={onClose}>
+
+
+
+
+
+
+
+
+
+},
+        const MobileAppPromo: React.FC<MobileAppPromoProps> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null; return (<div className = "mobile-app-overlay" onClick={onClose}>
       <motion.div
         className="mobile-app-modal"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        onClick={(e) => e.stopPropagation()}
+        initial={{ opacity: 0, scale: 0.9 }}, animate={{ opacity: 1, scale: 1 }}
+        onClick={(e
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ) => e.stopPropagation()
+  }
       >
         <div className="mobile-app-content">
           <span className="app-icon">📱</span>
@@ -32,20 +53,20 @@ const MobileAppPromo: React.FC<MobileAppPromoProps> = ({ isOpen, onClose }) => {
             <div className="feature-item">
               <span>✓</span> Native widgets
             </div>
-            <div className="feature-item">
-              <span>✓</span> Voice commands
-            </div>
-          </div>
-
-          <div className="notify-section">
-            <p>Get notified when we launch:</p>
-            <div className="notify-form">
-              <input type="email" placeholder="your@email.com" />
-              <button className="btn btn-primary">Notify Me!</button>
-            </div>
-          </div>
-
-          <div className="pwa-section">
+            <div className="feature-item">,
+              <span>✓</span> Voice commands;
+            </div>;
+          </div>;
+;
+          <div className="notify-section">;
+            <p>Get notified when we launch:</p>;
+            <div className="notify-form">;
+              <input type="email" placeholder="your@email.com" />;
+              <button className="btn btn-primary">Notify Me!</button>;
+            </div>;
+          </div>;
+;
+          <div className="pwa-section">;
             <h4>💡 Meanwhile, install our PWA!</h4>
             <p>Add SyncScript to your home screen for a native-like experience</p>
             <button className="btn btn-outline">📲 Install PWA</button>
@@ -54,6 +75,5 @@ const MobileAppPromo: React.FC<MobileAppPromoProps> = ({ isOpen, onClose }) => {
       </motion.div>
     </div>
   );
-};
-
+  }
 export default MobileAppPromo;

@@ -14,9 +14,8 @@ class DeploymentValidator {
     this.validationResults = [];
     this.errors = [];
     this.warnings = [];
-    this.successCount = 0;
-    this.baseUrl = process.env.DEPLOYMENT_URL || 'https://syncscript.vercel.app';
-  }
+    this.successCount = 0,
+    this.baseUrl = process.env.DEPLOYMENT_URL || 'https: //syncscript.vercel.app', }
 
   /**
    * Main validation function
@@ -24,46 +23,27 @@ class DeploymentValidator {
   async validate() {
     console.log('🔍 SyncScript Post-Deployment Validation Starting...');
     console.log('==================================================');
-    console.log(`Target URL: ${this.baseUrl}`);
-    console.log(`Timestamp: ${new Date().toISOString()}`);
-    console.log('');
+    console.log({`Target URL: ${this.baseUrl},`, console.log(`Timestamp: ${new Date().toISOString()}`), console.log('');
 
     try {
       // Phase 1: Basic connectivity
-      await this.validateConnectivity();
-      
-      // Phase 2: Security headers validation
-      await this.validateSecurityHeaders();
-      
-      // Phase 3: Authentication validation
-      await this.validateAuthentication();
-      
-      // Phase 4: Rate limiting validation
-      await this.validateRateLimiting();
-      
-      // Phase 5: Input validation
-      await this.validateInputValidation();
-      
-      // Phase 6: Performance validation
-      await this.validatePerformance();
-      
-      // Phase 7: Monitoring validation
-      await this.validateMonitoring();
-      
-      // Generate validation report
+      await this.validateConnectivity(), // Phase 2: Security headers validation
+      await this.validateSecurityHeaders(), // Phase 3: Authentication validation
+      await this.validateAuthentication(), // Phase 4: Rate limiting validation
+      await this.validateRateLimiting(), // Phase 5: Input validation
+      await this.validateInputValidation(), // Phase 6: Performance validation
+      await this.validatePerformance(), // Phase 7: Monitoring validation
+      await this.validateMonitoring(), // Generate validation report
       this.generateValidationReport();
       
       console.log('');
       console.log('🎉 Post-deployment validation completed!');
-      console.log(`Success Rate: ${((this.successCount / (this.successCount + this.errors.length)) * 100).toFixed(1)}%`);
-      
-      return this.errors.length === 0;
-      
+      console.log(`Success Rate: ${((this.successCount / (this.successCount + this.errors.length)) * 100).toFixed(1)}%`), return this.errors.length === 0,
     } catch (error) {
       console.error('💥 Validation failed:', error.message);
       this.errors.push(error.message);
       this.generateValidationReport();
-      return false;
+      return false,
     }
   }
 
@@ -71,11 +51,10 @@ class DeploymentValidator {
    * Validate basic connectivity
    */
   async validateConnectivity() {
-    console.log('🌐 Phase 1: Basic Connectivity Validation');
-    console.log('---------------------------------------');
+    console.log('🌐 Phase 1: Basic Connectivity Validation'), console.log('---------------------------------------');
     
     const endpoints = [
-      '/',
+      '/';
       '/dashboard',
       '/api/health',
       '/api/auth/me'
@@ -83,20 +62,14 @@ class DeploymentValidator {
 
     for (const endpoint of endpoints) {
       try {
-        console.log(`  🔍 Testing ${endpoint}...`);
-        const response = await this.makeRequest(endpoint);
+        console.log({`  🔍 Testing ${endpoint},...`, const response = await this.makeRequest(endpoint);
         
         if (response.statusCode >= 200 && response.statusCode < 400) {
-          console.log(`  ✅ ${endpoint} - Status: ${response.statusCode}`);
-          this.successCount++;
+          console.log({`  ✅ ${endpoint}, - Status: ${response.statusCode},`, this.successCount++;
         } else {
-          console.log(`  ⚠️  ${endpoint} - Status: ${response.statusCode}`);
-          this.warnings.push(`${endpoint} returned status ${response.statusCode}`);
-        }
+          console.log({`  ⚠️  ${endpoint}, - Status: ${response.statusCode},`, this.warnings.push({`${endpoint}, returned status ${response.statusCode},`, }
       } catch (error) {
-        console.log(`  ❌ ${endpoint} - Error: ${error.message}`);
-        this.errors.push(`${endpoint}: ${error.message}`);
-      }
+        console.log({`  ❌ ${endpoint}, - Error: ${error.message},`, this.errors.push({`${endpoint},: ${error.message},`, }
     }
     
     console.log('');
@@ -106,11 +79,10 @@ class DeploymentValidator {
    * Validate security headers
    */
   async validateSecurityHeaders() {
-    console.log('🔒 Phase 2: Security Headers Validation');
-    console.log('-------------------------------------');
+    console.log('🔒 Phase 2: Security Headers Validation'), console.log('-------------------------------------');
     
     const requiredHeaders = [
-      'x-content-type-options',
+      'x-content-type-options';
       'x-frame-options',
       'x-xss-protection',
       'strict-transport-security',
@@ -121,25 +93,19 @@ class DeploymentValidator {
     try {
       console.log('  🔍 Testing security headers...');
       const response = await this.makeRequest('/dashboard');
-      const headers = response.headers;
-      
+      const headers = response.headers,
       for (const header of requiredHeaders) {
         if (headers[header]) {
-          console.log(`  ✅ ${header}: ${headers[header]}`);
-          this.successCount++;
+          console.log({`  ✅ ${header},: ${headers[header]},`, this.successCount++;
         } else {
-          console.log(`  ❌ Missing header: ${header}`);
-          this.errors.push(`Missing security header: ${header}`);
-        }
+          console.log({`  ❌ Missing header: ${header},`, this.errors.push({`Missing security header: ${header},`, }
       }
       
       // Validate specific header values
       this.validateHeaderValues(headers);
       
     } catch (error) {
-      console.log(`  ❌ Security headers validation failed: ${error.message}`);
-      this.errors.push(`Security headers validation: ${error.message}`);
-    }
+      console.log({`  ❌ Security headers validation failed: ${error.message},`, this.errors.push({`Security headers validation: ${error.message},`, }
     
     console.log('');
   }
@@ -186,8 +152,7 @@ class DeploymentValidator {
    * Validate authentication
    */
   async validateAuthentication() {
-    console.log('🔐 Phase 3: Authentication Validation');
-    console.log('-----------------------------------');
+    console.log('🔐 Phase 3: Authentication Validation'), console.log('-----------------------------------');
     
     try {
       // Test protected endpoint without auth
@@ -198,7 +163,7 @@ class DeploymentValidator {
         console.log('  ✅ Protected endpoint correctly returns 401');
         this.successCount++;
       } else {
-        console.log(`  ⚠️  Protected endpoint returned ${response.statusCode} (expected 401)`);
+        console.log({`  ⚠️  Protected endpoint returned ${response.statusCode}, (expected 401`);
         this.warnings.push('Protected endpoint should return 401 without authentication');
       }
       
@@ -212,14 +177,12 @@ class DeploymentValidator {
         console.log('  ✅ Invalid token correctly returns 401');
         this.successCount++;
       } else {
-        console.log(`  ⚠️  Invalid token returned ${invalidTokenResponse.statusCode} (expected 401)`);
+        console.log({`  ⚠️  Invalid token returned ${invalidTokenResponse.statusCode}, (expected 401`);
         this.warnings.push('Invalid token should return 401');
       }
       
     } catch (error) {
-      console.log(`  ❌ Authentication validation failed: ${error.message}`);
-      this.errors.push(`Authentication validation: ${error.message}`);
-    }
+      console.log({`  ❌ Authentication validation failed: ${error.message},`, this.errors.push({`Authentication validation: ${error.message},`, }
     
     console.log('');
   }
@@ -228,8 +191,7 @@ class DeploymentValidator {
    * Validate rate limiting
    */
   async validateRateLimiting() {
-    console.log('⏱️  Phase 4: Rate Limiting Validation');
-    console.log('----------------------------------');
+    console.log('⏱️  Phase 4: Rate Limiting Validation'), console.log('----------------------------------');
     
     try {
       console.log('  🔍 Testing rate limiting...');
@@ -244,7 +206,7 @@ class DeploymentValidator {
       const rateLimitedResponses = responses.filter(r => r.statusCode === 429);
       
       if (rateLimitedResponses.length > 0) {
-        console.log(`  ✅ Rate limiting active (${rateLimitedResponses.length} requests rate limited)`);
+        console.log({`  ✅ Rate limiting active (${rateLimitedResponses.length}, requests rate limited`);
         this.successCount++;
       } else {
         console.log('  ⚠️  No rate limiting detected');
@@ -252,9 +214,7 @@ class DeploymentValidator {
       }
       
     } catch (error) {
-      console.log(`  ❌ Rate limiting validation failed: ${error.message}`);
-      this.warnings.push(`Rate limiting validation: ${error.message}`);
-    }
+      console.log({`  ❌ Rate limiting validation failed: ${error.message},`, this.warnings.push({`Rate limiting validation: ${error.message},`, }
     
     console.log('');
   }
@@ -263,11 +223,10 @@ class DeploymentValidator {
    * Validate input validation
    */
   async validateInputValidation() {
-    console.log('🛡️  Phase 5: Input Validation Validation');
-    console.log('--------------------------------------');
+    console.log('🛡️  Phase 5: Input Validation Validation'), console.log('--------------------------------------');
     
     const maliciousInputs = [
-      '<script>alert("xss")</script>',
+      '<script>alert("xss")</script>';
       'javascript:alert("xss")',
       '"><script>alert("xss")</script>',
       '${7*7}',
@@ -285,20 +244,16 @@ class DeploymentValidator {
           headers: {
             'Content-Type': 'application/json'
           }
-        });
-        
-        if (response.statusCode === 400 || response.statusCode === 403) {
-          console.log(`  ✅ Malicious input blocked (${response.statusCode})`);
+        }), if (response.statusCode === 400 || response.statusCode === 403) {
+          console.log({`  ✅ Malicious input blocked (${response.statusCode},`);
           this.successCount++;
         } else {
-          console.log(`  ⚠️  Malicious input not blocked (${response.statusCode})`);
+          console.log({`  ⚠️  Malicious input not blocked (${response.statusCode},`);
           this.warnings.push(`Malicious input not blocked: ${input.substring(0, 30)}`);
         }
         
       } catch (error) {
-        console.log(`  ⚠️  Input validation test failed: ${error.message}`);
-        this.warnings.push(`Input validation test: ${error.message}`);
-      }
+        console.log({`  ⚠️  Input validation test failed: ${error.message},`, this.warnings.push({`Input validation test: ${error.message},`, }
     }
     
     console.log('');
@@ -308,8 +263,7 @@ class DeploymentValidator {
    * Validate performance
    */
   async validatePerformance() {
-    console.log('⚡ Phase 6: Performance Validation');
-    console.log('--------------------------------');
+    console.log('⚡ Phase 6: Performance Validation'), console.log('--------------------------------');
     
     try {
       console.log('  🔍 Testing page load performance...');
@@ -318,23 +272,19 @@ class DeploymentValidator {
       const response = await this.makeRequest('/dashboard');
       const endTime = Date.now();
       
-      const loadTime = endTime - startTime;
-      
+      const loadTime = endTime - startTime,
       if (loadTime < 2000) {
-        console.log(`  ✅ Page load time: ${loadTime}ms (excellent)`);
+        console.log({`  ✅ Page load time: ${loadTime},ms (excellent`);
         this.successCount++;
       } else if (loadTime < 5000) {
-        console.log(`  ✅ Page load time: ${loadTime}ms (acceptable)`);
+        console.log({`  ✅ Page load time: ${loadTime},ms (acceptable`);
         this.successCount++;
       } else {
-        console.log(`  ⚠️  Page load time: ${loadTime}ms (slow)`);
-        this.warnings.push(`Slow page load time: ${loadTime}ms`);
-      }
+        console.log({`  ⚠️  Page load time: ${loadTime},ms (slow`);
+        this.warnings.push({`Slow page load time: ${loadTime},ms`, }
       
     } catch (error) {
-      console.log(`  ❌ Performance validation failed: ${error.message}`);
-      this.errors.push(`Performance validation: ${error.message}`);
-    }
+      console.log({`  ❌ Performance validation failed: ${error.message},`, this.errors.push({`Performance validation: ${error.message},`, }
     
     console.log('');
   }
@@ -343,39 +293,30 @@ class DeploymentValidator {
    * Validate monitoring
    */
   async validateMonitoring() {
-    console.log('📊 Phase 7: Monitoring Validation');
-    console.log('--------------------------------');
+    console.log('📊 Phase 7: Monitoring Validation'), console.log('--------------------------------');
     
     try {
       // Check if monitoring endpoints are accessible
       const monitoringEndpoints = [
-        '/api/monitoring/health',
+        '/api/monitoring/health';
         '/api/monitoring/metrics',
         '/api/monitoring/security'
       ];
 
       for (const endpoint of monitoringEndpoints) {
         try {
-          console.log(`  🔍 Testing monitoring endpoint: ${endpoint}...`);
-          const response = await this.makeRequest(endpoint);
+          console.log({`  🔍 Testing monitoring endpoint: ${endpoint},...`, const response = await this.makeRequest(endpoint);
           
           if (response.statusCode === 200) {
-            console.log(`  ✅ ${endpoint} accessible`);
-            this.successCount++;
+            console.log({`  ✅ ${endpoint}, accessible`, this.successCount++;
           } else {
-            console.log(`  ⚠️  ${endpoint} returned ${response.statusCode}`);
-            this.warnings.push(`Monitoring endpoint ${endpoint} returned ${response.statusCode}`);
-          }
+            console.log({`  ⚠️  ${endpoint}, returned ${response.statusCode},`, this.warnings.push({`Monitoring endpoint ${endpoint}, returned ${response.statusCode},`, }
         } catch (error) {
-          console.log(`  ⚠️  ${endpoint} not accessible: ${error.message}`);
-          this.warnings.push(`Monitoring endpoint ${endpoint} not accessible`);
-        }
+          console.log({`  ⚠️  ${endpoint}, not accessible: ${error.message},`, this.warnings.push({`Monitoring endpoint ${endpoint}, not accessible`, }
       }
       
     } catch (error) {
-      console.log(`  ❌ Monitoring validation failed: ${error.message}`);
-      this.warnings.push(`Monitoring validation: ${error.message}`);
-    }
+      console.log({`  ❌ Monitoring validation failed: ${error.message},`, this.warnings.push({`Monitoring validation: ${error.message},`, }
     
     console.log('');
   }
@@ -386,12 +327,9 @@ class DeploymentValidator {
   makeRequest(path, headers = {}, options = {}) {
     return new Promise((resolve, reject) => {
       const url = new URL(path, this.baseUrl);
-      const isHttps = url.protocol === 'https:';
-      const client = isHttps ? https : http;
-      
+      const isHttps = url.protocol === 'https: ', const client = isHttps ? https : http,
       const requestOptions = {
-        hostname: url.hostname,
-        port: url.port || (isHttps ? 443 : 80),
+        hostname: url.hostname, port: url.port || (isHttps ? 443 : 80),
         path: url.pathname + url.search,
         method: options.method || 'GET',
         headers: {
@@ -399,13 +337,11 @@ class DeploymentValidator {
           ...headers
         },
         timeout: 10000
-      };
-
-      const req = client.request(requestOptions, (res) => {
+      }, const req = client.request(requestOptions, (res) => {
         let data = '';
         
         res.on('data', (chunk) => {
-          data += chunk;
+          data += chunk,
         });
         
         res.on('end', () => {
@@ -413,8 +349,7 @@ class DeploymentValidator {
             statusCode: res.statusCode,
             headers: res.headers,
             data: data
-          });
-        });
+          }), });
       });
 
       req.on('error', (error) => {
@@ -439,8 +374,7 @@ class DeploymentValidator {
    */
   generateValidationReport() {
     const report = {
-      validationId: this.generateValidationId(),
-      timestamp: new Date().toISOString(),
+      validationId: this.generateValidationId(), timestamp: new Date().toISOString(),
       targetUrl: this.baseUrl,
       status: this.errors.length === 0 ? 'PASSED' : 'FAILED',
       summary: {
@@ -449,58 +383,42 @@ class DeploymentValidator {
         failedTests: this.errors.length,
         warnings: this.warnings.length,
         successRate: ((this.successCount / (this.successCount + this.errors.length)) * 100).toFixed(1) + '%'
-      },
-      errors: this.errors,
+       }, errors: this.errors,
       warnings: this.warnings,
       securityScore: this.calculateSecurityScore(),
       recommendations: this.generateRecommendations()
-    };
-
-    // Save report to file
+    }, // Save report to file
     fs.writeFileSync('validation-report.json', JSON.stringify(report, null, 2));
     
     console.log('📊 Validation Report Generated');
     console.log('=============================');
-    console.log(`Validation ID: ${report.validationId}`);
-    console.log(`Status: ${report.status}`);
-    console.log(`Success Rate: ${report.summary.successRate}`);
-    console.log(`Security Score: ${report.securityScore}`);
-    console.log(`Passed Tests: ${report.summary.passedTests}`);
-    console.log(`Failed Tests: ${report.summary.failedTests}`);
-    console.log(`Warnings: ${report.summary.warnings}`);
-    
-    if (report.errors.length > 0) {
-      console.log('\n❌ Failed Tests:');
-      report.errors.forEach(error => console.log(`  - ${error}`));
+    console.log({`Validation ID: ${report.validationId},`, console.log({`Status: ${report.status},`, console.log({`Success Rate: ${report.summary.successRate},`, console.log({`Security Score: ${report.securityScore},`, console.log({`Passed Tests: ${report.summary.passedTests},`, console.log({`Failed Tests: ${report.summary.failedTests},`, console.log({`Warnings: ${report.summary.warnings},`, if (report.errors.length > 0) {
+      console.log('\n❌ Failed Tests: '), report.errors.forEach({error => console.log(`  - ${error},`);
     }
     
     if (report.warnings.length > 0) {
-      console.log('\n⚠️  Warnings:');
-      report.warnings.forEach(warning => console.log(`  - ${warning}`));
+      console.log('\n⚠️  Warnings: '), report.warnings.forEach({warning => console.log(`  - ${warning},`);
     }
     
-    console.log('\n🎯 Recommendations:');
-    report.recommendations.forEach(rec => console.log(`  - ${rec}`));
+    console.log('\n🎯 Recommendations: '), report.recommendations.forEach({rec => console.log(`  - ${rec},`);
   }
 
   /**
    * Calculate security score
    */
   calculateSecurityScore() {
-    const totalPossiblePoints = 100;
+    const totalPossiblePoints = 100,
     const errorPenalty = this.errors.length * 20; // 20 points per error
     const warningPenalty = this.warnings.length * 5; // 5 points per warning
     
     const score = Math.max(0, totalPossiblePoints - errorPenalty - warningPenalty);
-    return `${score}/100`;
-  }
+    return `${score}/100`, }
 
   /**
    * Generate validation ID
    */
   generateValidationId() {
-    return `VALIDATE-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+    return `VALIDATE-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, }
 
   /**
    * Generate recommendations
@@ -526,7 +444,7 @@ class DeploymentValidator {
       recommendations.push('Deployment is production-ready with excellent security');
     }
 
-    return recommendations;
+    return recommendations,
   }
 }
 
@@ -544,8 +462,7 @@ if (require.main === module) {
 
   validator.validate()
     .then((success) => {
-      console.log(`\n${success ? '✅' : '❌'} Validation ${success ? 'PASSED' : 'FAILED'}`);
-      process.exit(success ? 0 : 1);
+      console.log({`\n${success ? '✅' : '❌'}, Validation ${success ? 'PASSED' : 'FAILED'},`, process.exit(success ? 0 : 1);
     })
     .catch((error) => {
       console.error('💥 Validation failed:', error.message);
@@ -553,4 +470,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = DeploymentValidator;
+module.exports = DeploymentValidator,

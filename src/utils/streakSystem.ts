@@ -1,290 +1,185 @@
-/**
- * Streak System with Multipliers & Rewards
- * Feature #28: Gamification of consistent usage
- */
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-export interface StreakData {
-  currentStreak: number
-  longestStreak: number
-  lastActiveDate: string
-  totalDays: number
-  multiplier: number
-  nextMilestone: number
-  bonusEmblemsEarned: number
+interface Streak {
+  id: string;
+  name: string;
+  currentStreak: number;
+  longestStreak: number;
+  lastActivity: Date;
+  target: number;
+  category: 'productivity' | 'health' | 'learning' | 'creative' | 'other';
+  description?: string;
+  createdAt: Date;
 }
 
-export interface StreakReward {
-  day: number
-  emblems: number
-  multiplier: number
-  title: string
-  message: string
-  icon: string
+interface StreakStore {
+  streaks: Streak[];
+  activeStreaks: Streak[];
+  updateStreak: (id: string, activity: boolean) => void;
+  addStreak: (streak: Omit<Streak, 'id' | 'currentStreak' | 'longestStreak' | 'lastActivity' | 'createdAt'>) => void;
+  deleteStreak: (id: string) => void;
+  resetStreak: (id: string) => void;
+  getStreakById: (id: string) => Streak | undefined;
+  getTotalActiveStreaks: () => number;
+  getStreaksByCategory: (category: Streak['category']) => Streak[];
 }
 
-/**
- * Streak Milestones & Rewards
- */
-const STREAK_MILESTONES: StreakReward[] = [
-  { day: 3, emblems: 5, multiplier: 1.1, title: '3-Day Streak!', message: 'Building momentum! 🔥', icon: '🔥' },
-  { day: 7, emblems: 15, multiplier: 1.2, title: 'Week Warrior!', message: 'One week strong! 💪', icon: '💪' },
-  { day: 14, emblems: 30, multiplier: 1.3, title: 'Two Weeks!', message: 'Consistency champion! ⚡', icon: '⚡' },
-  { day: 30, emblems: 75, multiplier: 1.5, title: 'Month Master!', message: 'Incredible dedication! 🏆', icon: '🏆' },
-  { day: 60, emblems: 150, multiplier: 1.75, title: '60-Day Legend!', message: 'You\'re unstoppable! 🌟', icon: '🌟' },
-  { day: 90, emblems: 250, multiplier: 2.0, title: '90-Day Hero!', message: 'Habits = Superpowers! 💎', icon: '💎' },
-  { day: 180, emblems: 500, multiplier: 2.5, title: 'Half-Year King!', message: 'Elite level reached! 👑', icon: '👑' },
-  { day: 365, emblems: 1000, multiplier: 3.0, title: 'Year Champion!', message: 'LEGENDARY STATUS! 🚀', icon: '🚀' }
-]
+const isSameDay = (date1: Date, date2: Date): boolean => {
+  return date1.toDateString() === date2.toDateString();
+};
 
-/**
- * Get current streak data
- */
-export function getStreakData(): StreakData {
-  if (typeof window === 'undefined') {
-    return getDefaultStreakData()
-  }
+const isYesterday = (date: Date): boolean => {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  return isSameDay(date, yesterday);
+};
 
-  try {
-    const stored = localStorage.getItem('streak_data')
-    if (!stored) return getDefaultStreakData()
-    
-    const data: StreakData = JSON.parse(stored)
-    
-    // Check if streak is still active
-    const today = new Date().toDateString()
-    const lastActive = new Date(data.lastActiveDate).toDateString()
-    const yesterday = new Date(Date.now() - 86400000).toDateString()
-    
-    // If last active was today, return as is
-    if (lastActive === today) {
-      return data
+export const useStreakStore = create<StreakStore>()(
+  persist(
+    (set, get) => ({
+      streaks: [],
+      activeStreaks: [],
+
+      updateStreak: (id, activity) => {
+        set((state) => ({
+          streaks: state.streaks.map((streak) => {
+            if (streak.id !== id) return streak;
+
+            const now = new Date();
+            const wasActiveYesterday = isYesterday(streak.lastActivity);
+            const isActiveToday = isSameDay(streak.lastActivity, now);
+
+            if (activity) {
+              if (!isActiveToday) {
+                // New activity
+                if (wasActiveYesterday || streak.currentStreak === 0) {
+                  // Continue streak
+                  return {
+                    ...streak,
+                    currentStreak: streak.currentStreak + 1,
+                    longestStreak: Math.max(streak.longestStreak, streak.currentStreak + 1),
+                    lastActivity: now
+                  };
+                } else {
+                  // Start new streak
+                  return {
+                    ...streak,
+                    currentStreak: 1,
+                    longestStreak: Math.max(streak.longestStreak, 1),
+                    lastActivity: now
+                  };
+                }
+              }
+            } else {
+              // No activity today
+              if (wasActiveYesterday) {
+                // Streak continues (no penalty for missing one day)
+                return streak;
+              } else if (!isActiveToday && streak.currentStreak > 0) {
+                // Streak broken
+                return {
+                  ...streak,
+                  currentStreak: 0,
+                  lastActivity: now
+                };
+              }
+            }
+
+            return streak;
+          })
+        }));
+
+        // Update active streaks
+        set((state) => ({
+          activeStreaks: state.streaks.filter((streak) => streak.currentStreak > 0)
+        }));
+      },
+
+      addStreak: (streakData) => {
+        const newStreak: Streak = {
+          ...streakData,
+          id: Date.now().toString(),
+          currentStreak: 0,
+          longestStreak: 0,
+          lastActivity: new Date(),
+          createdAt: new Date()
+        };
+
+        set((state) => ({
+          streaks: [...state.streaks, newStreak]
+        }));
+      },
+
+      deleteStreak: (id) => {
+        set((state) => ({
+          streaks: state.streaks.filter((streak) => streak.id !== id),
+          activeStreaks: state.activeStreaks.filter((streak) => streak.id !== id)
+        }));
+      },
+
+      resetStreak: (id) => {
+        set((state) => ({
+          streaks: state.streaks.map((streak) =>
+            streak.id === id
+              ? {
+                  ...streak,
+                  currentStreak: 0,
+                  lastActivity: new Date()
+                }
+              : streak
+          )
+        }));
+      },
+
+      getStreakById: (id) => {
+        return get().streaks.find((streak) => streak.id === id);
+      },
+
+      getTotalActiveStreaks: () => {
+        return get().activeStreaks.length;
+      },
+
+      getStreaksByCategory: (category) => {
+        return get().streaks.filter((streak) => streak.category === category);
+      }
+    }),
+    {
+      name: 'streak-storage',
+      version: 1
     }
-    
-    // If last active was yesterday, increment streak
-    if (lastActive === yesterday) {
-      return data
-    }
-    
-    // Streak broken - reset
-    return {
-      ...data,
-      currentStreak: 0,
-      multiplier: 1.0,
-      nextMilestone: 3
-    }
-  } catch (error) {
-    console.error('Error loading streak data:', error)
-    return getDefaultStreakData()
+  )
+);
+
+export const getStreakStatus = (streak: Streak): 'active' | 'broken' | 'new' => {
+  const now = new Date();
+  const wasActiveToday = isSameDay(streak.lastActivity, now);
+  const wasActiveYesterday = isYesterday(streak.lastActivity);
+
+  if (streak.currentStreak === 0) return 'new';
+  if (wasActiveToday || wasActiveYesterday) return 'active';
+  return 'broken';
+};
+
+export const getStreakMotivation = (streak: Streak): string => {
+  const status = getStreakStatus(streak);
+  
+  switch (status) {
+    case 'active':
+      if (streak.currentStreak >= streak.target) {
+        return `🎉 Amazing! You've reached your target of ${streak.target} days!`;
+      }
+      return `🔥 Keep it up! ${streak.target - streak.currentStreak} days to go!`;
+    case 'broken':
+      return `💪 Don't give up! Start a new streak today!`;
+    case 'new':
+      return `🚀 Ready to start your ${streak.name} streak?`;
+    default:
+      return 'Keep going!';
   }
-}
+};
 
-/**
- * Update streak (call once per day)
- */
-export function updateStreak(): {
-  data: StreakData
-  reward?: StreakReward
-  streakBroken?: boolean
-} {
-  const current = getStreakData()
-  const today = new Date().toDateString()
-  const lastActive = new Date(current.lastActiveDate).toDateString()
-  const yesterday = new Date(Date.now() - 86400000).toDateString()
-  
-  // Already updated today
-  if (lastActive === today) {
-    return { data: current }
-  }
-  
-  let newStreak: number
-  let streakBroken = false
-  
-  // Continue streak from yesterday
-  if (lastActive === yesterday) {
-    newStreak = current.currentStreak + 1
-  } 
-  // Streak broken
-  else {
-    newStreak = 1
-    streakBroken = true
-  }
-  
-  // Calculate multiplier based on streak
-  const multiplier = calculateMultiplier(newStreak)
-  
-  // Find next milestone
-  const nextMilestone = STREAK_MILESTONES.find(m => m.day > newStreak)?.day || 999
-  
-  // Check if milestone reached
-  const reward = STREAK_MILESTONES.find(m => m.day === newStreak)
-  
-  const newData: StreakData = {
-    currentStreak: newStreak,
-    longestStreak: Math.max(newStreak, current.longestStreak),
-    lastActiveDate: new Date().toISOString(),
-    totalDays: current.totalDays + 1,
-    multiplier,
-    nextMilestone,
-    bonusEmblemsEarned: current.bonusEmblemsEarned + (reward?.emblems || 0)
-  }
-  
-  saveStreakData(newData)
-  
-  console.log(`🔥 Streak Updated: Day ${newStreak} | ${multiplier}x multiplier`)
-  if (reward) {
-    console.log(`🎁 Milestone Reward: ${reward.title} - ${reward.emblems} emblems!`)
-  }
-  
-  return { data: newData, reward, streakBroken }
-}
-
-/**
- * Calculate multiplier based on streak length
- */
-function calculateMultiplier(streak: number): number {
-  if (streak >= 365) return 3.0
-  if (streak >= 180) return 2.5
-  if (streak >= 90) return 2.0
-  if (streak >= 60) return 1.75
-  if (streak >= 30) return 1.5
-  if (streak >= 14) return 1.3
-  if (streak >= 7) return 1.2
-  if (streak >= 3) return 1.1
-  return 1.0
-}
-
-/**
- * Apply streak multiplier to emblems earned
- */
-export function applyStreakMultiplier(baseEmblems: number, streak?: number): {
-  base: number
-  bonus: number
-  total: number
-  multiplier: number
-} {
-  const data = streak !== undefined 
-    ? { ...getStreakData(), currentStreak: streak }
-    : getStreakData()
-  
-  const multiplier = data.multiplier
-  const total = Math.floor(baseEmblems * multiplier)
-  const bonus = total - baseEmblems
-  
-  return {
-    base: baseEmblems,
-    bonus,
-    total,
-    multiplier
-  }
-}
-
-/**
- * Get motivational message based on streak
- */
-export function getStreakMessage(streak: number): string {
-  if (streak === 0) return 'Start your journey today! 🌟'
-  if (streak === 1) return 'Great start! Come back tomorrow! 💫'
-  if (streak === 2) return 'Two days strong! Keep it going! 🔥'
-  if (streak < 7) return `${streak} days in a row! Building momentum! 💪`
-  if (streak < 30) return `${streak}-day streak! You\'re crushing it! ⚡`
-  if (streak < 90) return `${streak} days of excellence! Unstoppable! 🏆`
-  if (streak < 180) return `${streak} consecutive days! Elite status! 👑`
-  if (streak < 365) return `${streak} days straight! LEGENDARY! 💎`
-  return `${streak} DAYS! You are a LEGEND! 🚀`
-}
-
-/**
- * Get progress to next milestone
- */
-export function getNextMilestoneProgress(): {
-  current: number
-  next: number
-  remaining: number
-  percentage: number
-  reward: StreakReward | null
-} {
-  const data = getStreakData()
-  const nextReward = STREAK_MILESTONES.find(m => m.day > data.currentStreak)
-  
-  if (!nextReward) {
-    return {
-      current: data.currentStreak,
-      next: 999,
-      remaining: 0,
-      percentage: 100,
-      reward: null
-    }
-  }
-  
-  const previousMilestone = STREAK_MILESTONES
-    .filter(m => m.day <= data.currentStreak)
-    .pop()?.day || 0
-  
-  const totalGap = nextReward.day - previousMilestone
-  const currentProgress = data.currentStreak - previousMilestone
-  const percentage = (currentProgress / totalGap) * 100
-  
-  return {
-    current: data.currentStreak,
-    next: nextReward.day,
-    remaining: nextReward.day - data.currentStreak,
-    percentage: Math.min(100, Math.max(0, percentage)),
-    reward: nextReward
-  }
-}
-
-/**
- * Get all milestone achievements
- */
-export function getMilestoneAchievements(): Array<StreakReward & { achieved: boolean }> {
-  const data = getStreakData()
-  
-  return STREAK_MILESTONES.map(milestone => ({
-    ...milestone,
-    achieved: data.currentStreak >= milestone.day || data.longestStreak >= milestone.day
-  }))
-}
-
-/**
- * Save streak data
- */
-function saveStreakData(data: StreakData): void {
-  if (typeof window === 'undefined') return
-  
-  try {
-    localStorage.setItem('streak_data', JSON.stringify(data))
-  } catch (error) {
-    console.error('Error saving streak data:', error)
-  }
-}
-
-/**
- * Default streak data
- */
-function getDefaultStreakData(): StreakData {
-  return {
-    currentStreak: 0,
-    longestStreak: 0,
-    lastActiveDate: new Date().toISOString(),
-    totalDays: 0,
-    multiplier: 1.0,
-    nextMilestone: 3,
-    bonusEmblemsEarned: 0
-  }
-}
-
-/**
- * Reset streak (for testing)
- */
-export function resetStreak(): void {
-  if (typeof window === 'undefined') return
-  localStorage.removeItem('streak_data')
-  console.log('🔄 Streak data reset')
-}
-
-// Export for testing
-export const __test__ = {
-  STREAK_MILESTONES,
-  calculateMultiplier
-}
-
+export const getTotalStreakDays = (): number => {
+  const streaks = useStreakStore.getState().streaks;
+  return streaks.reduce((total, streak) => total + streak.currentStreak, 0);
+};

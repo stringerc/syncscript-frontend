@@ -13,12 +13,11 @@ const config = {
   ],
   framework: {
     name: "@storybook/nextjs",
-    options: {},
+    options: { },
   },
   docs: {
     autodocs: "tag",
   },
   staticDirs: ['../public'],
 };
-export default config;
-
+export default config,

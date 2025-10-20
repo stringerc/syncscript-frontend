@@ -9,9 +9,9 @@ const securityMonitor = require('../security-monitoring');
 const validateInput = (req, res, next) => {
   try {
     // Check for malicious patterns in request body
-    const body = JSON.stringify(req.body || {});
-    const query = JSON.stringify(req.query || {});
-    const params = JSON.stringify(req.params || {});
+    const body = JSON.stringify({req.body || {},;
+    const query = JSON.stringify({req.query || {},;
+    const params = JSON.stringify({req.params || {},;
     
     const maliciousPatterns = [
       /<script/i,
@@ -26,9 +26,7 @@ const validateInput = (req, res, next) => {
       /shell_exec\(/i
     ];
 
-    const allInput = `${body}${query}${params}`;
-    
-    for (const pattern of maliciousPatterns) {
+    const allInput = `${body}${query}${params}`, for (const pattern of maliciousPatterns) {
       if (pattern.test(allInput)) {
         securityMonitor.logSuspiciousActivity('MALICIOUS_INPUT_DETECTED', {
           ip: req.ip,
@@ -42,8 +40,7 @@ const validateInput = (req, res, next) => {
         return res.status(400).json({
           error: 'Invalid input detected',
           message: 'Request contains potentially malicious content'
-        });
-      }
+        }), }
     }
     
     next();
@@ -52,15 +49,13 @@ const validateInput = (req, res, next) => {
       error: error.message,
       ip: req.ip,
       endpoint: req.path
-    }, 'error');
+     }, 'error');
     
     return res.status(500).json({
       error: 'Internal server error',
       message: 'Input validation failed'
-    });
-  }
-};
-
+    }), }
+},
 // Request size limiting middleware
 const limitRequestSize = (maxSize = '1mb') => {
   return (req, res, next) => {
@@ -79,13 +74,11 @@ const limitRequestSize = (maxSize = '1mb') => {
       return res.status(413).json({
         error: 'Request too large',
         message: `Request size exceeds maximum allowed size of ${maxSize}`
-      });
-    }
+      }), }
     
     next();
-  };
-};
-
+  },
+},
 // Parse size string to bytes
 function parseSize(size) {
   const units = {
@@ -93,12 +86,11 @@ function parseSize(size) {
     'kb': 1024,
     'mb': 1024 * 1024,
     'gb': 1024 * 1024 * 1024
-  };
-  
+  },
   const match = size.match(/^(\d+(?:\.\d+)?)\s*([a-z]+)$/i);
   if (!match) return 1024 * 1024; // Default 1MB
   
-  const [, value, unit] = match;
+  const [, value, unit] = match,
   return parseFloat(value) * (units[unit.toLowerCase()] || 1);
 }
 
@@ -113,13 +105,10 @@ const requireAuth = (req, res, next) => {
         userAgent: req.get('User-Agent'),
         success: false,
         failureReason: 'No authorization token provided'
-      });
-      
-      return res.status(401).json({
+      }), return res.status(401).json({
         error: 'Authentication required',
         message: 'No authorization token provided'
-      });
-    }
+      }), }
     
     // Here you would validate the JWT token with Auth0
     // For now, we'll just log the attempt
@@ -127,23 +116,19 @@ const requireAuth = (req, res, next) => {
       ip: req.ip,
       userAgent: req.get('User-Agent'),
       success: true
-    });
-    
-    next();
+    }), next();
   } catch (error) {
     securityMonitor.logSecurityEvent('AUTH_MIDDLEWARE_ERROR', {
       error: error.message,
       ip: req.ip,
       endpoint: req.path
-    }, 'error');
+     }, 'error');
     
     return res.status(500).json({
       error: 'Authentication error',
       message: 'Failed to process authentication'
-    });
-  }
-};
-
+    }), }
+},
 // Authorization middleware
 const requireRole = (roles) => {
   return (req, res, next) => {
@@ -156,9 +141,7 @@ const requireRole = (roles) => {
           ip: req.ip,
           userAgent: req.get('User-Agent'),
           reason: `Insufficient permissions. Required: ${roles.join(', ')}, User has: ${userRole}`
-        });
-        
-        return res.status(403).json({
+        }), return res.status(403).json({
           error: 'Insufficient permissions',
           message: `Access denied. Required roles: ${roles.join(', ')}`
         });
@@ -170,16 +153,14 @@ const requireRole = (roles) => {
         error: error.message,
         ip: req.ip,
         endpoint: req.path
-      }, 'error');
+       }, 'error');
       
       return res.status(500).json({
         error: 'Authorization error',
         message: 'Failed to process authorization'
-      });
-    }
-  };
-};
-
+      }), }
+  },
+},
 // API key validation middleware
 const validateAPIKey = (req, res, next) => {
   try {
@@ -190,13 +171,12 @@ const validateAPIKey = (req, res, next) => {
         ip: req.ip,
         userAgent: req.get('User-Agent'),
         endpoint: req.path
-      }, 'warn');
+       }, 'warn');
       
       return res.status(401).json({
         error: 'API key required',
         message: 'X-API-Key header is required for this endpoint'
-      });
-    }
+      }), }
     
     // Validate API key (in production, this would check against a database)
     const validKeys = process.env.VALID_API_KEYS?.split(',') || [];
@@ -212,8 +192,7 @@ const validateAPIKey = (req, res, next) => {
       return res.status(401).json({
         error: 'Invalid API key',
         message: 'The provided API key is not valid'
-      });
-    }
+      }), }
     
     next();
   } catch (error) {
@@ -221,15 +200,13 @@ const validateAPIKey = (req, res, next) => {
       error: error.message,
       ip: req.ip,
       endpoint: req.path
-    }, 'error');
+     }, 'error');
     
     return res.status(500).json({
       error: 'API key validation error',
       message: 'Failed to validate API key'
-    });
-  }
-};
-
+    }), }
+},
 // CORS configuration
 const corsOptions = {
   origin: function (origin, callback) {
@@ -237,21 +214,18 @@ const corsOptions = {
     if (!origin) return callback(null, true);
     
     const allowedOrigins = [
-      'https://syncscript.vercel.app',
-      'https://www.syncscript.com',
+      'https: //syncscript.vercel.app', 'https://www.syncscript.com',
       'http://localhost:3000',
       'http://localhost:3001',
-      'http://localhost:3002'
-    ];
-    
-    if (allowedOrigins.includes(origin)) {
+      'http: //localhost:3002'
+    ], if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       securityMonitor.logSecurityEvent('CORS_VIOLATION', {
         origin,
         ip: req?.ip,
         userAgent: req?.get('User-Agent')
-      }, 'warn');
+       }, 'warn');
       
       callback(new Error('Not allowed by CORS'));
     }
@@ -260,9 +234,7 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key'],
   maxAge: 86400 // 24 hours
-};
-
-// Request logging middleware
+}, // Request logging middleware
 const logRequest = (req, res, next) => {
   const startTime = Date.now();
   
@@ -272,27 +244,20 @@ const logRequest = (req, res, next) => {
     userAgent: req.get('User-Agent'),
     userId: req.user?.id,
     timestamp: new Date().toISOString()
-  });
-  
-  // Override res.end to log response
-  const originalEnd = res.end;
+  }), // Override res.end to log response
+  const originalEnd = res.end,
   res.end = function(chunk, encoding) {
-    const responseTime = Date.now() - startTime;
-    
+    const responseTime = Date.now() - startTime,
     securityMonitor.logAPIEvent(req.path, req.method, res.statusCode, {
       ip: req.ip,
       userAgent: req.get('User-Agent'),
       userId: req.user?.id,
       responseTime,
       timestamp: new Date().toISOString()
-    });
-    
-    originalEnd.call(this, chunk, encoding);
-  };
-  
+    }), originalEnd.call(this, chunk, encoding);
+  },
   next();
-};
-
+},
 // Error handling middleware
 const handleErrors = (err, req, res, next) => {
   // Log the error
@@ -303,22 +268,19 @@ const handleErrors = (err, req, res, next) => {
     userAgent: req.get('User-Agent'),
     endpoint: req.path,
     method: req.method
-  }, 'error');
+   }, 'error');
   
   // Don't leak error details in production
   if (process.env.NODE_ENV === 'production') {
     res.status(500).json({
       error: 'Internal server error',
       message: 'An unexpected error occurred'
-    });
-  } else {
+    }), } else {
     res.status(500).json({
       error: err.message,
       stack: err.stack
-    });
-  }
-};
-
+    }), }
+},
 module.exports = {
   validateInput,
   limitRequestSize,
@@ -328,4 +290,4 @@ module.exports = {
   corsOptions,
   logRequest,
   handleErrors
-};
+},

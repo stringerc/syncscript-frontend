@@ -4,10 +4,10 @@
  */
 
 import React, { useState } from 'react';
-import { useUser } from '@auth0/nextjs-auth0/client';
 
 export default function DeleteAccountButton() {
-  const { user } = useUser();
+  // Auth0 temporarily disabled
+  const user = null;
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmText, setConfirmText] = useState('');
 

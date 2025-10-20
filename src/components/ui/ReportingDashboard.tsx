@@ -1,94 +1,147 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer     } from 'recharts';
 
 interface Task {
-  completed: boolean;
-  created_at: string;
-  completed_at?: string;
-  [key: string]: unknown;
-}
+    completed: boolean,
+    created_at: string,
+    completed_at?: string;
+    [key: string]: unknown
+  
+  
+  
 
-interface EnergyLog {
-  energy_level: number;
-  created_at: string;
-  [key: string]: unknown;
-}
 
-interface ReportingDashboardProps {
-  isOpen: boolean;
-  onClose: () => void;
-  tasks: Task[];
-  energyLogs: EnergyLog[];
-}
 
-const ReportingDashboard: React.FC<ReportingDashboardProps> = ({ isOpen, onClose, tasks, energyLogs }) => {
-  const [reportType, setReportType] = useState<'overview' | 'tasks' | 'energy' | 'productivity'>('overview');
-  const [dateRange, setDateRange] = useState<'week' | 'month' | 'quarter'>('week');
+
+
+
+
+
+
+
+
+
+}
+    interface EnergyLog {
+  energy_level: number,
+    created_at: string;
+    [key: string]: unknown
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+}
+    interface ReportingDashboardProps {
+  isOpen: boolean,
+    onClose: () => void,
+  tasks: Task[],
+    energyLogs: EnergyLog[];
+    ;
+    ;
+     
+
+
+
+
+
+
+
+
+
+
+
+
+}
+const ReportingDashboard: React.FC<ReportingDashboardProps> = ({ isOpen,
+    onClose, tasks, energyLogs }) => {
+  const [ reportType, setReportType    ] = useState<'overview' | 'tasks' | 'energy' | 'productivity'>('overview');
+  const [ dateRange, setDateRange    ] = useState<'week' | 'month' | 'quarter'>('week');
 
   if (!isOpen) return null;
-
   // Calculate stats
-  const completed = tasks.filter(t => t.completed).length;
-  const completionRate = tasks.length > 0 ? (completed / tasks.length * 100).toFixed(1) : 0;
-  const avgEnergy = energyLogs.length > 0
+  const completed = tasks.filter(t => t.completed).length, const completionRate = tasks.length > 0 ? (completed / tasks.length * 100).toFixed(1) : 0;
+    const avgEnergy = energyLogs.length > 0
     ? Math.round(energyLogs.reduce((sum: number, log: EnergyLog) => sum + log.energy_level, 0) / energyLogs.length)
-    : 0;
-
-  // Prepare chart data
-  const last7Days = Array.from({ length: 7 }, (_, i) => {
-    const date = new Date();
-    date.setDate(date.getDate() - (6 - i));
-    return {
-      date: date.toLocaleDateString('en-US', { weekday: 'short' }),
-      tasks: tasks.filter(t => {
-        const taskDate = new Date(t.created_at);
+    : 0; // Prepare chart data
+  const last7Days = Array.from({ length: 7  }, (_; i) => {
+    const date = new Date(), date.setDate(date.getDate() - (6 - i)), return {
+      date: date.toLocaleDateString('en-US'; { weekday: 'short' })
+    tasks: tasks.filter(t = > { const taskDate = new Date(t.created_at),
         return taskDate.toDateString() === date.toDateString();
       }).length,
-      completed: tasks.filter(t => {
-        if (!t.completed_at) return false;
-        const completedDate = new Date(t.completed_at);
+      completed: tasks.filter(t = > { if (!t.completed_at) return false, const completedDate = new Date(t.completed_at);
         return completedDate.toDateString() === date.toDateString();
       }).length,
       energy: energyLogs.filter((log: EnergyLog) => {
-        const logDate = new Date(log.created_at);
+    const logDate = new Date(log.created_at),
         return logDate.toDateString() === date.toDateString();
       }).reduce((sum: number, log: EnergyLog) => sum + log.energy_level, 0) / energyLogs.filter((log: EnergyLog) => {
-        const logDate = new Date(log.created_at);
+    const logDate = new Date(log.created_at),
         return logDate.toDateString() === date.toDateString();
       }).length || 0
-    };
+  }
   });
 
-  return (
-    <div className="reporting-overlay" onClick={onClose}>
+  return (<div className = "reporting-overlay" onClick={onClose}>
       <motion.div
         className="reporting-modal"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="reporting-header">
-          <h2>📊 Reporting Dashboard</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
-        </div>
-
-        <div className="reporting-controls">
-          <div className="report-type-selector">
-            {['overview', 'tasks', 'energy', 'productivity'].map(type => (
+        initial={{ opacity: 0, scale: 0.95 }}, animate={{ opacity: 1, scale: 1 }}
+        onClick={(e
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ) => e.stopPropagation(),
+  };
+      >;
+        <div className="reporting-header">;
+          <h2>📊 Reporting Dashboard</h2>;
+          <button className="close-btn" onClick={onClose}>×</button>;
+        </div>;
+;
+        <div className="reporting-controls">;
+          <div className="report-type-selector">;
+            {['overview', 'tasks', 'energy', 'productivity'].map({type = > (
               <button
-                key={type}
-                className={`type-btn ${reportType === type ? 'active' : ''}`}
-                onClick={() => setReportType(type as 'overview' | 'tasks' | 'energy' | 'productivity')}
+                key={type
+  }
+       className={`type-btn ${reportType === type ? 'active' : ''
+  }
+       `}; onClick={( => setReportType(type as 'overview' | 'tasks' | 'energy' | 'productivity')
+  }
               >
-                {type.charAt(0).toUpperCase() + type.slice(1)}
+                {type.charAt(0).toUpperCase() + type.slice(1)
+  }
               </button>
-            ))}
+            ))
+  }
           </div>
 
           <select
-            value={dateRange}
-            onChange={(e) => setDateRange(e.target.value as 'week' | 'month' | 'quarter')}
+            value = {dateRange
+  }
+            onChange={(e) => setDateRange(e.target.value as 'week' | 'month' | 'quarter')
+  }
             className="date-range-select"
           >
             <option value="week">Last 7 Days</option>
@@ -98,7 +151,8 @@ const ReportingDashboard: React.FC<ReportingDashboardProps> = ({ isOpen, onClose
         </div>
 
         <div className="reporting-content">
-          {/* Summary Cards */}
+          {/* Summary Cards */
+  }
           <div className="summary-cards">
             <div className="summary-card">
               <div className="card-value">{completed}</div>
@@ -114,7 +168,8 @@ const ReportingDashboard: React.FC<ReportingDashboardProps> = ({ isOpen, onClose
             </div>
           </div>
 
-          {/* Charts */}
+          {/* Charts */
+  }
           <div className="charts-container">
             <div className="chart-section">
               <h4>Task Completion Trend</h4>
@@ -154,6 +209,5 @@ const ReportingDashboard: React.FC<ReportingDashboardProps> = ({ isOpen, onClose
       </motion.div>
     </div>
   );
-};
-
+  }
 export default ReportingDashboard;

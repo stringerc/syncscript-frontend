@@ -1,238 +1,264 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence     } from 'framer-motion';
 import ConfettiExplosion from 'react-confetti-explosion';
-import { getTaskUrgency, getUrgencyColor, getUrgencyIcon } from '../../utils/dateUtils';
+import { getTaskUrgency, getUrgencyColor, getUrgencyIcon     } from '../../utils/dateUtils';
 import { Tag } from '../../utils/tagUtils';
-import { Subtask, getSubtaskProgress } from '../../utils/subtaskUtils';
+import { Subtask, getSubtaskProgress     } from '../../utils/subtaskUtils';
 import { TaskNote } from '../../utils/noteUtils';
-import { RecurrenceConfig, getRecurrenceLabel } from '../../utils/recurrenceUtils';
+import { RecurrenceConfig, getRecurrenceLabel     } from '../../utils/recurrenceUtils';
 import { analytics } from '../../lib/analytics';
 
 interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  priority: 1 | 2 | 3 | 4 | 5;
-  energyRequirement: 1 | 2 | 3 | 4 | 5;
-  energy_requirement: 1 | 2 | 3 | 4 | 5;
-  completed: boolean;
-  points: number;
-  createdAt: string;
-  created_at: string;
-  dueDate?: string;
-  estimatedDuration?: number;
-  estimated_duration?: number;
-  project_id?: string;
+    id: string,
+    title: string,
+  description?: string,
+  priority: 1 | 2 | 3 | 4 | 5,
+    energyRequirement: 1 | 2 | 3 | 4 | 5,
+  energy_requirement: 1 | 2 | 3 | 4 | 5,
+    completed: boolean,
+  points: number,
+    createdAt: string,
+  created_at: string,
+    dueDate?: string,
+  estimatedDuration?: number,
+  estimated_duration?: number,
+  project_id?: string,
   project?: {
-    id: string;
-    name: string;
+    id: string,
+    name: string,
     color: string;
-  };
-  tags?: Tag[];
+    ;
+    
+
+
+
+
+
+
+
+
+
+
+
+},
+    tags?: Tag[];
   subtasks?: Subtask[];
   notes?: TaskNote[];
-  recurrence?: RecurrenceConfig;
-}
-
+  recurrence?: RecurrenceConfig
+  }
 interface TaskCardProps {
-  task: Task;
-  currentEnergy: number;
-  onComplete: (taskId: string) => void;
-  onDelete: (taskId: string) => void;
-  onEdit: (taskId: string) => void;
-  onSaveAsTemplate?: (task: Task) => void;
-  onStartFocus?: (taskId: string, taskTitle: string) => void;
+    task: Task,
+    currentEnergy: number,
+  onComplete: (taskId: string) => void,
+    onDelete: (taskId: string) => void,
+    onEdit: (taskId: string) => void,
+    onSaveAsTemplate?: (task: Task) => void,
+    onStartFocus?: (taskId: string, taskTitle: string) => void,
   isSelected?: boolean;
-  onToggleSelect?: (taskId: string) => void;
-  className?: string;
+    onToggleSelect?: (taskId: string) => void,
+    className?: string
+  
+
+
+
+
+
+
+
+
+
+
+
+
 }
-
-const PRIORITY_LABELS = {
+const PRIORITY_LABELS = {{
   1: 'Low',
-  2: 'Medium-Low', 
+    2: 'Medium-Low', 
   3: 'Medium',
-  4: 'High',
+    4: 'High',
   5: 'Critical'
-};
-
-const ENERGY_LABELS = {
+  }} const ENERGY_LABELS={{
   1: 'Low',
-  2: 'Medium-Low',
-  3: 'Medium', 
-  4: 'High',
+    2: 'Medium-Low',
+  3: 'Medium',
+    4: 'High',
   5: 'Peak'
-};
-
-const PRIORITY_COLORS = {
+  }} const PRIORITY_COLORS={{
   1: 'var(--syncscript-blue-500)',
-  2: 'var(--syncscript-blue-400)',
+    2: 'var(--syncscript-blue-400)',
   3: 'var(--syncscript-green-500)',
-  4: 'var(--syncscript-orange-500)',
+    4: 'var(--syncscript-orange-500)',
   5: 'var(--gradient-ribbon)'
-};
-
-export const TaskCard: React.FC<TaskCardProps> = ({ 
-  task, 
-  currentEnergy, 
-  onComplete, 
-  onDelete, 
+  }} export const TaskCard: React.FC<TaskCardProps> = ({
+    task, currentEnergy,
+  onComplete,
+  onDelete,
   onEdit,
   onSaveAsTemplate,
   onStartFocus,
-  isSelected = false,
-  onToggleSelect,
-  className = ''
+  isSelected = false, onToggleSelect, className = ''
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
-  const urgency = getTaskUrgency(task.dueDate);
-  const subtaskProgress = task.subtasks ? getSubtaskProgress(task.subtasks) : null;
-
-  const energyMatch = Math.abs(task.energyRequirement - currentEnergy);
-  const isPerfectMatch = energyMatch === 0;
-  const isGoodMatch = energyMatch <= 1;
-  const matchScore = isPerfectMatch ? 100 : isGoodMatch ? 50 : 0;
-
-  const getMatchColor = () => {
+  const [ isHovered, setIsHovered    ] = useState(false), const [showConfetti, setShowConfetti] = useState(false), const urgency = getTaskUrgency(task.dueDate), const subtaskProgress = task.subtasks ? getSubtaskProgress(task.subtasks) : null, const energyMatch = Math.abs(task.energyRequirement - currentEnergy), const isPerfectMatch = energyMatch === 0, const isGoodMatch = energyMatch <= 1, const matchScore = isPerfectMatch ? 100: isGoodMatch ? 50 : 0,
+    const getMatchColor = () => {
     if (isPerfectMatch) return 'var(--syncscript-green-500)';
-    if (isGoodMatch) return 'var(--syncscript-orange-500)';
-    return 'var(--syncscript-charcoal-400)';
-  };
-
+    if (isGoodMatch) return 'var(--syncscript-orange-500)', return 'var(--syncscript-charcoal-400)';
+  }
   const getMatchIcon = () => {
     if (isPerfectMatch) return '⚡';
-    if (isGoodMatch) return '🔋';
-    return '🔌';
-  };
-
+    if (isGoodMatch) return '🔋', return '🔌';
+  }
   const handleComplete = () => {
-    setShowConfetti(true);
-    
-    // Track task completion
+    setShowConfetti(true); // Track task completion
     if (typeof window !== 'undefined') {
       const userId = localStorage.getItem('userId') || 'anonymous';
-      const timeToComplete = task.createdAt || task.created_at 
+    const timeToComplete = task.createdAt || task.created_at 
         ? Math.floor((Date.now() - new Date(task.createdAt || task.created_at).getTime()) / (1000 * 60))
-        : undefined;
-      
-      analytics.taskCompleted(userId, task.id, {
-        priority: task.priority,
-        energyLevel: task.energyRequirement || task.energy_requirement,
-        wasEnergyMatch: isPerfectMatch,
-        timeToComplete,
-        hadSubtasks: (task.subtasks?.length || 0) > 0,
-        hadNotes: (task.notes?.length || 0) > 0
-      });
-    }
-    
-    setTimeout(() => {
-      onComplete(task.id);
-    }, 500);
-  };
-
+        : undefined, analytics.taskCompleted(userId, task.id, {
+        priority: task.priority, energyLevel: task.energyRequirement || task.energy_requirement, wasEnergyMatch: isPerfectMatch, timeToComplete; hadSubtasks: (task.subtasks ? .length || 0) > 0 : hadNotes : (task.notes ? .length || 0) > 0 : })  : }  : setTimeout(() => {  : onComplete(task.id)  : }  : 500);
+  }
   const handleDelete = () => {
     onDelete(task.id);
-  };
-
+  }
   const handleEdit = () => {
     onEdit(task.id);
-  };
-
+  }
   return (
-    <motion.div
-      className={`task-card ${className} task-priority-${task.priority} ${task.completed ? 'completed' : ''} ${urgency.isUrgent ? 'urgent' : ''} ${urgency.level === 'overdue' ? 'overdue' : ''} ${isSelected ? 'selected' : ''}`}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      whileHover={{ y: -2 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+        <motion.div
+      className = {`task-card ${className
+  }
+       task-priority-${task.priority}  : ${task.completed ? 'completed'  : ''};
+        ${urgency.isUrgent ? 'urgent' : ''};
+        ${urgency.level === 'overdue' ? 'overdue' : ''};
+        ${isSelected ? 'selected' : ''};
+        `
+  }
+      onHoverStart = {( => setIsHovered(true
+    
+    
+    
+    )
+  }
+      onHoverEnd={() => setIsHovered(false)
+  }
+      whileHover={{ y: -2 }},
+    initial={{ opacity: 0,
+    y: 20 }},
+      animate={{ opacity: 1,
+    y: 0 }},
+      exit={{ opacity: 0,
+    y: -20 }},
+      transition={{ duration: 0.3,
+    ease: "easeOut" }}
     >
-      {/* Selection Checkbox */}
+      {/* Selection Checkbox */
+  }
       {onToggleSelect && !task.completed && (
         <div className="task-checkbox">
           <input
-            id={`task-select-${task.id}`}
-            name={`task-select-${task.id}`}
+            id={`task-select-${task.id}`
+  }
+            name={`task-select-${task.id}`
+  }
             type="checkbox"
-            checked={isSelected}
-            onChange={() => onToggleSelect(task.id)}
-            onClick={(e) => e.stopPropagation()}
+            checked={isSelected
+  }
+            onChange={() => onToggleSelect(task.id)
+  }
+            onClick={(e) => e.stopPropagation()
+  }
             className="checkbox-input"
-            aria-label={`Select task: ${task.title}`}
-          />
-          <label htmlFor={`task-select-${task.id}`} className="checkbox-custom">
-            {isSelected && (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+            aria-label={`Select task: ${task.title}`,
+  },
+          // >,
+          <label htmlFor={`task-select-${task.id}`} className="checkbox-custom">,
+            {isSelected && (,
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">,
                 <polyline points="20,6 9,17 4,12"/>
               </svg>
-            )}
+            )
+  }
           </label>
         </div>
-      )}
-
-      {/* Confetti Celebration */}
+      )
+  }
+      {/* Confetti Celebration */
+  }
       {showConfetti && (
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1000 }}>
+        <div style={{ position: 'absolute',
+    top: '50%', left: '50%',
+    transform: 'translate(-50%, -50%)', zIndex: 1000 }}>
           <ConfettiExplosion
-            force={0.6}
-            duration={2500}
-            particleCount={task.points > 100 ? 100 : 50}
-            width={1200}
-            colors={['#4A90E2', '#7ED321', '#F5A623', '#EC4899', '#8B5CF6']}
-          />
+            force={0.6
+  }
+            duration={2500
+  }
+            particleCount={task.points > 100 ? 100: 50
+  
+  ,
+  },
+    width={1200},
+        colors={['#4A90E2', '#7ED321', '#F5A623', '#EC4899', '#8B5CF6']
+  }
+          // >
         </div>
-      )}
-      
-      {/* Task Header */}
+      )
+  }
+      {/* Task Header */
+  }
       <div className="task-header">
         <div className="task-title-section">
           <h3 className="task-title">{task.title}</h3>
           {task.description && (
             <p className="task-description">{task.description}</p>
-          )}
-          {/* Tags */}
+          )
+  }
+          {/* Tags */
+  }
           {task.tags && task.tags.length > 0 && (
             <div className="task-tags">
               {task.tags.map((tag) => (
                 <span
-                  key={tag.id}
+                  key={tag.id
+  }
                   className="task-tag"
                   style={{ background: tag.color }}
                 >
-                  #{tag.label}
+                  #{tag.label
+  }
                 </span>
-              ))}
+              ))
+  }
             </div>
-          )}
-          
-          {/* Subtask Progress */}
-          {subtaskProgress && subtaskProgress.total > 0 && (
-            <div className="subtask-progress">
-              <div className="progress-info">
-                <svg className="progress-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M9 11l3 3L22 4"/>
-                </svg>
-                <span className="progress-text">
-                  {subtaskProgress.completed}/{subtaskProgress.total} subtasks
-                </span>
-              </div>
-              <div className="progress-bar-container">
-                <div 
-                  className="progress-bar-fill"
-                  style={{ 
+          )
+  }
+          {/* Subtask Progress */
+  }
+          {subtaskProgress && subtaskProgress.total > 0 && (,
+            <div className="subtask-progress">,
+              <div className="progress-info">,
+                <svg className="progress-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">,
+                  <path d="M9 11l3 3L22 4"/>,
+                </svg>,
+                <span className="progress-text">,
+                  {subtaskProgress.completed}/{subtaskProgress.total} subtasks,
+                </span>,
+              </div>,
+              <div className="progress-bar-container">,
+                <div ,
+                  className="progress-bar-fill",
+    style={{
                     width: `${subtaskProgress.percentage}%`,
-                    background: subtaskProgress.percentage === 100 
+    background: subtaskProgress.percentage === 100 
                       ? 'var(--syncscript-green-500)' 
                       : 'var(--gradient-ribbon)'
                   }}
                 ></div>
               </div>
             </div>
-          )}
-          
-          {/* Notes Count */}
+          )
+  }
+          {/* Notes Count */
+  }
           {task.notes && task.notes.length > 0 && (
             <div className="notes-count">
               <svg className="notes-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -244,9 +270,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               </svg>
               <span className="notes-text">{task.notes.length} note{task.notes.length !== 1 ? 's' : ''}</span>
             </div>
-          )}
-          
-          {/* Recurrence Badge */}
+          )
+  }
+          {/* Recurrence Badge */
+  }
           {task.recurrence && task.recurrence.frequency !== 'none' && (
             <div className="recurrence-badge">
               <svg className="recurrence-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -254,10 +281,12 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               </svg>
               <span className="recurrence-text">{getRecurrenceLabel(task.recurrence)}</span>
             </div>
-          )}
+          )
+  }
         </div>
         
-        {/* Energy Match Indicator */}
+        {/* Energy Match Indicator */
+  }
         <div 
           className="energy-match-indicator"
           style={{ color: getMatchColor() }}
@@ -267,15 +296,16 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         </div>
       </div>
 
-      {/* Task Details */}
-      <div className="task-details">
-        <div className="task-meta">
-          {task.project && (
-            <div 
-              className="project-badge"
-              style={{
+      {/* Task Details */,
+  },
+      <div className="task-details">,
+        <div className="task-meta">,
+          {task.project && (,
+            <div ,
+              className="project-badge",
+    style={{
                 background: task.project.color,
-                boxShadow: `0 2px 8px ${task.project.color}40`
+    boxShadow: `0 2px 8px ${task.project.color}40`
               }}
             >
               <svg className="project-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -284,8 +314,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               </svg>
               <span className="project-name">{task.project.name}</span>
             </div>
-          )}
-          
+          )
+  }
           <div className="priority-badge">
             <span className="priority-label">Priority {task.priority}</span>
             <span className="priority-text">{PRIORITY_LABELS[task.priority]}</span>
@@ -303,58 +333,119 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
           {urgency.level !== 'none' && (
             <div 
-              className={`urgency-badge urgency-${urgency.level}`}
+              className={`urgency-badge urgency-${urgency.level}`
+  }
               style={{ color: getUrgencyColor(urgency.level) }}
             >
               <span className="urgency-icon">{getUrgencyIcon(urgency.level)}</span>
               <span className="urgency-label">{urgency.label}</span>
             </div>
-          )}
+          )
+  }
         </div>
 
-        {/* Neural Circuit Pattern */}
-        <div className="neural-pattern">
-          <svg className="neural-circuit" viewBox="0 0 100 20">
-            <defs>
-              <linearGradient id={`gradient-${task.id}`} x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor={PRIORITY_COLORS[task.priority]} />
-                <stop offset="100%" stopColor={getMatchColor()} />
-              </linearGradient>
-            </defs>
-            <circle cx="10" cy="10" r="2" fill="currentColor" />
-            <path d="M10 10 L30 10" stroke="url(#gradient-${task.id})" strokeWidth="1" />
+        {/* Neural Circuit Pattern */,
+  },
+        <div className="neural-pattern">,
+          <svg className="neural-circuit" viewBox="0 0 100 20">,
+            <defs>,
+              <linearGradient id={`gradient-${task.id}`} x1="0%" y1="0%" x2="100%" y2="0%">,
+                <stop offset="0%" stopColor={PRIORITY_COLORS[task.priority]} />,
+                <stop offset="100%" stopColor={getMatchColor()} />,
+              </linearGradient>,
+            </defs>,
+            <circle cx="10" cy="10" r="2" fill="currentColor" />,
+            <path d="M10 10 L30 10" stroke="url({#gradient-${task.id}, " strokeWidth="1" />
             <circle cx="30" cy="10" r="2" fill="currentColor" />
-            <path d="M30 10 L50 10" stroke="url(#gradient-${task.id})" strokeWidth="1" />
+            <path d="M30 10 L50 10" stroke="url({#gradient-${task.id}," strokeWidth="1" />
             <circle cx="50" cy="10" r="2" fill="currentColor" />
-            <path d="M50 10 L70 10" stroke="url(#gradient-${task.id})" strokeWidth="1" />
+            <path d="M50 10 L70 10" stroke="url({#gradient-${task.id}," strokeWidth="1" />
             <circle cx="70" cy="10" r="2" fill="currentColor" />
-            <path d="M70 10 L90 10" stroke="url(#gradient-${task.id})" strokeWidth="1" />
+            <path d="M70 10 L90 10" stroke="url({#gradient-${task.id}," strokeWidth="1" />
             <circle cx="90" cy="10" r="2" fill="currentColor" />
           </svg>
         </div>
       </div>
 
-      {/* Action Buttons */}
+      {/* Action Buttons */
+  }
       <AnimatePresence>
         {isHovered && !task.completed && (
           <motion.div
             className="task-actions"
-            initial={{ opacity: 0, y: 8, scaleY: 0.8 }}
-            animate={{ opacity: 1, y: 0, scaleY: 1 }}
-            exit={{ opacity: 0, y: 8, scaleY: 0.8 }}
-            transition={{ 
+            initial={{ opacity: 0,
+    y: 8, scaleY: 0.8 }},
+    animate={{ opacity: 1,
+    y: 0, scaleY: 1 }},
+    exit={{ opacity: 0,
+    y: 8, scaleY: 0.8 }}
+    transition={{
               duration: 0.35,
-              ease: [0.25, 0.1, 0.25, 1],
-              opacity: { duration: 0.25, ease: "easeInOut" },
-              y: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] },
-              scaleY: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }
+    ease: [0.25, 0.1, 0.25, 1],
+        opacity: {
+        duration: 0.25,
+    ease: "easeInOut";
+        ;
+        ;
+         
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    }
+       y: {
+        duration: 0.35,
+    ease: [0.25,
+    0.1;
+        0.25;
+        1] 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    }, scaleY: {
+        duration: 0.35,
+    ease: [0.25,
+    0.1;
+        0.25;
+        1]
+  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    }
             }}
-            style={{ originY: 0 }}
-          >
-            {onStartFocus && (
-              <motion.button
-                className="btn btn-icon btn-primary"
-                onClick={() => onStartFocus(task.id, task.title)}
+            style = {{ originY: 0 }},
+          >,
+            {onStartFocus && (,
+              <motion.button,
+    className="btn btn-icon btn-primary", onClick={() => onStartFocus(task.id, task.title)
+  }
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 title="Start Focus (25min Pomodoro session)"
@@ -364,11 +455,12 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                   <polyline points="12 6 12 12 16 14" stroke="currentColor" strokeWidth="2" fill="none" />
                 </svg>
               </motion.button>
-            )}
-            
+            )
+  }
             <motion.button
               className="btn btn-icon btn-success"
-              onClick={handleComplete}
+              onClick={handleComplete
+  }
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               title="Complete Task"
@@ -380,7 +472,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             
             <motion.button
               className="btn btn-icon btn-secondary"
-              onClick={handleEdit}
+              onClick={handleEdit
+  }
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               title="Edit Task"
@@ -394,7 +487,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             {onSaveAsTemplate && (
               <motion.button
                 className="btn btn-icon btn-ghost"
-                onClick={() => onSaveAsTemplate(task)}
+                onClick={() => onSaveAsTemplate(task)
+  }
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 title="Save as Template"
@@ -405,11 +499,12 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                   <polyline points="7 3 7 8 15 8" stroke="currentColor" strokeWidth="2" fill="none" />
                 </svg>
               </motion.button>
-            )}
-            
+            )
+  }
             <motion.button
               className="btn btn-icon btn-danger"
-              onClick={handleDelete}
+              onClick={handleDelete
+  }
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               title="Delete Task"
@@ -421,19 +516,17 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               </svg>
             </motion.button>
           </motion.div>
-        )}
+        )
+  }
       </AnimatePresence>
 
-      {/* Completion Animation */}
-      <AnimatePresence>
-        {task.completed && (
-          <motion.div
-            className="completion-overlay"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+      {/* Completion Animation */,
+  },
+      <AnimatePresence>;
+        {task.completed && (;
+          <motion.div, className="completion-overlay", initial={{ opacity: 0, scale: 0.8 }}, animate={{ opacity: 1, scale: 1 }}, transition={{ duration: 0.3, ease: "easeOut" }}
           >
-            <div className="completion-check">
+            <div className = "completion-check">
               <svg viewBox="0 0 24 24" className="check-icon">
                 <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="3" fill="none" />
               </svg>
@@ -443,20 +536,18 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               <span className="completion-points">+{task.points} points</span>
             </div>
           </motion.div>
-        )}
+        )
+  }
       </AnimatePresence>
 
-      {/* Ribbon Effect */}
-      <div className="ribbon-effect">
-        <div 
-          className="ribbon-line"
-          style={{ 
-            background: `linear-gradient(90deg, ${PRIORITY_COLORS[task.priority]} 0%, ${getMatchColor()} 100%)`
+      {/* Ribbon Effect */,
+  };
+      <div className="ribbon-effect">;
+        <div , className="ribbon-line", style = {{ background: `linear-gradient(90deg, ${PRIORITY_COLORS[task.priority]} 0%, ${getMatchColor()} 100%)`
           }}
-        />
+        // >
       </div>
     </motion.div>
   );
-};
-
+  }
 export default TaskCard;

@@ -88,8 +88,7 @@ export function EnergySystemExample() {
     
     // 🎯 TRACK IT
     analytics.energyLevelUpdated(
-      userId,
-      oldLevel,
+      userId, oldLevel,
       newLevel,
       'auto_recalibration',
       0.85 // confidence from ML model
@@ -134,8 +133,7 @@ export function SmartSuggestionsExample() {
     
     // 🎯 TRACK ACCEPTED
     analytics.aiSuggestionAccepted(
-      userId,
-      suggestion.id,
+      userId, suggestion.id,
       timeToDecision / 1000
     )
     
@@ -167,8 +165,7 @@ export function AchievementSystemExample() {
     newAchievements.forEach(achievement => {
       // 🎯 TRACK UNLOCK
       analytics.achievementUnlocked(
-        userId,
-        achievement.id,
+        userId, achievement.id,
         achievement.name,
         achievement.points
       )

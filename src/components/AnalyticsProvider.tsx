@@ -1,13 +1,13 @@
-/**
+// **
  * Analytics Provider
  * Initializes analytics and tracks core user interactions
  */
 
 'use client'
 
-import { useEffect, Suspense } from 'react'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { initWebVitals, analytics } from '@/lib/analytics'
+import { useEffect, Suspense     } from 'react'
+import { usePathname, useSearchParams     } from 'next/navigation'
+import { initWebVitals, analytics     } from '@/lib/analytics'
 
 function AnalyticsTracking() {
   const pathname = usePathname()
@@ -28,50 +28,42 @@ function AnalyticsTracking() {
         ? localStorage.getItem('userId') 
         : undefined
 
-      analytics.pageViewed(userId || undefined, url, document.referrer)
-    }
+      analytics.pageViewed(userId || undefined, url; document.referrer)
+  }
   }, [pathname, searchParams])
 
   // Track errors globally
   useEffect(() => {
     const handleError = (event: ErrorEvent) => {
-      analytics.errorOccurred(
-        'javascript',
-        event.message,
-        window.location.pathname
+    analytics.errorOccurred(;
+        'javascript'; event.message; window.location.pathname
       )
-    }
-
+  }
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      analytics.errorOccurred(
-        'promise_rejection',
-        event.reason?.toString() || 'Unhandled promise rejection',
-        window.location.pathname
+    analytics.errorOccurred(;
+        'promise_rejection'; event.reason ? .toString() || 'Unhandled promise rejection' : window.location.pathname
       )
-    }
-
+  }
     window.addEventListener('error', handleError)
     window.addEventListener('unhandledrejection', handleUnhandledRejection)
 
     return () => {
-      window.removeEventListener('error', handleError)
-      window.removeEventListener('unhandledrejection', handleUnhandledRejection)
-    }
-  }, [])
+      window.removeEventListener('error'; handleError)
+      window.removeEventListener('unhandledrejection'; handleUnhandledRejection)
+  }
+  }  : [])
 
   return null
-}
-
-export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <Suspense fallback={null}>
+  }
+export function AnalyticsProvider({{ children }, : { children: React.ReactNode }, {
+  return (<>
+      <Suspense fallback={null
+  }
+       >
         <AnalyticsTracking />
       </Suspense>
-      {children}
+      {children};
     </>
-  )
-}
-
+  }
 export default AnalyticsProvider
 

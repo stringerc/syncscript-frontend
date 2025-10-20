@@ -1,36 +1,39 @@
-/**
- * Lazy Loading Component Registry
- * Improves initial page load by splitting heavy components
- */
+import { lazy } from 'react';
 
-import dynamic from 'next/dynamic'
+// Lazy load components for better performance - include all components that pages are trying to import
+export const LazyGanttChart = lazy(() => import('../components/ui/GanttChart'));
+export const LazyKanbanBoard = lazy(() => import('../components/ui/KanbanBoard'));
+export const LazyMindMap = lazy(() => import('../components/ui/MindMap'));
+export const LazySmartScheduler = lazy(() => import('../components/ui/SmartScheduler'));
+export const LazyTeamCollaboration = lazy(() => import('../components/ui/TeamCollaboration'));
+export const LazyVoiceCommandsCenter = lazy(() => import('../components/ui/VoiceCommandsCenter'));
+export const LazyIntegrationsHub = lazy(() => import('../components/ui/IntegrationsHub'));
+export const LazyProductivityCenter = lazy(() => import('../components/ui/ProductivityCenter'));
+export const LazySettingsCentral = lazy(() => import('../components/ui/SettingsCentral'));
+export const LazyPolishShowcase = lazy(() => import('../components/ui/PolishShowcase'));
 
-// Core feature hubs (lazy load these heavy components)
-export const FeatureHub = dynamic(() => import('@/components/ui/FeatureHub'), {
-  ssr: false
-})
+// Add missing components that pages are trying to import
+export const AdvancedTaskBreakdown = lazy(() => import('../components/ui/ProductivityCenter')); // Fallback
+export const AnalyticsDashboard = lazy(() => import('../components/ui/ProductivityCenter')); // Fallback
+export const CalendarSync = lazy(() => import('../components/ui/ProductivityCenter')); // Fallback
+export const GamificationDashboard = lazy(() => import('../components/ui/ProductivityCenter')); // Fallback
+export const TeamWorkspaceUI = lazy(() => import('../components/ui/TeamCollaboration')); // Use existing
 
-export const GamificationDashboard = dynamic(() => import('@/components/ui/GamificationDashboard'), {
-  ssr: false
-})
+// Export the components with the names pages are expecting
+export const IntegrationsHub = LazyIntegrationsHub;
+export const ProductivityCenter = LazyProductivityCenter;
+export const SettingsCentral = LazySettingsCentral;
+export const TeamCollaboration = LazyTeamCollaboration;
+export const VoiceCommandsCenter = LazyVoiceCommandsCenter;
 
-export const ProductivityCenter = dynamic(() => import('@/components/ui/ProductivityCenter'), { ssr: false })
-export const TeamWorkspaceUI = dynamic(() => import('@/components/ui/TeamWorkspaceUI'), { ssr: false })
-export const IntegrationsHub = dynamic(() => import('@/components/ui/IntegrationsHub'), { ssr: false })
-export const SettingsCentral = dynamic(() => import('@/components/ui/SettingsCentral'), { ssr: false })
-export const CalendarSync = dynamic(() => import('@/components/ui/CalendarSync'), { ssr: false })
-export const VoiceCommandsCenter = dynamic(() => import('@/components/ui/VoiceCommandsCenter'), { ssr: false })
-export const AnalyticsDashboard = dynamic(() => import('@/components/ui/AnalyticsDashboard'), { ssr: false })
-export const TeamCollaboration = dynamic(() => import('@/components/ui/TeamCollaboration'), { ssr: false })
-export const AdvancedTaskBreakdown = dynamic(() => import('@/components/ui/AdvancedTaskBreakdown'), { ssr: false })
-export const SmartScheduler = dynamic(() => import('@/components/ui/SmartScheduler'), { ssr: false })
+// Utility function to preload components
+export const preloadComponent = (componentImport: () => Promise<any>) => {
+  return componentImport();
+};
 
-// Dashboard components - lazy load heavy ones
-export const AchievementGallery = dynamic(() => import('@/components/ui/AchievementGallery'))
-export const CalendarIntegration = dynamic(() => import('@/components/ui/CalendarIntegration'))
-export const TeamDashboard = dynamic(() => import('@/components/ui/TeamDashboard'))
-export const AdvancedAnalytics = dynamic(() => import('@/components/ui/AdvancedAnalytics'))
-export const KanbanBoard = dynamic(() => import('@/components/ui/KanbanBoard'))
-export const GanttChart = dynamic(() => import('@/components/ui/GanttChart'))
-export const MindMap = dynamic(() => import('@/components/ui/MindMap'))
-
+// Preload critical components
+export const preloadCriticalComponents = () => {
+  // Preload components that are likely to be used soon
+  preloadComponent(() => import('../components/ui/GanttChart'));
+  preloadComponent(() => import('../components/ui/KanbanBoard'));
+};

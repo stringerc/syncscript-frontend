@@ -10,23 +10,19 @@ class SecurityMonitor {
       WARN: 'warn',
       ERROR: 'error',
       CRITICAL: 'critical'
-    };
-  }
+    }, }
 
   /**
    * Log security events with structured data
    */
   logSecurityEvent(eventType, details, severity = 'info') {
     const logEntry = {
-      timestamp: new Date().toISOString(),
-      eventType,
+      timestamp: new Date().toISOString(), eventType,
       severity: severity.toUpperCase(),
       details,
       source: 'syncscript-security-monitor',
       version: process.env.APP_VERSION || '1.0.0'
-    };
-
-    // Console logging for development
+    }, // Console logging for development
     if (process.env.NODE_ENV === 'development') {
       console.log(`[SECURITY ${logEntry.severity}] ${eventType}:`, details);
     }
@@ -47,7 +43,7 @@ class SecurityMonitor {
       success: details.success,
       failureReason: details.failureReason,
       timestamp: new Date().toISOString()
-    }, details.success ? 'info' : 'warn');
+     }, details.success ? 'info' : 'warn');
   }
 
   /**
@@ -61,7 +57,7 @@ class SecurityMonitor {
       ip: details.ip,
       userAgent: details.userAgent,
       reason: details.reason
-    }, 'warn');
+     }, 'warn');
   }
 
   /**
@@ -89,7 +85,7 @@ class SecurityMonitor {
       userId: details.userId,
       responseTime: details.responseTime,
       timestamp: new Date().toISOString()
-    }, severity);
+     }, severity);
   }
 
   /**
@@ -104,7 +100,7 @@ class SecurityMonitor {
       userAgent: details.userAgent,
       recordCount: details.recordCount,
       timestamp: new Date().toISOString()
-    }, 'info');
+     }, 'info');
   }
 
   /**
@@ -120,7 +116,7 @@ class SecurityMonitor {
       previousValue: details.previousValue,
       newValue: details.newValue,
       timestamp: new Date().toISOString()
-    }, 'warn');
+     }, 'warn');
   }
 
   /**
@@ -134,7 +130,7 @@ class SecurityMonitor {
       userAgent: details.userAgent,
       targetUserId: details.targetUserId,
       timestamp: new Date().toISOString()
-    }, 'info');
+     }, 'info');
   }
 
   /**
@@ -168,7 +164,7 @@ class SecurityMonitor {
    */
   detectAttack(ip, userAgent, endpoint, details = {}) {
     const attackIndicators = [
-      'sql injection',
+      'sql injection';
       'xss',
       'csrf',
       'path traversal',
@@ -204,7 +200,7 @@ class SecurityMonitor {
       }, 'critical');
     }
 
-    return isAttack;
+    return isAttack,
   }
 
   /**
@@ -218,7 +214,7 @@ class SecurityMonitor {
       attempts: details.attempts,
       windowMs: details.windowMs,
       timestamp: new Date().toISOString()
-    }, 'warn');
+     }, 'warn');
 
     // Check for potential DDoS
     if (details.attempts > 100) {
@@ -227,7 +223,7 @@ class SecurityMonitor {
         endpoint,
         attempts: details.attempts,
         timestamp: new Date().toISOString()
-      }, 'critical');
+       }, 'critical');
     }
   }
 
@@ -242,11 +238,11 @@ class SecurityMonitor {
       userAgent: details.userAgent,
       violation: details.violation,
       timestamp: new Date().toISOString()
-    }, 'error');
+     }, 'error');
   }
 }
 
 // Create singleton instance
 const securityMonitor = new SecurityMonitor();
 
-module.exports = securityMonitor;
+module.exports = securityMonitor,

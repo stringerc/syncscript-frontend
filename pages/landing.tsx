@@ -1,156 +1,202 @@
 import React from 'react';
+import Head from 'next/head';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { 
+  ArrowRight, 
+  CheckCircle, 
+  Zap, 
+  Target, 
+  Users, 
+  BarChart3,
+  Star,
+  Play
+} from 'lucide-react';
 
-export default function LandingPage() {
+export default function Landing() {
+  const features = [
+    {
+      icon: <Zap className="h-6 w-6" />,
+      title: "AI-Powered Task Management",
+      description: "Intelligent task breakdown and prioritization using advanced AI algorithms."
+    },
+    {
+      icon: <Target className="h-6 w-6" />,
+      title: "Smart Goal Tracking",
+      description: "Set and achieve your goals with personalized insights and recommendations."
+    },
+    {
+      icon: <Users className="h-6 w-6" />,
+      title: "Team Collaboration",
+      description: "Work seamlessly with your team using advanced collaboration tools."
+    },
+    {
+      icon: <BarChart3 className="h-6 w-6" />,
+      title: "Analytics & Insights",
+      description: "Get detailed insights into your productivity patterns and performance."
+    }
+  ];
+
+  const testimonials = [
+    {
+      name: "Sarah Johnson",
+      role: "Product Manager",
+      content: "SyncScript has revolutionized how I manage my tasks and collaborate with my team.",
+      rating: 5
+    },
+    {
+      name: "Michael Chen",
+      role: "Software Engineer",
+      content: "The AI-powered insights have helped me optimize my productivity by 40%.",
+      rating: 5
+    }
+  ];
+
   return (
-    <div className="landing-page">
-      {/* Hero Section */}
-      <motion.section 
-        className="hero-section"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="hero-content">
-          <motion.h1 
-            className="hero-title"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <span className="title-gradient">SyncScript</span>
-          </motion.h1>
-          
-          <motion.p 
-            className="hero-subtitle"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            The most advanced productivity platform powered by energy intelligence
-          </motion.p>
-          
-          <motion.p 
-            className="hero-description"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            Match your tasks to your energy levels for maximum productivity. 
-            Experience the future of intelligent task management with our 
-            ribbon-inspired design and neural circuit intelligence.
-          </motion.p>
-          
-          <motion.div 
-            className="hero-actions"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-          >
-            <Link href="/api/auth/login" className="btn btn-primary btn-lg">
-              <svg className="neural-icon" viewBox="0 0 24 24">
-                <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" fill="none" />
-              </svg>
-              Get Started
-            </Link>
-            
-            <Link href="#features" className="btn btn-secondary btn-lg">
-              <svg className="neural-icon" viewBox="0 0 24 24">
-                <path d="M14.828 14.828a4 4 0 0 1-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" strokeWidth="2" fill="none" />
-              </svg>
-              View Features
-            </Link>
-          </motion.div>
-        </div>
-        
-        {/* Ribbon Animation */}
-        <div className="ribbon-animation">
-          <div className="ribbon-flow"></div>
-        </div>
-      </motion.section>
+    <>
+      <Head>
+        <title>SyncScript - Ultimate Productivity Platform</title>
+        <meta name="description" content="Transform your productivity with SyncScript's AI-powered task management, team collaboration, and advanced analytics." />
+      </Head>
 
-      {/* Features Section */}
-      <motion.section 
-        id="features"
-        className="features-section"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.0 }}
-      >
-        <div className="features-content">
-          <h2 className="features-title">Legendary Features</h2>
-          
-          <div className="features-grid">
-            <div className="feature-card card card-md">
-              <div className="feature-icon">
-                <div className="energy-demo">
-                  <div className="energy-dot energy-low"></div>
-                  <div className="energy-dot energy-medium"></div>
-                  <div className="energy-dot energy-peak"></div>
-                </div>
-              </div>
-              <h3 className="feature-title">Energy Intelligence</h3>
-              <p className="feature-description">
-                AI-powered energy prediction and task matching for optimal productivity
+      <div className="min-h-screen bg-white">
+        {/* Hero Section */}
+        <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center"
+            >
+              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+                Transform Your
+                <span className="text-blue-600"> Productivity</span>
+              </h1>
+              <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                SyncScript is the ultimate productivity platform that combines AI-powered task management, 
+                team collaboration, and advanced analytics to help you achieve more.
               </p>
-            </div>
-            
-            <div className="feature-card card card-md">
-              <div className="feature-icon">
-                <div className="neural-circuit-demo">
-                  <svg viewBox="0 0 60 20">
-                    <circle cx="10" cy="10" r="2" fill="currentColor" />
-                    <path d="M10 10 L20 10" stroke="currentColor" strokeWidth="1" />
-                    <circle cx="20" cy="10" r="2" fill="currentColor" />
-                    <path d="M20 10 L30 10" stroke="currentColor" strokeWidth="1" />
-                    <circle cx="30" cy="10" r="2" fill="currentColor" />
-                    <path d="M30 10 L40 10" stroke="currentColor" strokeWidth="1" />
-                    <circle cx="40" cy="10" r="2" fill="currentColor" />
-                    <path d="M40 10 L50 10" stroke="currentColor" strokeWidth="1" />
-                    <circle cx="50" cy="10" r="2" fill="currentColor" />
-                  </svg>
-                </div>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center">
+                  Start Free Trial
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </button>
+                <button className="border border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center">
+                  <Play className="mr-2 h-5 w-5" />
+                  Watch Demo
+                </button>
               </div>
-              <h3 className="feature-title">Neural Intelligence</h3>
-              <p className="feature-description">
-                Circuit-like patterns representing advanced AI and connectivity
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Powerful Features
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Everything you need to boost your productivity and achieve your goals.
               </p>
-            </div>
-            
-            <div className="feature-card card card-md">
-              <div className="feature-icon">
-                <div className="ribbon-gradient"></div>
-              </div>
-              <h3 className="feature-title">Ribbon Design</h3>
-              <p className="feature-description">
-                Flowing, dynamic visual elements with blue→green→orange spectrum
-              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {features.map((feature, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="text-center p-6 rounded-lg hover:shadow-lg transition-shadow"
+                >
+                  <div className="text-blue-600 mb-4 flex justify-center">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600">
+                    {feature.description}
+                  </p>
+                </motion.div>
+              ))}
             </div>
           </div>
-        </div>
-      </motion.section>
+        </section>
 
-      {/* CTA Section */}
-      <motion.section 
-        className="cta-section"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.2 }}
-      >
-        <div className="cta-content">
-          <h2 className="cta-title">Ready to Transform Your Productivity?</h2>
-          <p className="cta-description">
-            Join the future of intelligent task management with SyncScript
-          </p>
-          <Link href="/api/auth/login" className="btn btn-primary btn-lg">
-            <svg className="neural-icon" viewBox="0 0 24 24">
-              <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke="currentColor" strokeWidth="2" fill="none" />
-            </svg>
-            Start Your Journey
-          </Link>
-        </div>
-      </motion.section>
-    </div>
+        {/* Testimonials Section */}
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Loved by Thousands
+              </h2>
+              <p className="text-xl text-gray-600">
+                See what our users have to say about SyncScript.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {testimonials.map((testimonial, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="bg-white p-8 rounded-lg shadow-sm"
+                >
+                  <div className="flex mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-gray-600 mb-4 italic">
+                    "{testimonial.content}"
+                  </p>
+                  <div>
+                    <p className="font-semibold text-gray-900">{testimonial.name}</p>
+                    <p className="text-gray-500">{testimonial.role}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-20 bg-blue-600">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Ready to Transform Your Productivity?
+              </h2>
+              <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                Join thousands of users who have already revolutionized their workflow with SyncScript.
+              </p>
+              <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center mx-auto">
+                Get Started Today
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </button>
+            </motion.div>
+          </div>
+        </section>
+      </div>
+    </>
   );
 }

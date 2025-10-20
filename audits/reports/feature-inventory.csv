@@ -1,0 +1,150 @@
+route,file_path,screen_component,parent_layout,guard_flag,linked_api_hooks,visible_primary_actions,auth_required,feature_category,last_modified,test_coverage
+_app,/Users/Apple/syncscript-frontend/pages/_app.tsx,_app,DefaultLayout,,useEffect|useDown,,public,general,2025-10-15,no
+_document,/Users/Apple/syncscript-frontend/pages/_document.tsx,Document,DefaultLayout,,,,public,general,2025-10-09,no
+/ai-breakdown,/Users/Apple/syncscript-frontend/pages/ai-breakdown.tsx,AIBreakdownPage,DefaultLayout,,,,public,general,2025-10-14,no
+/analytics,/Users/Apple/syncscript-frontend/pages/analytics.tsx,AnalyticsPage,DefaultLayout,,,,public,analytics,2025-10-14,no
+/api/ai/breakdown-task,/Users/Apple/syncscript-frontend/pages/api/ai/breakdown-task.ts,breakdown-task.ts,DefaultLayout,,fetch(,,public,general,2025-10-10,yes
+/api/ai/coach,/Users/Apple/syncscript-frontend/pages/api/ai/coach.ts,coach.ts,DefaultLayout,,fetch(,,public,general,2025-10-10,yes
+/api/ai/daily-plan,/Users/Apple/syncscript-frontend/pages/api/ai/daily-plan.ts,daily-plan.ts,DefaultLayout,,fetch(,,public,general,2025-10-10,yes
+/api/ai/energy-insights,/Users/Apple/syncscript-frontend/pages/api/ai/energy-insights.ts,energy-insights.ts,DefaultLayout,,fetch(,,public,general,2025-10-10,yes
+/api/ai/meeting-notes,/Users/Apple/syncscript-frontend/pages/api/ai/meeting-notes.ts,meeting-notes.ts,DefaultLayout,,fetch(,,public,general,2025-10-10,yes
+/api/ai/parse-task,/Users/Apple/syncscript-frontend/pages/api/ai/parse-task.ts,parse-task.ts,DefaultLayout,,fetch(,,public,general,2025-10-10,yes
+/api/auth/:...auth0,/Users/Apple/syncscript-frontend/pages/api/auth/[...auth0].ts,[...auth0].ts,DefaultLayout,,,,public,general,2025-10-14,yes
+/api/auth/debug-callback,/Users/Apple/syncscript-frontend/pages/api/auth/debug-callback.ts,debug-callback.ts,DefaultLayout,,,,public,general,2025-10-14,yes
+/api/auth/google/callback,/Users/Apple/syncscript-frontend/pages/api/auth/google/callback.ts,callback.ts,DefaultLayout,,fetch(,,public,general,2025-10-10,yes
+/api/auth/google/test-oauth,/Users/Apple/syncscript-frontend/pages/api/auth/google/test-oauth.ts,test-oauth.ts,DefaultLayout,,,,public,general,2025-10-10,yes
+/api/auth/test-config,/Users/Apple/syncscript-frontend/pages/api/auth/test-config.ts,handler,DefaultLayout,,,,public,general,2025-10-13,yes
+/api/auth/test-login,/Users/Apple/syncscript-frontend/pages/api/auth/test-login.ts,handler,DefaultLayout,,,,public,general,2025-10-14,yes
+/api/auth/token,/Users/Apple/syncscript-frontend/pages/api/auth/token.ts,token.ts,DefaultLayout,,,,public,general,2025-10-14,yes
+/api/briefings/evening,/Users/Apple/syncscript-frontend/pages/api/briefings/evening.ts,evening.ts,DefaultLayout,,,,public,general,2025-10-15,yes
+/api/briefings/morning,/Users/Apple/syncscript-frontend/pages/api/briefings/morning.ts,morning.ts,DefaultLayout,,,,public,general,2025-10-15,yes
+/api/briefings/settings,/Users/Apple/syncscript-frontend/pages/api/briefings/settings.ts,settings.ts,DefaultLayout,,,,public,settings,2025-10-14,yes
+/api/calendar/connect,/Users/Apple/syncscript-frontend/pages/api/calendar/connect.ts,connect.ts,DefaultLayout,,,,public,general,2025-10-14,yes
+/api/calendar/events,/Users/Apple/syncscript-frontend/pages/api/calendar/events.ts,events.ts,DefaultLayout,,fetch(,,public,general,2025-10-14,yes
+/beta,/Users/Apple/syncscript-frontend/pages/beta.tsx,BetaPage,DefaultLayout,,useState|useUser,setSubmitted(false)}
+                className="inline-block w-full bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-xl hover:bg-gray-300 transition-colors"
+              >
+                Submit Another Application,public,general,2025-10-14,no
+/calendar-sync,/Users/Apple/syncscript-frontend/pages/calendar-sync.tsx,CalendarSyncPage,DefaultLayout,,,,public,general,2025-10-14,no
+/compare,/Users/Apple/syncscript-frontend/pages/compare.tsx,ComparePage,DefaultLayout,,useEnter|useLeave,,public,general,2025-10-14,no
+/dashboard/observability,/Users/Apple/syncscript-frontend/pages/dashboard/observability.tsx,ObservabilityDashboard,DefaultLayout,,useRouter|useState,router.back()}
+            className="mb-4 text-blue-600 hover:text-blue-700 dark:text-blue-400 flex items-center gap-2"
+          >
+            ← Back,public,general,2025-10-14,no
+/dashboard/quality,/Users/Apple/syncscript-frontend/pages/dashboard/quality.tsx,QualityDashboard,DefaultLayout,,useRouter,router.back()}
+            className="mb-4 text-blue-600 hover:text-blue-700 dark:text-blue-400 flex items-center gap-2"
+          >
+            ← Back,public,general,2025-10-14,no
+/dashboard,/Users/Apple/syncscript-frontend/pages/dashboard.tsx,Dashboard,DefaultLayout,,useUser|useRouter|useAuthenticatedFetch|useNotifications|useAchievements|useKeyboardShortcuts|useBriefingManager|useState|useEffect|useCallback|useMemo,setShowCommandCenter(true)}
+                title="All Features (Cmd+K)"
+                aria-label="Open All Features"
+                style={{ 
+                  background: 'var(--gradient-brand)',
+                  fontWeight: 'var(--font-weight-bold)',
+                  boxShadow: 'var(--shadow-primary)',
+                  padding: '0 var(--space-5)'
+                }}
+              >
+                ✨ All Features|{
+                  analytics.trackBriefingEvent('morning_brief_viewed');
+                  generateMorningBrief();
+                  // Trigger feedback collection for beta users
+                  if (betaUserStatus?.isBetaUser) {
+                    setTimeout(() => {
+                      setCurrentFeedbackFeature('morning-brief');
+                      setShowFeedbackCollector(true);
+                    }, 2000);
+                  }
+                }}
+                title="Test Morning Brief"
+                aria-label="Test Morning Brief"
+                style={{ 
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600'
+                }}
+              >
+                🌅 Morning|{
+                  console.log('🌙 Evening Brief clicked!');
+                  analytics.trackBriefingEvent('evening_brief_viewed');
+                  generateEveningBrief();
+                  // Trigger feedback collection for beta users
+                  if (betaUserStatus?.isBetaUser) {
+                    setTimeout(() => {
+                      setCurrentFeedbackFeature('evening-brief');
+                      setShowFeedbackCollector(true);
+                    }, 2000);
+                  }
+                }}
+                title="Test Evening Brief"
+                aria-label="Test Evening Brief"
+                style={{ 
+                  background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '100px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🌙 Evening|{
+                  console.log('🚀 Simple test button clicked!');
+                  alert('Briefing system is working! Check console for debug info.');
+                }}
+                style={{ 
+                  background: 'red',
+                  color: 'white',
+                  border: 'none',
+                  padding: '10px 20px',
+                  borderRadius: '5px',
+                  fontWeight: 'bold',
+                  fontSize: '14px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                🚀 TEST BRIEFING|{
+                  analytics.trackPageView('Analytics Dashboard');
+                  setShowAnalyticsDashboard(true);
+                }}
+                title="Analytics Dashboard"
+                aria-label="Analytics Dashboard"
+                style={{ 
+                  background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  height: '40px',
+                  zIndex: 9999,
+                  position: 'relative'
+                }}
+              >
+                📊 Analytics,required,general,2025-10-15,no
+/gamification,/Users/Apple/syncscript-frontend/pages/gamification.tsx,GamificationPage,DefaultLayout,,,,public,general,2025-10-14,no
+/integrations,/Users/Apple/syncscript-frontend/pages/integrations.tsx,IntegrationsPage,DefaultLayout,,,,public,integrations,2025-10-14,no
+/landing-v2,/Users/Apple/syncscript-frontend/pages/landing-v2.tsx,LandingV2,DefaultLayout,,,document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+              style={{
+                background: 'transparent',
+                color: 'var(--color-primary-600)',
+                padding: '16px 48px',
+                borderRadius: 'var(--radius-xl)',
+                border: '2px solid var(--color-primary-500)',
+                fontWeight: 'var(--font-bold)',
+                fontSize: 'var(--text-lg)',
+                cursor: 'pointer',
+                transition: 'var(--transition-all)'
+              }}
+            >
+              See How It Works,public,general,2025-10-14,no
+/landing,/Users/Apple/syncscript-frontend/pages/landing.tsx,LandingPage,DefaultLayout,,,,public,general,2025-10-08,no
+/polish,/Users/Apple/syncscript-frontend/pages/polish.tsx,PolishPage,DefaultLayout,,,,public,general,2025-10-14,no
+/productivity,/Users/Apple/syncscript-frontend/pages/productivity.tsx,ProductivityPage,DefaultLayout,,,,public,general,2025-10-14,no
+/settings,/Users/Apple/syncscript-frontend/pages/settings.tsx,SettingsPage,DefaultLayout,,,,public,settings,2025-10-14,no
+/smart-schedule,/Users/Apple/syncscript-frontend/pages/smart-schedule.tsx,SmartSchedulePage,DefaultLayout,,,,public,general,2025-10-14,no
+/team-collaboration,/Users/Apple/syncscript-frontend/pages/team-collaboration.tsx,TeamCollaborationPage,DefaultLayout,,,,public,collaboration,2025-10-14,no
+/team,/Users/Apple/syncscript-frontend/pages/team.tsx,TeamPage,DefaultLayout,,,,public,collaboration,2025-10-14,no
+/voice-commands,/Users/Apple/syncscript-frontend/pages/voice-commands.tsx,VoiceCommandsPage,DefaultLayout,,,,public,general,2025-10-14,no
