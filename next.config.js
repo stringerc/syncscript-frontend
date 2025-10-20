@@ -6,28 +6,14 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Remove output: 'standalone' as it can cause issues with Vercel
+  // output: 'standalone',
+  // Add proper headers for security
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live",
-              "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: https: blob: https://images.unsplash.com https://via.placeholder.com",
-              "font-src 'self' data:",
-              "connect-src 'self' https: wss:",
-              "frame-src 'self' https://vercel.live",
-              "object-src 'none'",
-              "base-uri 'self'",
-              "form-action 'self'",
-              "frame-ancestors 'none'",
-              "upgrade-insecure-requests"
-            ].join('; ')
-          },
           {
             key: 'X-Frame-Options',
             value: 'SAMEORIGIN'
@@ -44,6 +30,7 @@ const nextConfig = {
       }
     ];
   },
+  // Add experimental features that work with Vercel
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion']
   }
