@@ -4,7 +4,6 @@ import { Providers } from '../src/lib/providers';
 import { RubeProvider } from '../src/contexts/RubeContext';
 import { Toaster } from 'react-hot-toast';
 import '../src/styles/globals.css';
-import '../src/styles/dashboard.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
